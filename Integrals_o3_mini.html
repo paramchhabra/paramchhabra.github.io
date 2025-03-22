@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Integration Techniques", "label": "Integration Techniques", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration by Parts", "label": "Integration by Parts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Partial Fractions", "label": "Partial Fractions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Trigonometric Integration", "label": "Trigonometric Integration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Algebraic Manipulations", "label": "Algebraic Manipulations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "ILATE Rule", "label": "ILATE Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Choosing u and dv", "label": "Choosing u and dv", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b x ln(x) dx", "label": "Example: \u222b x ln(x) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inverse Functions", "label": "Inverse Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Logarithmic Functions", "label": "Logarithmic Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Algebraic Functions", "label": "Algebraic Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Trigonometric Functions", "label": "Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Exponential Functions", "label": "Exponential Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Repeated Linear Factors", "label": "Non-Repeated Linear Factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Repeated Factors", "label": "Repeated Factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Irreducible Quadratic Factors", "label": "Irreducible Quadratic Factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Comparing Coefficients", "label": "Comparing Coefficients", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Direct decomposition", "label": "Direct decomposition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b[P(x)/(x \u2013 p)(x \u2013 q)] dx", "label": "Example: \u222b[P(x)/(x \u2013 p)(x \u2013 q)] dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Assign partial fraction terms for each power", "label": "Assign partial fraction terms for each power", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Solve by comparing coefficients", "label": "Solve by comparing coefficients", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Choose quadratic factor that cannot be factored further", "label": "Choose quadratic factor that cannot be factored further", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Write numerator as linear expression", "label": "Write numerator as linear expression", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b[(ax\u00b2 + bx + c)/(quadratic factor)] dx", "label": "Example: \u222b[(ax\u00b2 + bx + c)/(quadratic factor)] dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Use De Moivre\u0027s Theorem", "label": "Use De Moivre\u0027s Theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reduction of sin\u207f x and cos\u207f x", "label": "Reduction of sin\u207f x and cos\u207f x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Express multiple angle sines and cosines", "label": "Express multiple angle sines and cosines", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Transpose terms to one side", "label": "Transpose terms to one side", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Collect like terms", "label": "Collect like terms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Take LCM to combine denominators", "label": "Take LCM to combine denominators", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resolve constants by comparing coefficients", "label": "Resolve constants by comparing coefficients", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Final Integration Process", "label": "Final Integration Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Simplify expression into integrable parts", "label": "Simplify expression into integrable parts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrate term by term", "label": "Integrate term by term", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Combine constants and reassemble the final answer", "label": "Combine constants and reassemble the final answer", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Integration Techniques", "to": "Integration by Parts"}, {"arrows": "to", "from": "Integration Techniques", "to": "Partial Fractions"}, {"arrows": "to", "from": "Integration Techniques", "to": "Trigonometric Integration"}, {"arrows": "to", "from": "Integration Techniques", "to": "Algebraic Manipulations"}, {"arrows": "to", "from": "Integration by Parts", "to": "ILATE Rule"}, {"arrows": "to", "from": "Integration by Parts", "to": "Choosing u and dv"}, {"arrows": "to", "from": "Integration by Parts", "to": "Example: \u222b x ln(x) dx"}, {"arrows": "to", "from": "Partial Fractions", "to": "Non-Repeated Linear Factors"}, {"arrows": "to", "from": "Partial Fractions", "to": "Repeated Factors"}, {"arrows": "to", "from": "Partial Fractions", "to": "Irreducible Quadratic Factors"}, {"arrows": "to", "from": "Partial Fractions", "to": "Comparing Coefficients"}, {"arrows": "to", "from": "Trigonometric Integration", "to": "Use De Moivre\u0027s Theorem"}, {"arrows": "to", "from": "Trigonometric Integration", "to": "Reduction of sin\u207f x and cos\u207f x"}, {"arrows": "to", "from": "Trigonometric Integration", "to": "Express multiple angle sines and cosines"}, {"arrows": "to", "from": "Algebraic Manipulations", "to": "Transpose terms to one side"}, {"arrows": "to", "from": "Algebraic Manipulations", "to": "Collect like terms"}, {"arrows": "to", "from": "Algebraic Manipulations", "to": "Take LCM to combine denominators"}, {"arrows": "to", "from": "Algebraic Manipulations", "to": "Resolve constants by comparing coefficients"}, {"arrows": "to", "from": "ILATE Rule", "to": "Inverse Functions"}, {"arrows": "to", "from": "ILATE Rule", "to": "Logarithmic Functions"}, {"arrows": "to", "from": "ILATE Rule", "to": "Algebraic Functions"}, {"arrows": "to", "from": "ILATE Rule", "to": "Trigonometric Functions"}, {"arrows": "to", "from": "ILATE Rule", "to": "Exponential Functions"}, {"arrows": "to", "from": "Non-Repeated Linear Factors", "to": "Direct decomposition"}, {"arrows": "to", "from": "Non-Repeated Linear Factors", "to": "Example: \u222b[P(x)/(x \u2013 p)(x \u2013 q)] dx"}, {"arrows": "to", "from": "Repeated Factors", "to": "Assign partial fraction terms for each power"}, {"arrows": "to", "from": "Repeated Factors", "to": "Solve by comparing coefficients"}, {"arrows": "to", "from": "Irreducible Quadratic Factors", "to": "Choose quadratic factor that cannot be factored further"}, {"arrows": "to", "from": "Irreducible Quadratic Factors", "to": "Write numerator as linear expression"}, {"arrows": "to", "from": "Irreducible Quadratic Factors", "to": "Example: \u222b[(ax\u00b2 + bx + c)/(quadratic factor)] dx"}, {"arrows": "to", "from": "Final Integration Process", "to": "Simplify expression into integrable parts"}, {"arrows": "to", "from": "Final Integration Process", "to": "Integrate term by term"}, {"arrows": "to", "from": "Final Integration Process", "to": "Combine constants and reassemble the final answer"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

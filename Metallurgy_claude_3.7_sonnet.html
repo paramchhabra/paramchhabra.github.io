@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "METALLURGY", "label": "METALLURGY", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Extraction of Metals", "label": "Extraction of Metals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Concentration of Ores", "label": "Concentration of Ores", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reduction Processes", "label": "Reduction Processes", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Purification Methods", "label": "Purification Methods", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Alloys", "label": "Alloys", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Important Compounds and Minerals", "label": "Important Compounds and Minerals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Occurrence of Metals", "label": "Occurrence of Metals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Steps in Metal Extraction", "label": "Steps in Metal Extraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thermodynamic Principles", "label": "Thermodynamic Principles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Native State (Au, Ag, Pt)", "label": "Native State (Au, Ag, Pt)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Combined State (oxides, sulfides, halides)", "label": "Combined State (oxides, sulfides, halides)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Common Minerals", "label": "Common Minerals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Concentration of Ore", "label": "Concentration of Ore", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conversion to Oxide", "label": "Conversion to Oxide", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reduction to Metal", "label": "Reduction to Metal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Refining/Purification", "label": "Refining/Purification", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hydraulic Washing", "label": "Hydraulic Washing", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Froth Flotation", "label": "Froth Flotation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Magnetic Separation", "label": "Magnetic Separation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Leaching", "label": "Leaching", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Based on difference in densities", "label": "Based on difference in densities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Lighter gangue washed away", "label": "Lighter gangue washed away", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used for oxide ores", "label": "Used for oxide ores", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used for sulphide ores", "label": "Used for sulphide ores", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ore particles wetted by oil", "label": "Ore particles wetted by oil", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gangue wetted by water", "label": "Gangue wetted by water", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Froth containing ore is skimmed off", "label": "Froth containing ore is skimmed off", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: PbS, ZnS ores", "label": "Example: PbS, ZnS ores", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used for magnetic ores", "label": "Used for magnetic ores", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ore passed over magnetic roller", "label": "Ore passed over magnetic roller", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic component attracted", "label": "Magnetic component attracted", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Non-magnetic gangue falls away", "label": "Non-magnetic gangue falls away", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Fe3O4 (magnetite)", "label": "Example: Fe3O4 (magnetite)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chemical extraction of metals", "label": "Chemical extraction of metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ore dissolved in suitable reagent", "label": "Ore dissolved in suitable reagent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Bauxite leached with NaOH", "label": "Example: Bauxite leached with NaOH", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Gold with NaCN solution", "label": "Example: Gold with NaCN solution", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pyrometallurgy", "label": "Pyrometallurgy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hydrometallurgy", "label": "Hydrometallurgy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrometallurgy", "label": "Electrometallurgy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Involves high temperature", "label": "Involves high temperature", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Calcination", "label": "Calcination", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Roasting", "label": "Roasting", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Smelting", "label": "Smelting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heating in limited air", "label": "Heating in limited air", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Drives off CO2, H2O", "label": "Drives off CO2, H2O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "MgCO3 \u2192 MgO + CO2", "label": "MgCO3 \u2192 MgO + CO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CaCO3 \u2192 CaO + CO2", "label": "CaCO3 \u2192 CaO + CO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heating in excess air", "label": "Heating in excess air", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Converts sulfides to oxides", "label": "Converts sulfides to oxides", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2ZnS + 3O2 \u2192 2ZnO + 2SO2", "label": "2ZnS + 3O2 \u2192 2ZnO + 2SO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2PbS + 3O2 \u2192 2PbO + 2SO2", "label": "2PbS + 3O2 \u2192 2PbO + 2SO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fusion with flux", "label": "Fusion with flux", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Forms slag with impurities", "label": "Forms slag with impurities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Flux + Impurity \u2192 Slag", "label": "Flux + Impurity \u2192 Slag", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Basic flux (CaO) for acidic impurities (SiO2)", "label": "Basic flux (CaO) for acidic impurities (SiO2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Acidic flux (SiO2) for basic impurities (FeO)", "label": "Acidic flux (SiO2) for basic impurities (FeO)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Displacement/Precipitation", "label": "Displacement/Precipitation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Ag extraction using NaCN", "label": "Example: Ag extraction using NaCN", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "4Ag + 8NaCN + O2 + 2H2O \u2192 4Na[Ag(CN)2] + 4NaOH", "label": "4Ag + 8NaCN + O2 + 2H2O \u2192 4Na[Ag(CN)2] + 4NaOH", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrolytic Reduction", "label": "Electrolytic Reduction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrolytic Refining", "label": "Electrolytic Refining", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hall-Heroult Process for Al", "label": "Hall-Heroult Process for Al", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Down\u0027s Process for Na", "label": "Down\u0027s Process for Na", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ellingham Diagram", "label": "Ellingham Diagram", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gibbs Free Energy", "label": "Gibbs Free Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u0394G = \u0394H - T\u0394S", "label": "\u0394G = \u0394H - T\u0394S", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u0394G related to equilibrium constant K", "label": "\u0394G related to equilibrium constant K", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plot of \u0394G\u00b0 vs Temperature", "label": "Plot of \u0394G\u00b0 vs Temperature", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Predicts feasibility of reduction", "label": "Predicts feasibility of reduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Lower line indicates more stable oxide", "label": "Lower line indicates more stable oxide", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Carbon reduction possible when metal line above C line", "label": "Carbon reduction possible when metal line above C line", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: ZnO + C \u2192 Zn + CO not feasible at low temperatures", "label": "Example: ZnO + C \u2192 Zn + CO not feasible at low temperatures", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Distillation", "label": "Distillation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Liquation", "label": "Liquation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Zone Refining", "label": "Zone Refining", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vapour Phase Refining", "label": "Vapour Phase Refining", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For volatile metals", "label": "For volatile metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zn, Hg, Cd purified this way", "label": "Zn, Hg, Cd purified this way", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Based on boiling point differences", "label": "Based on boiling point differences", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For low melting metals", "label": "For low melting metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Impure metal heated", "label": "Impure metal heated", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pure metal melts and flows away", "label": "Pure metal melts and flows away", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Sn, Pb purification", "label": "Example: Sn, Pb purification", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Impure metal as anode", "label": "Impure metal as anode", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pure metal as cathode", "label": "Pure metal as cathode", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrolyte contains metal salt", "label": "Electrolyte contains metal salt", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pure metal deposits at cathode", "label": "Pure metal deposits at cathode", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Cu refining with CuSO4 electrolyte", "label": "Example: Cu refining with CuSO4 electrolyte", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Based on different solubilities", "label": "Based on different solubilities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Moving molten zone", "label": "Moving molten zone", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Impurities concentrate in molten zone", "label": "Impurities concentrate in molten zone", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used for semiconductor materials", "label": "Used for semiconductor materials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Si, Ge purification", "label": "Example: Si, Ge purification", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metal forms volatile compound", "label": "Metal forms volatile compound", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Compound decomposed to get pure metal", "label": "Compound decomposed to get pure metal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Requirements: Volatile compound formation, Easy decomposition", "label": "Requirements: Volatile compound formation, Easy decomposition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Mond Process for Ni", "label": "Example: Mond Process for Ni", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ni + 4CO \u2192 Ni(CO)4 \u2192 Ni + 4CO", "label": "Ni + 4CO \u2192 Ni(CO)4 \u2192 Ni + 4CO", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Solid solutions of metals", "label": "Solid solutions of metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties different from constituent metals", "label": "Properties different from constituent metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: Substitutional, Interstitial", "label": "Types: Substitutional, Interstitial", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Types of Alloys", "label": "Types of Alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ferrous Alloys (with Fe)", "label": "Ferrous Alloys (with Fe)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Non-ferrous Alloys", "label": "Non-ferrous Alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Amalgams (with Hg)", "label": "Amalgams (with Hg)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Important Alloys", "label": "Important Alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Steel (Fe + C)", "label": "Steel (Fe + C)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stainless Steel (Fe + Cr + Ni)", "label": "Stainless Steel (Fe + Cr + Ni)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Brass (Cu + Zn)", "label": "Brass (Cu + Zn)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bronze (Cu + Sn)", "label": "Bronze (Cu + Sn)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Alnico (Fe + Al + Ni + Co)", "label": "Alnico (Fe + Al + Ni + Co)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Alnico", "label": "Alnico", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fe = 63%, Ni = 20%, Al = 12%, Co = 5%", "label": "Fe = 63%, Ni = 20%, Al = 12%, Co = 5%", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Highly magnetic", "label": "Highly magnetic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used for permanent magnets", "label": "Used for permanent magnets", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Steel", "label": "Steel", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "White Cast Iron (rapid cooling)", "label": "White Cast Iron (rapid cooling)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Contains cementite (Fe3C)", "label": "Contains cementite (Fe3C)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Grey Cast Iron (slow cooling)", "label": "Grey Cast Iron (slow cooling)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Contains graphite flakes", "label": "Contains graphite flakes", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Iron Minerals", "label": "Iron Minerals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Aluminum Minerals", "label": "Aluminum Minerals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Copper Minerals", "label": "Copper Minerals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Silver Minerals", "label": "Silver Minerals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Zinc Minerals", "label": "Zinc Minerals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Haematite (Fe2O3)", "label": "Haematite (Fe2O3)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetite (Fe3O4)", "label": "Magnetite (Fe3O4)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Siderite (FeCO3)", "label": "Siderite (FeCO3)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Iron Pyrites (FeS2)", "label": "Iron Pyrites (FeS2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bauxite (Al2O3\u00b7xH2O)", "label": "Bauxite (Al2O3\u00b7xH2O)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cryolite (Na3AlF6)", "label": "Cryolite (Na3AlF6)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Corundum (Al2O3)", "label": "Corundum (Al2O3)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Feldspar (KAlSi3O8)", "label": "Feldspar (KAlSi3O8)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Copper Pyrites (CuFeS2)", "label": "Copper Pyrites (CuFeS2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cuprite (Cu2O)", "label": "Cuprite (Cu2O)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Malachite [CuCO3\u00b7Cu(OH)2]", "label": "Malachite [CuCO3\u00b7Cu(OH)2]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Argentite (Ag2S)", "label": "Argentite (Ag2S)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Horn Silver (AgCl)", "label": "Horn Silver (AgCl)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Proustite (Ag3AsS3)", "label": "Proustite (Ag3AsS3)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stefanite (Ag5SbS4)", "label": "Stefanite (Ag5SbS4)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zinc Blende (ZnS)", "label": "Zinc Blende (ZnS)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Calamine (ZnCO3)", "label": "Calamine (ZnCO3)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zincite (ZnO)", "label": "Zincite (ZnO)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Extraction of Aluminum", "label": "Extraction of Aluminum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Purification of Bauxite (Bayer\u0027s Process)", "label": "Purification of Bauxite (Bayer\u0027s Process)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrolysis of Al2O3 in Cryolite (Hall-Heroult Process)", "label": "Electrolysis of Al2O3 in Cryolite (Hall-Heroult Process)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Bayer\u0027s Process", "label": "Bayer\u0027s Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bauxite treated with NaOH", "label": "Bauxite treated with NaOH", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fe2O3 and SiO2 removed", "label": "Fe2O3 and SiO2 removed", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Al2O3 + 2NaOH \u2192 2NaAlO2 + H2O", "label": "Al2O3 + 2NaOH \u2192 2NaAlO2 + H2O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2NaAlO2 + 4H2O \u2192 2NaOH + Al2O3\u00b73H2O", "label": "2NaAlO2 + 4H2O \u2192 2NaOH + Al2O3\u00b73H2O", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Hall-Heroult Process", "label": "Hall-Heroult Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrolysis of Al2O3 dissolved in Na3AlF6", "label": "Electrolysis of Al2O3 dissolved in Na3AlF6", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Carbon anode, Carbon-lined steel tank as cathode", "label": "Carbon anode, Carbon-lined steel tank as cathode", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Anode: C + O2- \u2192 CO/CO2 + 2e-", "label": "Anode: C + O2- \u2192 CO/CO2 + 2e-", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cathode: Al3+ + 3e- \u2192 Al", "label": "Cathode: Al3+ + 3e- \u2192 Al", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "About 0.5 kg carbon anode burnt away", "label": "About 0.5 kg carbon anode burnt away", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Extraction of Iron", "label": "Extraction of Iron", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Blast Furnace Process", "label": "Blast Furnace Process", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conversion to Steel", "label": "Conversion to Steel", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Charge: Iron ore, Coke, Limestone", "label": "Charge: Iron ore, Coke, Limestone", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hot air blast at bottom", "label": "Hot air blast at bottom", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Temperature zones: 500-800\u00b0C (upper), 800-1000\u00b0C (middle), 1500\u00b0C (lower)", "label": "Temperature zones: 500-800\u00b0C (upper), 800-1000\u00b0C (middle), 1500\u00b0C (lower)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reactions: Fe2O3 + 3CO \u2192 2Fe + 3CO2", "label": "Reactions: Fe2O3 + 3CO \u2192 2Fe + 3CO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CaO + SiO2 \u2192 CaSiO3 (slag)", "label": "CaO + SiO2 \u2192 CaSiO3 (slag)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bessemer Process", "label": "Bessemer Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Open Hearth Process", "label": "Open Hearth Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "L-D Process", "label": "L-D Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electric Arc Process", "label": "Electric Arc Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Acidic Bessemer for low P iron", "label": "Acidic Bessemer for low P iron", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Basic Bessemer for high P iron", "label": "Basic Bessemer for high P iron", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Air blown through molten pig iron", "label": "Air blown through molten pig iron", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Oxidizes C, Si, Mn impurities", "label": "Oxidizes C, Si, Mn impurities", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Extraction of Copper", "label": "Extraction of Copper", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Concentration by Froth Flotation", "label": "Concentration by Froth Flotation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Roasting: 2CuFeS2 + O2 \u2192 Cu2S + 2FeS + SO2", "label": "Roasting: 2CuFeS2 + O2 \u2192 Cu2S + 2FeS + SO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Smelting with Silica: 2FeS + 3O2 + SiO2 \u2192 2FeSiO3 + 2SO2", "label": "Smelting with Silica: 2FeS + 3O2 + SiO2 \u2192 2FeSiO3 + 2SO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Converting: Cu2S + O2 \u2192 2Cu + SO2", "label": "Converting: Cu2S + O2 \u2192 2Cu + SO2", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "METALLURGY", "to": "Extraction of Metals"}, {"arrows": "to", "from": "METALLURGY", "to": "Concentration of Ores"}, {"arrows": "to", "from": "METALLURGY", "to": "Reduction Processes"}, {"arrows": "to", "from": "METALLURGY", "to": "Purification Methods"}, {"arrows": "to", "from": "METALLURGY", "to": "Alloys"}, {"arrows": "to", "from": "METALLURGY", "to": "Important Compounds and Minerals"}, {"arrows": "to", "from": "Extraction of Metals", "to": "Occurrence of Metals"}, {"arrows": "to", "from": "Extraction of Metals", "to": "Steps in Metal Extraction"}, {"arrows": "to", "from": "Extraction of Metals", "to": "Thermodynamic Principles"}, {"arrows": "to", "from": "Concentration of Ores", "to": "Hydraulic Washing"}, {"arrows": "to", "from": "Concentration of Ores", "to": "Froth Flotation"}, {"arrows": "to", "from": "Concentration of Ores", "to": "Magnetic Separation"}, {"arrows": "to", "from": "Concentration of Ores", "to": "Leaching"}, {"arrows": "to", "from": "Reduction Processes", "to": "Pyrometallurgy"}, {"arrows": "to", "from": "Reduction Processes", "to": "Hydrometallurgy"}, {"arrows": "to", "from": "Reduction Processes", "to": "Electrometallurgy"}, {"arrows": "to", "from": "Purification Methods", "to": "Distillation"}, {"arrows": "to", "from": "Purification Methods", "to": "Liquation"}, {"arrows": "to", "from": "Purification Methods", "to": "Electrolytic Refining"}, {"arrows": "to", "from": "Purification Methods", "to": "Zone Refining"}, {"arrows": "to", "from": "Purification Methods", "to": "Vapour Phase Refining"}, {"arrows": "to", "from": "Alloys", "to": "Solid solutions of metals"}, {"arrows": "to", "from": "Alloys", "to": "Properties different from constituent metals"}, {"arrows": "to", "from": "Alloys", "to": "Types: Substitutional, Interstitial"}, {"arrows": "to", "from": "Important Compounds and Minerals", "to": "Iron Minerals"}, {"arrows": "to", "from": "Important Compounds and Minerals", "to": "Aluminum Minerals"}, {"arrows": "to", "from": "Important Compounds and Minerals", "to": "Copper Minerals"}, {"arrows": "to", "from": "Important Compounds and Minerals", "to": "Silver Minerals"}, {"arrows": "to", "from": "Important Compounds and Minerals", "to": "Zinc Minerals"}, {"arrows": "to", "from": "Occurrence of Metals", "to": "Native State (Au, Ag, Pt)"}, {"arrows": "to", "from": "Occurrence of Metals", "to": "Combined State (oxides, sulfides, halides)"}, {"arrows": "to", "from": "Occurrence of Metals", "to": "Common Minerals"}, {"arrows": "to", "from": "Steps in Metal Extraction", "to": "Concentration of Ore"}, {"arrows": "to", "from": "Steps in Metal Extraction", "to": "Conversion to Oxide"}, {"arrows": "to", "from": "Steps in Metal Extraction", "to": "Reduction to Metal"}, {"arrows": "to", "from": "Steps in Metal Extraction", "to": "Refining/Purification"}, {"arrows": "to", "from": "Thermodynamic Principles", "to": "Ellingham Diagram"}, {"arrows": "to", "from": "Thermodynamic Principles", "to": "Gibbs Free Energy"}, {"arrows": "to", "from": "Thermodynamic Principles", "to": "\u0394G = \u0394H - T\u0394S"}, {"arrows": "to", "from": "Thermodynamic Principles", "to": "\u0394G related to equilibrium constant K"}, {"arrows": "to", "from": "Hydraulic Washing", "to": "Based on difference in densities"}, {"arrows": "to", "from": "Hydraulic Washing", "to": "Lighter gangue washed away"}, {"arrows": "to", "from": "Hydraulic Washing", "to": "Used for oxide ores"}, {"arrows": "to", "from": "Froth Flotation", "to": "Used for sulphide ores"}, {"arrows": "to", "from": "Froth Flotation", "to": "Ore particles wetted by oil"}, {"arrows": "to", "from": "Froth Flotation", "to": "Gangue wetted by water"}, {"arrows": "to", "from": "Froth Flotation", "to": "Froth containing ore is skimmed off"}, {"arrows": "to", "from": "Froth Flotation", "to": "Example: PbS, ZnS ores"}, {"arrows": "to", "from": "Magnetic Separation", "to": "Used for magnetic ores"}, {"arrows": "to", "from": "Magnetic Separation", "to": "Ore passed over magnetic roller"}, {"arrows": "to", "from": "Magnetic Separation", "to": "Magnetic component attracted"}, {"arrows": "to", "from": "Magnetic Separation", "to": "Non-magnetic gangue falls away"}, {"arrows": "to", "from": "Magnetic Separation", "to": "Example: Fe3O4 (magnetite)"}, {"arrows": "to", "from": "Leaching", "to": "Chemical extraction of metals"}, {"arrows": "to", "from": "Leaching", "to": "Ore dissolved in suitable reagent"}, {"arrows": "to", "from": "Leaching", "to": "Example: Bauxite leached with NaOH"}, {"arrows": "to", "from": "Leaching", "to": "Example: Gold with NaCN solution"}, {"arrows": "to", "from": "Pyrometallurgy", "to": "Involves high temperature"}, {"arrows": "to", "from": "Pyrometallurgy", "to": "Calcination"}, {"arrows": "to", "from": "Pyrometallurgy", "to": "Roasting"}, {"arrows": "to", "from": "Pyrometallurgy", "to": "Smelting"}, {"arrows": "to", "from": "Hydrometallurgy", "to": "Leaching"}, {"arrows": "to", "from": "Hydrometallurgy", "to": "Displacement/Precipitation"}, {"arrows": "to", "from": "Hydrometallurgy", "to": "Example: Ag extraction using NaCN"}, {"arrows": "to", "from": "Hydrometallurgy", "to": "4Ag + 8NaCN + O2 + 2H2O \u2192 4Na[Ag(CN)2] + 4NaOH"}, {"arrows": "to", "from": "Electrometallurgy", "to": "Electrolytic Reduction"}, {"arrows": "to", "from": "Electrometallurgy", "to": "Electrolytic Refining"}, {"arrows": "to", "from": "Electrometallurgy", "to": "Hall-Heroult Process for Al"}, {"arrows": "to", "from": "Electrometallurgy", "to": "Down\u0027s Process for Na"}, {"arrows": "to", "from": "Calcination", "to": "Heating in limited air"}, {"arrows": "to", "from": "Calcination", "to": "Drives off CO2, H2O"}, {"arrows": "to", "from": "Calcination", "to": "MgCO3 \u2192 MgO + CO2"}, {"arrows": "to", "from": "Calcination", "to": "CaCO3 \u2192 CaO + CO2"}, {"arrows": "to", "from": "Roasting", "to": "Heating in excess air"}, {"arrows": "to", "from": "Roasting", "to": "Converts sulfides to oxides"}, {"arrows": "to", "from": "Roasting", "to": "2ZnS + 3O2 \u2192 2ZnO + 2SO2"}, {"arrows": "to", "from": "Roasting", "to": "2PbS + 3O2 \u2192 2PbO + 2SO2"}, {"arrows": "to", "from": "Smelting", "to": "Fusion with flux"}, {"arrows": "to", "from": "Smelting", "to": "Forms slag with impurities"}, {"arrows": "to", "from": "Smelting", "to": "Flux + Impurity \u2192 Slag"}, {"arrows": "to", "from": "Smelting", "to": "Basic flux (CaO) for acidic impurities (SiO2)"}, {"arrows": "to", "from": "Smelting", "to": "Acidic flux (SiO2) for basic impurities (FeO)"}, {"arrows": "to", "from": "Electrolytic Refining", "to": "Impure metal as anode"}, {"arrows": "to", "from": "Electrolytic Refining", "to": "Pure metal as cathode"}, {"arrows": "to", "from": "Electrolytic Refining", "to": "Electrolyte contains metal salt"}, {"arrows": "to", "from": "Electrolytic Refining", "to": "Pure metal deposits at cathode"}, {"arrows": "to", "from": "Electrolytic Refining", "to": "Example: Cu refining with CuSO4 electrolyte"}, {"arrows": "to", "from": "Ellingham Diagram", "to": "Plot of \u0394G\u00b0 vs Temperature"}, {"arrows": "to", "from": "Ellingham Diagram", "to": "Predicts feasibility of reduction"}, {"arrows": "to", "from": "Ellingham Diagram", "to": "Lower line indicates more stable oxide"}, {"arrows": "to", "from": "Ellingham Diagram", "to": "Carbon reduction possible when metal line above C line"}, {"arrows": "to", "from": "Ellingham Diagram", "to": "Example: ZnO + C \u2192 Zn + CO not feasible at low temperatures"}, {"arrows": "to", "from": "Distillation", "to": "For volatile metals"}, {"arrows": "to", "from": "Distillation", "to": "Zn, Hg, Cd purified this way"}, {"arrows": "to", "from": "Distillation", "to": "Based on boiling point differences"}, {"arrows": "to", "from": "Liquation", "to": "For low melting metals"}, {"arrows": "to", "from": "Liquation", "to": "Impure metal heated"}, {"arrows": "to", "from": "Liquation", "to": "Pure metal melts and flows away"}, {"arrows": "to", "from": "Liquation", "to": "Example: Sn, Pb purification"}, {"arrows": "to", "from": "Zone Refining", "to": "Based on different solubilities"}, {"arrows": "to", "from": "Zone Refining", "to": "Moving molten zone"}, {"arrows": "to", "from": "Zone Refining", "to": "Impurities concentrate in molten zone"}, {"arrows": "to", "from": "Zone Refining", "to": "Used for semiconductor materials"}, {"arrows": "to", "from": "Zone Refining", "to": "Example: Si, Ge purification"}, {"arrows": "to", "from": "Vapour Phase Refining", "to": "Metal forms volatile compound"}, {"arrows": "to", "from": "Vapour Phase Refining", "to": "Compound decomposed to get pure metal"}, {"arrows": "to", "from": "Vapour Phase Refining", "to": "Requirements: Volatile compound formation, Easy decomposition"}, {"arrows": "to", "from": "Vapour Phase Refining", "to": "Example: Mond Process for Ni"}, {"arrows": "to", "from": "Vapour Phase Refining", "to": "Ni + 4CO \u2192 Ni(CO)4 \u2192 Ni + 4CO"}, {"arrows": "to", "from": "Types of Alloys", "to": "Ferrous Alloys (with Fe)"}, {"arrows": "to", "from": "Types of Alloys", "to": "Non-ferrous Alloys"}, {"arrows": "to", "from": "Types of Alloys", "to": "Amalgams (with Hg)"}, {"arrows": "to", "from": "Important Alloys", "to": "Steel (Fe + C)"}, {"arrows": "to", "from": "Important Alloys", "to": "Stainless Steel (Fe + Cr + Ni)"}, {"arrows": "to", "from": "Important Alloys", "to": "Brass (Cu + Zn)"}, {"arrows": "to", "from": "Important Alloys", "to": "Bronze (Cu + Sn)"}, {"arrows": "to", "from": "Important Alloys", "to": "Alnico (Fe + Al + Ni + Co)"}, {"arrows": "to", "from": "Alnico", "to": "Fe = 63%, Ni = 20%, Al = 12%, Co = 5%"}, {"arrows": "to", "from": "Alnico", "to": "Highly magnetic"}, {"arrows": "to", "from": "Alnico", "to": "Used for permanent magnets"}, {"arrows": "to", "from": "Steel", "to": "White Cast Iron (rapid cooling)"}, {"arrows": "to", "from": "Steel", "to": "Contains cementite (Fe3C)"}, {"arrows": "to", "from": "Steel", "to": "Grey Cast Iron (slow cooling)"}, {"arrows": "to", "from": "Steel", "to": "Contains graphite flakes"}, {"arrows": "to", "from": "Iron Minerals", "to": "Haematite (Fe2O3)"}, {"arrows": "to", "from": "Iron Minerals", "to": "Magnetite (Fe3O4)"}, {"arrows": "to", "from": "Iron Minerals", "to": "Siderite (FeCO3)"}, {"arrows": "to", "from": "Iron Minerals", "to": "Iron Pyrites (FeS2)"}, {"arrows": "to", "from": "Aluminum Minerals", "to": "Bauxite (Al2O3\u00b7xH2O)"}, {"arrows": "to", "from": "Aluminum Minerals", "to": "Cryolite (Na3AlF6)"}, {"arrows": "to", "from": "Aluminum Minerals", "to": "Corundum (Al2O3)"}, {"arrows": "to", "from": "Aluminum Minerals", "to": "Feldspar (KAlSi3O8)"}, {"arrows": "to", "from": "Copper Minerals", "to": "Copper Pyrites (CuFeS2)"}, {"arrows": "to", "from": "Copper Minerals", "to": "Cuprite (Cu2O)"}, {"arrows": "to", "from": "Copper Minerals", "to": "Malachite [CuCO3\u00b7Cu(OH)2]"}, {"arrows": "to", "from": "Silver Minerals", "to": "Argentite (Ag2S)"}, {"arrows": "to", "from": "Silver Minerals", "to": "Horn Silver (AgCl)"}, {"arrows": "to", "from": "Silver Minerals", "to": "Proustite (Ag3AsS3)"}, {"arrows": "to", "from": "Silver Minerals", "to": "Stefanite (Ag5SbS4)"}, {"arrows": "to", "from": "Zinc Minerals", "to": "Zinc Blende (ZnS)"}, {"arrows": "to", "from": "Zinc Minerals", "to": "Calamine (ZnCO3)"}, {"arrows": "to", "from": "Zinc Minerals", "to": "Zincite (ZnO)"}, {"arrows": "to", "from": "Extraction of Aluminum", "to": "Purification of Bauxite (Bayer\u0027s Process)"}, {"arrows": "to", "from": "Extraction of Aluminum", "to": "Electrolysis of Al2O3 in Cryolite (Hall-Heroult Process)"}, {"arrows": "to", "from": "Bayer\u0027s Process", "to": "Bauxite treated with NaOH"}, {"arrows": "to", "from": "Bayer\u0027s Process", "to": "Fe2O3 and SiO2 removed"}, {"arrows": "to", "from": "Bayer\u0027s Process", "to": "Al2O3 + 2NaOH \u2192 2NaAlO2 + H2O"}, {"arrows": "to", "from": "Bayer\u0027s Process", "to": "2NaAlO2 + 4H2O \u2192 2NaOH + Al2O3\u00b73H2O"}, {"arrows": "to", "from": "Hall-Heroult Process", "to": "Electrolysis of Al2O3 dissolved in Na3AlF6"}, {"arrows": "to", "from": "Hall-Heroult Process", "to": "Carbon anode, Carbon-lined steel tank as cathode"}, {"arrows": "to", "from": "Hall-Heroult Process", "to": "Anode: C + O2- \u2192 CO/CO2 + 2e-"}, {"arrows": "to", "from": "Hall-Heroult Process", "to": "Cathode: Al3+ + 3e- \u2192 Al"}, {"arrows": "to", "from": "Hall-Heroult Process", "to": "About 0.5 kg carbon anode burnt away"}, {"arrows": "to", "from": "Extraction of Iron", "to": "Blast Furnace Process"}, {"arrows": "to", "from": "Extraction of Iron", "to": "Conversion to Steel"}, {"arrows": "to", "from": "Blast Furnace Process", "to": "Charge: Iron ore, Coke, Limestone"}, {"arrows": "to", "from": "Blast Furnace Process", "to": "Hot air blast at bottom"}, {"arrows": "to", "from": "Blast Furnace Process", "to": "Temperature zones: 500-800\u00b0C (upper), 800-1000\u00b0C (middle), 1500\u00b0C (lower)"}, {"arrows": "to", "from": "Blast Furnace Process", "to": "Reactions: Fe2O3 + 3CO \u2192 2Fe + 3CO2"}, {"arrows": "to", "from": "Blast Furnace Process", "to": "CaCO3 \u2192 CaO + CO2"}, {"arrows": "to", "from": "Blast Furnace Process", "to": "CaO + SiO2 \u2192 CaSiO3 (slag)"}, {"arrows": "to", "from": "Conversion to Steel", "to": "Bessemer Process"}, {"arrows": "to", "from": "Conversion to Steel", "to": "Open Hearth Process"}, {"arrows": "to", "from": "Conversion to Steel", "to": "L-D Process"}, {"arrows": "to", "from": "Conversion to Steel", "to": "Electric Arc Process"}, {"arrows": "to", "from": "Bessemer Process", "to": "Acidic Bessemer for low P iron"}, {"arrows": "to", "from": "Bessemer Process", "to": "Basic Bessemer for high P iron"}, {"arrows": "to", "from": "Bessemer Process", "to": "Air blown through molten pig iron"}, {"arrows": "to", "from": "Bessemer Process", "to": "Oxidizes C, Si, Mn impurities"}, {"arrows": "to", "from": "Extraction of Copper", "to": "Concentration by Froth Flotation"}, {"arrows": "to", "from": "Extraction of Copper", "to": "Roasting: 2CuFeS2 + O2 \u2192 Cu2S + 2FeS + SO2"}, {"arrows": "to", "from": "Extraction of Copper", "to": "Smelting with Silica: 2FeS + 3O2 + SiO2 \u2192 2FeSiO3 + 2SO2"}, {"arrows": "to", "from": "Extraction of Copper", "to": "Converting: Cu2S + O2 \u2192 2Cu + SO2"}, {"arrows": "to", "from": "Extraction of Copper", "to": "Electrolytic Refining"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

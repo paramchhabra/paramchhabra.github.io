@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Radioactivity", "label": "Radioactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Decay of Radioactive Sample", "label": "Decay of Radioactive Sample", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When an Atom Disintegrates", "label": "When an Atom Disintegrates", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When an Atom Disintegrates (Continued)", "label": "When an Atom Disintegrates (Continued)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties of Cathode Rays", "label": "Properties of Cathode Rays", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Working - Photoelectric Cells", "label": "Working - Photoelectric Cells", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Radioactive Decay Laws", "label": "Radioactive Decay Laws", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Activity of Sample", "label": "Activity of Sample", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Average Life", "label": "Average Life", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Activity Definition", "label": "Activity Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Unit of Activity", "label": "Unit of Activity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The activity of a radioactive sample is called one curie if it", "label": "The activity of a radioactive sample is called one curie if it", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The activity of a radioactive sample may be expressed as", "label": "The activity of a radioactive sample may be expressed as", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Curie (Ci)", "label": "Curie (Ci)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rutherford", "label": "Rutherford", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1 Ci = 3.7 x 10^10 disintegrations/second", "label": "1 Ci = 3.7 x 10^10 disintegrations/second", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The activity of a radioactive sample is called one Rutherford if it", "label": "The activity of a radioactive sample is called one Rutherford if it", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1 Rutherford = 10^6 disintegrations/second", "label": "1 Rutherford = 10^6 disintegrations/second", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Average Life Formula", "label": "Average Life Formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Average Life = 1 / Lambda", "label": "Average Life = 1 / Lambda", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Emission of Particles", "label": "Emission of Particles", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gamma Rays", "label": "Gamma Rays", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Effect of Position of Anode", "label": "Effect of Position of Anode", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Either a - particle reflection, refraction, etc.", "label": "Either a - particle reflection, refraction, etc.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Neither the interaction", "label": "Neither the interaction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The gas in the discharge tube and their direction of propagation", "label": "The gas in the discharge tube and their direction of propagation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Explanation of Phenomena", "label": "Explanation of Phenomena", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wavelength of radiations", "label": "Wavelength of radiations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "This phenomenon can be explained on the basis of either", "label": "This phenomenon can be explained on the basis of either", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The wavelength of the de-Broglie particle is independent", "label": "The wavelength of the de-Broglie particle is independent", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Minimum wavelength below which no X-ray is emitted", "label": "Minimum wavelength below which no X-ray is emitted", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "There is a minimum wavelength below which no X-ray is emitted", "label": "There is a minimum wavelength below which no X-ray is emitted", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Photoelectric Cell Applications", "label": "Photoelectric Cell Applications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Coolant and Heat Exchange", "label": "Coolant and Heat Exchange", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Television studio", "label": "Television studio", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Convert light to electrical signals", "label": "Convert light to electrical signals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The coolant takes away heat", "label": "The coolant takes away heat", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heat Exchange Principle", "label": "Heat Exchange Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Photoelectric Cell Composition", "label": "Photoelectric Cell Composition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electron\u0027s Energy Absorption", "label": "Electron\u0027s Energy Absorption", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Photons of the incident radiation is incident", "label": "Photons of the incident radiation is incident", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The work function of the metal", "label": "The work function of the metal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electron can absorb or radiate energy", "label": "Electron can absorb or radiate energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rutherford-Soddy Studies", "label": "Rutherford-Soddy Studies", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nuclear Fission", "label": "Nuclear Fission", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Laws of Radioactive Disintegration", "label": "Laws of Radioactive Disintegration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mean or Average Life", "label": "Mean or Average Life", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Half Life", "label": "Half Life", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Binding energy of nucleus", "label": "Binding energy of nucleus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phenomenon of radioactivity", "label": "Phenomenon of radioactivity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When a suitable radiation is incident on the electrode E", "label": "When a suitable radiation is incident on the electrode E", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Process of splitting a heavy nucleus", "label": "Process of splitting a heavy nucleus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Masses with liberation of energy", "label": "Masses with liberation of energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rate of disintegration depends upon the", "label": "Rate of disintegration depends upon the", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Number of atoms of the sample decrease", "label": "Number of atoms of the sample decrease", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The number of atoms in the sample at that instant", "label": "The number of atoms in the sample at that instant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "N = N0e^(-lambda*t)", "label": "N = N0e^(-lambda*t)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mean life formula", "label": "Mean life formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T = 1/lambda", "label": "T = 1/lambda", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Half life formula", "label": "Half life formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T1/2 = 0.693 / lambda", "label": "T1/2 = 0.693 / lambda", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The energy released during disintegration", "label": "The energy released during disintegration", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Radioactivity", "to": "Decay of Radioactive Sample"}, {"arrows": "to", "from": "Radioactivity", "to": "When an Atom Disintegrates"}, {"arrows": "to", "from": "Radioactivity", "to": "When an Atom Disintegrates (Continued)"}, {"arrows": "to", "from": "Radioactivity", "to": "Properties of Cathode Rays"}, {"arrows": "to", "from": "Radioactivity", "to": "Working - Photoelectric Cells"}, {"arrows": "to", "from": "Radioactivity", "to": "Radioactive Decay Laws"}, {"arrows": "to", "from": "Decay of Radioactive Sample", "to": "Activity of Sample"}, {"arrows": "to", "from": "Decay of Radioactive Sample", "to": "Average Life"}, {"arrows": "to", "from": "When an Atom Disintegrates", "to": "Emission of Particles"}, {"arrows": "to", "from": "When an Atom Disintegrates", "to": "Gamma Rays"}, {"arrows": "to", "from": "When an Atom Disintegrates", "to": "Effect of Position of Anode"}, {"arrows": "to", "from": "When an Atom Disintegrates (Continued)", "to": "Explanation of Phenomena"}, {"arrows": "to", "from": "When an Atom Disintegrates (Continued)", "to": "Wavelength of radiations"}, {"arrows": "to", "from": "Properties of Cathode Rays", "to": "Photoelectric Cell Applications"}, {"arrows": "to", "from": "Properties of Cathode Rays", "to": "Coolant and Heat Exchange"}, {"arrows": "to", "from": "Working - Photoelectric Cells", "to": "Photoelectric Cell Composition"}, {"arrows": "to", "from": "Working - Photoelectric Cells", "to": "Electron\u0027s Energy Absorption"}, {"arrows": "to", "from": "Radioactive Decay Laws", "to": "Rutherford-Soddy Studies"}, {"arrows": "to", "from": "Radioactive Decay Laws", "to": "Nuclear Fission"}, {"arrows": "to", "from": "Radioactive Decay Laws", "to": "Laws of Radioactive Disintegration"}, {"arrows": "to", "from": "Radioactive Decay Laws", "to": "Mean or Average Life"}, {"arrows": "to", "from": "Radioactive Decay Laws", "to": "Half Life"}, {"arrows": "to", "from": "Radioactive Decay Laws", "to": "Binding energy of nucleus"}, {"arrows": "to", "from": "Activity of Sample", "to": "Activity Definition"}, {"arrows": "to", "from": "Activity of Sample", "to": "Unit of Activity"}, {"arrows": "to", "from": "Average Life", "to": "Average Life Formula"}, {"arrows": "to", "from": "Activity Definition", "to": "The activity of a radioactive sample is called one curie if it"}, {"arrows": "to", "from": "Activity Definition", "to": "The activity of a radioactive sample may be expressed as"}, {"arrows": "to", "from": "Unit of Activity", "to": "Curie (Ci)"}, {"arrows": "to", "from": "Unit of Activity", "to": "Rutherford"}, {"arrows": "to", "from": "Curie (Ci)", "to": "1 Ci = 3.7 x 10^10 disintegrations/second"}, {"arrows": "to", "from": "Rutherford", "to": "The activity of a radioactive sample is called one Rutherford if it"}, {"arrows": "to", "from": "Rutherford", "to": "1 Rutherford = 10^6 disintegrations/second"}, {"arrows": "to", "from": "Average Life Formula", "to": "Average Life = 1 / Lambda"}, {"arrows": "to", "from": "Emission of Particles", "to": "Either a - particle reflection, refraction, etc."}, {"arrows": "to", "from": "Gamma Rays", "to": "Neither the interaction"}, {"arrows": "to", "from": "Effect of Position of Anode", "to": "The gas in the discharge tube and their direction of propagation"}, {"arrows": "to", "from": "Explanation of Phenomena", "to": "This phenomenon can be explained on the basis of either"}, {"arrows": "to", "from": "Wavelength of radiations", "to": "The wavelength of the de-Broglie particle is independent"}, {"arrows": "to", "from": "Wavelength of radiations", "to": "Minimum wavelength below which no X-ray is emitted"}, {"arrows": "to", "from": "Minimum wavelength below which no X-ray is emitted", "to": "There is a minimum wavelength below which no X-ray is emitted"}, {"arrows": "to", "from": "Photoelectric Cell Applications", "to": "Television studio"}, {"arrows": "to", "from": "Photoelectric Cell Applications", "to": "Convert light to electrical signals"}, {"arrows": "to", "from": "Coolant and Heat Exchange", "to": "The coolant takes away heat"}, {"arrows": "to", "from": "Coolant and Heat Exchange", "to": "Heat Exchange Principle"}, {"arrows": "to", "from": "Photoelectric Cell Composition", "to": "Photons of the incident radiation is incident"}, {"arrows": "to", "from": "Photoelectric Cell Composition", "to": "The work function of the metal"}, {"arrows": "to", "from": "Electron\u0027s Energy Absorption", "to": "Electron can absorb or radiate energy"}, {"arrows": "to", "from": "Rutherford-Soddy Studies", "to": "Phenomenon of radioactivity"}, {"arrows": "to", "from": "Rutherford-Soddy Studies", "to": "When a suitable radiation is incident on the electrode E"}, {"arrows": "to", "from": "Nuclear Fission", "to": "Process of splitting a heavy nucleus"}, {"arrows": "to", "from": "Nuclear Fission", "to": "Masses with liberation of energy"}, {"arrows": "to", "from": "Laws of Radioactive Disintegration", "to": "Rate of disintegration depends upon the"}, {"arrows": "to", "from": "Laws of Radioactive Disintegration", "to": "Number of atoms of the sample decrease"}, {"arrows": "to", "from": "Mean or Average Life", "to": "Mean life formula"}, {"arrows": "to", "from": "Half Life", "to": "Half life formula"}, {"arrows": "to", "from": "Binding energy of nucleus", "to": "The energy released during disintegration"}, {"arrows": "to", "from": "Rate of disintegration depends upon the", "to": "The number of atoms in the sample at that instant"}, {"arrows": "to", "from": "Rate of disintegration depends upon the", "to": "N = N0e^(-lambda*t)"}, {"arrows": "to", "from": "Mean life formula", "to": "T = 1/lambda"}, {"arrows": "to", "from": "Half life formula", "to": "T1/2 = 0.693 / lambda"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

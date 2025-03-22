@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Integration Techniques", "label": "Integration Techniques", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Partial Fractions", "label": "Partial Fractions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration by Parts", "label": "Integration by Parts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Trigonometric Substitutions", "label": "Trigonometric Substitutions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rational Functions", "label": "Rational Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Special Integrals", "label": "Special Integrals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Case 1: Non-repeated Linear Factors", "label": "Case 1: Non-repeated Linear Factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Case 2: Linear + Quadratic Factors", "label": "Case 2: Linear + Quadratic Factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Case 3: Repeated Linear Factors", "label": "Case 3: Repeated Linear Factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Case 4: Repeated Quadratic Factors", "label": "Case 4: Repeated Quadratic Factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Case 5: Quadratic Factors", "label": "Case 5: Quadratic Factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (x-a\u2081)(x-a\u2082)...(x-a\u2099)", "label": "g(x) = (x-a\u2081)(x-a\u2082)...(x-a\u2099)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Decomposition: f(x)/g(x) = A\u2081/(x-a\u2081) + A\u2082/(x-a\u2082) + ... + A\u2099/(x-a\u2099)", "label": "Decomposition: f(x)/g(x) = A\u2081/(x-a\u2081) + A\u2082/(x-a\u2082) + ... + A\u2099/(x-a\u2099)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b(2x+1)/((x-1)(x-2))dx = A/(x-1) + B/(x-2)", "label": "Example: \u222b(2x+1)/((x-1)(x-2))dx = A/(x-1) + B/(x-2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (x-a\u2081)...(ax\u00b2+bx+c)", "label": "g(x) = (x-a\u2081)...(ax\u00b2+bx+c)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Decomposition includes terms like (Ax+B)/(ax\u00b2+bx+c)", "label": "Decomposition includes terms like (Ax+B)/(ax\u00b2+bx+c)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bdx/((x-1)(x\u00b2+1)) = A/(x-1) + (Bx+C)/(x\u00b2+1)", "label": "Example: \u222bdx/((x-1)(x\u00b2+1)) = A/(x-1) + (Bx+C)/(x\u00b2+1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (x-a)\u02b3(x-b)\u02e2...", "label": "g(x) = (x-a)\u02b3(x-b)\u02e2...", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Decomposition: A\u2081/(x-a) + A\u2082/(x-a)\u00b2 + ... + A\u1d63/(x-a)\u02b3 + ...", "label": "Decomposition: A\u2081/(x-a) + A\u2082/(x-a)\u00b2 + ... + A\u1d63/(x-a)\u02b3 + ...", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bdx/((x-1)\u00b2(x-2)) = A/(x-1) + B/(x-1)\u00b2 + C/(x-2)", "label": "Example: \u222bdx/((x-1)\u00b2(x-2)) = A/(x-1) + B/(x-1)\u00b2 + C/(x-2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (ax\u00b2+bx+c)\u02b3...", "label": "g(x) = (ax\u00b2+bx+c)\u02b3...", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Decomposition includes (A\u2081x+B\u2081)/(ax\u00b2+bx+c) + (A\u2082x+B\u2082)/(ax\u00b2+bx+c)\u00b2 + ...", "label": "Decomposition includes (A\u2081x+B\u2081)/(ax\u00b2+bx+c) + (A\u2082x+B\u2082)/(ax\u00b2+bx+c)\u00b2 + ...", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bdx/((x\u00b2+1)\u00b2) = (Ax+B)/(x\u00b2+1) + (Cx+D)/(x\u00b2+1)\u00b2", "label": "Example: \u222bdx/((x\u00b2+1)\u00b2) = (Ax+B)/(x\u00b2+1) + (Cx+D)/(x\u00b2+1)\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For irreducible quadratic factors ax\u00b2+bx+c", "label": "For irreducible quadratic factors ax\u00b2+bx+c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Complete the square: ax\u00b2+bx+c = a(x+b/2a)\u00b2+(c-b\u00b2/4a)", "label": "Complete the square: ax\u00b2+bx+c = a(x+b/2a)\u00b2+(c-b\u00b2/4a)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bdx/(x\u00b2+4) = (1/2)tan\u207b\u00b9(x/2)", "label": "Example: \u222bdx/(x\u00b2+4) = (1/2)tan\u207b\u00b9(x/2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: \u222bu\u00b7dv = u\u00b7v - \u222bv\u00b7du", "label": "Formula: \u222bu\u00b7dv = u\u00b7v - \u222bv\u00b7du", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "ILATE Rule for choosing u and v", "label": "ILATE Rule for choosing u and v", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Repeated application when needed", "label": "Repeated application when needed", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bx\u00b7e^x dx = x\u00b7e^x - \u222be^x dx = x\u00b7e^x - e^x + C", "label": "Example: \u222bx\u00b7e^x dx = x\u00b7e^x - \u222be^x dx = x\u00b7e^x - e^x + C", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "ILATE Rule", "label": "ILATE Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I - Inverse trigonometric functions", "label": "I - Inverse trigonometric functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "L - Logarithmic functions", "label": "L - Logarithmic functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A - Algebraic functions", "label": "A - Algebraic functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T - Trigonometric functions", "label": "T - Trigonometric functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "E - Exponential functions", "label": "E - Exponential functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For \u221a(a\u00b2-x\u00b2): x = a\u00b7sin \u03b8", "label": "For \u221a(a\u00b2-x\u00b2): x = a\u00b7sin \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For \u221a(a\u00b2+x\u00b2): x = a\u00b7tan \u03b8", "label": "For \u221a(a\u00b2+x\u00b2): x = a\u00b7tan \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For \u221a(x\u00b2-a\u00b2): x = a\u00b7sec \u03b8", "label": "For \u221a(x\u00b2-a\u00b2): x = a\u00b7sec \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bdx/\u221a(4-x\u00b2) using x = 2sin \u03b8", "label": "Example: \u222bdx/\u221a(4-x\u00b2) using x = 2sin \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222bP(x)/Q(x)dx where P, Q are polynomials", "label": "\u222bP(x)/Q(x)dx where P, Q are polynomials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If degree(P) \u2265 degree(Q), divide first", "label": "If degree(P) \u2265 degree(Q), divide first", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Apply partial fractions decomposition", "label": "Apply partial fractions decomposition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b(x\u00b2+1)/(x-1)dx = x + 1 + 2/(x-1)", "label": "Example: \u222b(x\u00b2+1)/(x-1)dx = x + 1 + 2/(x-1)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Trigonometric Integrals", "label": "Trigonometric Integrals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals with Even Powers", "label": "Integrals with Even Powers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals with Odd Powers", "label": "Integrals with Odd Powers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rational Trigonometric Functions", "label": "Rational Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222bsin^m x\u00b7cos^n x dx", "label": "\u222bsin^m x\u00b7cos^n x dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When m,n both odd: use substitution u = tan x", "label": "When m,n both odd: use substitution u = tan x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When m,n both even: use double angle formulas", "label": "When m,n both even: use double angle formulas", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When one even, one odd: substitute for the odd power", "label": "When one even, one odd: substitute for the odd power", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For \u222bsin\u00b2\u207fx dx, use reduction formula", "label": "For \u222bsin\u00b2\u207fx dx, use reduction formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For \u222bcos\u00b2\u207fx dx, use reduction formula", "label": "For \u222bcos\u00b2\u207fx dx, use reduction formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bsin\u00b2x dx = (1/2) - (1/2)cos(2x)", "label": "Example: \u222bsin\u00b2x dx = (1/2) - (1/2)cos(2x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For \u222bsin\u00b2\u207f\u207a\u00b9x dx, substitute u = cos x", "label": "For \u222bsin\u00b2\u207f\u207a\u00b9x dx, substitute u = cos x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For \u222bcos\u00b2\u207f\u207a\u00b9x dx, substitute u = sin x", "label": "For \u222bcos\u00b2\u207f\u207a\u00b9x dx, substitute u = sin x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bsin\u00b3x dx = -(cos x) + (cos\u00b3x)/3", "label": "Example: \u222bsin\u00b3x dx = -(cos x) + (cos\u00b3x)/3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222bR(sin x, cos x)dx", "label": "\u222bR(sin x, cos x)dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Substitute t = tan(x/2)", "label": "Substitute t = tan(x/2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Transforms to rational function of t", "label": "Transforms to rational function of t", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bdx/(1+sin x) using t = tan(x/2)", "label": "Example: \u222bdx/(1+sin x) using t = tan(x/2)", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Integration Techniques", "to": "Partial Fractions"}, {"arrows": "to", "from": "Integration Techniques", "to": "Integration by Parts"}, {"arrows": "to", "from": "Integration Techniques", "to": "Trigonometric Substitutions"}, {"arrows": "to", "from": "Integration Techniques", "to": "Rational Functions"}, {"arrows": "to", "from": "Integration Techniques", "to": "Special Integrals"}, {"arrows": "to", "from": "Partial Fractions", "to": "Case 1: Non-repeated Linear Factors"}, {"arrows": "to", "from": "Partial Fractions", "to": "Case 2: Linear + Quadratic Factors"}, {"arrows": "to", "from": "Partial Fractions", "to": "Case 3: Repeated Linear Factors"}, {"arrows": "to", "from": "Partial Fractions", "to": "Case 4: Repeated Quadratic Factors"}, {"arrows": "to", "from": "Partial Fractions", "to": "Case 5: Quadratic Factors"}, {"arrows": "to", "from": "Integration by Parts", "to": "Formula: \u222bu\u00b7dv = u\u00b7v - \u222bv\u00b7du"}, {"arrows": "to", "from": "Integration by Parts", "to": "ILATE Rule for choosing u and v"}, {"arrows": "to", "from": "Integration by Parts", "to": "Repeated application when needed"}, {"arrows": "to", "from": "Integration by Parts", "to": "Example: \u222bx\u00b7e^x dx = x\u00b7e^x - \u222be^x dx = x\u00b7e^x - e^x + C"}, {"arrows": "to", "from": "Trigonometric Substitutions", "to": "For \u221a(a\u00b2-x\u00b2): x = a\u00b7sin \u03b8"}, {"arrows": "to", "from": "Trigonometric Substitutions", "to": "For \u221a(a\u00b2+x\u00b2): x = a\u00b7tan \u03b8"}, {"arrows": "to", "from": "Trigonometric Substitutions", "to": "For \u221a(x\u00b2-a\u00b2): x = a\u00b7sec \u03b8"}, {"arrows": "to", "from": "Trigonometric Substitutions", "to": "Example: \u222bdx/\u221a(4-x\u00b2) using x = 2sin \u03b8"}, {"arrows": "to", "from": "Rational Functions", "to": "\u222bP(x)/Q(x)dx where P, Q are polynomials"}, {"arrows": "to", "from": "Rational Functions", "to": "If degree(P) \u2265 degree(Q), divide first"}, {"arrows": "to", "from": "Rational Functions", "to": "Apply partial fractions decomposition"}, {"arrows": "to", "from": "Rational Functions", "to": "Example: \u222b(x\u00b2+1)/(x-1)dx = x + 1 + 2/(x-1)"}, {"arrows": "to", "from": "Special Integrals", "to": "Trigonometric Integrals"}, {"arrows": "to", "from": "Special Integrals", "to": "Integrals with Even Powers"}, {"arrows": "to", "from": "Special Integrals", "to": "Integrals with Odd Powers"}, {"arrows": "to", "from": "Special Integrals", "to": "Rational Trigonometric Functions"}, {"arrows": "to", "from": "Case 1: Non-repeated Linear Factors", "to": "g(x) = (x-a\u2081)(x-a\u2082)...(x-a\u2099)"}, {"arrows": "to", "from": "Case 1: Non-repeated Linear Factors", "to": "Decomposition: f(x)/g(x) = A\u2081/(x-a\u2081) + A\u2082/(x-a\u2082) + ... + A\u2099/(x-a\u2099)"}, {"arrows": "to", "from": "Case 1: Non-repeated Linear Factors", "to": "Example: \u222b(2x+1)/((x-1)(x-2))dx = A/(x-1) + B/(x-2)"}, {"arrows": "to", "from": "Case 2: Linear + Quadratic Factors", "to": "g(x) = (x-a\u2081)...(ax\u00b2+bx+c)"}, {"arrows": "to", "from": "Case 2: Linear + Quadratic Factors", "to": "Decomposition includes terms like (Ax+B)/(ax\u00b2+bx+c)"}, {"arrows": "to", "from": "Case 2: Linear + Quadratic Factors", "to": "Example: \u222bdx/((x-1)(x\u00b2+1)) = A/(x-1) + (Bx+C)/(x\u00b2+1)"}, {"arrows": "to", "from": "Case 3: Repeated Linear Factors", "to": "g(x) = (x-a)\u02b3(x-b)\u02e2..."}, {"arrows": "to", "from": "Case 3: Repeated Linear Factors", "to": "Decomposition: A\u2081/(x-a) + A\u2082/(x-a)\u00b2 + ... + A\u1d63/(x-a)\u02b3 + ..."}, {"arrows": "to", "from": "Case 3: Repeated Linear Factors", "to": "Example: \u222bdx/((x-1)\u00b2(x-2)) = A/(x-1) + B/(x-1)\u00b2 + C/(x-2)"}, {"arrows": "to", "from": "Case 4: Repeated Quadratic Factors", "to": "g(x) = (ax\u00b2+bx+c)\u02b3..."}, {"arrows": "to", "from": "Case 4: Repeated Quadratic Factors", "to": "Decomposition includes (A\u2081x+B\u2081)/(ax\u00b2+bx+c) + (A\u2082x+B\u2082)/(ax\u00b2+bx+c)\u00b2 + ..."}, {"arrows": "to", "from": "Case 4: Repeated Quadratic Factors", "to": "Example: \u222bdx/((x\u00b2+1)\u00b2) = (Ax+B)/(x\u00b2+1) + (Cx+D)/(x\u00b2+1)\u00b2"}, {"arrows": "to", "from": "Case 5: Quadratic Factors", "to": "For irreducible quadratic factors ax\u00b2+bx+c"}, {"arrows": "to", "from": "Case 5: Quadratic Factors", "to": "Complete the square: ax\u00b2+bx+c = a(x+b/2a)\u00b2+(c-b\u00b2/4a)"}, {"arrows": "to", "from": "Case 5: Quadratic Factors", "to": "Example: \u222bdx/(x\u00b2+4) = (1/2)tan\u207b\u00b9(x/2)"}, {"arrows": "to", "from": "ILATE Rule", "to": "I - Inverse trigonometric functions"}, {"arrows": "to", "from": "ILATE Rule", "to": "L - Logarithmic functions"}, {"arrows": "to", "from": "ILATE Rule", "to": "A - Algebraic functions"}, {"arrows": "to", "from": "ILATE Rule", "to": "T - Trigonometric functions"}, {"arrows": "to", "from": "ILATE Rule", "to": "E - Exponential functions"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "\u222bsin^m x\u00b7cos^n x dx"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "When m,n both odd: use substitution u = tan x"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "When m,n both even: use double angle formulas"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "When one even, one odd: substitute for the odd power"}, {"arrows": "to", "from": "Integrals with Even Powers", "to": "For \u222bsin\u00b2\u207fx dx, use reduction formula"}, {"arrows": "to", "from": "Integrals with Even Powers", "to": "For \u222bcos\u00b2\u207fx dx, use reduction formula"}, {"arrows": "to", "from": "Integrals with Even Powers", "to": "Example: \u222bsin\u00b2x dx = (1/2) - (1/2)cos(2x)"}, {"arrows": "to", "from": "Integrals with Odd Powers", "to": "For \u222bsin\u00b2\u207f\u207a\u00b9x dx, substitute u = cos x"}, {"arrows": "to", "from": "Integrals with Odd Powers", "to": "For \u222bcos\u00b2\u207f\u207a\u00b9x dx, substitute u = sin x"}, {"arrows": "to", "from": "Integrals with Odd Powers", "to": "Example: \u222bsin\u00b3x dx = -(cos x) + (cos\u00b3x)/3"}, {"arrows": "to", "from": "Rational Trigonometric Functions", "to": "\u222bR(sin x, cos x)dx"}, {"arrows": "to", "from": "Rational Trigonometric Functions", "to": "Substitute t = tan(x/2)"}, {"arrows": "to", "from": "Rational Trigonometric Functions", "to": "Transforms to rational function of t"}, {"arrows": "to", "from": "Rational Trigonometric Functions", "to": "Example: \u222bdx/(1+sin x) using t = tan(x/2)"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

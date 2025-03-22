@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Quadratic Functions", "label": "Quadratic Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Form", "label": "Form", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Roots", "label": "Roots", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Function of x", "label": "Function of x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polynomial of degree 2", "label": "Polynomial of degree 2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "General Form: ax^2 + bx + c", "label": "General Form: ax^2 + bx + c", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Standard Form: ax^2 + bx + c = 0", "label": "Standard Form: ax^2 + bx + c = 0", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vertex Form: a(x - h)^2 + k", "label": "Vertex Form: a(x - h)^2 + k", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Solutions to the equation", "label": "Solutions to the equation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x-intercepts of the graph", "label": "x-intercepts of the graph", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Completed Square Form", "label": "Completed Square Form", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Factoring", "label": "Factoring", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a(x - h)^2 + k", "label": "a(x - h)^2 + k", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vertex: (h, k)", "label": "Vertex: (h, k)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Product of two binomials: (x - r1)(x - r2)", "label": "Product of two binomials: (x - r1)(x - r2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum/Maximum value", "label": "Minimum/Maximum value", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Roots of Quadratic Functions", "label": "Roots of Quadratic Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quadratic Formula: x = (-b \u00b1 \u221a(b^2 - 4ac)) / 2a", "label": "Quadratic Formula: x = (-b \u00b1 \u221a(b^2 - 4ac)) / 2a", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Discriminant: b^2 - 4ac", "label": "Discriminant: b^2 - 4ac", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nature of roots", "label": "Nature of roots", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "b^2 - 4ac \u003e 0: Two distinct roots", "label": "b^2 - 4ac \u003e 0: Two distinct roots", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "b^2 - 4ac = 0: One repeated root", "label": "b^2 - 4ac = 0: One repeated root", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "b^2 - 4ac \u003c 0: Complex roots", "label": "b^2 - 4ac \u003c 0: Complex roots", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Graphs of Quadratic Functions", "label": "Graphs of Quadratic Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Parabola", "label": "Parabola", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vertex", "label": "Vertex", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Axis of Symmetry", "label": "Axis of Symmetry", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "U-shaped graph", "label": "U-shaped graph", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Opening upwards/downwards", "label": "Opening upwards/downwards", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum/Maximum point", "label": "Minimum/Maximum point", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Symmetric about the axis", "label": "Symmetric about the axis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x = -b / 2a", "label": "x = -b / 2a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Symmetric about the vertex", "label": "Symmetric about the vertex", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Transformations of Quadratic Functions", "label": "Transformations of Quadratic Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vertical Shifts", "label": "Vertical Shifts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Horizontal Shifts", "label": "Horizontal Shifts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Up/Down shifts", "label": "Up/Down shifts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Changing the value of k", "label": "Changing the value of k", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Left/Right shifts", "label": "Left/Right shifts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Changing the value of h", "label": "Changing the value of h", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Applications of Quadratic Functions", "label": "Applications of Quadratic Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Modeling real-world situations", "label": "Modeling real-world situations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Optimization problems", "label": "Optimization problems", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Projectile motion", "label": "Projectile motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrical circuits", "label": "Electrical circuits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Maximizing/minimizing a quantity", "label": "Maximizing/minimizing a quantity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Subject to constraints", "label": "Subject to constraints", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integrals of Quadratic Functions", "label": "Integrals of Quadratic Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Basic Integrals", "label": "Basic Integrals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration by Substitution", "label": "Integration by Substitution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222bx^n dx = (x^(n+1))/(n+1) + C", "label": "\u222bx^n dx = (x^(n+1))/(n+1) + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222bx^2 dx = (x^3)/3 + C", "label": "\u222bx^2 dx = (x^3)/3 + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "u-substitution method", "label": "u-substitution method", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Changing the variable of integration", "label": "Changing the variable of integration", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Quadratic Functions", "to": "Definition"}, {"arrows": "to", "from": "Quadratic Functions", "to": "Form"}, {"arrows": "to", "from": "Quadratic Functions", "to": "Roots"}, {"arrows": "to", "from": "Definition", "to": "Function of x"}, {"arrows": "to", "from": "Definition", "to": "Polynomial of degree 2"}, {"arrows": "to", "from": "Definition", "to": "General Form: ax^2 + bx + c"}, {"arrows": "to", "from": "Form", "to": "Standard Form: ax^2 + bx + c = 0"}, {"arrows": "to", "from": "Form", "to": "Vertex Form: a(x - h)^2 + k"}, {"arrows": "to", "from": "Roots", "to": "Solutions to the equation"}, {"arrows": "to", "from": "Roots", "to": "x-intercepts of the graph"}, {"arrows": "to", "from": "Standard Form: ax^2 + bx + c = 0", "to": "Completed Square Form"}, {"arrows": "to", "from": "Standard Form: ax^2 + bx + c = 0", "to": "Factoring"}, {"arrows": "to", "from": "Vertex Form: a(x - h)^2 + k", "to": "Vertex: (h, k)"}, {"arrows": "to", "from": "Vertex Form: a(x - h)^2 + k", "to": "Minimum/Maximum value"}, {"arrows": "to", "from": "Completed Square Form", "to": "a(x - h)^2 + k"}, {"arrows": "to", "from": "Completed Square Form", "to": "Vertex: (h, k)"}, {"arrows": "to", "from": "Factoring", "to": "Product of two binomials: (x - r1)(x - r2)"}, {"arrows": "to", "from": "Roots of Quadratic Functions", "to": "Factoring"}, {"arrows": "to", "from": "Roots of Quadratic Functions", "to": "Quadratic Formula: x = (-b \u00b1 \u221a(b^2 - 4ac)) / 2a"}, {"arrows": "to", "from": "Quadratic Formula: x = (-b \u00b1 \u221a(b^2 - 4ac)) / 2a", "to": "Discriminant: b^2 - 4ac"}, {"arrows": "to", "from": "Quadratic Formula: x = (-b \u00b1 \u221a(b^2 - 4ac)) / 2a", "to": "Nature of roots"}, {"arrows": "to", "from": "Discriminant: b^2 - 4ac", "to": "b^2 - 4ac \u003e 0: Two distinct roots"}, {"arrows": "to", "from": "Discriminant: b^2 - 4ac", "to": "b^2 - 4ac = 0: One repeated root"}, {"arrows": "to", "from": "Discriminant: b^2 - 4ac", "to": "b^2 - 4ac \u003c 0: Complex roots"}, {"arrows": "to", "from": "Graphs of Quadratic Functions", "to": "Parabola"}, {"arrows": "to", "from": "Graphs of Quadratic Functions", "to": "Vertex"}, {"arrows": "to", "from": "Graphs of Quadratic Functions", "to": "Axis of Symmetry"}, {"arrows": "to", "from": "Parabola", "to": "U-shaped graph"}, {"arrows": "to", "from": "Parabola", "to": "Opening upwards/downwards"}, {"arrows": "to", "from": "Vertex", "to": "Minimum/Maximum point"}, {"arrows": "to", "from": "Vertex", "to": "Symmetric about the axis"}, {"arrows": "to", "from": "Axis of Symmetry", "to": "x = -b / 2a"}, {"arrows": "to", "from": "Axis of Symmetry", "to": "Symmetric about the vertex"}, {"arrows": "to", "from": "Transformations of Quadratic Functions", "to": "Vertical Shifts"}, {"arrows": "to", "from": "Transformations of Quadratic Functions", "to": "Horizontal Shifts"}, {"arrows": "to", "from": "Vertical Shifts", "to": "Up/Down shifts"}, {"arrows": "to", "from": "Vertical Shifts", "to": "Changing the value of k"}, {"arrows": "to", "from": "Horizontal Shifts", "to": "Left/Right shifts"}, {"arrows": "to", "from": "Horizontal Shifts", "to": "Changing the value of h"}, {"arrows": "to", "from": "Applications of Quadratic Functions", "to": "Modeling real-world situations"}, {"arrows": "to", "from": "Applications of Quadratic Functions", "to": "Optimization problems"}, {"arrows": "to", "from": "Modeling real-world situations", "to": "Projectile motion"}, {"arrows": "to", "from": "Modeling real-world situations", "to": "Electrical circuits"}, {"arrows": "to", "from": "Optimization problems", "to": "Maximizing/minimizing a quantity"}, {"arrows": "to", "from": "Optimization problems", "to": "Subject to constraints"}, {"arrows": "to", "from": "Integrals of Quadratic Functions", "to": "Basic Integrals"}, {"arrows": "to", "from": "Integrals of Quadratic Functions", "to": "Integration by Substitution"}, {"arrows": "to", "from": "Basic Integrals", "to": "\u222bx^n dx = (x^(n+1))/(n+1) + C"}, {"arrows": "to", "from": "Basic Integrals", "to": "\u222bx^2 dx = (x^3)/3 + C"}, {"arrows": "to", "from": "Integration by Substitution", "to": "u-substitution method"}, {"arrows": "to", "from": "Integration by Substitution", "to": "Changing the variable of integration"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

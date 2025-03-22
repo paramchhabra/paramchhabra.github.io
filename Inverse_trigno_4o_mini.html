@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Graph Theory", "label": "Graph Theory", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definitions", "label": "Definitions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Graphs", "label": "Types of Graphs", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Graph: G = (V, E)", "label": "Graph: G = (V, E)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vertex (Node): V", "label": "Vertex (Node): V", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Edge: E", "label": "Edge: E", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Degree: Number of edges connected to a vertex", "label": "Degree: Number of edges connected to a vertex", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Undirected Graphs", "label": "Undirected Graphs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Directed Graphs", "label": "Directed Graphs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Weighted Graphs", "label": "Weighted Graphs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Unweighted Graphs", "label": "Unweighted Graphs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Simple Graphs", "label": "Simple Graphs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Multigraphs", "label": "Multigraphs", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Edges have no direction", "label": "Edges have no direction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: A\u2014B", "label": "Example: A\u2014B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Edges have direction", "label": "Edges have direction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: A \u2192 B", "label": "Example: A \u2192 B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Edges have weights assigned", "label": "Edges have weights assigned", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used in optimization problems", "label": "Used in optimization problems", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Edges are equal", "label": "Edges are equal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Only connectivity matters", "label": "Only connectivity matters", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "No loops or multiple edges", "label": "No loops or multiple edges", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: A\u2014B, C\u2014D", "label": "Example: A\u2014B, C\u2014D", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multiple edges between two vertices", "label": "Multiple edges between two vertices", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Can include loops", "label": "Can include loops", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Graph Representation", "label": "Graph Representation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Adjacency Matrix", "label": "Adjacency Matrix", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Adjacency List", "label": "Adjacency List", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Incidence Matrix", "label": "Incidence Matrix", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2D array representation", "label": "2D array representation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Matrix entry indicates edge presence", "label": "Matrix entry indicates edge presence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Array of lists", "label": "Array of lists", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Each list contains connected vertices", "label": "Each list contains connected vertices", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rows represent edges", "label": "Rows represent edges", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Columns represent vertices", "label": "Columns represent vertices", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Graph Traversal", "label": "Graph Traversal", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Depth First Search (DFS)", "label": "Depth First Search (DFS)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Breadth First Search (BFS)", "label": "Breadth First Search (BFS)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Explores as far as possible down a branch", "label": "Explores as far as possible down a branch", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uses stack data structure", "label": "Uses stack data structure", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Explores all neighbors at the present depth", "label": "Explores all neighbors at the present depth", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uses queue data structure", "label": "Uses queue data structure", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Graph Algorithms", "label": "Graph Algorithms", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Dijkstra\u2019s Algorithm", "label": "Dijkstra\u2019s Algorithm", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Kruskal\u2019s Algorithm", "label": "Kruskal\u2019s Algorithm", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Prim\u2019s Algorithm", "label": "Prim\u2019s Algorithm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finds shortest paths from source", "label": "Finds shortest paths from source", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uses priority queue", "label": "Uses priority queue", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum spanning tree using edge weights", "label": "Minimum spanning tree using edge weights", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Greedy approach", "label": "Greedy approach", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum spanning tree using tree building", "label": "Minimum spanning tree using tree building", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Involves adding edges", "label": "Involves adding edges", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Applications of Graph Theory", "label": "Applications of Graph Theory", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Network Design", "label": "Network Design", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Social Networks", "label": "Social Networks", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Routing Algorithms", "label": "Routing Algorithms", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graphical Representation", "label": "Graphical Representation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Connects different devices efficiently", "label": "Connects different devices efficiently", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Models relationships", "label": "Models relationships", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Analyzes network dynamics", "label": "Analyzes network dynamics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finds optimal paths in networking", "label": "Finds optimal paths in networking", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Internet routing", "label": "Example: Internet routing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Visualization of complex relationships", "label": "Visualization of complex relationships", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used in data science", "label": "Used in data science", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Graph Theory", "to": "Definitions"}, {"arrows": "to", "from": "Graph Theory", "to": "Types of Graphs"}, {"arrows": "to", "from": "Definitions", "to": "Graph: G = (V, E)"}, {"arrows": "to", "from": "Definitions", "to": "Vertex (Node): V"}, {"arrows": "to", "from": "Definitions", "to": "Edge: E"}, {"arrows": "to", "from": "Definitions", "to": "Degree: Number of edges connected to a vertex"}, {"arrows": "to", "from": "Types of Graphs", "to": "Undirected Graphs"}, {"arrows": "to", "from": "Types of Graphs", "to": "Directed Graphs"}, {"arrows": "to", "from": "Types of Graphs", "to": "Weighted Graphs"}, {"arrows": "to", "from": "Types of Graphs", "to": "Unweighted Graphs"}, {"arrows": "to", "from": "Types of Graphs", "to": "Simple Graphs"}, {"arrows": "to", "from": "Types of Graphs", "to": "Multigraphs"}, {"arrows": "to", "from": "Undirected Graphs", "to": "Edges have no direction"}, {"arrows": "to", "from": "Undirected Graphs", "to": "Example: A\u2014B"}, {"arrows": "to", "from": "Directed Graphs", "to": "Edges have direction"}, {"arrows": "to", "from": "Directed Graphs", "to": "Example: A \u2192 B"}, {"arrows": "to", "from": "Weighted Graphs", "to": "Edges have weights assigned"}, {"arrows": "to", "from": "Weighted Graphs", "to": "Used in optimization problems"}, {"arrows": "to", "from": "Unweighted Graphs", "to": "Edges are equal"}, {"arrows": "to", "from": "Unweighted Graphs", "to": "Only connectivity matters"}, {"arrows": "to", "from": "Simple Graphs", "to": "No loops or multiple edges"}, {"arrows": "to", "from": "Simple Graphs", "to": "Example: A\u2014B, C\u2014D"}, {"arrows": "to", "from": "Multigraphs", "to": "Multiple edges between two vertices"}, {"arrows": "to", "from": "Multigraphs", "to": "Can include loops"}, {"arrows": "to", "from": "Graph Representation", "to": "Adjacency Matrix"}, {"arrows": "to", "from": "Graph Representation", "to": "Adjacency List"}, {"arrows": "to", "from": "Graph Representation", "to": "Incidence Matrix"}, {"arrows": "to", "from": "Adjacency Matrix", "to": "2D array representation"}, {"arrows": "to", "from": "Adjacency Matrix", "to": "Matrix entry indicates edge presence"}, {"arrows": "to", "from": "Adjacency List", "to": "Array of lists"}, {"arrows": "to", "from": "Adjacency List", "to": "Each list contains connected vertices"}, {"arrows": "to", "from": "Incidence Matrix", "to": "Rows represent edges"}, {"arrows": "to", "from": "Incidence Matrix", "to": "Columns represent vertices"}, {"arrows": "to", "from": "Graph Traversal", "to": "Depth First Search (DFS)"}, {"arrows": "to", "from": "Graph Traversal", "to": "Breadth First Search (BFS)"}, {"arrows": "to", "from": "Depth First Search (DFS)", "to": "Explores as far as possible down a branch"}, {"arrows": "to", "from": "Depth First Search (DFS)", "to": "Uses stack data structure"}, {"arrows": "to", "from": "Breadth First Search (BFS)", "to": "Explores all neighbors at the present depth"}, {"arrows": "to", "from": "Breadth First Search (BFS)", "to": "Uses queue data structure"}, {"arrows": "to", "from": "Graph Algorithms", "to": "Dijkstra\u2019s Algorithm"}, {"arrows": "to", "from": "Graph Algorithms", "to": "Kruskal\u2019s Algorithm"}, {"arrows": "to", "from": "Graph Algorithms", "to": "Prim\u2019s Algorithm"}, {"arrows": "to", "from": "Dijkstra\u2019s Algorithm", "to": "Finds shortest paths from source"}, {"arrows": "to", "from": "Dijkstra\u2019s Algorithm", "to": "Uses priority queue"}, {"arrows": "to", "from": "Kruskal\u2019s Algorithm", "to": "Minimum spanning tree using edge weights"}, {"arrows": "to", "from": "Kruskal\u2019s Algorithm", "to": "Greedy approach"}, {"arrows": "to", "from": "Prim\u2019s Algorithm", "to": "Minimum spanning tree using tree building"}, {"arrows": "to", "from": "Prim\u2019s Algorithm", "to": "Involves adding edges"}, {"arrows": "to", "from": "Applications of Graph Theory", "to": "Network Design"}, {"arrows": "to", "from": "Applications of Graph Theory", "to": "Social Networks"}, {"arrows": "to", "from": "Applications of Graph Theory", "to": "Routing Algorithms"}, {"arrows": "to", "from": "Applications of Graph Theory", "to": "Graphical Representation"}, {"arrows": "to", "from": "Network Design", "to": "Connects different devices efficiently"}, {"arrows": "to", "from": "Social Networks", "to": "Models relationships"}, {"arrows": "to", "from": "Social Networks", "to": "Analyzes network dynamics"}, {"arrows": "to", "from": "Routing Algorithms", "to": "Finds optimal paths in networking"}, {"arrows": "to", "from": "Routing Algorithms", "to": "Example: Internet routing"}, {"arrows": "to", "from": "Graphical Representation", "to": "Visualization of complex relationships"}, {"arrows": "to", "from": "Graphical Representation", "to": "Used in data science"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

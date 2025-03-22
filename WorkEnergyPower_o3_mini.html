@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Work \u0026 Energy Concepts", "label": "Work \u0026 Energy Concepts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done Against Force", "label": "Work Done Against Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservative Forces", "label": "Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Variable Force Work", "label": "Variable Force Work", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conical Pendulum Dynamics", "label": "Conical Pendulum Dynamics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Energy Conservation", "label": "Energy Conservation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Calculus in Work Problems", "label": "Calculus in Work Problems", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Conservative Forces", "label": "Non-Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Force-Displacement Graph Analysis", "label": "Force-Displacement Graph Analysis", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Energy Release Examples", "label": "Energy Release Examples", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: W = \u222b F \u00b7 ds", "label": "Formula: W = \u222b F \u00b7 ds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: For lifting a mass against gravity, W = mgh", "label": "Example: For lifting a mass against gravity, W = mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Property: Work depends only on initial and final positions", "label": "Property: Work depends only on initial and final positions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Potential Energy: \u0394U = \u2013W", "label": "Potential Energy: \u0394U = \u2013W", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Gravitational force yields cos 180\u00b0 = \u20131 implying negative work when moving against force", "label": "Example: Gravitational force yields cos 180\u00b0 = \u20131 implying negative work when moving against force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Approach: Partition displacement into many infinitesimal segments", "label": "Approach: Partition displacement into many infinitesimal segments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: dW = F dx", "label": "Formula: dW = F dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Setup: A mass suspended by a string that makes a constant angle with the vertical", "label": "Setup: A mass suspended by a string that makes a constant angle with the vertical", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Result: The horizontal component of tension provides the centripetal force for circular motion", "label": "Result: The horizontal component of tension provides the centripetal force for circular motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Conical pendulum maintains uniform circular motion due to constant angular configuration", "label": "Example: Conical pendulum maintains uniform circular motion due to constant angular configuration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Concept: In conservative force fields, the total mechanical energy remains constant", "label": "Concept: In conservative force fields, the total mechanical energy remains constant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Implication: Energy lost in work is stored as potential energy and vice versa", "label": "Implication: Energy lost in work is stored as potential energy and vice versa", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Technique: Use integration to sum infinitesimal work elements over displacement", "label": "Technique: Use integration to sum infinitesimal work elements over displacement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: For a spring, W = (1/2) k x\u00b2 where force varies linearly with displacement", "label": "Example: For a spring, W = (1/2) k x\u00b2 where force varies linearly with displacement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Forces (e.g. friction) where work depends on the path taken", "label": "Definition: Forces (e.g. friction) where work depends on the path taken", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Effect: Mechanical energy is not conserved because energy dissipates into other forms", "label": "Effect: Mechanical energy is not conserved because energy dissipates into other forms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Insight: The area under the force vs. displacement curve represents the work done", "label": "Insight: The area under the force vs. displacement curve represents the work done", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Application: Useful in analyzing variable forces such as spring forces", "label": "Application: Useful in analyzing variable forces such as spring forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Combustion processes (e.g. burning coal) can release energy on the order of 3\u00d710\u2077 J", "label": "Example: Combustion processes (e.g. burning coal) can release energy on the order of 3\u00d710\u2077 J", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Concept: Energy release through the rearrangement of atoms in chemical reactions", "label": "Concept: Energy release through the rearrangement of atoms in chemical reactions", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Work Done Against Force"}, {"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Conservative Forces"}, {"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Variable Force Work"}, {"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Conical Pendulum Dynamics"}, {"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Energy Conservation"}, {"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Calculus in Work Problems"}, {"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Non-Conservative Forces"}, {"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Force-Displacement Graph Analysis"}, {"arrows": "to", "from": "Work \u0026 Energy Concepts", "to": "Energy Release Examples"}, {"arrows": "to", "from": "Work Done Against Force", "to": "Formula: W = \u222b F \u00b7 ds"}, {"arrows": "to", "from": "Work Done Against Force", "to": "Example: For lifting a mass against gravity, W = mgh"}, {"arrows": "to", "from": "Conservative Forces", "to": "Property: Work depends only on initial and final positions"}, {"arrows": "to", "from": "Conservative Forces", "to": "Potential Energy: \u0394U = \u2013W"}, {"arrows": "to", "from": "Conservative Forces", "to": "Example: Gravitational force yields cos 180\u00b0 = \u20131 implying negative work when moving against force"}, {"arrows": "to", "from": "Variable Force Work", "to": "Approach: Partition displacement into many infinitesimal segments"}, {"arrows": "to", "from": "Variable Force Work", "to": "Formula: dW = F dx"}, {"arrows": "to", "from": "Conical Pendulum Dynamics", "to": "Setup: A mass suspended by a string that makes a constant angle with the vertical"}, {"arrows": "to", "from": "Conical Pendulum Dynamics", "to": "Result: The horizontal component of tension provides the centripetal force for circular motion"}, {"arrows": "to", "from": "Conical Pendulum Dynamics", "to": "Example: Conical pendulum maintains uniform circular motion due to constant angular configuration"}, {"arrows": "to", "from": "Energy Conservation", "to": "Concept: In conservative force fields, the total mechanical energy remains constant"}, {"arrows": "to", "from": "Energy Conservation", "to": "Implication: Energy lost in work is stored as potential energy and vice versa"}, {"arrows": "to", "from": "Calculus in Work Problems", "to": "Technique: Use integration to sum infinitesimal work elements over displacement"}, {"arrows": "to", "from": "Calculus in Work Problems", "to": "Example: For a spring, W = (1/2) k x\u00b2 where force varies linearly with displacement"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Definition: Forces (e.g. friction) where work depends on the path taken"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Effect: Mechanical energy is not conserved because energy dissipates into other forms"}, {"arrows": "to", "from": "Force-Displacement Graph Analysis", "to": "Insight: The area under the force vs. displacement curve represents the work done"}, {"arrows": "to", "from": "Force-Displacement Graph Analysis", "to": "Application: Useful in analyzing variable forces such as spring forces"}, {"arrows": "to", "from": "Energy Release Examples", "to": "Example: Combustion processes (e.g. burning coal) can release energy on the order of 3\u00d710\u2077 J"}, {"arrows": "to", "from": "Energy Release Examples", "to": "Concept: Energy release through the rearrangement of atoms in chemical reactions"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

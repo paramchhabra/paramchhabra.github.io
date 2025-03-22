@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Work Done Against the Force in Moving a Mass Between Two Points Depends Only on the Location of Two", "label": "Work Done Against the Force in Moving a Mass Between Two Points Depends Only on the Location of Two", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gravity Work Done", "label": "Gravity Work Done", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work done by a body on moving", "label": "Work done by a body on moving", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g = 9.8 m/s^2", "label": "g = 9.8 m/s^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by gravity on a body moving", "label": "Work done by gravity on a body moving", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Produces a displacement s in the body along the positive x-direction", "label": "Produces a displacement s in the body along the positive x-direction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Figure If \u03b8 is the angle which F makes with the displacement s, then", "label": "Figure If \u03b8 is the angle which F makes with the displacement s, then", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "We have to calculate work done in moving the body from A to B under the action of this variable force. To do this,", "label": "We have to calculate work done in moving the body from A to B under the action of this variable force. To do this,", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If entire displacement from A to B is made up of a large number of infinitesimal displacements.", "label": "If entire displacement from A to B is made up of a large number of infinitesimal displacements.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "we assume that the entire displacement from A to B is made up of a large number of infinitesimal displacements.", "label": "we assume that the entire displacement from A to B is made up of a large number of infinitesimal displacements.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Whatever force is responsible for circular motion becomes the centripetal force.", "label": "Whatever force is responsible for circular motion becomes the centripetal force.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "With the configuration (or arrangement) of a system of objects that exert forces on one another. Obviously, if", "label": "With the configuration (or arrangement) of a system of objects that exert forces on one another. Obviously, if", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "The string is always inclined with the vertical at an angle \u03b8.", "label": "The string is always inclined with the vertical at an angle \u03b8.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "This arrangement is known as a conical pendulum.", "label": "This arrangement is known as a conical pendulum.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Therefore, work done by applied force = + mgh. However,", "label": "Therefore, work done by applied force = + mgh. However,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by gravitational force = \u2013 mgh.", "label": "Work done by gravitational force = \u2013 mgh.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "m = constant", "label": "m = constant", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "p\u00b2/2K.E.", "label": "p\u00b2/2K.E.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "figure (b).", "label": "figure (b).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If m = constant, p\u00b2 \u221d K.E. or p \u221d \u221aK.E.", "label": "If m = constant, p\u00b2 \u221d K.E. or p \u221d \u221aK.E.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "figure (c)", "label": "figure (c)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Arrangement of atoms. For example, coal consists of carbon and a kilogram of it. When burnt releases 3 \u00d7 10^7 J of energy.", "label": "Arrangement of atoms. For example, coal consists of carbon and a kilogram of it. When burnt releases 3 \u00d7 10^7 J of energy.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "techniques of calculus to evaluate the work done by it.", "label": "techniques of calculus to evaluate the work done by it.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When the spring is compressed or elongated, it tends to recover to its original length, on account of elasticity. The", "label": "When the spring is compressed or elongated, it tends to recover to its original length, on account of elasticity. The", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "elasticity.", "label": "elasticity.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "consider an elastic spring O\u2206 of negligible mass, the end O of which is kept fixed and the body of mass m lies", "label": "consider an elastic spring O\u2206 of negligible mass, the end O of which is kept fixed and the body of mass m lies", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When force applied F for the displacement s or both are random motion. Thus, internal energy of a body is the", "label": "When force applied F for the displacement s or both are random motion. Thus, internal energy of a body is the", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "body against the retaining force. Thus, according to work energy principle, work and kinetic energy are", "label": "body against the retaining force. Thus, according to work energy principle, work and kinetic energy are", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Surface of the Earth.", "label": "Surface of the Earth.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "body.", "label": "body.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "There are two ways in which we can characterize a Conservative Force :", "label": "There are two ways in which we can characterize a Conservative Force :", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "(a) Zero work", "label": "(a) Zero work", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(b) Find the minimum velocity at the bottom of the circle.", "label": "(b) Find the minimum velocity at the bottom of the circle.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "(i) When a body falls freely under the action of gravity,", "label": "(i) When a body falls freely under the action of gravity,", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "(ii) For a conical pendulum,", "label": "(ii) For a conical pendulum,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iii) When force applied F for the displacement s or both are random motion", "label": "(iii) When force applied F for the displacement s or both are random motion", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "\u03b8 = 0\u00b0, cos \u03b8 = cos 0\u00b0 = + 1. Therefore, work done by", "label": "\u03b8 = 0\u00b0, cos \u03b8 = cos 0\u00b0 = + 1. Therefore, work done by", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "acceleration) and other axis perpendicular to the radius. Resolve all the forces into components.", "label": "acceleration) and other axis perpendicular to the radius. Resolve all the forces into components.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mathematical Treatment (of work done by a variable", "label": "Mathematical Treatment (of work done by a variable", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Motion in a Vertical Circle", "label": "Motion in a Vertical Circle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "associated potential energy function U(x). When", "label": "associated potential energy function U(x). When", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "body is at P, where force on the", "label": "body is at P, where force on the", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Find the minimum velocity at the bottom of the circle", "label": "Find the minimum velocity at the bottom of the circle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Circle so that it is able to complete the circle.", "label": "Circle so that it is able to complete the circle.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Therefore, the body gains the retaining force. Thus,", "label": "Therefore, the body gains the retaining force. Thus,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Upwards is negative.", "label": "Upwards is negative.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "For a conical pendulum,", "label": "For a conical pendulum,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When force applied F for the displacement s or both are random motion.", "label": "When force applied F for the displacement s or both are random motion.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Elastic potential energy of a body is the energy", "label": "Elastic potential energy of a body is the energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chosen as the origin.", "label": "Chosen as the origin.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "(c) Zero work", "label": "(c) Zero work", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Zere work", "label": "Zere work", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Frictional and viscous forces are the most common examples of", "label": "Frictional and viscous forces are the most common examples of", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For a conical pendulum, g\u00b2 \u221d cos\u00b2 \u03b8 (Because cos \u03b8 \u003c 1)", "label": "For a conical pendulum, g\u00b2 \u221d cos\u00b2 \u03b8 (Because cos \u03b8 \u003c 1)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "To evaluate it, consider an elastic spring OA of negligible", "label": "To evaluate it, consider an elastic spring OA of negligible", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "change in K.E. = work done", "label": "change in K.E. = work done", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Spring be oriented along x\u2013axis and the body of mass m", "label": "Spring be oriented along x\u2013axis and the body of mass m", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Is chosen as the origin.", "label": "Is chosen as the origin.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "To evaluate gravitational potential energy, suppose", "label": "To evaluate gravitational potential energy, suppose", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mass of a body is", "label": "Mass of a body is", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Frictionless horizontal table.", "label": "Frictionless horizontal table.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "body in direction of the force applied. Thus, according", "label": "body in direction of the force applied. Thus, according", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spring will be oriented along x\u2013axis", "label": "Spring will be oriented along x\u2013axis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Find the mathematical treatment (of work done by a", "label": "Find the mathematical treatment (of work done by a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g\u00b2/cos\u00b2 = 18.5", "label": "g\u00b2/cos\u00b2 = 18.5", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Work Done Against the Force in Moving a Mass Between Two Points Depends Only on the Location of Two", "to": "Gravity Work Done"}, {"arrows": "to", "from": "Work Done Against the Force in Moving a Mass Between Two Points Depends Only on the Location of Two", "to": "Work done by a body on moving"}, {"arrows": "to", "from": "Gravity Work Done", "to": "g = 9.8 m/s^2"}, {"arrows": "to", "from": "Gravity Work Done", "to": "Work done by gravity on a body moving"}, {"arrows": "to", "from": "Work done by a body on moving", "to": "Produces a displacement s in the body along the positive x-direction"}, {"arrows": "to", "from": "Work done by a body on moving", "to": "Figure If \u03b8 is the angle which F makes with the displacement s, then"}, {"arrows": "to", "from": "Produces a displacement s in the body along the positive x-direction", "to": "We have to calculate work done in moving the body from A to B under the action of this variable force. To do this,"}, {"arrows": "to", "from": "Produces a displacement s in the body along the positive x-direction", "to": "If entire displacement from A to B is made up of a large number of infinitesimal displacements."}, {"arrows": "to", "from": "Figure If \u03b8 is the angle which F makes with the displacement s, then", "to": "g\u00b2/cos\u00b2 = 18.5"}, {"arrows": "to", "from": "Figure If \u03b8 is the angle which F makes with the displacement s, then", "to": "Motion in a Vertical Circle"}, {"arrows": "to", "from": "We have to calculate work done in moving the body from A to B under the action of this variable force. To do this,", "to": "we assume that the entire displacement from A to B is made up of a large number of infinitesimal displacements."}, {"arrows": "to", "from": "If entire displacement from A to B is made up of a large number of infinitesimal displacements.", "to": "Whatever force is responsible for circular motion becomes the centripetal force."}, {"arrows": "to", "from": "If entire displacement from A to B is made up of a large number of infinitesimal displacements.", "to": "With the configuration (or arrangement) of a system of objects that exert forces on one another. Obviously, if"}, {"arrows": "to", "from": "Whatever force is responsible for circular motion becomes the centripetal force.", "to": "The string is always inclined with the vertical at an angle \u03b8."}, {"arrows": "to", "from": "Whatever force is responsible for circular motion becomes the centripetal force.", "to": "This arrangement is known as a conical pendulum."}, {"arrows": "to", "from": "The string is always inclined with the vertical at an angle \u03b8.", "to": "Therefore, work done by applied force = + mgh. However,"}, {"arrows": "to", "from": "The string is always inclined with the vertical at an angle \u03b8.", "to": "Work done by gravitational force = \u2013 mgh."}, {"arrows": "to", "from": "Therefore, work done by applied force = + mgh. However,", "to": "m = constant"}, {"arrows": "to", "from": "Therefore, work done by applied force = + mgh. However,", "to": "p\u00b2/2K.E."}, {"arrows": "to", "from": "m = constant", "to": "figure (b)."}, {"arrows": "to", "from": "m = constant", "to": "If m = constant, p\u00b2 \u221d K.E. or p \u221d \u221aK.E."}, {"arrows": "to", "from": "p\u00b2/2K.E.", "to": "figure (c)"}, {"arrows": "to", "from": "p\u00b2/2K.E.", "to": "Arrangement of atoms. For example, coal consists of carbon and a kilogram of it. When burnt releases 3 \u00d7 10^7 J of energy."}, {"arrows": "to", "from": "Arrangement of atoms. For example, coal consists of carbon and a kilogram of it. When burnt releases 3 \u00d7 10^7 J of energy.", "to": "techniques of calculus to evaluate the work done by it."}, {"arrows": "to", "from": "Arrangement of atoms. For example, coal consists of carbon and a kilogram of it. When burnt releases 3 \u00d7 10^7 J of energy.", "to": "When the spring is compressed or elongated, it tends to recover to its original length, on account of elasticity. The"}, {"arrows": "to", "from": "techniques of calculus to evaluate the work done by it.", "to": "When the spring is compressed or elongated, it tends to recover to its original length, on account of elasticity. The"}, {"arrows": "to", "from": "When the spring is compressed or elongated, it tends to recover to its original length, on account of elasticity. The", "to": "elasticity."}, {"arrows": "to", "from": "When the spring is compressed or elongated, it tends to recover to its original length, on account of elasticity. The", "to": "consider an elastic spring O\u2206 of negligible mass, the end O of which is kept fixed and the body of mass m lies"}, {"arrows": "to", "from": "consider an elastic spring O\u2206 of negligible mass, the end O of which is kept fixed and the body of mass m lies", "to": "When force applied F for the displacement s or both are random motion. Thus, internal energy of a body is the"}, {"arrows": "to", "from": "consider an elastic spring O\u2206 of negligible mass, the end O of which is kept fixed and the body of mass m lies", "to": "body against the retaining force. Thus, according to work energy principle, work and kinetic energy are"}, {"arrows": "to", "from": "consider an elastic spring O\u2206 of negligible mass, the end O of which is kept fixed and the body of mass m lies", "to": "Surface of the Earth."}, {"arrows": "to", "from": "consider an elastic spring O\u2206 of negligible mass, the end O of which is kept fixed and the body of mass m lies", "to": "body."}, {"arrows": "to", "from": "When force applied F for the displacement s or both are random motion. Thus, internal energy of a body is the", "to": "There are two ways in which we can characterize a Conservative Force :"}, {"arrows": "to", "from": "When force applied F for the displacement s or both are random motion. Thus, internal energy of a body is the", "to": "(a) Zero work"}, {"arrows": "to", "from": "When force applied F for the displacement s or both are random motion. Thus, internal energy of a body is the", "to": "(b) Find the minimum velocity at the bottom of the circle."}, {"arrows": "to", "from": "body against the retaining force. Thus, according to work energy principle, work and kinetic energy are", "to": "To evaluate it, consider an elastic spring OA of negligible"}, {"arrows": "to", "from": "body against the retaining force. Thus, according to work energy principle, work and kinetic energy are", "to": "change in K.E. = work done"}, {"arrows": "to", "from": "Surface of the Earth.", "to": "To evaluate gravitational potential energy, suppose"}, {"arrows": "to", "from": "Surface of the Earth.", "to": "Mass of a body is"}, {"arrows": "to", "from": "Surface of the Earth.", "to": "Frictionless horizontal table."}, {"arrows": "to", "from": "body.", "to": "Frictional and viscous forces are the most common examples of"}, {"arrows": "to", "from": "There are two ways in which we can characterize a Conservative Force :", "to": "(i) When a body falls freely under the action of gravity,"}, {"arrows": "to", "from": "There are two ways in which we can characterize a Conservative Force :", "to": "(ii) For a conical pendulum,"}, {"arrows": "to", "from": "There are two ways in which we can characterize a Conservative Force :", "to": "(iii) When force applied F for the displacement s or both are random motion"}, {"arrows": "to", "from": "(a) Zero work", "to": "For a conical pendulum,"}, {"arrows": "to", "from": "(a) Zero work", "to": "Upwards is negative."}, {"arrows": "to", "from": "(a) Zero work", "to": "When force applied F for the displacement s or both are random motion."}, {"arrows": "to", "from": "(i) When a body falls freely under the action of gravity,", "to": "\u03b8 = 0\u00b0, cos \u03b8 = cos 0\u00b0 = + 1. Therefore, work done by"}, {"arrows": "to", "from": "(i) When a body falls freely under the action of gravity,", "to": "acceleration) and other axis perpendicular to the radius. Resolve all the forces into components."}, {"arrows": "to", "from": "(ii) For a conical pendulum,", "to": "Find the minimum velocity at the bottom of the circle"}, {"arrows": "to", "from": "(ii) For a conical pendulum,", "to": "Circle so that it is able to complete the circle."}, {"arrows": "to", "from": "(ii) For a conical pendulum,", "to": "When force applied F for the displacement s or both are random motion."}, {"arrows": "to", "from": "\u03b8 = 0\u00b0, cos \u03b8 = cos 0\u00b0 = + 1. Therefore, work done by", "to": "Mathematical Treatment (of work done by a variable"}, {"arrows": "to", "from": "\u03b8 = 0\u00b0, cos \u03b8 = cos 0\u00b0 = + 1. Therefore, work done by", "to": "Motion in a Vertical Circle"}, {"arrows": "to", "from": "Mathematical Treatment (of work done by a variable", "to": "associated potential energy function U(x). When"}, {"arrows": "to", "from": "Mathematical Treatment (of work done by a variable", "to": "body is at P, where force on the"}, {"arrows": "to", "from": "Motion in a Vertical Circle", "to": "Find the minimum velocity at the bottom of the circle"}, {"arrows": "to", "from": "Motion in a Vertical Circle", "to": "Circle so that it is able to complete the circle."}, {"arrows": "to", "from": "Find the minimum velocity at the bottom of the circle", "to": "Therefore, the body gains the retaining force. Thus,"}, {"arrows": "to", "from": "Find the minimum velocity at the bottom of the circle", "to": "Upwards is negative."}, {"arrows": "to", "from": "Circle so that it is able to complete the circle.", "to": "Therefore, the body gains the retaining force. Thus,"}, {"arrows": "to", "from": "Circle so that it is able to complete the circle.", "to": "Upwards is negative."}, {"arrows": "to", "from": "For a conical pendulum,", "to": "Elastic potential energy of a body is the energy"}, {"arrows": "to", "from": "For a conical pendulum,", "to": "Chosen as the origin."}, {"arrows": "to", "from": "Elastic potential energy of a body is the energy", "to": "(c) Zero work"}, {"arrows": "to", "from": "Elastic potential energy of a body is the energy", "to": "When force applied F for the displacement s or both are random motion."}, {"arrows": "to", "from": "(c) Zero work", "to": "Zere work"}, {"arrows": "to", "from": "(c) Zero work", "to": "Frictional and viscous forces are the most common examples of"}, {"arrows": "to", "from": "Zere work", "to": "For a conical pendulum, g\u00b2 \u221d cos\u00b2 \u03b8 (Because cos \u03b8 \u003c 1)"}, {"arrows": "to", "from": "To evaluate it, consider an elastic spring OA of negligible", "to": "(i) When a body falls freely under the action of gravity,"}, {"arrows": "to", "from": "To evaluate it, consider an elastic spring OA of negligible", "to": "Chosen as the origin."}, {"arrows": "to", "from": "change in K.E. = work done", "to": "Spring be oriented along x\u2013axis and the body of mass m"}, {"arrows": "to", "from": "Spring be oriented along x\u2013axis and the body of mass m", "to": "For a conical pendulum,"}, {"arrows": "to", "from": "Spring be oriented along x\u2013axis and the body of mass m", "to": "Is chosen as the origin."}, {"arrows": "to", "from": "Is chosen as the origin.", "to": "Frictionless horizontal table."}, {"arrows": "to", "from": "Is chosen as the origin.", "to": "Find the mathematical treatment (of work done by a"}, {"arrows": "to", "from": "To evaluate gravitational potential energy, suppose", "to": "body in direction of the force applied. Thus, according"}, {"arrows": "to", "from": "To evaluate gravitational potential energy, suppose", "to": "Spring will be oriented along x\u2013axis"}, {"arrows": "to", "from": "Mass of a body is", "to": "Chosen as the origin."}, {"arrows": "to", "from": "Mass of a body is", "to": "(i) When a body falls freely under the action of gravity,"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Experiments", "label": "Experiments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tossing two dice: Sum of numbers", "label": "Tossing two dice: Sum of numbers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tossing coin 50 times: Count of heads", "label": "Tossing coin 50 times: Count of heads", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Drawing 4 articles from 20 (6 defective): Count defective", "label": "Drawing 4 articles from 20 (6 defective): Count defective", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Basic Definitions", "label": "Basic Definitions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random Experiment: Known outcomes but unpredictable result (e.g., coin toss)", "label": "Random Experiment: Known outcomes but unpredictable result (e.g., coin toss)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sample Space (S): Set of all possible outcomes (e.g., S = {1,2,3,4,5,6} for a die)", "label": "Sample Space (S): Set of all possible outcomes (e.g., S = {1,2,3,4,5,6} for a die)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Trial/Experiment: A sequence where outcomes are uncertain", "label": "Trial/Experiment: A sequence where outcomes are uncertain", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Events", "label": "Events", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Event: Subset of sample space", "label": "Event: Subset of sample space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Simple Event: Contains one outcome", "label": "Simple Event: Contains one outcome", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Compound Event: Union of sample points (e.g., drawing a red card {heart, diamond})", "label": "Compound Event: Union of sample points (e.g., drawing a red card {heart, diamond})", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mutually Exclusive Event: Two events that cannot occur simultaneously", "label": "Mutually Exclusive Event: Two events that cannot occur simultaneously", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independent Events: Occurrence of one does not affect the other (P(E\u2229F) = P(E)P(F))", "label": "Independent Events: Occurrence of one does not affect the other (P(E\u2229F) = P(E)P(F))", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Exhaustive Event: Set of events covering all outcomes", "label": "Exhaustive Event: Set of events covering all outcomes", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Probability", "label": "Probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: P(A) = favorable cases (n) / total cases (N)", "label": "Definition: P(A) = favorable cases (n) / total cases (N)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Remarks: Probability 1 doesn\u2019t ensure certainty, and zero probability doesn\u2019t mean impossibility", "label": "Remarks: Probability 1 doesn\u2019t ensure certainty, and zero probability doesn\u2019t mean impossibility", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multiplication Rule: For events E and F, P(E\u2229F) = P(E)P(F|E)", "label": "Multiplication Rule: For events E and F, P(E\u2229F) = P(E)P(F|E)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Extension: For three events, P(A\u2229B\u2229C) = P(A)P(B)P(C) (if independent)", "label": "Extension: For three events, P(A\u2229B\u2229C) = P(A)P(B)P(C) (if independent)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Conditional Probability", "label": "Conditional Probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: P(B|A) = P(A\u2229B) / P(A), provided P(A) \u2260 0", "label": "Definition: P(B|A) = P(A\u2229B) / P(A), provided P(A) \u2260 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For Independent Events: P(B|A) = P(B)", "label": "For Independent Events: P(B|A) = P(B)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used in multiplication rule and dependency analysis", "label": "Used in multiplication rule and dependency analysis", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Bayes\u0027 Theorem", "label": "Bayes\u0027 Theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Also known as Inverse Probability Theorem", "label": "Also known as Inverse Probability Theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: P(Ei|A) = [P(A|Ei)P(Ei)] / \u03a3 P(A|Ej)P(Ej) for partition events Ej", "label": "Formula: P(Ei|A) = [P(A|Ei)P(Ei)] / \u03a3 P(A|Ej)P(Ej) for partition events Ej", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Terminology: Hypotheses (Ei), Prior probability (P(Ei)), Posterior probability (P(Ei|A))", "label": "Terminology: Hypotheses (Ei), Prior probability (P(Ei)), Posterior probability (P(Ei|A))", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Application: Determining reverse probability (e.g., bag selection problems)", "label": "Application: Determining reverse probability (e.g., bag selection problems)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Random Variables", "label": "Random Variables", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Real-valued function on a sample space (e.g., X = number of heads)", "label": "Definition: Real-valued function on a sample space (e.g., X = number of heads)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: Domain = sample space; Co-domain = \u211d", "label": "Properties: Domain = sample space; Co-domain = \u211d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: For coin toss sample space S = {HH, HT, TH, TT}, X(HH)=2, X(HT)=1, X(TH)=1, X(TT)=0", "label": "Example: For coin toss sample space S = {HH, HT, TH, TT}, X(HH)=2, X(HT)=1, X(TH)=1, X(TT)=0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multiple random variables can be defined on the same sample space (e.g., Y = heads \u2212 tails)", "label": "Multiple random variables can be defined on the same sample space (e.g., Y = heads \u2212 tails)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Probability Distributions", "label": "Probability Distributions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Lists possible values of X with corresponding probabilities", "label": "Definition: Lists possible values of X with corresponding probabilities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability Function: P(X=x) where \u03a3 P(x) = 1", "label": "Probability Function: P(X=x) where \u03a3 P(x) = 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Binomial Distribution: B(n, p) with P(X=x) = C(n, x)p^x(1\u2212p)^(n\u2212x)", "label": "Binomial Distribution: B(n, p) with P(X=x) = C(n, x)p^x(1\u2212p)^(n\u2212x)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Mean and Variance", "label": "Mean and Variance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mean (Expectation): \u03bc = E(X) = \u03a3 x_i p(x_i)", "label": "Mean (Expectation): \u03bc = E(X) = \u03a3 x_i p(x_i)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Variance: \u03c3\u00b2 = \u03a3 (x_i \u2212 \u03bc)\u00b2 p(x_i), measures spread around the mean", "label": "Variance: \u03c3\u00b2 = \u03a3 (x_i \u2212 \u03bc)\u00b2 p(x_i), measures spread around the mean", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Standard Deviation: sqrt(Variance), represents typical deviation from \u03bc", "label": "Standard Deviation: sqrt(Variance), represents typical deviation from \u03bc", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Total Probability \u0026 Multiplication Theorem", "label": "Total Probability \u0026 Multiplication Theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Partition of Sample Space: Events E1, E2, \u2026, En are disjoint and exhaustive with P(Ei) \u003e 0", "label": "Partition of Sample Space: Events E1, E2, \u2026, En are disjoint and exhaustive with P(Ei) \u003e 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Total Probability Theorem: P(A) = \u03a3 P(A|Ei)P(Ei)", "label": "Total Probability Theorem: P(A) = \u03a3 P(A|Ei)P(Ei)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multiplication Rule Extended: For events E, F, G, P(E\u2229F\u2229G) = P(E)P(F|E)P(G|E\u2229F)", "label": "Multiplication Rule Extended: For events E, F, G, P(E\u2229F\u2229G) = P(E)P(F|E)P(G|E\u2229F)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Example Calculations", "label": "Example Calculations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dice Example: E = {multiple of 3} = {3, 6}, F = {even} = {2,4,6} \u21d2 P(E)=1/3, P(F)=1/2, P(E\u2229F)=1/6; hence, independent (P(E\u2229F) = P(E)P(F))", "label": "Dice Example: E = {multiple of 3} = {3, 6}, F = {even} = {2,4,6} \u21d2 P(E)=1/3, P(F)=1/2, P(E\u2229F)=1/6; hence, independent (P(E\u2229F) = P(E)P(F))", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Urn Problem: 10 black, 5 white \u2192 P(first black) = 10/15; P(second black | first black) = 9/14; Product = (10/15)*(9/14)", "label": "Urn Problem: 10 black, 5 white \u2192 P(first black) = 10/15; P(second black | first black) = 9/14; Product = (10/15)*(9/14)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bag Selection: Applying Bayes\u2019 theorem for reverse probability based on drawn ball color", "label": "Bag Selection: Applying Bayes\u2019 theorem for reverse probability based on drawn ball color", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Experiments", "to": "Tossing two dice: Sum of numbers"}, {"arrows": "to", "from": "Experiments", "to": "Tossing coin 50 times: Count of heads"}, {"arrows": "to", "from": "Experiments", "to": "Drawing 4 articles from 20 (6 defective): Count defective"}, {"arrows": "to", "from": "Basic Definitions", "to": "Random Experiment: Known outcomes but unpredictable result (e.g., coin toss)"}, {"arrows": "to", "from": "Basic Definitions", "to": "Sample Space (S): Set of all possible outcomes (e.g., S = {1,2,3,4,5,6} for a die)"}, {"arrows": "to", "from": "Basic Definitions", "to": "Trial/Experiment: A sequence where outcomes are uncertain"}, {"arrows": "to", "from": "Events", "to": "Event: Subset of sample space"}, {"arrows": "to", "from": "Events", "to": "Simple Event: Contains one outcome"}, {"arrows": "to", "from": "Events", "to": "Compound Event: Union of sample points (e.g., drawing a red card {heart, diamond})"}, {"arrows": "to", "from": "Events", "to": "Mutually Exclusive Event: Two events that cannot occur simultaneously"}, {"arrows": "to", "from": "Events", "to": "Independent Events: Occurrence of one does not affect the other (P(E\u2229F) = P(E)P(F))"}, {"arrows": "to", "from": "Events", "to": "Exhaustive Event: Set of events covering all outcomes"}, {"arrows": "to", "from": "Probability", "to": "Definition: P(A) = favorable cases (n) / total cases (N)"}, {"arrows": "to", "from": "Probability", "to": "Remarks: Probability 1 doesn\u2019t ensure certainty, and zero probability doesn\u2019t mean impossibility"}, {"arrows": "to", "from": "Probability", "to": "Multiplication Rule: For events E and F, P(E\u2229F) = P(E)P(F|E)"}, {"arrows": "to", "from": "Probability", "to": "Extension: For three events, P(A\u2229B\u2229C) = P(A)P(B)P(C) (if independent)"}, {"arrows": "to", "from": "Conditional Probability", "to": "Definition: P(B|A) = P(A\u2229B) / P(A), provided P(A) \u2260 0"}, {"arrows": "to", "from": "Conditional Probability", "to": "For Independent Events: P(B|A) = P(B)"}, {"arrows": "to", "from": "Conditional Probability", "to": "Used in multiplication rule and dependency analysis"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Also known as Inverse Probability Theorem"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Formula: P(Ei|A) = [P(A|Ei)P(Ei)] / \u03a3 P(A|Ej)P(Ej) for partition events Ej"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Terminology: Hypotheses (Ei), Prior probability (P(Ei)), Posterior probability (P(Ei|A))"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Application: Determining reverse probability (e.g., bag selection problems)"}, {"arrows": "to", "from": "Random Variables", "to": "Definition: Real-valued function on a sample space (e.g., X = number of heads)"}, {"arrows": "to", "from": "Random Variables", "to": "Properties: Domain = sample space; Co-domain = \u211d"}, {"arrows": "to", "from": "Random Variables", "to": "Example: For coin toss sample space S = {HH, HT, TH, TT}, X(HH)=2, X(HT)=1, X(TH)=1, X(TT)=0"}, {"arrows": "to", "from": "Random Variables", "to": "Multiple random variables can be defined on the same sample space (e.g., Y = heads \u2212 tails)"}, {"arrows": "to", "from": "Probability Distributions", "to": "Definition: Lists possible values of X with corresponding probabilities"}, {"arrows": "to", "from": "Probability Distributions", "to": "Probability Function: P(X=x) where \u03a3 P(x) = 1"}, {"arrows": "to", "from": "Probability Distributions", "to": "Binomial Distribution: B(n, p) with P(X=x) = C(n, x)p^x(1\u2212p)^(n\u2212x)"}, {"arrows": "to", "from": "Mean and Variance", "to": "Mean (Expectation): \u03bc = E(X) = \u03a3 x_i p(x_i)"}, {"arrows": "to", "from": "Mean and Variance", "to": "Variance: \u03c3\u00b2 = \u03a3 (x_i \u2212 \u03bc)\u00b2 p(x_i), measures spread around the mean"}, {"arrows": "to", "from": "Mean and Variance", "to": "Standard Deviation: sqrt(Variance), represents typical deviation from \u03bc"}, {"arrows": "to", "from": "Total Probability \u0026 Multiplication Theorem", "to": "Partition of Sample Space: Events E1, E2, \u2026, En are disjoint and exhaustive with P(Ei) \u003e 0"}, {"arrows": "to", "from": "Total Probability \u0026 Multiplication Theorem", "to": "Total Probability Theorem: P(A) = \u03a3 P(A|Ei)P(Ei)"}, {"arrows": "to", "from": "Total Probability \u0026 Multiplication Theorem", "to": "Multiplication Rule Extended: For events E, F, G, P(E\u2229F\u2229G) = P(E)P(F|E)P(G|E\u2229F)"}, {"arrows": "to", "from": "Example Calculations", "to": "Dice Example: E = {multiple of 3} = {3, 6}, F = {even} = {2,4,6} \u21d2 P(E)=1/3, P(F)=1/2, P(E\u2229F)=1/6; hence, independent (P(E\u2229F) = P(E)P(F))"}, {"arrows": "to", "from": "Example Calculations", "to": "Urn Problem: 10 black, 5 white \u2192 P(first black) = 10/15; P(second black | first black) = 9/14; Product = (10/15)*(9/14)"}, {"arrows": "to", "from": "Example Calculations", "to": "Bag Selection: Applying Bayes\u2019 theorem for reverse probability based on drawn ball color"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Interference redistribution of energy takes place in the form of maxima and minima.", "label": "Interference redistribution of energy takes place in the form of maxima and minima.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Average intensity : 2\u03c9\u03c9\u03c9\u03c9\u03c9\u03c9max", "label": "Average intensity : 2\u03c9\u03c9\u03c9\u03c9\u03c9\u03c9max", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shift is independent of wavelength.", "label": "Shift is independent of wavelength.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "ILLUSTRATIONS OF INTERFERENCE", "label": "ILLUSTRATIONS OF INTERFERENCE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9min = 0\u03c9\u03c9 \u21d2 \u03c9\u03c9max = 2\u03c9\u03c90", "label": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9min = 0\u03c9\u03c9 \u21d2 \u03c9\u03c9max = 2\u03c9\u03c90", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9min = 0", "label": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9min = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Where a1, a2 = Individual amplitudes, \u03b4 = Phase difference", "label": "Where a1, a2 = Individual amplitudes, \u03b4 = Phase difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9max = 2\u03c9\u03c90", "label": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9max = 2\u03c9\u03c90", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wavelength, So spectrum of wavelength, So spectrum", "label": "Wavelength, So spectrum of wavelength, So spectrum", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or Brewster\u0027s angle.", "label": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or Brewster\u0027s angle.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Results due to the superposition Results due to the superposition\u2013", "label": "Results due to the superposition Results due to the superposition\u2013", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Waves from the two ends of the aperture is given by \u03b4 = nd; where n = 1, 2, 3 .....i.e. d sin \u03b8 = n\u03bb; \u03b4 = n\u03bb.", "label": "Waves from the two ends of the aperture is given by \u03b4 = nd; where n = 1, 2, 3 .....i.e. d sin \u03b8 = n\u03bb; \u03b4 = n\u03bb.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ray optics can be taken as a limiting case of wave optics.", "label": "Ray optics can be taken as a limiting case of wave optics.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hence Ray optics can be taken as a limiting case of wave optics.", "label": "Hence Ray optics can be taken as a limiting case of wave optics.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a1 = a2 \u21d2 Amin = 0 If  a1 = a2 \u21d2 Amax = 2a0", "label": "If a1 = a2 \u21d2 Amin = 0 If  a1 = a2 \u21d2 Amax = 2a0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If  a1 = a2 Amin = 0", "label": "If  a1 = a2 Amin = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a1 = a2 \u21d2 Amax = 2a0", "label": "If a1 = a2 \u21d2 Amax = 2a0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The plane perpendicular to the direction of propagation is called Unpolarized light. The oscillation may be resolved into", "label": "The plane perpendicular to the direction of propagation is called Unpolarized light. The oscillation may be resolved into", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Results due to the superposition", "label": "Results due to the superposition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reflection of light limits the ability of optical instruments to form clear images of objects when they", "label": "Reflection of light limits the ability of optical instruments to form clear images of objects when they", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Brewster\u2019s principle or Huygen\u0027s construction.", "label": "Brewster\u2019s principle or Huygen\u0027s construction.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "KEY POINTS", "label": "KEY POINTS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Waves from the two ends of the aperture is given by d", "label": "Waves from the two ends of the aperture is given by d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Where n = 1, 2, 3 .....i.e. sin = n; = n;", "label": "Where n = 1, 2, 3 .....i.e. sin = n; = n;", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Both reflected and refracted rays becomes partially polarized.", "label": "Both reflected and refracted rays becomes partially polarized.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) For glass \u03bc \u2248 57P, for water \u03bc \u2248 53P", "label": "(ii) For glass \u03bc \u2248 57P, for water \u03bc \u2248 53P", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Huy KEY POINTS", "label": "Huy KEY POINTS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "sin \u03b8 = n\u03bb", "label": "sin \u03b8 = n\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The phenomenon of apparent change in frequency (or wavelength) of light due to", "label": "The phenomenon of apparent change in frequency (or wavelength) of light due to", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Huy Key Points", "label": "Huy Key Points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dnsing79", "label": "dnsing79", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Where = 1, 2, 3 ...i.e. d sin g84 n; sin g84 = n;", "label": "Where = 1, 2, 3 ...i.e. d sin g84 n; sin g84 = n;", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dn sin g79", "label": "dn sin g79", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dnsing79.", "label": "dnsing79.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave Optics", "label": "Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "4.2 Resultant intensity due to two identical waves", "label": "4.2 Resultant intensity due to two identical waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For two coherent sources when waves of exactly same frequency (coming from two", "label": "For two coherent sources when waves of exactly same frequency (coming from two", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The secondary maxima occurs, where the path difference between the rays from the two ends of the", "label": "The secondary maxima occurs, where the path difference between the rays from the two ends of the", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thin films", "label": "Thin films", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Results due to superposition", "label": "Results due to superposition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "4.1 Wave front", "label": "4.1 Wave front", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Plane wave front", "label": "Plane wave front", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Waves at that instant.", "label": "Waves at that instant.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Those two assumptions are known as Huygens\u2019 principle or Huygens\u2019 construction.", "label": "Those two assumptions are known as Huygens\u2019 principle or Huygens\u2019 construction.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "1.3 Plane wave front", "label": "1.3 Plane wave front", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Waves at that instant", "label": "Waves at that instant", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If fringes are visible in a field of view with light of wavelength g791", "label": "If fringes are visible in a field of view with light of wavelength g791", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Resultant amplitude at point P and Q will be", "label": "Resultant amplitude at point P and Q will be", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "The intensity of transmitted polarized light is half the intensity of unpolarized light.", "label": "The intensity of transmitted polarized light is half the intensity of unpolarized light.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "4.4 Diffraction and optical instruments", "label": "4.4 Diffraction and optical instruments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Where g79  = n. d sin g32 = ndsin g84", "label": "Where g79  = n. d sin g32 = ndsin g84", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iii) The secondary maxima occurs, where the path", "label": "(iii) The secondary maxima occurs, where the path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan g3 = n g79 ; where n = 57P, for glass g113 /g124 g84", "label": "tan g3 = n g79 ; where n = 57P, for glass g113 /g124 g84", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan g3 = n g79 ; where n = 53P, for water g113 /g124 g84", "label": "tan g3 = n g79 ; where n = 53P, for water g113 /g124 g84", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) The plane perpendicular to the direction of propagation is called the plane of", "label": "(ii) The plane perpendicular to the direction of propagation is called the plane of", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin g84 = n; sin g84 = n;", "label": "sin g84 = n; sin g84 = n;", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "4.5 Polarization", "label": "4.5 Polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "In thin films interference takes place between the light waves reflected from the opposite surfaces of the film.", "label": "In thin films interference takes place between the light waves reflected from the opposite surfaces of the film.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Brewster\u2019s law", "label": "Brewster\u2019s law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan g3 = n g79", "label": "tan g3 = n g79", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Interference redistribution of energy takes place in the form of maxima and minima.", "to": "Average intensity : 2\u03c9\u03c9\u03c9\u03c9\u03c9\u03c9max"}, {"arrows": "to", "from": "Interference redistribution of energy takes place in the form of maxima and minima.", "to": "Shift is independent of wavelength."}, {"arrows": "to", "from": "Interference redistribution of energy takes place in the form of maxima and minima.", "to": "ILLUSTRATIONS OF INTERFERENCE"}, {"arrows": "to", "from": "Average intensity : 2\u03c9\u03c9\u03c9\u03c9\u03c9\u03c9max", "to": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9min = 0\u03c9\u03c9 \u21d2 \u03c9\u03c9max = 2\u03c9\u03c90"}, {"arrows": "to", "from": "Average intensity : 2\u03c9\u03c9\u03c9\u03c9\u03c9\u03c9max", "to": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9min = 0"}, {"arrows": "to", "from": "Average intensity : 2\u03c9\u03c9\u03c9\u03c9\u03c9\u03c9max", "to": "Where a1, a2 = Individual amplitudes, \u03b4 = Phase difference"}, {"arrows": "to", "from": "Average intensity : 2\u03c9\u03c9\u03c9\u03c9\u03c9\u03c9max", "to": "If  \u03c9\u03c91 = \u03c9\u03c92 \u21d2 \u03c9\u03c9max = 2\u03c9\u03c90"}, {"arrows": "to", "from": "ILLUSTRATIONS OF INTERFERENCE", "to": "Wavelength, So spectrum of wavelength, So spectrum"}, {"arrows": "to", "from": "ILLUSTRATIONS OF INTERFERENCE", "to": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or Brewster\u0027s angle."}, {"arrows": "to", "from": "ILLUSTRATIONS OF INTERFERENCE", "to": "Results due to the superposition Results due to the superposition\u2013"}, {"arrows": "to", "from": "ILLUSTRATIONS OF INTERFERENCE", "to": "Waves from the two ends of the aperture is given by \u03b4 = nd; where n = 1, 2, 3 .....i.e. d sin \u03b8 = n\u03bb; \u03b4 = n\u03bb."}, {"arrows": "to", "from": "ILLUSTRATIONS OF INTERFERENCE", "to": "Ray optics can be taken as a limiting case of wave optics."}, {"arrows": "to", "from": "ILLUSTRATIONS OF INTERFERENCE", "to": "Hence Ray optics can be taken as a limiting case of wave optics."}, {"arrows": "to", "from": "Wavelength, So spectrum of wavelength, So spectrum", "to": "If a1 = a2 \u21d2 Amin = 0 If  a1 = a2 \u21d2 Amax = 2a0"}, {"arrows": "to", "from": "Wavelength, So spectrum of wavelength, So spectrum", "to": "If  a1 = a2 Amin = 0"}, {"arrows": "to", "from": "Wavelength, So spectrum of wavelength, So spectrum", "to": "If a1 = a2 \u21d2 Amax = 2a0"}, {"arrows": "to", "from": "Wavelength, So spectrum of wavelength, So spectrum", "to": "Where a1, a2 = Individual amplitudes, \u03b4 = Phase difference"}, {"arrows": "to", "from": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or Brewster\u0027s angle.", "to": "The plane perpendicular to the direction of propagation is called Unpolarized light. The oscillation may be resolved into"}, {"arrows": "to", "from": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or Brewster\u0027s angle.", "to": "Results due to the superposition"}, {"arrows": "to", "from": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or Brewster\u0027s angle.", "to": "Reflection of light limits the ability of optical instruments to form clear images of objects when they"}, {"arrows": "to", "from": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or Brewster\u0027s angle.", "to": "Brewster\u2019s principle or Huygen\u0027s construction."}, {"arrows": "to", "from": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or Brewster\u0027s angle.", "to": "KEY POINTS"}, {"arrows": "to", "from": "Results due to the superposition Results due to the superposition\u2013", "to": "Waves from the two ends of the aperture is given by d"}, {"arrows": "to", "from": "Results due to the superposition Results due to the superposition\u2013", "to": "Where n = 1, 2, 3 .....i.e. sin = n; = n;"}, {"arrows": "to", "from": "Reflection of light limits the ability of optical instruments to form clear images of objects when they", "to": "Both reflected and refracted rays becomes partially polarized."}, {"arrows": "to", "from": "Reflection of light limits the ability of optical instruments to form clear images of objects when they", "to": "(ii) For glass \u03bc \u2248 57P, for water \u03bc \u2248 53P"}, {"arrows": "to", "from": "Brewster\u2019s principle or Huygen\u0027s construction.", "to": "Huy KEY POINTS"}, {"arrows": "to", "from": "Brewster\u2019s principle or Huygen\u0027s construction.", "to": "sin \u03b8 = n\u03bb"}, {"arrows": "to", "from": "KEY POINTS", "to": "The phenomenon of apparent change in frequency (or wavelength) of light due to"}, {"arrows": "to", "from": "KEY POINTS", "to": "Huy Key Points"}, {"arrows": "to", "from": "KEY POINTS", "to": "dnsing79"}, {"arrows": "to", "from": "KEY POINTS", "to": "Where = 1, 2, 3 ...i.e. d sin g84 n; sin g84 = n;"}, {"arrows": "to", "from": "Huy KEY POINTS", "to": "dn sin g79"}, {"arrows": "to", "from": "Huy KEY POINTS", "to": "dnsing79."}, {"arrows": "to", "from": "sin \u03b8 = n\u03bb", "to": "Wave Optics"}, {"arrows": "to", "from": "sin \u03b8 = n\u03bb", "to": "4.2 Resultant intensity due to two identical waves"}, {"arrows": "to", "from": "Huy Key Points", "to": "dnsing79."}, {"arrows": "to", "from": "Huy Key Points", "to": "4.1 Wave front"}, {"arrows": "to", "from": "Huy Key Points", "to": "Where = 1, 2, 3 ...i.e. d sin g84 n; sin g84 = n;"}, {"arrows": "to", "from": "4.2 Resultant intensity due to two identical waves", "to": "For two coherent sources when waves of exactly same frequency (coming from two"}, {"arrows": "to", "from": "4.2 Resultant intensity due to two identical waves", "to": "The secondary maxima occurs, where the path difference between the rays from the two ends of the"}, {"arrows": "to", "from": "4.2 Resultant intensity due to two identical waves", "to": "Thin films"}, {"arrows": "to", "from": "4.2 Resultant intensity due to two identical waves", "to": "Results due to superposition"}, {"arrows": "to", "from": "4.2 Resultant intensity due to two identical waves", "to": "KEY POINTS"}, {"arrows": "to", "from": "4.2 Resultant intensity due to two identical waves", "to": "Huy KEY POINTS"}, {"arrows": "to", "from": "4.2 Resultant intensity due to two identical waves", "to": "sin \u03b8 = n\u03bb"}, {"arrows": "to", "from": "Thin films", "to": "The intensity of transmitted polarized light is half the intensity of unpolarized light."}, {"arrows": "to", "from": "Thin films", "to": "Where g79  = n. d sin g32 = ndsin g84"}, {"arrows": "to", "from": "Thin films", "to": "(iii) The secondary maxima occurs, where the path"}, {"arrows": "to", "from": "Thin films", "to": "Those two assumptions are known as Huygens\u2019 principle or Huygens\u2019 construction."}, {"arrows": "to", "from": "4.1 Wave front", "to": "Plane wave front"}, {"arrows": "to", "from": "4.1 Wave front", "to": "Waves at that instant."}, {"arrows": "to", "from": "4.1 Wave front", "to": "Wave Optics"}, {"arrows": "to", "from": "4.1 Wave front", "to": "4.2 Resultant intensity due to two identical waves"}, {"arrows": "to", "from": "Plane wave front", "to": "Those two assumptions are known as Huygens\u2019 principle or Huygens\u2019 construction."}, {"arrows": "to", "from": "Plane wave front", "to": "1.3 Plane wave front"}, {"arrows": "to", "from": "1.3 Plane wave front", "to": "Waves at that instant"}, {"arrows": "to", "from": "Waves at that instant", "to": "Thin films"}, {"arrows": "to", "from": "Waves at that instant", "to": "If fringes are visible in a field of view with light of wavelength g791"}, {"arrows": "to", "from": "Waves at that instant", "to": "Resultant amplitude at point P and Q will be"}, {"arrows": "to", "from": "Waves at that instant", "to": "The intensity of transmitted polarized light is half the intensity of unpolarized light."}, {"arrows": "to", "from": "Waves at that instant", "to": "KEY POINTS"}, {"arrows": "to", "from": "Waves at that instant", "to": "4.4 Diffraction and optical instruments"}, {"arrows": "to", "from": "If fringes are visible in a field of view with light of wavelength g791", "to": "KEY POINTS"}, {"arrows": "to", "from": "Resultant amplitude at point P and Q will be", "to": "tan g3 = n g79 ; where n = 57P, for glass g113 /g124 g84"}, {"arrows": "to", "from": "Resultant amplitude at point P and Q will be", "to": "tan g3 = n g79 ; where n = 53P, for water g113 /g124 g84"}, {"arrows": "to", "from": "The intensity of transmitted polarized light is half the intensity of unpolarized light.", "to": "(ii) The plane perpendicular to the direction of propagation is called the plane of"}, {"arrows": "to", "from": "The intensity of transmitted polarized light is half the intensity of unpolarized light.", "to": "KEY POINTS"}, {"arrows": "to", "from": "The intensity of transmitted polarized light is half the intensity of unpolarized light.", "to": "Huy KEY POINTS"}, {"arrows": "to", "from": "4.4 Diffraction and optical instruments", "to": "Wave Optics"}, {"arrows": "to", "from": "4.4 Diffraction and optical instruments", "to": "sin g84 = n; sin g84 = n;"}, {"arrows": "to", "from": "4.4 Diffraction and optical instruments", "to": "4.5 Polarization"}, {"arrows": "to", "from": "4.5 Polarization", "to": "In thin films interference takes place between the light waves reflected from the opposite surfaces of the film."}, {"arrows": "to", "from": "4.5 Polarization", "to": "Brewster\u2019s law"}, {"arrows": "to", "from": "4.5 Polarization", "to": "(iii) The secondary maxima occurs, where the path"}, {"arrows": "to", "from": "In thin films interference takes place between the light waves reflected from the opposite surfaces of the film.", "to": "tan g3 = n g79"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

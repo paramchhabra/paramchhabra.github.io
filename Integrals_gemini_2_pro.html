@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "INDEFINITE INTEGRATION", "label": "INDEFINITE INTEGRATION", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration by Parts", "label": "Integration by Parts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integral Substitution", "label": "Integral Substitution", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Partial Fractions", "label": "Partial Fractions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Trigonometric Integrals", "label": "Trigonometric Integrals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Special Integrals", "label": "Special Integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222budv = uv - \u222bvdu", "label": "\u222budv = uv - \u222bvdu", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "ILATE Rule", "label": "ILATE Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Choose \u0027u\u0027 based on ILATE", "label": "Choose \u0027u\u0027 based on ILATE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I - Inverse Trigonometric functions", "label": "I - Inverse Trigonometric functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "L - Logarithmic functions", "label": "L - Logarithmic functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A - Algebraic functions", "label": "A - Algebraic functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T - Trigonometric functions", "label": "T - Trigonometric functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "E - Exponential functions", "label": "E - Exponential functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If functions are of different types, choose u according to ILATE", "label": "If functions are of different types, choose u according to ILATE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If both functions are trigonometric, take the function as second function whose integral is simpler", "label": "If both functions are trigonometric, take the function as second function whose integral is simpler", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If both functions are of same type, take that as first which comes first in ILATE", "label": "If both functions are of same type, take that as first which comes first in ILATE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The process of integration of the product of two functions is known as integration by parts.", "label": "The process of integration of the product of two functions is known as integration by parts.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rule of integration by parts may be used repeatedly, if required.", "label": "Rule of integration by parts may be used repeatedly, if required.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "First function as the one whose initial comes first in the word \u201cILATE\u201d", "label": "First function as the one whose initial comes first in the word \u201cILATE\u201d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222bf(g(x))g\u0027(x)dx = \u222bf(u)du, where u = g(x)", "label": "\u222bf(g(x))g\u0027(x)dx = \u222bf(u)du, where u = g(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Change the variable to simplify the integrand", "label": "Change the variable to simplify the integrand", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Working Rule", "label": "Working Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the integral consists of an inverse trigonometric function, change the integral into other variables and f(x) to F(t)", "label": "If the integral consists of an inverse trigonometric function, change the integral into other variables and f(x) to F(t)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "There is no general rule for finding a proper substitution and the best guide in this matter is experience.", "label": "There is no general rule for finding a proper substitution and the best guide in this matter is experience.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) Split the integral into two integrals.", "label": "(i) Split the integral into two integrals.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) Equate coefficients of sin x, cos x and constant term on both sides and find the values of L, M, N.", "label": "(ii) Equate coefficients of sin x, cos x and constant term on both sides and find the values of L, M, N.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iii) Split the given integral into three integrals and evaluate each integral separately, i.e", "label": "(iii) Split the given integral into three integrals and evaluate each integral separately, i.e", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iv) Rule of integration by parts may be used repeatedly, if required", "label": "(iv) Rule of integration by parts may be used repeatedly, if required", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222b a b cosx c sinx dx e f cosx g sinx", "label": "\u222b a b cosx c sinx dx e f cosx g sinx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i)Put x^2 = z in the integrand.", "label": "(i)Put x^2 = z in the integrand.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii)Equate coefficients of sin x and cos x on both sides and find the values of a and  b.", "label": "(ii)Equate coefficients of sin x and cos x on both sides and find the values of a and  b.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrand can be integrated by resolving the integrand into partial fractions", "label": "Integrand can be integrated by resolving the integrand into partial fractions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CASE 1: When the denominator contains non-repeated linear factors.", "label": "CASE 1: When the denominator contains non-repeated linear factors.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (x \u2013 a1) (x \u2013 a2) . . . (x \u2013 an).", "label": "g(x) = (x \u2013 a1) (x \u2013 a2) . . . (x \u2013 an).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CASE 2: When the denominator contains repeated as well as non-repeated linear factor.", "label": "CASE 2: When the denominator contains repeated as well as non-repeated linear factor.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g (x) = (ax2 + bx + c) (x \u2013 \u03b11) (x \u2013 \u03b12) . . . (x \u2013 \u03b1n) .", "label": "g (x) = (ax2 + bx + c) (x \u2013 \u03b11) (x \u2013 \u03b12) . . . (x \u2013 \u03b1n) .", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g (x) = (ax2 + bx + c)2 (x \u2013 \u03b11) (x \u2013 \u03b12) . . . (x \u2013 \u03b1n)", "label": "g (x) = (ax2 + bx + c)2 (x \u2013 \u03b11) (x \u2013 \u03b12) . . . (x \u2013 \u03b1n)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Note : Corresponding to repeated linear factor (x \u2013 a)r in the denominator, a sum of r partial fractions.", "label": "Note : Corresponding to repeated linear factor (x \u2013 a)r in the denominator, a sum of r partial fractions.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrals of the form \u222bsin^m(x)cos^n(x)dx", "label": "Integrals of the form \u222bsin^m(x)cos^n(x)dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) If the power of sin x is an odd positive integer, put cos x = t.", "label": "(i) If the power of sin x is an odd positive integer, put cos x = t.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) If the power of cos x is an odd positive integer, put sin x = t.", "label": "(ii) If the power of cos x is an odd positive integer, put sin x = t.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iii) If the power of sin x and cos x are both odd positive integers,put sin x = t or cos x = t.", "label": "(iii) If the power of sin x and cos x are both odd positive integers,put sin x = t or cos x = t.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iv) If the power of sin x and cos x are both even positive integers, use De\u2019 Moivre\u2019s theorem", "label": "(iv) If the power of sin x and cos x are both even positive integers, use De\u2019 Moivre\u2019s theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(v) If the sum of powers of sin x and cos x is an even negative integer, put tan x = z.", "label": "(v) If the sum of powers of sin x and cos x is an even negative integer, put tan x = z.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(vi) In case, both the functions are trigonometric, take that function as second function whose integral is simple.", "label": "(vi) In case, both the functions are trigonometric, take that function as second function whose integral is simple.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a cos x + b sin x = A (c cos x + d sin x) + B (\u2013 c sin x + d cos x).", "label": "a cos x + b sin x = A (c cos x + d sin x) + B (\u2013 c sin x + d cos x).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrals of the form \u222bP(x)/\u221a(ax^2 + bx + c) dx", "label": "Integrals of the form \u222bP(x)/\u221a(ax^2 + bx + c) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrals of the form \u222b(px+q)/(ax^2 + bx + c) dx", "label": "Integrals of the form \u222b(px+q)/(ax^2 + bx + c) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222b(px+q)/\u221a(ax^2 + bx + c) dx", "label": "\u222b(px+q)/\u221a(ax^2 + bx + c) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222b\u221a(ax^2 + bx + c) dx", "label": "\u222b\u221a(ax^2 + bx + c) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222be^x[f(x) + f\u0027(x)]dx = e^x f(x) + C", "label": "\u222be^x[f(x) + f\u0027(x)]dx = e^x f(x) + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222b(ax^2 + bx + c) dx", "label": "\u222b(ax^2 + bx + c) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) If the two functions are of different type, we can choose quadratic factor which cannot be factorised further.", "label": "(i) If the two functions are of different type, we can choose quadratic factor which cannot be factorised further.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "quadratic factor which cannot be factorised further: That is g (x) = (ax2 + bx + c)2 (x \u2013 \u03b15) (x \u2013 \u03b16) . . . (x \u2013 \u03b1n)", "label": "quadratic factor which cannot be factorised further: That is g (x) = (ax2 + bx + c)2 (x \u2013 \u03b15) (x \u2013 \u03b16) . . . (x \u2013 \u03b1n)", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "INDEFINITE INTEGRATION", "to": "Integration by Parts"}, {"arrows": "to", "from": "INDEFINITE INTEGRATION", "to": "Integral Substitution"}, {"arrows": "to", "from": "INDEFINITE INTEGRATION", "to": "Partial Fractions"}, {"arrows": "to", "from": "INDEFINITE INTEGRATION", "to": "Trigonometric Integrals"}, {"arrows": "to", "from": "INDEFINITE INTEGRATION", "to": "Special Integrals"}, {"arrows": "to", "from": "Integration by Parts", "to": "\u222budv = uv - \u222bvdu"}, {"arrows": "to", "from": "Integration by Parts", "to": "ILATE Rule"}, {"arrows": "to", "from": "Integration by Parts", "to": "Choose \u0027u\u0027 based on ILATE"}, {"arrows": "to", "from": "Integration by Parts", "to": "I - Inverse Trigonometric functions"}, {"arrows": "to", "from": "Integration by Parts", "to": "L - Logarithmic functions"}, {"arrows": "to", "from": "Integration by Parts", "to": "A - Algebraic functions"}, {"arrows": "to", "from": "Integration by Parts", "to": "T - Trigonometric functions"}, {"arrows": "to", "from": "Integration by Parts", "to": "E - Exponential functions"}, {"arrows": "to", "from": "Integration by Parts", "to": "If functions are of different types, choose u according to ILATE"}, {"arrows": "to", "from": "Integration by Parts", "to": "If both functions are trigonometric, take the function as second function whose integral is simpler"}, {"arrows": "to", "from": "Integration by Parts", "to": "If both functions are of same type, take that as first which comes first in ILATE"}, {"arrows": "to", "from": "Integration by Parts", "to": "The process of integration of the product of two functions is known as integration by parts."}, {"arrows": "to", "from": "Integration by Parts", "to": "Rule of integration by parts may be used repeatedly, if required."}, {"arrows": "to", "from": "Integral Substitution", "to": "\u222bf(g(x))g\u0027(x)dx = \u222bf(u)du, where u = g(x)"}, {"arrows": "to", "from": "Integral Substitution", "to": "Change the variable to simplify the integrand"}, {"arrows": "to", "from": "Integral Substitution", "to": "Working Rule"}, {"arrows": "to", "from": "Integral Substitution", "to": "If the integral consists of an inverse trigonometric function, change the integral into other variables and f(x) to F(t)"}, {"arrows": "to", "from": "Integral Substitution", "to": "There is no general rule for finding a proper substitution and the best guide in this matter is experience."}, {"arrows": "to", "from": "Partial Fractions", "to": "Integrand can be integrated by resolving the integrand into partial fractions"}, {"arrows": "to", "from": "Partial Fractions", "to": "CASE 1: When the denominator contains non-repeated linear factors."}, {"arrows": "to", "from": "Partial Fractions", "to": "g(x) = (x \u2013 a1) (x \u2013 a2) . . . (x \u2013 an)."}, {"arrows": "to", "from": "Partial Fractions", "to": "CASE 2: When the denominator contains repeated as well as non-repeated linear factor."}, {"arrows": "to", "from": "Partial Fractions", "to": "g (x) = (ax2 + bx + c) (x \u2013 \u03b11) (x \u2013 \u03b12) . . . (x \u2013 \u03b1n) ."}, {"arrows": "to", "from": "Partial Fractions", "to": "g (x) = (ax2 + bx + c)2 (x \u2013 \u03b11) (x \u2013 \u03b12) . . . (x \u2013 \u03b1n)"}, {"arrows": "to", "from": "Partial Fractions", "to": "Note : Corresponding to repeated linear factor (x \u2013 a)r in the denominator, a sum of r partial fractions."}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "Integrals of the form \u222bsin^m(x)cos^n(x)dx"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "(i) If the power of sin x is an odd positive integer, put cos x = t."}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "(ii) If the power of cos x is an odd positive integer, put sin x = t."}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "(iii) If the power of sin x and cos x are both odd positive integers,put sin x = t or cos x = t."}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "(iv) If the power of sin x and cos x are both even positive integers, use De\u2019 Moivre\u2019s theorem"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "(v) If the sum of powers of sin x and cos x is an even negative integer, put tan x = z."}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "(vi) In case, both the functions are trigonometric, take that function as second function whose integral is simple."}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "a cos x + b sin x = A (c cos x + d sin x) + B (\u2013 c sin x + d cos x)."}, {"arrows": "to", "from": "Special Integrals", "to": "Integrals of the form \u222bP(x)/\u221a(ax^2 + bx + c) dx"}, {"arrows": "to", "from": "Special Integrals", "to": "Integrals of the form \u222b(px+q)/(ax^2 + bx + c) dx"}, {"arrows": "to", "from": "Special Integrals", "to": "\u222b(px+q)/\u221a(ax^2 + bx + c) dx"}, {"arrows": "to", "from": "Special Integrals", "to": "\u222b\u221a(ax^2 + bx + c) dx"}, {"arrows": "to", "from": "Special Integrals", "to": "\u222be^x[f(x) + f\u0027(x)]dx = e^x f(x) + C"}, {"arrows": "to", "from": "Special Integrals", "to": "\u222b(ax^2 + bx + c) dx"}, {"arrows": "to", "from": "Special Integrals", "to": "(i) If the two functions are of different type, we can choose quadratic factor which cannot be factorised further."}, {"arrows": "to", "from": "Special Integrals", "to": "quadratic factor which cannot be factorised further: That is g (x) = (ax2 + bx + c)2 (x \u2013 \u03b15) (x \u2013 \u03b16) . . . (x \u2013 \u03b1n)"}, {"arrows": "to", "from": "ILATE Rule", "to": "First function as the one whose initial comes first in the word \u201cILATE\u201d"}, {"arrows": "to", "from": "Working Rule", "to": "(i) Split the integral into two integrals."}, {"arrows": "to", "from": "Working Rule", "to": "(ii) Equate coefficients of sin x, cos x and constant term on both sides and find the values of L, M, N."}, {"arrows": "to", "from": "Working Rule", "to": "(iii) Split the given integral into three integrals and evaluate each integral separately, i.e"}, {"arrows": "to", "from": "Working Rule", "to": "(iv) Rule of integration by parts may be used repeatedly, if required"}, {"arrows": "to", "from": "Working Rule", "to": "\u222b a b cosx c sinx dx e f cosx g sinx"}, {"arrows": "to", "from": "Working Rule", "to": "(i)Put x^2 = z in the integrand."}, {"arrows": "to", "from": "Working Rule", "to": "(ii)Equate coefficients of sin x and cos x on both sides and find the values of a and  b."}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

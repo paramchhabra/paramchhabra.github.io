@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Work Done", "label": "Work Done", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Against Force", "label": "Against Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Between Two Points", "label": "Between Two Points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Force * Distance", "label": "Force * Distance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work = F * d", "label": "Work = F * d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends Only on Location", "label": "Depends Only on Location", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Path Independent", "label": "Path Independent", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservative Force", "label": "Conservative Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Conservative Force", "label": "Non-Conservative Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gravity", "label": "Gravity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Friction", "label": "Friction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Viscous Force", "label": "Viscous Force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Air Resistance", "label": "Air Resistance", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Work Energy Theorem", "label": "Work Energy Theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Net Work = Change in Kinetic Energy", "label": "Net Work = Change in Kinetic Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work = \u0394KE", "label": "Work = \u0394KE", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Kinetic Energy", "label": "Kinetic Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "KE = (1/2)mv^2", "label": "KE = (1/2)mv^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "m = mass, v = velocity", "label": "m = mass, v = velocity", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Potential Energy", "label": "Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PE = mgh", "label": "PE = mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g = acceleration due to gravity, h = height", "label": "g = acceleration due to gravity, h = height", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Energy", "label": "Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Total Energy = KE + PE", "label": "Total Energy = KE + PE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conservation of Energy", "label": "Conservation of Energy", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Spring Force", "label": "Spring Force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = kx", "label": "F = kx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "k = spring constant, x = displacement", "label": "k = spring constant, x = displacement", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Energy in Simple Harmonic Motion", "label": "Energy in Simple Harmonic Motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Total Energy = (1/2)kA^2", "label": "Total Energy = (1/2)kA^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A = amplitude", "label": "A = amplitude", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Forces", "label": "Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Normal Force", "label": "Normal Force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Static Friction", "label": "Static Friction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Kinetic Friction", "label": "Kinetic Friction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Weight = mg", "label": "Weight = mg", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g = acceleration due to gravity", "label": "g = acceleration due to gravity", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Newton\u0027s Laws", "label": "Newton\u0027s Laws", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "First Law", "label": "First Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Second Law", "label": "Second Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Third Law", "label": "Third Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Law of Inertia", "label": "Law of Inertia", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = 0 --\u003e a = 0", "label": "F = 0 --\u003e a = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = ma", "label": "F = ma", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a = acceleration, m = mass", "label": "a = acceleration, m = mass", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Action and Reaction", "label": "Action and Reaction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Forces come in pairs", "label": "Forces come in pairs", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Momentum", "label": "Momentum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "p = mv", "label": "p = mv", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conservation of Momentum", "label": "Conservation of Momentum", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "System", "label": "System", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Isolated System", "label": "Isolated System", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Isolated System", "label": "Non-Isolated System", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "No external forces", "label": "No external forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conservation of Energy and Momentum", "label": "Conservation of Energy and Momentum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "External forces", "label": "External forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "No conservation of Energy and Momentum", "label": "No conservation of Energy and Momentum", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Collisions", "label": "Collisions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Elastic Collision", "label": "Elastic Collision", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Inelastic Collision", "label": "Inelastic Collision", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Kinetic Energy is conserved", "label": "Kinetic Energy is conserved", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Momentum is conserved", "label": "Momentum is conserved", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Kinetic Energy is not conserved", "label": "Kinetic Energy is not conserved", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Energy Transfer", "label": "Energy Transfer", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mechanical Energy", "label": "Mechanical Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " Thermal Energy", "label": " Thermal Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Kinetic Energy + Potential Energy", "label": "Kinetic Energy + Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conservation of Mechanical Energy", "label": "Conservation of Mechanical Energy", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Thermal Energy", "label": "Thermal Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Internal Energy", "label": "Internal Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heat Transfer", "label": "Heat Transfer", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Work Done", "to": "Against Force"}, {"arrows": "to", "from": "Work Done", "to": "Between Two Points"}, {"arrows": "to", "from": "Against Force", "to": "Force * Distance"}, {"arrows": "to", "from": "Against Force", "to": "Work = F * d"}, {"arrows": "to", "from": "Between Two Points", "to": "Depends Only on Location"}, {"arrows": "to", "from": "Between Two Points", "to": "Path Independent"}, {"arrows": "to", "from": "Path Independent", "to": "Conservative Force"}, {"arrows": "to", "from": "Path Independent", "to": "Non-Conservative Force"}, {"arrows": "to", "from": "Conservative Force", "to": "Gravity"}, {"arrows": "to", "from": "Conservative Force", "to": "Friction"}, {"arrows": "to", "from": "Non-Conservative Force", "to": "Viscous Force"}, {"arrows": "to", "from": "Non-Conservative Force", "to": "Air Resistance"}, {"arrows": "to", "from": "Gravity", "to": "Weight = mg"}, {"arrows": "to", "from": "Gravity", "to": "g = acceleration due to gravity"}, {"arrows": "to", "from": "Friction", "to": "Static Friction"}, {"arrows": "to", "from": "Friction", "to": "Kinetic Friction"}, {"arrows": "to", "from": "Work Energy Theorem", "to": "Net Work = Change in Kinetic Energy"}, {"arrows": "to", "from": "Work Energy Theorem", "to": "Work = \u0394KE"}, {"arrows": "to", "from": "Kinetic Energy", "to": "KE = (1/2)mv^2"}, {"arrows": "to", "from": "Kinetic Energy", "to": "m = mass, v = velocity"}, {"arrows": "to", "from": "Potential Energy", "to": "PE = mgh"}, {"arrows": "to", "from": "Potential Energy", "to": "g = acceleration due to gravity, h = height"}, {"arrows": "to", "from": "Energy", "to": "Total Energy = KE + PE"}, {"arrows": "to", "from": "Energy", "to": "Conservation of Energy"}, {"arrows": "to", "from": "Spring Force", "to": "F = kx"}, {"arrows": "to", "from": "Spring Force", "to": "k = spring constant, x = displacement"}, {"arrows": "to", "from": "Energy in Simple Harmonic Motion", "to": "Total Energy = (1/2)kA^2"}, {"arrows": "to", "from": "Energy in Simple Harmonic Motion", "to": "A = amplitude"}, {"arrows": "to", "from": "Forces", "to": "Gravity"}, {"arrows": "to", "from": "Forces", "to": "Friction"}, {"arrows": "to", "from": "Forces", "to": "Normal Force"}, {"arrows": "to", "from": "Newton\u0027s Laws", "to": "First Law"}, {"arrows": "to", "from": "Newton\u0027s Laws", "to": "Second Law"}, {"arrows": "to", "from": "Newton\u0027s Laws", "to": "Third Law"}, {"arrows": "to", "from": "First Law", "to": "Law of Inertia"}, {"arrows": "to", "from": "First Law", "to": "F = 0 --\u003e a = 0"}, {"arrows": "to", "from": "Second Law", "to": "F = ma"}, {"arrows": "to", "from": "Second Law", "to": "a = acceleration, m = mass"}, {"arrows": "to", "from": "Third Law", "to": "Action and Reaction"}, {"arrows": "to", "from": "Third Law", "to": "Forces come in pairs"}, {"arrows": "to", "from": "Momentum", "to": "p = mv"}, {"arrows": "to", "from": "Momentum", "to": "Conservation of Momentum"}, {"arrows": "to", "from": "System", "to": "Isolated System"}, {"arrows": "to", "from": "System", "to": "Non-Isolated System"}, {"arrows": "to", "from": "Isolated System", "to": "No external forces"}, {"arrows": "to", "from": "Isolated System", "to": "Conservation of Energy and Momentum"}, {"arrows": "to", "from": "Non-Isolated System", "to": "External forces"}, {"arrows": "to", "from": "Non-Isolated System", "to": "No conservation of Energy and Momentum"}, {"arrows": "to", "from": "Collisions", "to": "Elastic Collision"}, {"arrows": "to", "from": "Collisions", "to": "Inelastic Collision"}, {"arrows": "to", "from": "Elastic Collision", "to": "Kinetic Energy is conserved"}, {"arrows": "to", "from": "Elastic Collision", "to": "Momentum is conserved"}, {"arrows": "to", "from": "Inelastic Collision", "to": "Kinetic Energy is not conserved"}, {"arrows": "to", "from": "Inelastic Collision", "to": "Momentum is conserved"}, {"arrows": "to", "from": "Energy Transfer", "to": "Mechanical Energy"}, {"arrows": "to", "from": "Energy Transfer", "to": " Thermal Energy"}, {"arrows": "to", "from": "Mechanical Energy", "to": "Kinetic Energy + Potential Energy"}, {"arrows": "to", "from": "Mechanical Energy", "to": "Conservation of Mechanical Energy"}, {"arrows": "to", "from": "Thermal Energy", "to": "Internal Energy"}, {"arrows": "to", "from": "Thermal Energy", "to": "Heat Transfer"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Interference of Waves", "label": "Interference of Waves", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conditions", "label": "Conditions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Interference", "label": "Types of Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Key Formulas", "label": "Key Formulas", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications", "label": "Applications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Examples", "label": "Examples", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Superposition of two or more waves leading to a resultant wave with varying amplitude", "label": "Superposition of two or more waves leading to a resultant wave with varying amplitude", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Coherence", "label": "Coherence", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Monochromatic Sources", "label": "Monochromatic Sources", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Constant Phase Difference", "label": "Constant Phase Difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sources must maintain a constant phase difference", "label": "Sources must maintain a constant phase difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sources emit waves of the same wavelength", "label": "Sources emit waves of the same wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phase difference between sources remains constant", "label": "Phase difference between sources remains constant", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Constructive Interference", "label": "Constructive Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Destructive Interference", "label": "Destructive Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mixed Interference", "label": "Mixed Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Occurs when waves are in phase", "label": "Occurs when waves are in phase", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference \u03b4 = m\u03bb", "label": "Path difference \u03b4 = m\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Maximum intensity (Bright fringes)", "label": "Maximum intensity (Bright fringes)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Occurs when waves are out of phase by 180 degrees", "label": "Occurs when waves are out of phase by 180 degrees", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference \u03b4 = (m + 0.5)\u03bb", "label": "Path difference \u03b4 = (m + 0.5)\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum intensity (Dark fringes)", "label": "Minimum intensity (Dark fringes)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Combination of constructive and destructive interference", "label": "Combination of constructive and destructive interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path Difference \u03b4 = d sin\u03b8", "label": "Path Difference \u03b4 = d sin\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Condition for Constructive Interference \u03b4 = m\u03bb", "label": "Condition for Constructive Interference \u03b4 = m\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Condition for Destructive Interference \u03b4 = (m + 0.5)\u03bb", "label": "Condition for Destructive Interference \u03b4 = (m + 0.5)\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity Formula I = 4I\u2080 cos\u00b2(\u03c6/2)", "label": "Intensity Formula I = 4I\u2080 cos\u00b2(\u03c6/2)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Double-slit Experiment", "label": "Double-slit Experiment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thin Film Interference", "label": "Thin Film Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Interferometers", "label": "Interferometers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Holography", "label": "Holography", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Young\u0027s experiment demonstrating interference", "label": "Young\u0027s experiment demonstrating interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula for fringe separation: \u0394y = \u03bbD/d", "label": "Formula for fringe separation: \u0394y = \u03bbD/d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference in thin films causing colorful patterns", "label": "Interference in thin films causing colorful patterns", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends on film thickness and wavelength", "label": "Depends on film thickness and wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Devices that use interference to make precise measurements", "label": "Devices that use interference to make precise measurements", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Michelson Interferometer", "label": "Michelson Interferometer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mach-Zehnder Interferometer", "label": "Mach-Zehnder Interferometer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Creating 3D images using interference patterns", "label": "Creating 3D images using interference patterns", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Young\u0027s Double Slit", "label": "Young\u0027s Double Slit", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Interference of Waves", "to": "Definition"}, {"arrows": "to", "from": "Interference of Waves", "to": "Conditions"}, {"arrows": "to", "from": "Interference of Waves", "to": "Types of Interference"}, {"arrows": "to", "from": "Interference of Waves", "to": "Key Formulas"}, {"arrows": "to", "from": "Interference of Waves", "to": "Applications"}, {"arrows": "to", "from": "Interference of Waves", "to": "Examples"}, {"arrows": "to", "from": "Definition", "to": "Superposition of two or more waves leading to a resultant wave with varying amplitude"}, {"arrows": "to", "from": "Conditions", "to": "Coherence"}, {"arrows": "to", "from": "Conditions", "to": "Monochromatic Sources"}, {"arrows": "to", "from": "Conditions", "to": "Constant Phase Difference"}, {"arrows": "to", "from": "Types of Interference", "to": "Constructive Interference"}, {"arrows": "to", "from": "Types of Interference", "to": "Destructive Interference"}, {"arrows": "to", "from": "Types of Interference", "to": "Mixed Interference"}, {"arrows": "to", "from": "Key Formulas", "to": "Path Difference \u03b4 = d sin\u03b8"}, {"arrows": "to", "from": "Key Formulas", "to": "Condition for Constructive Interference \u03b4 = m\u03bb"}, {"arrows": "to", "from": "Key Formulas", "to": "Condition for Destructive Interference \u03b4 = (m + 0.5)\u03bb"}, {"arrows": "to", "from": "Key Formulas", "to": "Intensity Formula I = 4I\u2080 cos\u00b2(\u03c6/2)"}, {"arrows": "to", "from": "Applications", "to": "Double-slit Experiment"}, {"arrows": "to", "from": "Applications", "to": "Thin Film Interference"}, {"arrows": "to", "from": "Applications", "to": "Interferometers"}, {"arrows": "to", "from": "Applications", "to": "Holography"}, {"arrows": "to", "from": "Examples", "to": "Young\u0027s Double Slit"}, {"arrows": "to", "from": "Examples", "to": "Michelson Interferometer"}, {"arrows": "to", "from": "Coherence", "to": "Sources must maintain a constant phase difference"}, {"arrows": "to", "from": "Monochromatic Sources", "to": "Sources emit waves of the same wavelength"}, {"arrows": "to", "from": "Constant Phase Difference", "to": "Phase difference between sources remains constant"}, {"arrows": "to", "from": "Constructive Interference", "to": "Occurs when waves are in phase"}, {"arrows": "to", "from": "Constructive Interference", "to": "Path difference \u03b4 = m\u03bb"}, {"arrows": "to", "from": "Constructive Interference", "to": "Maximum intensity (Bright fringes)"}, {"arrows": "to", "from": "Destructive Interference", "to": "Occurs when waves are out of phase by 180 degrees"}, {"arrows": "to", "from": "Destructive Interference", "to": "Path difference \u03b4 = (m + 0.5)\u03bb"}, {"arrows": "to", "from": "Destructive Interference", "to": "Minimum intensity (Dark fringes)"}, {"arrows": "to", "from": "Mixed Interference", "to": "Combination of constructive and destructive interference"}, {"arrows": "to", "from": "Double-slit Experiment", "to": "Young\u0027s experiment demonstrating interference"}, {"arrows": "to", "from": "Double-slit Experiment", "to": "Formula for fringe separation: \u0394y = \u03bbD/d"}, {"arrows": "to", "from": "Thin Film Interference", "to": "Interference in thin films causing colorful patterns"}, {"arrows": "to", "from": "Thin Film Interference", "to": "Depends on film thickness and wavelength"}, {"arrows": "to", "from": "Interferometers", "to": "Devices that use interference to make precise measurements"}, {"arrows": "to", "from": "Interferometers", "to": "Michelson Interferometer"}, {"arrows": "to", "from": "Interferometers", "to": "Mach-Zehnder Interferometer"}, {"arrows": "to", "from": "Holography", "to": "Creating 3D images using interference patterns"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

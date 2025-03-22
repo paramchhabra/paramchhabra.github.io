@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "METALLURGY", "label": "METALLURGY", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Occurrence of Metals", "label": "Occurrence of Metals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Concentration Process", "label": "Concentration Process", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Extraction of Metals", "label": "Extraction of Metals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Refining of Metals", "label": "Refining of Metals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Alloy Formation", "label": "Alloy Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Recycling", "label": "Recycling", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Native Ores", "label": "Native Ores", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sulfide Ores", "label": "Sulfide Ores", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Oxide Ores", "label": "Oxide Ores", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Carbonate Ores", "label": "Carbonate Ores", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pure metals found in nature", "label": "Pure metals found in nature", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Gold, Silver, Copper", "label": "Examples: Gold, Silver, Copper", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metals present as sulfides", "label": "Metals present as sulfides", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Pyrite (FeS\u2082)", "label": "Example: Pyrite (FeS\u2082)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metals present as oxides", "label": "Metals present as oxides", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Hematite (Fe\u2082O\u2083)", "label": "Example: Hematite (Fe\u2082O\u2083)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metals present as carbonates", "label": "Metals present as carbonates", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Smithsonite (ZnCO\u2083)", "label": "Example: Smithsonite (ZnCO\u2083)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Crushing and Grinding", "label": "Crushing and Grinding", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Washing", "label": "Washing", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Froth Flotation", "label": "Froth Flotation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Magnetic Separation", "label": "Magnetic Separation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reducing ore size for further processing", "label": "Reducing ore size for further processing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Removing impurities using water", "label": "Removing impurities using water", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Separating hydrophobic materials from hydrophilic", "label": "Separating hydrophobic materials from hydrophilic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Recovery of sulfide ores", "label": "Example: Recovery of sulfide ores", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Using magnetic properties to separate metals", "label": "Using magnetic properties to separate metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Separation of magnetite from non-magnetic minerals", "label": "Example: Separation of magnetite from non-magnetic minerals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thermodynamic Principles", "label": "Thermodynamic Principles", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reduction Methods", "label": "Reduction Methods", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrolytic Reduction", "label": "Electrolytic Reduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gibbs Free Energy (\u0394G)", "label": "Gibbs Free Energy (\u0394G)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ellingham Diagram", "label": "Ellingham Diagram", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Gibbs Free Energy", "label": "Gibbs Free Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u0394G = \u0394H - T\u0394S", "label": "\u0394G = \u0394H - T\u0394S", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Determines spontaneity of reactions", "label": "Determines spontaneity of reactions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plots \u0394G vs temperature for various reactions", "label": "Plots \u0394G vs temperature for various reactions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used to predict feasibility of reduction", "label": "Used to predict feasibility of reduction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Carbon Reduction", "label": "Carbon Reduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Using carbon as reducing agent", "label": "Using carbon as reducing agent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: C + Fe\u2082O\u2083 \u2192 2Fe + CO\u2082", "label": "Example: C + Fe\u2082O\u2083 \u2192 2Fe + CO\u2082", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Using electrical energy to reduce metal ions", "label": "Using electrical energy to reduce metal ions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Aluminum extraction", "label": "Example: Aluminum extraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrolytic Refining", "label": "Electrolytic Refining", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Zone Refining", "label": "Zone Refining", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Distillation", "label": "Distillation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Purifying metals through electrolysis", "label": "Purifying metals through electrolysis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Copper refining", "label": "Example: Copper refining", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Purifying metals by moving a molten zone", "label": "Purifying metals by moving a molten zone", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used for semiconductor-grade materials", "label": "Used for semiconductor-grade materials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Purifying metals by vaporization and condensation", "label": "Purifying metals by vaporization and condensation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Mercury purification", "label": "Example: Mercury purification", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Alloys", "label": "Types of Alloys", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties of Alloys", "label": "Properties of Alloys", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ferrous Alloys", "label": "Ferrous Alloys", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Ferrous Alloys", "label": "Non-Ferrous Alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Contain iron", "label": "Contain iron", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Steel, Cast Iron", "label": "Examples: Steel, Cast Iron", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Do not contain iron", "label": "Do not contain iron", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Brass, Bronze, Aluminum Alloys", "label": "Examples: Brass, Bronze, Aluminum Alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Improved strength", "label": "Improved strength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Enhanced corrosion resistance", "label": "Enhanced corrosion resistance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Better malleability", "label": "Better malleability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Methods of Recycling", "label": "Methods of Recycling", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Benefits of Recycling", "label": "Benefits of Recycling", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ferrous Recycling", "label": "Ferrous Recycling", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Ferrous Recycling", "label": "Non-Ferrous Recycling", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reusing steel and iron products", "label": "Reusing steel and iron products", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reusing aluminum, copper, and other non-ferrous metals", "label": "Reusing aluminum, copper, and other non-ferrous metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conserves natural resources", "label": "Conserves natural resources", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Saves energy", "label": "Saves energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reduces environmental impact", "label": "Reduces environmental impact", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "METALLURGY", "to": "Occurrence of Metals"}, {"arrows": "to", "from": "METALLURGY", "to": "Concentration Process"}, {"arrows": "to", "from": "METALLURGY", "to": "Extraction of Metals"}, {"arrows": "to", "from": "METALLURGY", "to": "Refining of Metals"}, {"arrows": "to", "from": "METALLURGY", "to": "Alloy Formation"}, {"arrows": "to", "from": "METALLURGY", "to": "Recycling"}, {"arrows": "to", "from": "Occurrence of Metals", "to": "Native Ores"}, {"arrows": "to", "from": "Occurrence of Metals", "to": "Sulfide Ores"}, {"arrows": "to", "from": "Occurrence of Metals", "to": "Oxide Ores"}, {"arrows": "to", "from": "Occurrence of Metals", "to": "Carbonate Ores"}, {"arrows": "to", "from": "Concentration Process", "to": "Crushing and Grinding"}, {"arrows": "to", "from": "Concentration Process", "to": "Washing"}, {"arrows": "to", "from": "Concentration Process", "to": "Froth Flotation"}, {"arrows": "to", "from": "Concentration Process", "to": "Magnetic Separation"}, {"arrows": "to", "from": "Extraction of Metals", "to": "Thermodynamic Principles"}, {"arrows": "to", "from": "Extraction of Metals", "to": "Reduction Methods"}, {"arrows": "to", "from": "Extraction of Metals", "to": "Electrolytic Reduction"}, {"arrows": "to", "from": "Refining of Metals", "to": "Electrolytic Refining"}, {"arrows": "to", "from": "Refining of Metals", "to": "Zone Refining"}, {"arrows": "to", "from": "Refining of Metals", "to": "Distillation"}, {"arrows": "to", "from": "Alloy Formation", "to": "Types of Alloys"}, {"arrows": "to", "from": "Alloy Formation", "to": "Properties of Alloys"}, {"arrows": "to", "from": "Recycling", "to": "Methods of Recycling"}, {"arrows": "to", "from": "Recycling", "to": "Benefits of Recycling"}, {"arrows": "to", "from": "Native Ores", "to": "Pure metals found in nature"}, {"arrows": "to", "from": "Native Ores", "to": "Examples: Gold, Silver, Copper"}, {"arrows": "to", "from": "Sulfide Ores", "to": "Metals present as sulfides"}, {"arrows": "to", "from": "Sulfide Ores", "to": "Example: Pyrite (FeS\u2082)"}, {"arrows": "to", "from": "Oxide Ores", "to": "Metals present as oxides"}, {"arrows": "to", "from": "Oxide Ores", "to": "Example: Hematite (Fe\u2082O\u2083)"}, {"arrows": "to", "from": "Carbonate Ores", "to": "Metals present as carbonates"}, {"arrows": "to", "from": "Carbonate Ores", "to": "Example: Smithsonite (ZnCO\u2083)"}, {"arrows": "to", "from": "Crushing and Grinding", "to": "Reducing ore size for further processing"}, {"arrows": "to", "from": "Washing", "to": "Removing impurities using water"}, {"arrows": "to", "from": "Froth Flotation", "to": "Separating hydrophobic materials from hydrophilic"}, {"arrows": "to", "from": "Froth Flotation", "to": "Example: Recovery of sulfide ores"}, {"arrows": "to", "from": "Magnetic Separation", "to": "Using magnetic properties to separate metals"}, {"arrows": "to", "from": "Magnetic Separation", "to": "Example: Separation of magnetite from non-magnetic minerals"}, {"arrows": "to", "from": "Thermodynamic Principles", "to": "Gibbs Free Energy (\u0394G)"}, {"arrows": "to", "from": "Thermodynamic Principles", "to": "Ellingham Diagram"}, {"arrows": "to", "from": "Reduction Methods", "to": "Carbon Reduction"}, {"arrows": "to", "from": "Reduction Methods", "to": "Electrolytic Reduction"}, {"arrows": "to", "from": "Electrolytic Reduction", "to": "Using electrical energy to reduce metal ions"}, {"arrows": "to", "from": "Electrolytic Reduction", "to": "Example: Aluminum extraction"}, {"arrows": "to", "from": "Ellingham Diagram", "to": "Plots \u0394G vs temperature for various reactions"}, {"arrows": "to", "from": "Ellingham Diagram", "to": "Used to predict feasibility of reduction"}, {"arrows": "to", "from": "Gibbs Free Energy", "to": "\u0394G = \u0394H - T\u0394S"}, {"arrows": "to", "from": "Gibbs Free Energy", "to": "Determines spontaneity of reactions"}, {"arrows": "to", "from": "Carbon Reduction", "to": "Using carbon as reducing agent"}, {"arrows": "to", "from": "Carbon Reduction", "to": "Example: C + Fe\u2082O\u2083 \u2192 2Fe + CO\u2082"}, {"arrows": "to", "from": "Electrolytic Refining", "to": "Purifying metals through electrolysis"}, {"arrows": "to", "from": "Electrolytic Refining", "to": "Example: Copper refining"}, {"arrows": "to", "from": "Zone Refining", "to": "Purifying metals by moving a molten zone"}, {"arrows": "to", "from": "Zone Refining", "to": "Used for semiconductor-grade materials"}, {"arrows": "to", "from": "Distillation", "to": "Purifying metals by vaporization and condensation"}, {"arrows": "to", "from": "Distillation", "to": "Example: Mercury purification"}, {"arrows": "to", "from": "Types of Alloys", "to": "Ferrous Alloys"}, {"arrows": "to", "from": "Types of Alloys", "to": "Non-Ferrous Alloys"}, {"arrows": "to", "from": "Properties of Alloys", "to": "Improved strength"}, {"arrows": "to", "from": "Properties of Alloys", "to": "Enhanced corrosion resistance"}, {"arrows": "to", "from": "Properties of Alloys", "to": "Better malleability"}, {"arrows": "to", "from": "Ferrous Alloys", "to": "Contain iron"}, {"arrows": "to", "from": "Ferrous Alloys", "to": "Examples: Steel, Cast Iron"}, {"arrows": "to", "from": "Non-Ferrous Alloys", "to": "Do not contain iron"}, {"arrows": "to", "from": "Non-Ferrous Alloys", "to": "Examples: Brass, Bronze, Aluminum Alloys"}, {"arrows": "to", "from": "Methods of Recycling", "to": "Ferrous Recycling"}, {"arrows": "to", "from": "Methods of Recycling", "to": "Non-Ferrous Recycling"}, {"arrows": "to", "from": "Benefits of Recycling", "to": "Conserves natural resources"}, {"arrows": "to", "from": "Benefits of Recycling", "to": "Saves energy"}, {"arrows": "to", "from": "Benefits of Recycling", "to": "Reduces environmental impact"}, {"arrows": "to", "from": "Ferrous Recycling", "to": "Reusing steel and iron products"}, {"arrows": "to", "from": "Non-Ferrous Recycling", "to": "Reusing aluminum, copper, and other non-ferrous metals"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "WAVE OPTICS", "label": "WAVE OPTICS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Huygen\u0027s Principle", "label": "Huygen\u0027s Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Interference", "label": "Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction", "label": "Diffraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polarization", "label": "Polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thin Films", "label": "Thin Films", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Optical Instruments", "label": "Optical Instruments", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Huygen\u0027s Construction", "label": "Huygen\u0027s Construction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wavefronts", "label": "Wavefronts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Assumptions", "label": "Assumptions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Secondary Wavelets", "label": "Secondary Wavelets", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) Each point on a wavefront acts as a source of secondary wavelets.", "label": "(i) Each point on a wavefront acts as a source of secondary wavelets.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) The new wavefront is the forward envelope of the secondary wavelets.", "label": "(ii) The new wavefront is the forward envelope of the secondary wavelets.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spread out in all directions", "label": "Spread out in all directions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Particles vibrate in phase", "label": "Particles vibrate in phase", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Plane Wavefront", "label": "Plane Wavefront", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Spherical Wavefront", "label": "Spherical Wavefront", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cylindrical Wavefront", "label": "Cylindrical Wavefront", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "From a point source at infinite distance", "label": "From a point source at infinite distance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "From a point source", "label": "From a point source", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "From linear Source", "label": "From linear Source", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Coherent Sources", "label": "Coherent Sources", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Superposition of Waves", "label": "Superposition of Waves", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Resultant Amplitude", "label": "Resultant Amplitude", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Resultant Intensity", "label": "Resultant Intensity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conditions for Maxima and Minima", "label": "Conditions for Maxima and Minima", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Phase Difference", "label": "Phase Difference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Path Difference", "label": "Path Difference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "YDSE", "label": "YDSE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Same frequency", "label": "Same frequency", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Constant or zero phase difference", "label": "Constant or zero phase difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Slits S1 and S2", "label": "Slits S1 and S2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two coherent sources", "label": "Two coherent sources", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A = \u221a(a\u2081\u00b2 + a\u2082\u00b2 + 2a\u2081a\u2082cos\u03a6)", "label": "A = \u221a(a\u2081\u00b2 + a\u2082\u00b2 + 2a\u2081a\u2082cos\u03a6)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a\u2081, a\u2082 = Individual amplitudes", "label": "a\u2081, a\u2082 = Individual amplitudes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03a6 = Phase difference", "label": "\u03a6 = Phase difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = I\u2081 + I\u2082 + 2\u221a(I\u2081I\u2082)cos\u03a6", "label": "I = I\u2081 + I\u2082 + 2\u221a(I\u2081I\u2082)cos\u03a6", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = 4I\u2080cos\u00b2(\u03a6/2)  (when I\u2081=I\u2082=I\u2080)", "label": "I = 4I\u2080cos\u00b2(\u03a6/2)  (when I\u2081=I\u2082=I\u2080)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Average intensity : 2I\u2080 (when I\u2081=I\u2082=I\u2080)", "label": "Average intensity : 2I\u2080 (when I\u2081=I\u2082=I\u2080)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Maxima (Constructive Interference)", "label": "Maxima (Constructive Interference)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Minima (Destructive Interference)", "label": "Minima (Destructive Interference)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03a6 = 2n\u03c0", "label": "\u03a6 = 2n\u03c0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path Difference = n\u03bb", "label": "Path Difference = n\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A_max = a\u2081 + a\u2082", "label": "A_max = a\u2081 + a\u2082", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A_max = 2a\u2080 (if a\u2081 = a\u2082 = a\u2080)", "label": "A_max = 2a\u2080 (if a\u2081 = a\u2082 = a\u2080)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "n = 0, 1, 2, ...", "label": "n = 0, 1, 2, ...", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03a6 = (2n + 1)\u03c0", "label": "\u03a6 = (2n + 1)\u03c0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path Difference = (2n + 1)\u03bb/2", "label": "Path Difference = (2n + 1)\u03bb/2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A_min = a\u2081 - a\u2082", "label": "A_min = a\u2081 - a\u2082", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A_min = 0 (if a\u2081 = a\u2082)", "label": "A_min = 0 (if a\u2081 = a\u2082)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03a6", "label": "\u03a6", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Difference between phases of two waves", "label": "Difference between phases of two waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u0394x = d sin\u03b8", "label": "\u0394x = d sin\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Relation with Phase Difference: \u03a6 = (2\u03c0/\u03bb)\u0394x", "label": "Relation with Phase Difference: \u03a6 = (2\u03c0/\u03bb)\u0394x", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Young\u0027s Double Slit Experiment", "label": "Young\u0027s Double Slit Experiment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fringe Width (\u03b2)", "label": "Fringe Width (\u03b2)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conditions", "label": "Conditions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two coherent sources (slits)", "label": "Two coherent sources (slits)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference pattern on screen", "label": "Interference pattern on screen", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b2 = \u03bbD/d", "label": "\u03b2 = \u03bbD/d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "D = Distance between slits and screen", "label": "D = Distance between slits and screen", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "d = Distance between slits", "label": "d = Distance between slits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03bb = Wavelength", "label": "\u03bb = Wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shift is independent of wavelength", "label": "Shift is independent of wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dsin\u03b8 = n\u03bb", "label": "dsin\u03b8 = n\u03bb", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction at a Single Slit", "label": "Diffraction at a Single Slit", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Secondary Maxima", "label": "Secondary Maxima", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction and optical instruments", "label": "Diffraction and optical instruments", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Central Maxima", "label": "Central Maxima", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Minima", "label": "Minima", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Intensity", "label": "Intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Brightest fringe", "label": "Brightest fringe", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Width = 2\u03bbD/a", "label": "Width = 2\u03bbD/a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a = width of the slit.", "label": "a = width of the slit.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Occurs at  dsin\u03b8 = n\u03bb", "label": "Occurs at  dsin\u03b8 = n\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "n = 1,2,3", "label": "n = 1,2,3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Decreases for higher order maximas", "label": "Decreases for higher order maximas", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Occurs where path difference = (n+1/2)\u03bb ", "label": "Occurs where path difference = (n+1/2)\u03bb ", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "objective lense limits ability", "label": "objective lense limits ability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Plane of Polarization", "label": "Plane of Polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polarizing Angle", "label": "Polarizing Angle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Malus\u0027 Law", "label": "Malus\u0027 Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polarization by Scattering", "label": "Polarization by Scattering", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Unpolarized Light", "label": "Unpolarized Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plane perpendicular to plane of oscillation.", "label": "Plane perpendicular to plane of oscillation.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Brewster\u0027s Angle (\u03b8p)", "label": "Brewster\u0027s Angle (\u03b8p)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan \u03b8p= \u03bc", "label": "tan \u03b8p= \u03bc", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03bc = Refractive index of medium", "label": "\u03bc = Refractive index of medium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reflected light is completely plane polarized", "label": "Reflected light is completely plane polarized", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For glass, \u03b8p ~ 57\u00b0", "label": "For glass, \u03b8p ~ 57\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For water, \u03b8p ~ 53\u00b0", "label": "For water, \u03b8p ~ 53\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = I\u2080 cos\u00b2\u03b8", "label": "I = I\u2080 cos\u00b2\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I\u2080 = Intensity of incident polarized light", "label": "I\u2080 = Intensity of incident polarized light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 = Angle between polarizer and analyzer", "label": "\u03b8 = Angle between polarizer and analyzer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity of transmitted polarized light", "label": "Intensity of transmitted polarized light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Scattered light in direction perpendicular to incidence", "label": "Scattered light in direction perpendicular to incidence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity is half", "label": "Intensity is half", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference between reflected waves", "label": "Interference between reflected waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Telescope", "label": "Telescope", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Microscope", "label": "Microscope", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "WAVE OPTICS", "to": "Huygen\u0027s Principle"}, {"arrows": "to", "from": "WAVE OPTICS", "to": "Interference"}, {"arrows": "to", "from": "WAVE OPTICS", "to": "Diffraction"}, {"arrows": "to", "from": "WAVE OPTICS", "to": "Polarization"}, {"arrows": "to", "from": "WAVE OPTICS", "to": "Thin Films"}, {"arrows": "to", "from": "WAVE OPTICS", "to": "Optical Instruments"}, {"arrows": "to", "from": "Huygen\u0027s Principle", "to": "Huygen\u0027s Construction"}, {"arrows": "to", "from": "Huygen\u0027s Principle", "to": "Wavefronts"}, {"arrows": "to", "from": "Interference", "to": "Coherent Sources"}, {"arrows": "to", "from": "Interference", "to": "Superposition of Waves"}, {"arrows": "to", "from": "Interference", "to": "Resultant Amplitude"}, {"arrows": "to", "from": "Interference", "to": "Resultant Intensity"}, {"arrows": "to", "from": "Interference", "to": "Conditions for Maxima and Minima"}, {"arrows": "to", "from": "Interference", "to": "Phase Difference"}, {"arrows": "to", "from": "Interference", "to": "Path Difference"}, {"arrows": "to", "from": "Interference", "to": "YDSE"}, {"arrows": "to", "from": "Diffraction", "to": "Diffraction at a Single Slit"}, {"arrows": "to", "from": "Diffraction", "to": "Secondary Maxima"}, {"arrows": "to", "from": "Diffraction", "to": "Diffraction and optical instruments"}, {"arrows": "to", "from": "Polarization", "to": "Plane of Polarization"}, {"arrows": "to", "from": "Polarization", "to": "Polarizing Angle"}, {"arrows": "to", "from": "Polarization", "to": "Malus\u0027 Law"}, {"arrows": "to", "from": "Polarization", "to": "Polarization by Scattering"}, {"arrows": "to", "from": "Polarization", "to": "Unpolarized Light"}, {"arrows": "to", "from": "Thin Films", "to": "Interference between reflected waves"}, {"arrows": "to", "from": "Optical Instruments", "to": "Telescope"}, {"arrows": "to", "from": "Optical Instruments", "to": "Microscope"}, {"arrows": "to", "from": "Huygen\u0027s Construction", "to": "Assumptions"}, {"arrows": "to", "from": "Huygen\u0027s Construction", "to": "Secondary Wavelets"}, {"arrows": "to", "from": "Wavefronts", "to": "Plane Wavefront"}, {"arrows": "to", "from": "Wavefronts", "to": "Spherical Wavefront"}, {"arrows": "to", "from": "Wavefronts", "to": "Cylindrical Wavefront"}, {"arrows": "to", "from": "Assumptions", "to": "(i) Each point on a wavefront acts as a source of secondary wavelets."}, {"arrows": "to", "from": "Assumptions", "to": "(ii) The new wavefront is the forward envelope of the secondary wavelets."}, {"arrows": "to", "from": "Secondary Wavelets", "to": "Spread out in all directions"}, {"arrows": "to", "from": "Secondary Wavelets", "to": "Particles vibrate in phase"}, {"arrows": "to", "from": "Plane Wavefront", "to": "From a point source at infinite distance"}, {"arrows": "to", "from": "Spherical Wavefront", "to": "From a point source"}, {"arrows": "to", "from": "Cylindrical Wavefront", "to": "From linear Source"}, {"arrows": "to", "from": "Coherent Sources", "to": "Same frequency"}, {"arrows": "to", "from": "Coherent Sources", "to": "Constant or zero phase difference"}, {"arrows": "to", "from": "Coherent Sources", "to": "Slits S1 and S2"}, {"arrows": "to", "from": "Superposition of Waves", "to": "Two coherent sources"}, {"arrows": "to", "from": "Resultant Amplitude", "to": "A = \u221a(a\u2081\u00b2 + a\u2082\u00b2 + 2a\u2081a\u2082cos\u03a6)"}, {"arrows": "to", "from": "Resultant Amplitude", "to": "a\u2081, a\u2082 = Individual amplitudes"}, {"arrows": "to", "from": "Resultant Amplitude", "to": "\u03a6 = Phase difference"}, {"arrows": "to", "from": "Resultant Intensity", "to": "I = I\u2081 + I\u2082 + 2\u221a(I\u2081I\u2082)cos\u03a6"}, {"arrows": "to", "from": "Resultant Intensity", "to": "I = 4I\u2080cos\u00b2(\u03a6/2)  (when I\u2081=I\u2082=I\u2080)"}, {"arrows": "to", "from": "Resultant Intensity", "to": "Average intensity : 2I\u2080 (when I\u2081=I\u2082=I\u2080)"}, {"arrows": "to", "from": "Conditions for Maxima and Minima", "to": "Maxima (Constructive Interference)"}, {"arrows": "to", "from": "Conditions for Maxima and Minima", "to": "Minima (Destructive Interference)"}, {"arrows": "to", "from": "Phase Difference", "to": "\u03a6"}, {"arrows": "to", "from": "Phase Difference", "to": "Difference between phases of two waves"}, {"arrows": "to", "from": "Path Difference", "to": "\u0394x = d sin\u03b8"}, {"arrows": "to", "from": "Path Difference", "to": "Relation with Phase Difference: \u03a6 = (2\u03c0/\u03bb)\u0394x"}, {"arrows": "to", "from": "YDSE", "to": "Young\u0027s Double Slit Experiment"}, {"arrows": "to", "from": "YDSE", "to": "Fringe Width (\u03b2)"}, {"arrows": "to", "from": "YDSE", "to": "Conditions"}, {"arrows": "to", "from": "Maxima (Constructive Interference)", "to": "\u03a6 = 2n\u03c0"}, {"arrows": "to", "from": "Maxima (Constructive Interference)", "to": "Path Difference = n\u03bb"}, {"arrows": "to", "from": "Maxima (Constructive Interference)", "to": "A_max = a\u2081 + a\u2082"}, {"arrows": "to", "from": "Maxima (Constructive Interference)", "to": "A_max = 2a\u2080 (if a\u2081 = a\u2082 = a\u2080)"}, {"arrows": "to", "from": "Maxima (Constructive Interference)", "to": "n = 0, 1, 2, ..."}, {"arrows": "to", "from": "Minima (Destructive Interference)", "to": "\u03a6 = (2n + 1)\u03c0"}, {"arrows": "to", "from": "Minima (Destructive Interference)", "to": "Path Difference = (2n + 1)\u03bb/2"}, {"arrows": "to", "from": "Minima (Destructive Interference)", "to": "A_min = a\u2081 - a\u2082"}, {"arrows": "to", "from": "Minima (Destructive Interference)", "to": "A_min = 0 (if a\u2081 = a\u2082)"}, {"arrows": "to", "from": "Minima (Destructive Interference)", "to": "n = 0, 1, 2, ..."}, {"arrows": "to", "from": "Young\u0027s Double Slit Experiment", "to": "Two coherent sources (slits)"}, {"arrows": "to", "from": "Young\u0027s Double Slit Experiment", "to": "Interference pattern on screen"}, {"arrows": "to", "from": "Fringe Width (\u03b2)", "to": "\u03b2 = \u03bbD/d"}, {"arrows": "to", "from": "Fringe Width (\u03b2)", "to": "D = Distance between slits and screen"}, {"arrows": "to", "from": "Fringe Width (\u03b2)", "to": "d = Distance between slits"}, {"arrows": "to", "from": "Fringe Width (\u03b2)", "to": "\u03bb = Wavelength"}, {"arrows": "to", "from": "Conditions", "to": "Shift is independent of wavelength"}, {"arrows": "to", "from": "Conditions", "to": "dsin\u03b8 = n\u03bb"}, {"arrows": "to", "from": "Diffraction at a Single Slit", "to": "Central Maxima"}, {"arrows": "to", "from": "Diffraction at a Single Slit", "to": "Minima"}, {"arrows": "to", "from": "Diffraction at a Single Slit", "to": "Intensity"}, {"arrows": "to", "from": "Secondary Maxima", "to": "Occurs where path difference = (n+1/2)\u03bb "}, {"arrows": "to", "from": "Secondary Maxima", "to": "n = 1,2,3"}, {"arrows": "to", "from": "Diffraction and optical instruments", "to": "objective lense limits ability"}, {"arrows": "to", "from": "Central Maxima", "to": "Brightest fringe"}, {"arrows": "to", "from": "Central Maxima", "to": "Width = 2\u03bbD/a"}, {"arrows": "to", "from": "Central Maxima", "to": "a = width of the slit."}, {"arrows": "to", "from": "Minima", "to": "Occurs at  dsin\u03b8 = n\u03bb"}, {"arrows": "to", "from": "Minima", "to": "n = 1,2,3"}, {"arrows": "to", "from": "Intensity", "to": "Decreases for higher order maximas"}, {"arrows": "to", "from": "Plane of Polarization", "to": "Plane perpendicular to plane of oscillation."}, {"arrows": "to", "from": "Polarizing Angle", "to": "Brewster\u0027s Angle (\u03b8p)"}, {"arrows": "to", "from": "Polarizing Angle", "to": "tan \u03b8p= \u03bc"}, {"arrows": "to", "from": "Polarizing Angle", "to": "\u03bc = Refractive index of medium"}, {"arrows": "to", "from": "Polarizing Angle", "to": "Reflected light is completely plane polarized"}, {"arrows": "to", "from": "Polarizing Angle", "to": "For glass, \u03b8p ~ 57\u00b0"}, {"arrows": "to", "from": "Polarizing Angle", "to": "For water, \u03b8p ~ 53\u00b0"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "I = I\u2080 cos\u00b2\u03b8"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "I\u2080 = Intensity of incident polarized light"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "\u03b8 = Angle between polarizer and analyzer"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "Intensity of transmitted polarized light"}, {"arrows": "to", "from": "Polarization by Scattering", "to": "Scattered light in direction perpendicular to incidence"}, {"arrows": "to", "from": "Unpolarized Light", "to": "Intensity is half"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

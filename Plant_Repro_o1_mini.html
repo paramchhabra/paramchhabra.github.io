@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Sexual Reproduction in Flowering Plants", "label": "Sexual Reproduction in Flowering Plants", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Structure of Flower", "label": "Structure of Flower", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Process Steps", "label": "Process Steps", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Anther Structure", "label": "Anther Structure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed and Fruit Formation", "label": "Seed and Fruit Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reproductive Organs", "label": "Reproductive Organs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sporophylls", "label": "Sporophylls", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Carpel", "label": "Carpel", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Stamen", "label": "Stamen", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Microsporophylls (Stamen)", "label": "Microsporophylls (Stamen)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Megasporophylls (Carpel)", "label": "Megasporophylls (Carpel)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ovary", "label": "Ovary", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Style", "label": "Style", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stigma", "label": "Stigma", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Filament", "label": "Filament", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Anther", "label": "Anther", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Connective", "label": "Connective", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pre-fertilization", "label": "Pre-fertilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Double Fertilization", "label": "Double Fertilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Post-fertilization", "label": "Post-fertilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen Grain Formation", "label": "Pollen Grain Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryo Sac Formation", "label": "Embryo Sac Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollination", "label": "Pollination", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Exine", "label": "Exine", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Intine", "label": "Intine", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cytoplasm", "label": "Cytoplasm", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollinium", "label": "Pollinium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inner Endexine", "label": "Inner Endexine", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Outer Exine", "label": "Outer Exine", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inner Continuous Foot Layer", "label": "Inner Continuous Foot Layer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Middle Discontinuous Baculate Layer", "label": "Middle Discontinuous Baculate Layer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Outermost Discontinuous Tectum", "label": "Outermost Discontinuous Tectum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thin and Elastic", "label": "Thin and Elastic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Composed of Cellulose and Pectin", "label": "Composed of Cellulose and Pectin", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Forms Pollen Tube During Germination", "label": "Forms Pollen Tube During Germination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rich in Starch and Unsaturated Oils", "label": "Rich in Starch and Unsaturated Oils", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Initially Uninucleate, Later 2-3 Celled", "label": "Initially Uninucleate, Later 2-3 Celled", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formed in Calotropis and Orchids", "label": "Formed in Calotropis and Orchids", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Characteristic Mass from Each Anther Lobe", "label": "Characteristic Mass from Each Anther Lobe", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Details Not Specified", "label": "Details Not Specified", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Entomophily", "label": "Entomophily", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ornithophily", "label": "Ornithophily", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Chiropterophily", "label": "Chiropterophily", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hydrophily", "label": "Hydrophily", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Colored Flowers", "label": "Colored Flowers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Aroma or Scent", "label": "Aroma or Scent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nectar or Pollen as Food", "label": "Nectar or Pollen as Food", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sticky Pollen Grains", "label": "Sticky Pollen Grains", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sticky Stigmas", "label": "Sticky Stigmas", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Mulberry, Maize, Grass", "label": "Examples: Mulberry, Maize, Grass", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Large and Strong Flowers", "label": "Large and Strong Flowers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Abundant Nectar", "label": "Abundant Nectar", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bird Types: Sun Birds, Humming Birds, Bulbul, Parrot, Crow", "label": "Bird Types: Sun Birds, Humming Birds, Bulbul, Parrot, Crow", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Bombax, Agave, Butea, Bignonia", "label": "Examples: Bombax, Agave, Butea, Bignonia", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Large Dull Colored Flowers", "label": "Large Dull Colored Flowers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Strong Aroma", "label": "Strong Aroma", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Abundant Pollen and Nectar", "label": "Abundant Pollen and Nectar", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Bat-Pollinated Flowers", "label": "Examples: Bat-Pollinated Flowers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Small, Colorless, Odorless, Nectarless Flowers", "label": "Small, Colorless, Odorless, Nectarless Flowers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sticky Stigma", "label": "Sticky Stigma", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: Epihydrophily, Hypohydrophily", "label": "Types: Epihydrophily, Hypohydrophily", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Vallisneria (Epihydrophily), Zostera, Ceratophyllum (Hypohydrophily)", "label": "Examples: Vallisneria (Epihydrophily), Zostera, Ceratophyllum (Hypohydrophily)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Not Detailed", "label": "Not Detailed", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endosperm Formation", "label": "Endosperm Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Metaxenia", "label": "Metaxenia", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triploid Nutritive Tissue", "label": "Triploid Nutritive Tissue", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Effects of Male Genes (Xenia)", "label": "Effects of Male Genes (Xenia)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: Nuclear, Cellular, Helobial", "label": "Types: Nuclear, Cellular, Helobial", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Functions: Nourishing Embryo, Early Seedling Growth", "label": "Functions: Nourishing Embryo, Early Seedling Growth", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Effect on Seed Coat or Pericarp", "label": "Effect on Seed Coat or Pericarp", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Endosperm Types", "label": "Endosperm Types", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nuclear (e.g., Maize, Wheat, Rice)", "label": "Nuclear (e.g., Maize, Wheat, Rice)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cellular (e.g., Datura, Petunia)", "label": "Cellular (e.g., Datura, Petunia)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Helobial (e.g., Eremurus, Asphodelus)", "label": "Helobial (e.g., Eremurus, Asphodelus)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wall Layers", "label": "Wall Layers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Epidermis", "label": "Epidermis", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endothecium", "label": "Endothecium", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Middle Layers", "label": "Middle Layers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Tapetum", "label": "Tapetum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Single Protective Layer", "label": "Single Protective Layer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Single Layered with Cellulose Thickening", "label": "Single Layered with Cellulose Thickening", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Aids in Anther Dehiscence", "label": "Aids in Anther Dehiscence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1-6 Layers", "label": "1-6 Layers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Degenerate at Maturity", "label": "Degenerate at Maturity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Innermost Layer Surrounding Sporogenous Tissue", "label": "Innermost Layer Surrounding Sporogenous Tissue", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutritive", "label": "Nutritive", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: Secretary/Glandular, Amoeboid/Periplasmodial", "label": "Types: Secretary/Glandular, Amoeboid/Periplasmodial", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Functions: Nourishment and Pollenkitt Deposition", "label": "Functions: Nourishment and Pollenkitt Deposition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed Structure", "label": "Seed Structure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fruit Structure", "label": "Fruit Structure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed Viability", "label": "Seed Viability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Importance of Seeds", "label": "Importance of Seeds", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Parthenocarpic Fruits", "label": "Parthenocarpic Fruits", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integuments", "label": "Integuments", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed Coat", "label": "Seed Coat", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Testa and Tegmen", "label": "Testa and Tegmen", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hilum", "label": "Hilum", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Micropyle", "label": "Micropyle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endothelium", "label": "Endothelium", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Aril", "label": "Aril", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Caruncle", "label": "Caruncle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Origin: Chalaza", "label": "Origin: Chalaza", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types Based on Number: Unitegmic, Bitegmic, Tritegmic, Ategmic", "label": "Types Based on Number: Unitegmic, Bitegmic, Tritegmic, Ategmic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Functions: Nourish Embryo Sac, Protection", "label": "Functions: Nourish Embryo Sac, Protection", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Testa (Outer Integument)", "label": "Testa (Outer Integument)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tegmen (Inner Integument)", "label": "Tegmen (Inner Integument)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Point of Attachment of Funicle to Ovule", "label": "Point of Attachment of Funicle to Ovule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Scar Left After Funiculus Withers", "label": "Scar Left After Funiculus Withers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pore Opposite to Chalazal End", "label": "Pore Opposite to Chalazal End", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Site of Pollen Tube Entry", "label": "Site of Pollen Tube Entry", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inner Region of Integument Nourishing Embryo Sac", "label": "Inner Region of Integument Nourishing Embryo Sac", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Additional Seed Cover in Some Species", "label": "Additional Seed Cover in Some Species", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Litchi, Pithecolobium", "label": "Examples: Litchi, Pithecolobium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spongy Outgrowth Near Micropyle", "label": "Spongy Outgrowth Near Micropyle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Functions: Water Absorption, Seed Dispersal by Ants", "label": "Functions: Water Absorption, Seed Dispersal by Ants", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pericarp", "label": "Pericarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Epicarp", "label": "Epicarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mesocarp", "label": "Mesocarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endocarp", "label": "Endocarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fleshy or Dry Fruit Wall", "label": "Fleshy or Dry Fruit Wall", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Factors: Genetically and Environmental", "label": "Factors: Genetically and Environmental", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tests: Respiration, Germination", "label": "Tests: Respiration, Germination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Lotus (1000+ years), Phoenix dactylifera (2000 years), Lupins arcticus (10000 years)", "label": "Examples: Lotus (1000+ years), Phoenix dactylifera (2000 years), Lupins arcticus (10000 years)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Protection to Embryo", "label": "Protection to Embryo", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Food Reserve for Germination", "label": "Food Reserve for Germination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dispersal and Colonization", "label": "Dispersal and Colonization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Genetic Variation and Adaptation", "label": "Genetic Variation and Adaptation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Foundation of Agriculture", "label": "Foundation of Agriculture", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seedless", "label": "Seedless", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Develop Without Pollination", "label": "Develop Without Pollination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Advantages: No Seed Removal Needed, Can Be Grown in Greenhouses, Quicker Food Processing", "label": "Advantages: No Seed Removal Needed, Can Be Grown in Greenhouses, Quicker Food Processing", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Structure of Flower"}, {"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Process Steps"}, {"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Anther Structure"}, {"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Seed and Fruit Formation"}, {"arrows": "to", "from": "Structure of Flower", "to": "Reproductive Organs"}, {"arrows": "to", "from": "Process Steps", "to": "Pre-fertilization"}, {"arrows": "to", "from": "Process Steps", "to": "Double Fertilization"}, {"arrows": "to", "from": "Process Steps", "to": "Post-fertilization"}, {"arrows": "to", "from": "Anther Structure", "to": "Wall Layers"}, {"arrows": "to", "from": "Seed and Fruit Formation", "to": "Seed Structure"}, {"arrows": "to", "from": "Seed and Fruit Formation", "to": "Fruit Structure"}, {"arrows": "to", "from": "Seed and Fruit Formation", "to": "Seed Viability"}, {"arrows": "to", "from": "Seed and Fruit Formation", "to": "Importance of Seeds"}, {"arrows": "to", "from": "Seed and Fruit Formation", "to": "Parthenocarpic Fruits"}, {"arrows": "to", "from": "Reproductive Organs", "to": "Sporophylls"}, {"arrows": "to", "from": "Reproductive Organs", "to": "Carpel"}, {"arrows": "to", "from": "Reproductive Organs", "to": "Stamen"}, {"arrows": "to", "from": "Sporophylls", "to": "Microsporophylls (Stamen)"}, {"arrows": "to", "from": "Sporophylls", "to": "Megasporophylls (Carpel)"}, {"arrows": "to", "from": "Carpel", "to": "Ovary"}, {"arrows": "to", "from": "Carpel", "to": "Style"}, {"arrows": "to", "from": "Carpel", "to": "Stigma"}, {"arrows": "to", "from": "Stamen", "to": "Filament"}, {"arrows": "to", "from": "Stamen", "to": "Anther"}, {"arrows": "to", "from": "Stamen", "to": "Connective"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Pollen Grain Formation"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Embryo Sac Formation"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Pollination"}, {"arrows": "to", "from": "Double Fertilization", "to": "Not Detailed"}, {"arrows": "to", "from": "Post-fertilization", "to": "Endosperm Formation"}, {"arrows": "to", "from": "Post-fertilization", "to": "Metaxenia"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Exine"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Intine"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Cytoplasm"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Pollinium"}, {"arrows": "to", "from": "Embryo Sac Formation", "to": "Details Not Specified"}, {"arrows": "to", "from": "Pollination", "to": "Entomophily"}, {"arrows": "to", "from": "Pollination", "to": "Ornithophily"}, {"arrows": "to", "from": "Pollination", "to": "Chiropterophily"}, {"arrows": "to", "from": "Pollination", "to": "Hydrophily"}, {"arrows": "to", "from": "Exine", "to": "Inner Endexine"}, {"arrows": "to", "from": "Exine", "to": "Outer Exine"}, {"arrows": "to", "from": "Intine", "to": "Thin and Elastic"}, {"arrows": "to", "from": "Intine", "to": "Composed of Cellulose and Pectin"}, {"arrows": "to", "from": "Intine", "to": "Forms Pollen Tube During Germination"}, {"arrows": "to", "from": "Cytoplasm", "to": "Rich in Starch and Unsaturated Oils"}, {"arrows": "to", "from": "Cytoplasm", "to": "Initially Uninucleate, Later 2-3 Celled"}, {"arrows": "to", "from": "Pollinium", "to": "Formed in Calotropis and Orchids"}, {"arrows": "to", "from": "Pollinium", "to": "Characteristic Mass from Each Anther Lobe"}, {"arrows": "to", "from": "Outer Exine", "to": "Inner Continuous Foot Layer"}, {"arrows": "to", "from": "Outer Exine", "to": "Middle Discontinuous Baculate Layer"}, {"arrows": "to", "from": "Outer Exine", "to": "Outermost Discontinuous Tectum"}, {"arrows": "to", "from": "Entomophily", "to": "Colored Flowers"}, {"arrows": "to", "from": "Entomophily", "to": "Aroma or Scent"}, {"arrows": "to", "from": "Entomophily", "to": "Nectar or Pollen as Food"}, {"arrows": "to", "from": "Entomophily", "to": "Sticky Pollen Grains"}, {"arrows": "to", "from": "Entomophily", "to": "Sticky Stigmas"}, {"arrows": "to", "from": "Entomophily", "to": "Examples: Mulberry, Maize, Grass"}, {"arrows": "to", "from": "Ornithophily", "to": "Large and Strong Flowers"}, {"arrows": "to", "from": "Ornithophily", "to": "Abundant Nectar"}, {"arrows": "to", "from": "Ornithophily", "to": "Bird Types: Sun Birds, Humming Birds, Bulbul, Parrot, Crow"}, {"arrows": "to", "from": "Ornithophily", "to": "Examples: Bombax, Agave, Butea, Bignonia"}, {"arrows": "to", "from": "Chiropterophily", "to": "Large Dull Colored Flowers"}, {"arrows": "to", "from": "Chiropterophily", "to": "Strong Aroma"}, {"arrows": "to", "from": "Chiropterophily", "to": "Abundant Pollen and Nectar"}, {"arrows": "to", "from": "Chiropterophily", "to": "Examples: Bat-Pollinated Flowers"}, {"arrows": "to", "from": "Hydrophily", "to": "Small, Colorless, Odorless, Nectarless Flowers"}, {"arrows": "to", "from": "Hydrophily", "to": "Sticky Stigma"}, {"arrows": "to", "from": "Hydrophily", "to": "Types: Epihydrophily, Hypohydrophily"}, {"arrows": "to", "from": "Hydrophily", "to": "Examples: Vallisneria (Epihydrophily), Zostera, Ceratophyllum (Hypohydrophily)"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Triploid Nutritive Tissue"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Effects of Male Genes (Xenia)"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Types: Nuclear, Cellular, Helobial"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Functions: Nourishing Embryo, Early Seedling Growth"}, {"arrows": "to", "from": "Metaxenia", "to": "Effect on Seed Coat or Pericarp"}, {"arrows": "to", "from": "Endosperm Types", "to": "Nuclear (e.g., Maize, Wheat, Rice)"}, {"arrows": "to", "from": "Endosperm Types", "to": "Cellular (e.g., Datura, Petunia)"}, {"arrows": "to", "from": "Endosperm Types", "to": "Helobial (e.g., Eremurus, Asphodelus)"}, {"arrows": "to", "from": "Wall Layers", "to": "Epidermis"}, {"arrows": "to", "from": "Wall Layers", "to": "Endothecium"}, {"arrows": "to", "from": "Wall Layers", "to": "Middle Layers"}, {"arrows": "to", "from": "Wall Layers", "to": "Tapetum"}, {"arrows": "to", "from": "Epidermis", "to": "Single Protective Layer"}, {"arrows": "to", "from": "Endothecium", "to": "Single Layered with Cellulose Thickening"}, {"arrows": "to", "from": "Endothecium", "to": "Aids in Anther Dehiscence"}, {"arrows": "to", "from": "Middle Layers", "to": "1-6 Layers"}, {"arrows": "to", "from": "Middle Layers", "to": "Degenerate at Maturity"}, {"arrows": "to", "from": "Tapetum", "to": "Innermost Layer Surrounding Sporogenous Tissue"}, {"arrows": "to", "from": "Tapetum", "to": "Nutritive"}, {"arrows": "to", "from": "Tapetum", "to": "Types: Secretary/Glandular, Amoeboid/Periplasmodial"}, {"arrows": "to", "from": "Tapetum", "to": "Functions: Nourishment and Pollenkitt Deposition"}, {"arrows": "to", "from": "Seed Structure", "to": "Integuments"}, {"arrows": "to", "from": "Seed Structure", "to": "Seed Coat"}, {"arrows": "to", "from": "Seed Structure", "to": "Testa and Tegmen"}, {"arrows": "to", "from": "Seed Structure", "to": "Hilum"}, {"arrows": "to", "from": "Seed Structure", "to": "Micropyle"}, {"arrows": "to", "from": "Seed Structure", "to": "Endothelium"}, {"arrows": "to", "from": "Seed Structure", "to": "Aril"}, {"arrows": "to", "from": "Seed Structure", "to": "Caruncle"}, {"arrows": "to", "from": "Fruit Structure", "to": "Pericarp"}, {"arrows": "to", "from": "Fruit Structure", "to": "Epicarp"}, {"arrows": "to", "from": "Fruit Structure", "to": "Mesocarp"}, {"arrows": "to", "from": "Fruit Structure", "to": "Endocarp"}, {"arrows": "to", "from": "Seed Viability", "to": "Factors: Genetically and Environmental"}, {"arrows": "to", "from": "Seed Viability", "to": "Tests: Respiration, Germination"}, {"arrows": "to", "from": "Seed Viability", "to": "Examples: Lotus (1000+ years), Phoenix dactylifera (2000 years), Lupins arcticus (10000 years)"}, {"arrows": "to", "from": "Importance of Seeds", "to": "Protection to Embryo"}, {"arrows": "to", "from": "Importance of Seeds", "to": "Food Reserve for Germination"}, {"arrows": "to", "from": "Importance of Seeds", "to": "Dispersal and Colonization"}, {"arrows": "to", "from": "Importance of Seeds", "to": "Genetic Variation and Adaptation"}, {"arrows": "to", "from": "Importance of Seeds", "to": "Foundation of Agriculture"}, {"arrows": "to", "from": "Parthenocarpic Fruits", "to": "Seedless"}, {"arrows": "to", "from": "Parthenocarpic Fruits", "to": "Develop Without Pollination"}, {"arrows": "to", "from": "Parthenocarpic Fruits", "to": "Advantages: No Seed Removal Needed, Can Be Grown in Greenhouses, Quicker Food Processing"}, {"arrows": "to", "from": "Integuments", "to": "Origin: Chalaza"}, {"arrows": "to", "from": "Integuments", "to": "Types Based on Number: Unitegmic, Bitegmic, Tritegmic, Ategmic"}, {"arrows": "to", "from": "Integuments", "to": "Functions: Nourish Embryo Sac, Protection"}, {"arrows": "to", "from": "Seed Coat", "to": "Testa (Outer Integument)"}, {"arrows": "to", "from": "Seed Coat", "to": "Tegmen (Inner Integument)"}, {"arrows": "to", "from": "Hilum", "to": "Point of Attachment of Funicle to Ovule"}, {"arrows": "to", "from": "Hilum", "to": "Scar Left After Funiculus Withers"}, {"arrows": "to", "from": "Micropyle", "to": "Pore Opposite to Chalazal End"}, {"arrows": "to", "from": "Micropyle", "to": "Site of Pollen Tube Entry"}, {"arrows": "to", "from": "Endothelium", "to": "Inner Region of Integument Nourishing Embryo Sac"}, {"arrows": "to", "from": "Aril", "to": "Additional Seed Cover in Some Species"}, {"arrows": "to", "from": "Aril", "to": "Examples: Litchi, Pithecolobium"}, {"arrows": "to", "from": "Caruncle", "to": "Spongy Outgrowth Near Micropyle"}, {"arrows": "to", "from": "Caruncle", "to": "Functions: Water Absorption, Seed Dispersal by Ants"}, {"arrows": "to", "from": "Pericarp", "to": "Fleshy or Dry Fruit Wall"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

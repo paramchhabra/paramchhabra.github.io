@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Graphs", "label": "Graphs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Straight Line", "label": "Straight Line", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sinusoidal Curve", "label": "Sinusoidal Curve", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Exponential Curve", "label": "Exponential Curve", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Equation: y = mx + c", "label": "Equation: y = mx + c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Slope: m", "label": "Slope: m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Y-Intercept: c", "label": "Y-Intercept: c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Equation: y = sin(x)", "label": "Equation: y = sin(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: Periodic, Continuous", "label": "Properties: Periodic, Continuous", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Equation: y = e^x", "label": "Equation: y = e^x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: Continuous, Differentiable", "label": "Properties: Continuous, Differentiable", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Trigonometric Functions", "label": "Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sine: sin(x)", "label": "Sine: sin(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cosine: cos(x)", "label": "Cosine: cos(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tangent: tan(x)", "label": "Tangent: tan(x)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Inverse Trigonometric Functions", "label": "Inverse Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Arcsine: sin^-1(x)", "label": "Arcsine: sin^-1(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Arccosine: cos^-1(x)", "label": "Arccosine: cos^-1(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Arctangent: tan^-1(x)", "label": "Arctangent: tan^-1(x)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Calculus", "label": "Calculus", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Limits", "label": "Limits", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Derivatives", "label": "Derivatives", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals", "label": "Integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: lim x-\u003ea f(x) = L", "label": "Definition: lim x-\u003ea f(x) = L", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: Linearity, Homogeneity", "label": "Properties: Linearity, Homogeneity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: f\u0027(x) = lim h-\u003e0 [f(x+h) - f(x)]/h", "label": "Definition: f\u0027(x) = lim h-\u003e0 [f(x+h) - f(x)]/h", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: Product Rule, Quotient Rule", "label": "Properties: Product Rule, Quotient Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: \u222bf(x)dx = F(x) + C", "label": "Definition: \u222bf(x)dx = F(x) + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: Fundamental Theorem of Calculus", "label": "Properties: Fundamental Theorem of Calculus", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Equations", "label": "Equations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear Equations: ax + by = c", "label": "Linear Equations: ax + by = c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quadratic Equations: ax^2 + bx + c = 0", "label": "Quadratic Equations: ax^2 + bx + c = 0", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Inequalities", "label": "Inequalities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear Inequalities: ax + by \u003e c", "label": "Linear Inequalities: ax + by \u003e c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quadratic Inequalities: ax^2 + bx + c \u003e 0", "label": "Quadratic Inequalities: ax^2 + bx + c \u003e 0", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Functions", "label": "Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Domain", "label": "Domain", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Range", "label": "Range", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Composition", "label": "Composition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Set of all possible input values", "label": "Definition: Set of all possible input values", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Set of all possible output values", "label": "Definition: Set of all possible output values", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: (f \u2218 g)(x) = f(g(x))", "label": "Definition: (f \u2218 g)(x) = f(g(x))", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Key Concepts", "label": "Key Concepts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Even and Odd Functions", "label": "Even and Odd Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Increasing and Decreasing Functions", "label": "Increasing and Decreasing Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Maxima and Minima", "label": "Maxima and Minima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: f(-x) = f(x) for even, f(-x) = -f(x) for odd", "label": "Definition: f(-x) = f(x) for even, f(-x) = -f(x) for odd", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: f\u0027(x) \u003e 0 for increasing, f\u0027(x) \u003c 0 for decreasing", "label": "Definition: f\u0027(x) \u003e 0 for increasing, f\u0027(x) \u003c 0 for decreasing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Global Maxima: f(x) \u2264 f(a) for all x, Global Minima: f(x) \u2265 f(a) for all x", "label": "Definition: Global Maxima: f(x) \u2264 f(a) for all x, Global Minima: f(x) \u2265 f(a) for all x", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Graphs", "to": "Straight Line"}, {"arrows": "to", "from": "Graphs", "to": "Sinusoidal Curve"}, {"arrows": "to", "from": "Graphs", "to": "Exponential Curve"}, {"arrows": "to", "from": "Straight Line", "to": "Equation: y = mx + c"}, {"arrows": "to", "from": "Straight Line", "to": "Slope: m"}, {"arrows": "to", "from": "Straight Line", "to": "Y-Intercept: c"}, {"arrows": "to", "from": "Sinusoidal Curve", "to": "Equation: y = sin(x)"}, {"arrows": "to", "from": "Sinusoidal Curve", "to": "Properties: Periodic, Continuous"}, {"arrows": "to", "from": "Exponential Curve", "to": "Equation: y = e^x"}, {"arrows": "to", "from": "Exponential Curve", "to": "Properties: Continuous, Differentiable"}, {"arrows": "to", "from": "Trigonometric Functions", "to": "Sine: sin(x)"}, {"arrows": "to", "from": "Trigonometric Functions", "to": "Cosine: cos(x)"}, {"arrows": "to", "from": "Trigonometric Functions", "to": "Tangent: tan(x)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "Arcsine: sin^-1(x)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "Arccosine: cos^-1(x)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "Arctangent: tan^-1(x)"}, {"arrows": "to", "from": "Calculus", "to": "Limits"}, {"arrows": "to", "from": "Calculus", "to": "Derivatives"}, {"arrows": "to", "from": "Calculus", "to": "Integrals"}, {"arrows": "to", "from": "Limits", "to": "Definition: lim x-\u003ea f(x) = L"}, {"arrows": "to", "from": "Limits", "to": "Properties: Linearity, Homogeneity"}, {"arrows": "to", "from": "Derivatives", "to": "Definition: f\u0027(x) = lim h-\u003e0 [f(x+h) - f(x)]/h"}, {"arrows": "to", "from": "Derivatives", "to": "Properties: Product Rule, Quotient Rule"}, {"arrows": "to", "from": "Integrals", "to": "Definition: \u222bf(x)dx = F(x) + C"}, {"arrows": "to", "from": "Integrals", "to": "Properties: Fundamental Theorem of Calculus"}, {"arrows": "to", "from": "Equations", "to": "Linear Equations: ax + by = c"}, {"arrows": "to", "from": "Equations", "to": "Quadratic Equations: ax^2 + bx + c = 0"}, {"arrows": "to", "from": "Inequalities", "to": "Linear Inequalities: ax + by \u003e c"}, {"arrows": "to", "from": "Inequalities", "to": "Quadratic Inequalities: ax^2 + bx + c \u003e 0"}, {"arrows": "to", "from": "Functions", "to": "Domain"}, {"arrows": "to", "from": "Functions", "to": "Range"}, {"arrows": "to", "from": "Functions", "to": "Composition"}, {"arrows": "to", "from": "Domain", "to": "Definition: Set of all possible input values"}, {"arrows": "to", "from": "Range", "to": "Definition: Set of all possible output values"}, {"arrows": "to", "from": "Composition", "to": "Definition: (f \u2218 g)(x) = f(g(x))"}, {"arrows": "to", "from": "Key Concepts", "to": "Even and Odd Functions"}, {"arrows": "to", "from": "Key Concepts", "to": "Increasing and Decreasing Functions"}, {"arrows": "to", "from": "Key Concepts", "to": "Maxima and Minima"}, {"arrows": "to", "from": "Even and Odd Functions", "to": "Definition: f(-x) = f(x) for even, f(-x) = -f(x) for odd"}, {"arrows": "to", "from": "Increasing and Decreasing Functions", "to": "Definition: f\u0027(x) \u003e 0 for increasing, f\u0027(x) \u003c 0 for decreasing"}, {"arrows": "to", "from": "Maxima and Minima", "to": "Definition: Global Maxima: f(x) \u2264 f(a) for all x, Global Minima: f(x) \u2265 f(a) for all x"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

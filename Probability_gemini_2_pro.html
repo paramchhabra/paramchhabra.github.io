@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#ffcc00", "id": "Probability", "label": "Probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(A) = n/N (favorable cases/total cases)", "label": "P(A) = n/N (favorable cases/total cases)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Remarks: P(A)=1 (not necessarily certain), P(A)=0 (doesn\u0027t mean impossible)", "label": "Remarks: P(A)=1 (not necessarily certain), P(A)=0 (doesn\u0027t mean impossible)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Basic Definitions", "label": "Basic Definitions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Random Experiment", "label": "Random Experiment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sample-space", "label": "Sample-space", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Experiment or Trial", "label": "Experiment or Trial", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Event", "label": "Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Simple Event", "label": "Simple Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Compound Event", "label": "Compound Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mutually exclusive Event", "label": "Mutually exclusive Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Exhaustive Event", "label": "Exhaustive Event", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Outcomes known in advance", "label": "Outcomes known in advance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Specific outcome not predictable", "label": "Specific outcome not predictable", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Tossing a coin", "label": "Example: Tossing a coin", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Set of all possible outcomes", "label": "Set of all possible outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Denoted by \u0027S\u0027", "label": "Denoted by \u0027S\u0027", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Die roll S = {1, 2, 3, 4, 5, 6}", "label": "Example: Die roll S = {1, 2, 3, 4, 5, 6}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Series of actions", "label": "Series of actions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uncertain outcomes", "label": "Uncertain outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Coin toss, card selection, dice throw", "label": "Examples: Coin toss, card selection, dice throw", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Subset of sample space", "label": "Subset of sample space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Contains only one element of sample space", "label": "Contains only one element of sample space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing a specific card (e.g., Ace of Spades)", "label": "Example: Drawing a specific card (e.g., Ace of Spades)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Union of sample points", "label": "Union of sample points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing a red card (heart or diamond)", "label": "Example: Drawing a red card (heart or diamond)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cannot occur simultaneously", "label": "Cannot occur simultaneously", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Performance of random experiment always results in the occurence of atleast one of them", "label": "Performance of random experiment always results in the occurence of atleast one of them", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Conditional Probability", "label": "Conditional Probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(B|A): Probability of B given A", "label": "P(B|A): Probability of B given A", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(B|A) = P(B) if A and B are independent", "label": "P(B|A) = P(B) if A and B are independent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(A and B) = P(A) * P(B|A) if A and B are not independent", "label": "P(A and B) = P(A) * P(B|A) if A and B are not independent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: P(S|F) = P(F|F) = 1", "label": "Properties: P(S|F) = P(F|F) = 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Property 2:P((A \u222a B)|F) = P(A|F) + P(B|F) - P((A \u2229 B)|F)", "label": "Property 2:P((A \u222a B)|F) = P(A|F) + P(B|F) - P((A \u2229 B)|F)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Property 3:P(E\u0027|F) = 1-P(E|F)", "label": "Property 3:P(E\u0027|F) = 1-P(E|F)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Multiplication Theorem on Probability", "label": "Multiplication Theorem on Probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(E|F) = P(E \u2229 F) / P(F), where P(F) \u2260 0", "label": "P(E|F) = P(E \u2229 F) / P(F), where P(F) \u2260 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(E \u2229 F) = P(E) * P(F|E)", "label": "P(E \u2229 F) = P(E) * P(F|E)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing two black balls without replacement", "label": "Example: Drawing two black balls without replacement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For more than two events: P(E \u2229 F \u2229 G) = P(E)P(F|E)P(G|EF)", "label": "For more than two events: P(E \u2229 F \u2229 G) = P(E)P(F|E)P(G|EF)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Independent Events", "label": "Independent Events", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Occurrence of one does not affect the other", "label": "Occurrence of one does not affect the other", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(E \u2229 F) = P(E) * P(F)", "label": "P(E \u2229 F) = P(E) * P(F)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dependent Events: P(E \u2229 F) \u2260 P(E) * P(F)", "label": "Dependent Events: P(E \u2229 F) \u2260 P(E) * P(F)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Three events A, B, and C are mutually independent if: P(A \u2229 B) = P(A)P(B), P(A \u2229 C) = P(A)P(C), P(B \u2229 C) = P(B)P(C), and P(A \u2229 B \u2229 C) = P(A)P(B)P(C)", "label": "Three events A, B, and C are mutually independent if: P(A \u2229 B) = P(A)P(B), P(A \u2229 C) = P(A)P(C), P(B \u2229 C) = P(B)P(C), and P(A \u2229 B \u2229 C) = P(A)P(B)P(C)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Die roll, E (multiple of 3), F (even number)", "label": "Example: Die roll, E (multiple of 3), F (even number)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independent vs. Mutually Exclusive: Independent relates to probability, mutually exclusive to events (subsets). Non-zero probability independent events cannot be mutually exclusive.", "label": "Independent vs. Mutually Exclusive: Independent relates to probability, mutually exclusive to events (subsets). Non-zero probability independent events cannot be mutually exclusive.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Bayes\u0027 Theorem", "label": "Bayes\u0027 Theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inverse probability theorem", "label": "Inverse probability theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used to find reverse probability", "label": "Used to find reverse probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definitions: Partition of sample space", "label": "Definitions: Partition of sample space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Partition Properties: Ei \u2229 Ej = \u03c6 (i \u2260 j),  E1 \u222a \u03952 \u222a ... \u222a En= S, P(Ei) \u003e 0", "label": "Partition Properties: Ei \u2229 Ej = \u03c6 (i \u2260 j),  E1 \u222a \u03952 \u222a ... \u222a En= S, P(Ei) \u003e 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Theorem of Total Probability", "label": "Theorem of Total Probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Theorem Proof: S = E1 \u222a E2 \u222a ... \u222a En, A = A \u2229 S =  (A \u2229 E1) \u222a (A \u2229 E2) \u222a ... \u222a (A \u2229 En) ,P(A) = P(A \u2229 E1) + P(A \u2229 E2) + ... + P(A \u2229 En), P(A) = \u03a3 P(Ei)P(A|Ei)", "label": "Theorem Proof: S = E1 \u222a E2 \u222a ... \u222a En, A = A \u2229 S =  (A \u2229 E1) \u222a (A \u2229 E2) \u222a ... \u222a (A \u2229 En) ,P(A) = P(A \u2229 E1) + P(A \u2229 E2) + ... + P(A \u2229 En), P(A) = \u03a3 P(Ei)P(A|Ei)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bayes\u0027 Theorem Formula: P(Ei|A) = [P(Ei) * P(A|Ei)] / \u03a3 [P(Ej) * P(A|Ej)]", "label": "Bayes\u0027 Theorem Formula: P(Ei|A) = [P(Ei) * P(A|Ei)] / \u03a3 [P(Ej) * P(A|Ej)]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Proof:  P(Ei|A) = P(A \u2229 Ei)/P(A) = P(Ei)P(A|Ei) / \u03a3 P(Ej)P(A|Ej)", "label": "Proof:  P(Ei|A) = P(A \u2229 Ei)/P(A) = P(Ei)P(A|Ei) / \u03a3 P(Ej)P(A|Ej)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Terminology: Hypotheses (E1, E2,...En), Priori Probability P(Ei), Posteriori Probability P(Ei|A)", "label": "Terminology: Hypotheses (E1, E2,...En), Priori Probability P(Ei), Posteriori Probability P(Ei|A)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Two bags with different colored balls, probability of drawing from a specific bag given the color.", "label": "Example: Two bags with different colored balls, probability of drawing from a specific bag given the color.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Random Variables and Probability Distributions", "label": "Random Variables and Probability Distributions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Random Variable Definition", "label": "Random Variable Definition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Coin toss (number of heads), articles (number of defectives)", "label": "Examples: Coin toss (number of heads), articles (number of defectives)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Probability Distribution Definition", "label": "Probability Distribution Definition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sum of probabilities in distribution equals 1", "label": "Sum of probabilities in distribution equals 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mean of a Random Variable (Expectation)", "label": "Mean of a Random Variable (Expectation)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula Mean: \u03bc = E(X) = \u03a3 [xi * p(xi)]", "label": "Formula Mean: \u03bc = E(X) = \u03a3 [xi * p(xi)]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Variance of a Random Variable", "label": "Variance of a Random Variable", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: Var(X) = \u03c3^2 = \u03a3 (xi - \u03bc)^2 * p(xi)  = E(X^2) - [E(X)]^2", "label": "Formula: Var(X) = \u03c3^2 = \u03a3 (xi - \u03bc)^2 * p(xi)  = E(X^2) - [E(X)]^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Standard Deviation: \u03c3 = sqrt(Var(X))", "label": "Standard Deviation: \u03c3 = sqrt(Var(X))", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A random variable is a real valued function whose domain is the sample space of a random experiment.", "label": "A random variable is a real valued function whose domain is the sample space of a random experiment.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Consider the experiment of tossing a coin two times in succession, If X denotes the number of heads obtained, then X is a random variable", "label": "Example: Consider the experiment of tossing a coin two times in succession, If X denotes the number of heads obtained, then X is a random variable", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The probability distribution of a random variable X is the system of numbers", "label": "The probability distribution of a random variable X is the system of numbers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: xi: x1 x2 x3,  P(xi): p1, p2, p3", "label": "Example: xi: x1 x2 x3,  P(xi): p1, p2, p3", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Bernoulli Trials and Binomial Distribution", "label": "Bernoulli Trials and Binomial Distribution", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bernoulli Trials Definition", "label": "Bernoulli Trials Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conditions for Bernoulli Trials", "label": "Conditions for Bernoulli Trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing balls with/without replacement", "label": "Example: Drawing balls with/without replacement", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Binomial Distribution Definition", "label": "Binomial Distribution Definition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability of x successes: P(X = x) =  nCx * p^x * q^(n-x), where q = 1-p", "label": "Probability of x successes: P(X = x) =  nCx * p^x * q^(n-x), where q = 1-p", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Notation: B(n, p)", "label": "Notation: B(n, p)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Trials with only two outcomes (\u0027success\u0027 or \u0027failure\u0027)", "label": "Trials with only two outcomes (\u0027success\u0027 or \u0027failure\u0027)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability of success (p) remains constant for each trial", "label": "Probability of success (p) remains constant for each trial", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Trials are independent", "label": "Trials are independent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finite number of trials", "label": "Finite number of trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independent trials", "label": "Independent trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two outcomes (success/failure)", "label": "Two outcomes (success/failure)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Constant probability of success", "label": "Constant probability of success", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability distribution of the number of successes in n Bernoulli trials", "label": "Probability distribution of the number of successes in n Bernoulli trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Obtained by binomial expansion of (q + p)^n", "label": "Obtained by binomial expansion of (q + p)^n", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Probability", "to": "P(A) = n/N (favorable cases/total cases)"}, {"arrows": "to", "from": "Probability", "to": "Remarks: P(A)=1 (not necessarily certain), P(A)=0 (doesn\u0027t mean impossible)"}, {"arrows": "to", "from": "Basic Definitions", "to": "Random Experiment"}, {"arrows": "to", "from": "Basic Definitions", "to": "Sample-space"}, {"arrows": "to", "from": "Basic Definitions", "to": "Experiment or Trial"}, {"arrows": "to", "from": "Basic Definitions", "to": "Event"}, {"arrows": "to", "from": "Basic Definitions", "to": "Simple Event"}, {"arrows": "to", "from": "Basic Definitions", "to": "Compound Event"}, {"arrows": "to", "from": "Basic Definitions", "to": "Probability"}, {"arrows": "to", "from": "Basic Definitions", "to": "Mutually exclusive Event"}, {"arrows": "to", "from": "Basic Definitions", "to": "Exhaustive Event"}, {"arrows": "to", "from": "Random Experiment", "to": "Outcomes known in advance"}, {"arrows": "to", "from": "Random Experiment", "to": "Specific outcome not predictable"}, {"arrows": "to", "from": "Random Experiment", "to": "Example: Tossing a coin"}, {"arrows": "to", "from": "Sample-space", "to": "Set of all possible outcomes"}, {"arrows": "to", "from": "Sample-space", "to": "Denoted by \u0027S\u0027"}, {"arrows": "to", "from": "Sample-space", "to": "Example: Die roll S = {1, 2, 3, 4, 5, 6}"}, {"arrows": "to", "from": "Experiment or Trial", "to": "Series of actions"}, {"arrows": "to", "from": "Experiment or Trial", "to": "Uncertain outcomes"}, {"arrows": "to", "from": "Experiment or Trial", "to": "Examples: Coin toss, card selection, dice throw"}, {"arrows": "to", "from": "Event", "to": "Subset of sample space"}, {"arrows": "to", "from": "Simple Event", "to": "Contains only one element of sample space"}, {"arrows": "to", "from": "Simple Event", "to": "Example: Drawing a specific card (e.g., Ace of Spades)"}, {"arrows": "to", "from": "Compound Event", "to": "Union of sample points"}, {"arrows": "to", "from": "Compound Event", "to": "Example: Drawing a red card (heart or diamond)"}, {"arrows": "to", "from": "Mutually exclusive Event", "to": "Cannot occur simultaneously"}, {"arrows": "to", "from": "Exhaustive Event", "to": "Performance of random experiment always results in the occurence of atleast one of them"}, {"arrows": "to", "from": "Conditional Probability", "to": "P(B|A): Probability of B given A"}, {"arrows": "to", "from": "Conditional Probability", "to": "P(B|A) = P(B) if A and B are independent"}, {"arrows": "to", "from": "Conditional Probability", "to": "P(A and B) = P(A) * P(B|A) if A and B are not independent"}, {"arrows": "to", "from": "Conditional Probability", "to": "Properties: P(S|F) = P(F|F) = 1"}, {"arrows": "to", "from": "Conditional Probability", "to": "Property 2:P((A \u222a B)|F) = P(A|F) + P(B|F) - P((A \u2229 B)|F)"}, {"arrows": "to", "from": "Conditional Probability", "to": "Property 3:P(E\u0027|F) = 1-P(E|F)"}, {"arrows": "to", "from": "Multiplication Theorem on Probability", "to": "P(E|F) = P(E \u2229 F) / P(F), where P(F) \u2260 0"}, {"arrows": "to", "from": "Multiplication Theorem on Probability", "to": "P(E \u2229 F) = P(E) * P(F|E)"}, {"arrows": "to", "from": "Multiplication Theorem on Probability", "to": "Example: Drawing two black balls without replacement"}, {"arrows": "to", "from": "Multiplication Theorem on Probability", "to": "For more than two events: P(E \u2229 F \u2229 G) = P(E)P(F|E)P(G|EF)"}, {"arrows": "to", "from": "Independent Events", "to": "Occurrence of one does not affect the other"}, {"arrows": "to", "from": "Independent Events", "to": "P(E \u2229 F) = P(E) * P(F)"}, {"arrows": "to", "from": "Independent Events", "to": "Dependent Events: P(E \u2229 F) \u2260 P(E) * P(F)"}, {"arrows": "to", "from": "Independent Events", "to": "Three events A, B, and C are mutually independent if: P(A \u2229 B) = P(A)P(B), P(A \u2229 C) = P(A)P(C), P(B \u2229 C) = P(B)P(C), and P(A \u2229 B \u2229 C) = P(A)P(B)P(C)"}, {"arrows": "to", "from": "Independent Events", "to": "Example: Die roll, E (multiple of 3), F (even number)"}, {"arrows": "to", "from": "Independent Events", "to": "Independent vs. Mutually Exclusive: Independent relates to probability, mutually exclusive to events (subsets). Non-zero probability independent events cannot be mutually exclusive."}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Inverse probability theorem"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Used to find reverse probability"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Definitions: Partition of sample space"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Partition Properties: Ei \u2229 Ej = \u03c6 (i \u2260 j),  E1 \u222a \u03952 \u222a ... \u222a En= S, P(Ei) \u003e 0"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Theorem of Total Probability"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Theorem Proof: S = E1 \u222a E2 \u222a ... \u222a En, A = A \u2229 S =  (A \u2229 E1) \u222a (A \u2229 E2) \u222a ... \u222a (A \u2229 En) ,P(A) = P(A \u2229 E1) + P(A \u2229 E2) + ... + P(A \u2229 En), P(A) = \u03a3 P(Ei)P(A|Ei)"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Bayes\u0027 Theorem Formula: P(Ei|A) = [P(Ei) * P(A|Ei)] / \u03a3 [P(Ej) * P(A|Ej)]"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Proof:  P(Ei|A) = P(A \u2229 Ei)/P(A) = P(Ei)P(A|Ei) / \u03a3 P(Ej)P(A|Ej)"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Terminology: Hypotheses (E1, E2,...En), Priori Probability P(Ei), Posteriori Probability P(Ei|A)"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Example: Two bags with different colored balls, probability of drawing from a specific bag given the color."}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Random Variable Definition"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Examples: Coin toss (number of heads), articles (number of defectives)"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Probability Distribution Definition"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Sum of probabilities in distribution equals 1"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Mean of a Random Variable (Expectation)"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Formula Mean: \u03bc = E(X) = \u03a3 [xi * p(xi)]"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Variance of a Random Variable"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Formula: Var(X) = \u03c3^2 = \u03a3 (xi - \u03bc)^2 * p(xi)  = E(X^2) - [E(X)]^2"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Standard Deviation: \u03c3 = sqrt(Var(X))"}, {"arrows": "to", "from": "Random Variable Definition", "to": "A random variable is a real valued function whose domain is the sample space of a random experiment."}, {"arrows": "to", "from": "Random Variable Definition", "to": "Example: Consider the experiment of tossing a coin two times in succession, If X denotes the number of heads obtained, then X is a random variable"}, {"arrows": "to", "from": "Probability Distribution Definition", "to": "The probability distribution of a random variable X is the system of numbers"}, {"arrows": "to", "from": "Probability Distribution Definition", "to": "Example: xi: x1 x2 x3,  P(xi): p1, p2, p3"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Bernoulli Trials Definition"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Conditions for Bernoulli Trials"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Example: Drawing balls with/without replacement"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Binomial Distribution Definition"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Probability of x successes: P(X = x) =  nCx * p^x * q^(n-x), where q = 1-p"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Notation: B(n, p)"}, {"arrows": "to", "from": "Bernoulli Trials Definition", "to": "Trials with only two outcomes (\u0027success\u0027 or \u0027failure\u0027)"}, {"arrows": "to", "from": "Bernoulli Trials Definition", "to": "Probability of success (p) remains constant for each trial"}, {"arrows": "to", "from": "Bernoulli Trials Definition", "to": "Trials are independent"}, {"arrows": "to", "from": "Conditions for Bernoulli Trials", "to": "Finite number of trials"}, {"arrows": "to", "from": "Conditions for Bernoulli Trials", "to": "Independent trials"}, {"arrows": "to", "from": "Conditions for Bernoulli Trials", "to": "Two outcomes (success/failure)"}, {"arrows": "to", "from": "Conditions for Bernoulli Trials", "to": "Constant probability of success"}, {"arrows": "to", "from": "Binomial Distribution Definition", "to": "Probability distribution of the number of successes in n Bernoulli trials"}, {"arrows": "to", "from": "Binomial Distribution Definition", "to": "Obtained by binomial expansion of (q + p)^n"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

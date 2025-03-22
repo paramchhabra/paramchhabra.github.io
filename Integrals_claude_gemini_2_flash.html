@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Indefinite Integration", "label": "Indefinite Integration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quadratic Factor (v) If the two functions are of different type, we can choose quadratic factor which cannot be factorised further:\ng (x) = (ax2 + bx + c)(x - a3)(x - a4)...(x - an).", "label": "Quadratic Factor (v) If the two functions are of different type, we can choose quadratic factor which cannot be factorised further:\ng (x) = (ax2 + bx + c)(x - a3)(x - a4)...(x - an).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quadratic Factor which cannot be factorised further:\ng (x) = (ax2 + bx + c)2 (x - a5)(x - a6) ... (x - an)", "label": "Quadratic Factor which cannot be factorised further:\ng (x) = (ax2 + bx + c)2 (x - a5)(x - a6) ... (x - an)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "The first function as the one whose initial comes first in the word \u201cILATE\u201d, where I \u2013 Inverse Trigonometric function", "label": "The first function as the one whose initial comes first in the word \u201cILATE\u201d, where I \u2013 Inverse Trigonometric function", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the given integrand again, put it equal to I.\n(iii)Transpose and collect terms involving I on one side\nand evaluate I.", "label": "the given integrand again, put it equal to I.\n(iii)Transpose and collect terms involving I on one side\nand evaluate I.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the sines or cosines of multiple angles. Further integrate\nterm by term.", "label": "the sines or cosines of multiple angles. Further integrate\nterm by term.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "where A1, A2, ... An are constants to be determined by comparing the coefficients of various powers of x on both", "label": "where A1, A2, ... An are constants to be determined by comparing the coefficients of various powers of x on both", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "(x) p/q can be integrated by resolving\nthe integrand into partial fractions. We proceed as follows:", "label": "(x) p/q can be integrated by resolving\nthe integrand into partial fractions. We proceed as follows:", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "(i)If the power of sin x and cos x are both odd positive integers,\nput cos x = t or sin x = t.", "label": "(i)If the power of sin x and cos x are both odd positive integers,\nput cos x = t or sin x = t.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Write ax2 + bx + c in the form: \n22b4acb4a (xb2a)", "label": "Write ax2 + bx + c in the form: \n22b4acb4a (xb2a)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "(i)Split the integral into two integrals.", "label": "(i)Split the integral into two integrals.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quadratic Factor which cannot be factorised further: That\nis\ng (x) = (ax2 + bx + c)(x - a1)(x - a2) ... (x - an).", "label": "Quadratic Factor which cannot be factorised further: That\nis\ng (x) = (ax2 + bx + c)(x - a1)(x - a2) ... (x - an).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrate by parts. [ \u222b u.v dx = u \u222b v dx - \u222b (du/dx . \u222b v dx) dx]", "label": "Integrate by parts. [ \u222b u.v dx = u \u222b v dx - \u222b (du/dx . \u222b v dx) dx]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 1 : When the denominator contains non-repeated linear factors. That\nis\ng (x) = (x - a1)(x - a2) ... (x - an).", "label": "Case 1 : When the denominator contains non-repeated linear factors. That\nis\ng (x) = (x - a1)(x - a2) ... (x - an).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "write ax2 + bx + c in the form\n22b4acb4a (xb2a)", "label": "write ax2 + bx + c in the form\n22b4acb4a (xb2a)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sides after taking L.C.M.", "label": "Sides after taking L.C.M.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Case 2 : When the denominator contains repeated linear factors as well\nas non-repeated linear factor. That is", "label": "Case 2 : When the denominator contains repeated linear factors as well\nas non-repeated linear factor. That is", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sides after taking L.C.M.\n(iv)If the power of sin x and cos x are both even positive integers,\nuse De\u2019 Moivre\u2019s theorem as follows:\nIntegrate a cos x + b sin x = L \u222b (e + f cos x + g sin x) + M \u222b 1 + (\u2013 f sin x + g cos x).\n(ii)If the powers of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "label": "Sides after taking L.C.M.\n(iv)If the power of sin x and cos x are both even positive integers,\nuse De\u2019 Moivre\u2019s theorem as follows:\nIntegrate a cos x + b sin x = L \u222b (e + f cos x + g sin x) + M \u222b 1 + (\u2013 f sin x + g cos x).\n(ii)If the powers of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "(ii)If the powers of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "label": "(ii)If the powers of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Working Rule\n(i)Split the integral into two integrals.", "label": "Working Rule\n(i)Split the integral into two integrals.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals of the form\n22b4acb4a dxaxbxc dx", "label": "Integrals of the form\n22b4acb4a dxaxbxc dx", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Working Rule", "label": "Working Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CASE 4 : When the denominator contains a repeated\nquadratic factor.", "label": "CASE 4 : When the denominator contains a repeated\nquadratic factor.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the power of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "label": "If the power of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Working Rule (i)Split the integral into two integrals.\nCASE 5 : If the integrand contains only even powers of x put\nx2 = z in the integrand.", "label": "Working Rule (i)Split the integral into two integrals.\nCASE 5 : If the integrand contains only even powers of x put\nx2 = z in the integrand.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration By Parts (integrals involving algebraic and trigonometric\nfunctions)", "label": "Integration By Parts (integrals involving algebraic and trigonometric\nfunctions)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration By Parts", "label": "Integration By Parts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222b x2 dx, where P(x) is a polynomial in x.", "label": "\u222b x2 dx, where P(x) is a polynomial in x.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(viii)Rule of integration by parts may be used repeatedly, if\nrequired.", "label": "(viii)Rule of integration by parts may be used repeatedly, if\nrequired.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dx a + b cos x + c sin x", "label": "dx a + b cos x + c sin x", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "The process of integration of the product of two functions is\nknown as integration by parts.", "label": "The process of integration of the product of two functions is\nknown as integration by parts.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals Subsitution", "label": "Integrals Subsitution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(derivations of denominator) + N", "label": "(derivations of denominator) + N", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integration by Parts may be used repeatedly, if\nrequired.", "label": "Integration by Parts may be used repeatedly, if\nrequired.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When the denominator contains non-repeated linear factors.", "label": "When the denominator contains non-repeated linear factors.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "dx a + b cos x = t or x = t.", "label": "dx a + b cos x = t or x = t.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1 dt (a cos x + b sin x = C (C cos x + D sin x", "label": "1 dt (a cos x + b sin x = C (C cos x + D sin x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Equations coefficients of sin x, cos x and constant term on both\nsides and find the values of L, M, N.", "label": "Equations coefficients of sin x, cos x and constant term on both\nsides and find the values of L, M, N.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finding a function, whose differential coefficient is known, is called\nintegration.", "label": "Finding a function, whose differential coefficient is known, is called\nintegration.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "changed into another variable t so that the integrand f (x)\nis changed into F(t) which is some standard integral or", "label": "changed into another variable t so that the integrand f (x)\nis changed into F(t) which is some standard integral or", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Algebraic sum of standard integrals.", "label": "Algebraic sum of standard integrals.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If the powers of sin x and cos x is an odd positive integer,\nput cos x = z.", "label": "If the powers of sin x and cos x is an odd positive integer,\nput cos x = z.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "215 Integrals of the Form sinm x cosn x dx", "label": "215 Integrals of the Form sinm x cosn x dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integration Subsitution", "label": "Integration Subsitution", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Indefinite Integration", "to": "Quadratic Factor (v) If the two functions are of different type, we can choose quadratic factor which cannot be factorised further:\ng (x) = (ax2 + bx + c)(x - a3)(x - a4)...(x - an)."}, {"arrows": "to", "from": "Indefinite Integration", "to": "Quadratic Factor which cannot be factorised further:\ng (x) = (ax2 + bx + c)2 (x - a5)(x - a6) ... (x - an)"}, {"arrows": "to", "from": "Indefinite Integration", "to": "The first function as the one whose initial comes first in the word \u201cILATE\u201d, where I \u2013 Inverse Trigonometric function"}, {"arrows": "to", "from": "Indefinite Integration", "to": "the given integrand again, put it equal to I.\n(iii)Transpose and collect terms involving I on one side\nand evaluate I."}, {"arrows": "to", "from": "Indefinite Integration", "to": "the sines or cosines of multiple angles. Further integrate\nterm by term."}, {"arrows": "to", "from": "Indefinite Integration", "to": "where A1, A2, ... An are constants to be determined by comparing the coefficients of various powers of x on both"}, {"arrows": "to", "from": "Indefinite Integration", "to": "(x) p/q can be integrated by resolving\nthe integrand into partial fractions. We proceed as follows:"}, {"arrows": "to", "from": "Indefinite Integration", "to": "(i)If the power of sin x and cos x are both odd positive integers,\nput cos x = t or sin x = t."}, {"arrows": "to", "from": "Indefinite Integration", "to": "Write ax2 + bx + c in the form: \n22b4acb4a (xb2a)"}, {"arrows": "to", "from": "Indefinite Integration", "to": "(i)Split the integral into two integrals."}, {"arrows": "to", "from": "Quadratic Factor (v) If the two functions are of different type, we can choose quadratic factor which cannot be factorised further:\ng (x) = (ax2 + bx + c)(x - a3)(x - a4)...(x - an).", "to": "Quadratic Factor which cannot be factorised further: That\nis\ng (x) = (ax2 + bx + c)(x - a1)(x - a2) ... (x - an)."}, {"arrows": "to", "from": "The first function as the one whose initial comes first in the word \u201cILATE\u201d, where I \u2013 Inverse Trigonometric function", "to": "Integrate by parts. [ \u222b u.v dx = u \u222b v dx - \u222b (du/dx . \u222b v dx) dx]"}, {"arrows": "to", "from": "(x) p/q can be integrated by resolving\nthe integrand into partial fractions. We proceed as follows:", "to": "Case 1 : When the denominator contains non-repeated linear factors. That\nis\ng (x) = (x - a1)(x - a2) ... (x - an)."}, {"arrows": "to", "from": "(i)If the power of sin x and cos x are both odd positive integers,\nput cos x = t or sin x = t.", "to": "write ax2 + bx + c in the form\n22b4acb4a (xb2a)"}, {"arrows": "to", "from": "(i)Split the integral into two integrals.", "to": "Sides after taking L.C.M."}, {"arrows": "to", "from": "(i)Split the integral into two integrals.", "to": "Case 2 : When the denominator contains repeated linear factors as well\nas non-repeated linear factor. That is"}, {"arrows": "to", "from": "Case 2 : When the denominator contains repeated linear factors as well\nas non-repeated linear factor. That is", "to": "Sides after taking L.C.M.\n(iv)If the power of sin x and cos x are both even positive integers,\nuse De\u2019 Moivre\u2019s theorem as follows:\nIntegrate a cos x + b sin x = L \u222b (e + f cos x + g sin x) + M \u222b 1 + (\u2013 f sin x + g cos x).\n(ii)If the powers of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:"}, {"arrows": "to", "from": "(ii)If the powers of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "to": "Working Rule\n(i)Split the integral into two integrals."}, {"arrows": "to", "from": "(ii)If the powers of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "to": "Integrals of the form\n22b4acb4a dxaxbxc dx"}, {"arrows": "to", "from": "(ii)If the powers of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:", "to": "Working Rule"}, {"arrows": "to", "from": "Working Rule\n(i)Split the integral into two integrals.", "to": "CASE 4 : When the denominator contains a repeated\nquadratic factor."}, {"arrows": "to", "from": "Working Rule\n(i)Split the integral into two integrals.", "to": "If the power of sin x and cos x are both even positive\nintegers, use De\u2019 Moivre\u2019s theorem as follows:"}, {"arrows": "to", "from": "Integrals of the form\n22b4acb4a dxaxbxc dx", "to": "Working Rule (i)Split the integral into two integrals.\nCASE 5 : If the integrand contains only even powers of x put\nx2 = z in the integrand."}, {"arrows": "to", "from": "Integrals of the form\n22b4acb4a dxaxbxc dx", "to": "Integration By Parts (integrals involving algebraic and trigonometric\nfunctions)"}, {"arrows": "to", "from": "Integrals of the form\n22b4acb4a dxaxbxc dx", "to": "Integration By Parts"}, {"arrows": "to", "from": "Working Rule", "to": "Integration Subsitution"}, {"arrows": "to", "from": "Working Rule", "to": "Integration By Parts"}, {"arrows": "to", "from": "Integration By Parts (integrals involving algebraic and trigonometric\nfunctions)", "to": "\u222b x2 dx, where P(x) is a polynomial in x."}, {"arrows": "to", "from": "Integration By Parts (integrals involving algebraic and trigonometric\nfunctions)", "to": "(viii)Rule of integration by parts may be used repeatedly, if\nrequired."}, {"arrows": "to", "from": "Integration By Parts", "to": "dx a + b cos x + c sin x"}, {"arrows": "to", "from": "Integration By Parts", "to": "The process of integration of the product of two functions is\nknown as integration by parts."}, {"arrows": "to", "from": "Integration By Parts", "to": "Integrals Subsitution"}, {"arrows": "to", "from": "Integration By Parts", "to": "(derivations of denominator) + N"}, {"arrows": "to", "from": "The process of integration of the product of two functions is\nknown as integration by parts.", "to": "Integration by Parts may be used repeatedly, if\nrequired."}, {"arrows": "to", "from": "Integrals Subsitution", "to": "When the denominator contains non-repeated linear factors."}, {"arrows": "to", "from": "When the denominator contains non-repeated linear factors.", "to": "dx a + b cos x = t or x = t."}, {"arrows": "to", "from": "dx a + b cos x = t or x = t.", "to": "1 dt (a cos x + b sin x = C (C cos x + D sin x"}, {"arrows": "to", "from": "dx a + b cos x = t or x = t.", "to": "Equations coefficients of sin x, cos x and constant term on both\nsides and find the values of L, M, N."}, {"arrows": "to", "from": "dx a + b cos x = t or x = t.", "to": "Finding a function, whose differential coefficient is known, is called\nintegration."}, {"arrows": "to", "from": "dx a + b cos x = t or x = t.", "to": "changed into another variable t so that the integrand f (x)\nis changed into F(t) which is some standard integral or"}, {"arrows": "to", "from": "dx a + b cos x = t or x = t.", "to": "Algebraic sum of standard integrals."}, {"arrows": "to", "from": "changed into another variable t so that the integrand f (x)\nis changed into F(t) which is some standard integral or", "to": "If the powers of sin x and cos x is an odd positive integer,\nput cos x = z."}, {"arrows": "to", "from": "If the powers of sin x and cos x is an odd positive integer,\nput cos x = z.", "to": "215 Integrals of the Form sinm x cosn x dx"}, {"arrows": "to", "from": "If the powers of sin x and cos x is an odd positive integer,\nput cos x = z.", "to": "Working Rule"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

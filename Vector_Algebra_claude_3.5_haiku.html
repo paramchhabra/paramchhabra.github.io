@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Linear Dependence and Independence", "label": "Linear Dependence and Independence", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition of Linear Dependence", "label": "Definition of Linear Dependence", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conditions for Linear Dependence", "label": "Conditions for Linear Dependence", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vector Properties", "label": "Vector Properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If three vectors a, b, c are linearly dependent", "label": "If three vectors a, b, c are linearly dependent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "One vector can be expressed as a linear combination of others", "label": "One vector can be expressed as a linear combination of others", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Scalar coefficients k1, k2, k3", "label": "Scalar coefficients k1, k2, k3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "k1a + k2b + k3c = 0", "label": "k1a + k2b + k3c = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Non-trivial solution exists", "label": "Non-trivial solution exists", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Scalar Multiplication", "label": "Scalar Multiplication", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vector Product", "label": "Vector Product", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Projection of Vectors", "label": "Projection of Vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multiplication of vector by scalar", "label": "Multiplication of vector by scalar", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Preserves direction of vector", "label": "Preserves direction of vector", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Changes magnitude of vector", "label": "Changes magnitude of vector", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Dot Product", "label": "Dot Product", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cross Product", "label": "Cross Product", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Scalar Triple Product", "label": "Scalar Triple Product", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measures angle between vectors", "label": "Measures angle between vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Commutative property", "label": "Commutative property", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zero if vectors are perpendicular", "label": "Zero if vectors are perpendicular", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Produces vector perpendicular to both input vectors", "label": "Produces vector perpendicular to both input vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnitude depends on angle between vectors", "label": "Magnitude depends on angle between vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Right-hand rule determines direction", "label": "Right-hand rule determines direction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Geometric interpretation of volume", "label": "Geometric interpretation of volume", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Represents area of parallelogram", "label": "Represents area of parallelogram", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Indicates linear dependence of vectors", "label": "Indicates linear dependence of vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Projection of one vector onto another", "label": "Projection of one vector onto another", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measures component along given direction", "label": "Measures component along given direction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used in physics and engineering calculations", "label": "Used in physics and engineering calculations", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Linear Dependence and Independence", "to": "Definition of Linear Dependence"}, {"arrows": "to", "from": "Linear Dependence and Independence", "to": "Conditions for Linear Dependence"}, {"arrows": "to", "from": "Linear Dependence and Independence", "to": "Vector Properties"}, {"arrows": "to", "from": "Definition of Linear Dependence", "to": "If three vectors a, b, c are linearly dependent"}, {"arrows": "to", "from": "Definition of Linear Dependence", "to": "One vector can be expressed as a linear combination of others"}, {"arrows": "to", "from": "Conditions for Linear Dependence", "to": "Scalar coefficients k1, k2, k3"}, {"arrows": "to", "from": "Conditions for Linear Dependence", "to": "k1a + k2b + k3c = 0"}, {"arrows": "to", "from": "Conditions for Linear Dependence", "to": "Non-trivial solution exists"}, {"arrows": "to", "from": "Vector Properties", "to": "Scalar Multiplication"}, {"arrows": "to", "from": "Vector Properties", "to": "Vector Product"}, {"arrows": "to", "from": "Vector Properties", "to": "Projection of Vectors"}, {"arrows": "to", "from": "Scalar Multiplication", "to": "Multiplication of vector by scalar"}, {"arrows": "to", "from": "Scalar Multiplication", "to": "Preserves direction of vector"}, {"arrows": "to", "from": "Scalar Multiplication", "to": "Changes magnitude of vector"}, {"arrows": "to", "from": "Vector Product", "to": "Dot Product"}, {"arrows": "to", "from": "Vector Product", "to": "Cross Product"}, {"arrows": "to", "from": "Vector Product", "to": "Scalar Triple Product"}, {"arrows": "to", "from": "Projection of Vectors", "to": "Projection of one vector onto another"}, {"arrows": "to", "from": "Projection of Vectors", "to": "Measures component along given direction"}, {"arrows": "to", "from": "Projection of Vectors", "to": "Used in physics and engineering calculations"}, {"arrows": "to", "from": "Dot Product", "to": "Measures angle between vectors"}, {"arrows": "to", "from": "Dot Product", "to": "Commutative property"}, {"arrows": "to", "from": "Dot Product", "to": "Zero if vectors are perpendicular"}, {"arrows": "to", "from": "Cross Product", "to": "Produces vector perpendicular to both input vectors"}, {"arrows": "to", "from": "Cross Product", "to": "Magnitude depends on angle between vectors"}, {"arrows": "to", "from": "Cross Product", "to": "Right-hand rule determines direction"}, {"arrows": "to", "from": "Scalar Triple Product", "to": "Geometric interpretation of volume"}, {"arrows": "to", "from": "Scalar Triple Product", "to": "Represents area of parallelogram"}, {"arrows": "to", "from": "Scalar Triple Product", "to": "Indicates linear dependence of vectors"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

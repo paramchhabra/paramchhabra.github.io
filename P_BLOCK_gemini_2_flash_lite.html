@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "p-BLOCK ELEMENTS", "label": "p-BLOCK ELEMENTS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nitric Acid (HNO3)", "label": "Nitric Acid (HNO3)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "PHOSPHORUS", "label": "PHOSPHORUS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Estimation of Available Chlorine", "label": "Estimation of Available Chlorine", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Clatherate compounds", "label": "Clatherate compounds", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "COMPOUNDS OF XENON", "label": "COMPOUNDS OF XENON", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sulphuric Acid (H2SO4)", "label": "Sulphuric Acid (H2SO4)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "GROUP 17 ELEMENTS", "label": "GROUP 17 ELEMENTS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "OXY-ACIDS OF CHLORINE", "label": "OXY-ACIDS OF CHLORINE", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "BLEACHING POWDER (CaOCl2.H2O)", "label": "BLEACHING POWDER (CaOCl2.H2O)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Oxidizing Agent", "label": "Oxidizing Agent", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Aqua Regia", "label": "Aqua Regia", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Brown ring test", "label": "Brown ring test", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ostwald process", "label": "Ostwald process", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties", "label": "Properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Concentrated nitric acid (80%)", "label": "Concentrated nitric acid (80%)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Al, Fe, Cr rendered passive", "label": "Al, Fe, Cr rendered passive", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Noble metals like Au, Pt, Rh, and Ir are not attacked", "label": "Noble metals like Au, Pt, Rh, and Ir are not attacked", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1:3 mixture of conc. HNO3 and conc. HCl", "label": "1:3 mixture of conc. HNO3 and conc. HCl", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dissolves Au and Pt", "label": "Dissolves Au and Pt", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "HNO3 + 3HCl -\u003e 2H2O + 2Cl + NOCl", "label": "HNO3 + 3HCl -\u003e 2H2O + 2Cl + NOCl", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Au + 3Cl + HCl -\u003e HAuCl4", "label": "Au + 3Cl + HCl -\u003e HAuCl4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pt + 4Cl + 2HCl -\u003e H2PtCl6", "label": "Pt + 4Cl + 2HCl -\u003e H2PtCl6", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2HNO3 + 3H2SO4 + 6FeSO4 -\u003e 3Fe2(SO4)3 + 2NO + 4H2O", "label": "2HNO3 + 3H2SO4 + 6FeSO4 -\u003e 3Fe2(SO4)3 + 2NO + 4H2O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "FeSO4 + NO + 5H2O -\u003e [Fe(H2O)5NO]SO4", "label": "FeSO4 + NO + 5H2O -\u003e [Fe(H2O)5NO]SO4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "NH3 oxidation over Pt-Rh catalyst", "label": "NH3 oxidation over Pt-Rh catalyst", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "4NH3 + 5O2 -\u003e 4NO + 6H2O", "label": "4NH3 + 5O2 -\u003e 4NO + 6H2O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2NO + O2 -\u003e 2NO2", "label": "2NO + O2 -\u003e 2NO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "3NO2 + H2O -\u003e 2HNO3 + NO", "label": "3NO2 + H2O -\u003e 2HNO3 + NO", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Atomic \u0026 Physical Properties", "label": "Atomic \u0026 Physical Properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Oxidation States", "label": "Oxidation States", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chemical Reactivity", "label": "Chemical Reactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reactivity", "label": "Reactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Occurrence", "label": "Occurrence", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Important minerals", "label": "Important minerals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Very reactive non-metal", "label": "Very reactive non-metal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Catches fire in air", "label": "Catches fire in air", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fluorine: Fluorospar (CaF2), Cryolite (Na3AlF6)", "label": "Fluorine: Fluorospar (CaF2), Cryolite (Na3AlF6)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chlorine: NaCl (sea water)", "label": "Chlorine: NaCl (sea water)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bromine: NaBr (sea water)", "label": "Bromine: NaBr (sea water)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Iodine: NaIO3 (seaweed)", "label": "Iodine: NaIO3 (seaweed)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Astatine: Radioactive", "label": "Astatine: Radioactive", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) Phosphorite, Ca3(PO4)2", "label": "(i) Phosphorite, Ca3(PO4)2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) Chloraptite, Ca3(PO4)2CaCl2", "label": "(ii) Chloraptite, Ca3(PO4)2CaCl2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iii) Fluoraptite, Ca3(PO4)2CaF2", "label": "(iii) Fluoraptite, Ca3(PO4)2CaF2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iv) Vivianite, Fe3(PO4)2\u00b78H2O", "label": "(iv) Vivianite, Fe3(PO4)2\u00b78H2O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(v) Redonda phosphate, AlPO4", "label": "(v) Redonda phosphate, AlPO4", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Procedure", "label": "Procedure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reactions", "label": "Reactions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Calculation", "label": "Calculation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Add sample to acetic acid and excess KI", "label": "Add sample to acetic acid and excess KI", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Yellow-brown solution (I3\u2013)", "label": "Yellow-brown solution (I3\u2013)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Add starch solution (blue color)", "label": "Add starch solution (blue color)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Titrate with hypo", "label": "Titrate with hypo", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CaOCl2 + 2CH3COOH -\u003e (CH3COO)2Ca + H2O + Cl2", "label": "CaOCl2 + 2CH3COOH -\u003e (CH3COO)2Ca + H2O + Cl2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cl2 + 2KI -\u003e 2KCl + I2", "label": "Cl2 + 2KI -\u003e 2KCl + I2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I2 + 2S2O32\u2013 -\u003e S4O62\u2013 + 2I\u2013", "label": "I2 + 2S2O32\u2013 -\u003e S4O62\u2013 + 2I\u2013", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "%Cl = (V x M x 71 / W) x 100", "label": "%Cl = (V x M x 71 / W) x 100", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Formation", "label": "Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Composition", "label": "Composition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Examples", "label": "Examples", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inert gas molecules trapped in water cages", "label": "Inert gas molecules trapped in water cages", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "6 water molecules : 1 inert gas molecule (approx)", "label": "6 water molecules : 1 inert gas molecule (approx)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Xe, Kr, Rn trapped in ice", "label": "Xe, Kr, Rn trapped in ice", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Other organic liquids like dihydroxybenzene (quinol)", "label": "Other organic liquids like dihydroxybenzene (quinol)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "XENON DIFLUORIDE (XeF2)", "label": "XENON DIFLUORIDE (XeF2)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "XENON TRIOXIDE (XeO3)", "label": "XENON TRIOXIDE (XeO3)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "XENON TETRAFLUORIDE (XeF4)", "label": "XENON TETRAFLUORIDE (XeF4)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "XENON HEXAFLUORIDE (XeF6)", "label": "XENON HEXAFLUORIDE (XeF6)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "PREPARATION", "label": "PREPARATION", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "PROPERTIES", "label": "PROPERTIES", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ca(OH)2 + Cl2 -\u003e Ca(OCl)Cl + H2O", "label": "Ca(OH)2 + Cl2 -\u003e Ca(OCl)Cl + H2O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Releases Cl2 with dilute acids and CO2", "label": "Releases Cl2 with dilute acids and CO2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bleaching action (oxidation)", "label": "Bleaching action (oxidation)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CaOCl2 + 2HCl -\u003e CaCl2 + H2O + Cl2", "label": "CaOCl2 + 2HCl -\u003e CaCl2 + H2O + Cl2", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "USES", "label": "USES", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Lead Chamber Process", "label": "Lead Chamber Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2SO2 + O2 + 2H2O + [NO] -\u003e 2H2SO4 + [NO]", "label": "2SO2 + O2 + 2H2O + [NO] -\u003e 2H2SO4 + [NO]", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Contact Process", "label": "Contact Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2SO2 + O2 -\u003e 2SO3 (catalyst: V2O5)", "label": "2SO2 + O2 -\u003e 2SO3 (catalyst: V2O5)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "H2SO4 + SO3 -\u003e H2S2O7 (oleum)", "label": "H2SO4 + SO3 -\u003e H2S2O7 (oleum)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "H2S2O7 + H2O -\u003e 2H2SO4", "label": "H2S2O7 + H2O -\u003e 2H2SO4", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Thermal stability", "label": "Thermal stability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "4HNO3 -\u003e 2H2O + 4NO2 + O2", "label": "4HNO3 -\u003e 2H2O + 4NO2 + O2", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Oxidising properties", "label": "Oxidising properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "H2SO4 -\u003e H2O + SO2 + [O]", "label": "H2SO4 -\u003e H2O + SO2 + [O]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "C + 2H2SO4 -\u003e CO2 + 2SO2 + 2H2O", "label": "C + 2H2SO4 -\u003e CO2 + 2SO2 + 2H2O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cu + 2H2SO4 -\u003e CuSO4 + SO2 + 2H2O", "label": "Cu + 2H2SO4 -\u003e CuSO4 + SO2 + 2H2O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2KI + 2H2SO4 -\u003e K2SO4 + SO2 + I2 + 2H2O", "label": "2KI + 2H2SO4 -\u003e K2SO4 + SO2 + I2 + 2H2O", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Dehydrating agent", "label": "Dehydrating agent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "C12H22O11 -\u003e 12C + 11H2O", "label": "C12H22O11 -\u003e 12C + 11H2O", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Miscellaneous reactions", "label": "Miscellaneous reactions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sulphonation of benzene", "label": "Sulphonation of benzene", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reaction with PCl5", "label": "Reaction with PCl5", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "K4[Fe(CN)6] + H2SO4 -\u003e products", "label": "K4[Fe(CN)6] + H2SO4 -\u003e products", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "3KClO3 + 3H2SO4 -\u003e products", "label": "3KClO3 + 3H2SO4 -\u003e products", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Manufacture of fertilizers", "label": "Manufacture of fertilizers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Laboratory reagent", "label": "Laboratory reagent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Storage batteries", "label": "Storage batteries", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Industries (leather, textile, paper, dyeing)", "label": "Industries (leather, textile, paper, dyeing)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "General Information", "label": "General Information", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Chemical Properties", "label": "Chemical Properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Halogens (F, Cl, Br, I, At)", "label": "Halogens (F, Cl, Br, I, At)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electronic Configuration", "label": "Electronic Configuration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "ns2 np5", "label": "ns2 np5", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Atomic number", "label": "Atomic number", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Covalent Radius", "label": "Covalent Radius", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ionic Radius", "label": "Ionic Radius", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ionization Enthalpy", "label": "Ionization Enthalpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electron gain enthalpy", "label": "Electron gain enthalpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Distance X-X", "label": "Distance X-X", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Melting point", "label": "Melting point", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Boiling point", "label": "Boiling point", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Enthalpy of dissociation", "label": "Enthalpy of dissociation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Trends in chemical reactivity", "label": "Trends in chemical reactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reactivity with hydrogen", "label": "Reactivity with hydrogen", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reactivity with oxygen", "label": "Reactivity with oxygen", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reactivity toward the halogens", "label": "Reactivity toward the halogens", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reactivity towards metals", "label": "Reactivity towards metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of hydrides (HX)", "label": "Formation of hydrides (HX)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Acidic character increases: HF \u003c HCl \u003c HBr \u003c HI", "label": "Acidic character increases: HF \u003c HCl \u003c HBr \u003c HI", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thermal stability decreases: HF \u003e HCl \u003e HBr \u003e HI", "label": "Thermal stability decreases: HF \u003e HCl \u003e HBr \u003e HI", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reducing power increases: HF \u003c HCl \u003c HBr \u003c HI", "label": "Reducing power increases: HF \u003c HCl \u003c HBr \u003c HI", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of oxides (OX, OX2, OX3)", "label": "Formation of oxides (OX, OX2, OX3)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stability: F \u003e Cl \u003e Br \u003e I", "label": "Stability: F \u003e Cl \u003e Br \u003e I", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Oxidizing power: ClO4- \u003e ClO3- \u003e ClO2- \u003e ClO- ", "label": "Oxidizing power: ClO4- \u003e ClO3- \u003e ClO2- \u003e ClO- ", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of interhalogen compounds (XX\u0027)", "label": "Formation of interhalogen compounds (XX\u0027)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: AB, AB3, AB5, AB7", "label": "Types: AB, AB3, AB5, AB7", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "HYPO-CHLOROUS ACID [HClO]", "label": "HYPO-CHLOROUS ACID [HClO]", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "CHLOROUS ACID [HClO2]", "label": "CHLOROUS ACID [HClO2]", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "CHLORIC ACID [HClO3]", "label": "CHLORIC ACID [HClO3]", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Per-Chloric Acid  [HClO4]", "label": "Per-Chloric Acid  [HClO4]", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "Nitric Acid (HNO3)"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "PHOSPHORUS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "Estimation of Available Chlorine"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "Clatherate compounds"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "COMPOUNDS OF XENON"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "Sulphuric Acid (H2SO4)"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "GROUP 17 ELEMENTS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "OXY-ACIDS OF CHLORINE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "BLEACHING POWDER (CaOCl2.H2O)"}, {"arrows": "to", "from": "Nitric Acid (HNO3)", "to": "Oxidizing Agent"}, {"arrows": "to", "from": "Nitric Acid (HNO3)", "to": "Aqua Regia"}, {"arrows": "to", "from": "Nitric Acid (HNO3)", "to": "Brown ring test"}, {"arrows": "to", "from": "Nitric Acid (HNO3)", "to": "Ostwald process"}, {"arrows": "to", "from": "Nitric Acid (HNO3)", "to": "Properties"}, {"arrows": "to", "from": "PHOSPHORUS", "to": "Reactivity"}, {"arrows": "to", "from": "PHOSPHORUS", "to": "Occurrence"}, {"arrows": "to", "from": "PHOSPHORUS", "to": "Important minerals"}, {"arrows": "to", "from": "Estimation of Available Chlorine", "to": "Procedure"}, {"arrows": "to", "from": "Estimation of Available Chlorine", "to": "Reactions"}, {"arrows": "to", "from": "Estimation of Available Chlorine", "to": "Calculation"}, {"arrows": "to", "from": "Clatherate compounds", "to": "Formation"}, {"arrows": "to", "from": "Clatherate compounds", "to": "Composition"}, {"arrows": "to", "from": "Clatherate compounds", "to": "Examples"}, {"arrows": "to", "from": "COMPOUNDS OF XENON", "to": "XENON DIFLUORIDE (XeF2)"}, {"arrows": "to", "from": "COMPOUNDS OF XENON", "to": "XENON TRIOXIDE (XeO3)"}, {"arrows": "to", "from": "COMPOUNDS OF XENON", "to": "XENON TETRAFLUORIDE (XeF4)"}, {"arrows": "to", "from": "COMPOUNDS OF XENON", "to": "XENON HEXAFLUORIDE (XeF6)"}, {"arrows": "to", "from": "Sulphuric Acid (H2SO4)", "to": "PREPARATION"}, {"arrows": "to", "from": "Sulphuric Acid (H2SO4)", "to": "PROPERTIES"}, {"arrows": "to", "from": "Sulphuric Acid (H2SO4)", "to": "USES"}, {"arrows": "to", "from": "GROUP 17 ELEMENTS", "to": "General Information"}, {"arrows": "to", "from": "GROUP 17 ELEMENTS", "to": "Properties"}, {"arrows": "to", "from": "GROUP 17 ELEMENTS", "to": "Chemical Properties"}, {"arrows": "to", "from": "OXY-ACIDS OF CHLORINE", "to": "HYPO-CHLOROUS ACID [HClO]"}, {"arrows": "to", "from": "OXY-ACIDS OF CHLORINE", "to": "CHLOROUS ACID [HClO2]"}, {"arrows": "to", "from": "OXY-ACIDS OF CHLORINE", "to": "CHLORIC ACID [HClO3]"}, {"arrows": "to", "from": "OXY-ACIDS OF CHLORINE", "to": "Per-Chloric Acid  [HClO4]"}, {"arrows": "to", "from": "BLEACHING POWDER (CaOCl2.H2O)", "to": "PREPARATION"}, {"arrows": "to", "from": "BLEACHING POWDER (CaOCl2.H2O)", "to": "PROPERTIES"}, {"arrows": "to", "from": "Oxidizing Agent", "to": "Concentrated nitric acid (80%)"}, {"arrows": "to", "from": "Oxidizing Agent", "to": "Al, Fe, Cr rendered passive"}, {"arrows": "to", "from": "Oxidizing Agent", "to": "Noble metals like Au, Pt, Rh, and Ir are not attacked"}, {"arrows": "to", "from": "Aqua Regia", "to": "1:3 mixture of conc. HNO3 and conc. HCl"}, {"arrows": "to", "from": "Aqua Regia", "to": "Dissolves Au and Pt"}, {"arrows": "to", "from": "Aqua Regia", "to": "HNO3 + 3HCl -\u003e 2H2O + 2Cl + NOCl"}, {"arrows": "to", "from": "Aqua Regia", "to": "Au + 3Cl + HCl -\u003e HAuCl4"}, {"arrows": "to", "from": "Aqua Regia", "to": "Pt + 4Cl + 2HCl -\u003e H2PtCl6"}, {"arrows": "to", "from": "Brown ring test", "to": "2HNO3 + 3H2SO4 + 6FeSO4 -\u003e 3Fe2(SO4)3 + 2NO + 4H2O"}, {"arrows": "to", "from": "Brown ring test", "to": "FeSO4 + NO + 5H2O -\u003e [Fe(H2O)5NO]SO4"}, {"arrows": "to", "from": "Ostwald process", "to": "NH3 oxidation over Pt-Rh catalyst"}, {"arrows": "to", "from": "Ostwald process", "to": "4NH3 + 5O2 -\u003e 4NO + 6H2O"}, {"arrows": "to", "from": "Ostwald process", "to": "2NO + O2 -\u003e 2NO2"}, {"arrows": "to", "from": "Ostwald process", "to": "3NO2 + H2O -\u003e 2HNO3 + NO"}, {"arrows": "to", "from": "Properties", "to": "Atomic \u0026 Physical Properties"}, {"arrows": "to", "from": "Properties", "to": "Oxidation States"}, {"arrows": "to", "from": "Properties", "to": "Chemical Reactivity"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Atomic number"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Electronic Configuration"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Covalent Radius"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Ionic Radius"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Ionization Enthalpy"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Electron gain enthalpy"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Distance X-X"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Melting point"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Boiling point"}, {"arrows": "to", "from": "Atomic \u0026 Physical Properties", "to": "Enthalpy of dissociation"}, {"arrows": "to", "from": "Reactivity", "to": "Very reactive non-metal"}, {"arrows": "to", "from": "Reactivity", "to": "Catches fire in air"}, {"arrows": "to", "from": "Occurrence", "to": "Fluorine: Fluorospar (CaF2), Cryolite (Na3AlF6)"}, {"arrows": "to", "from": "Occurrence", "to": "Chlorine: NaCl (sea water)"}, {"arrows": "to", "from": "Occurrence", "to": "Bromine: NaBr (sea water)"}, {"arrows": "to", "from": "Occurrence", "to": "Iodine: NaIO3 (seaweed)"}, {"arrows": "to", "from": "Occurrence", "to": "Astatine: Radioactive"}, {"arrows": "to", "from": "Important minerals", "to": "(i) Phosphorite, Ca3(PO4)2"}, {"arrows": "to", "from": "Important minerals", "to": "(ii) Chloraptite, Ca3(PO4)2CaCl2"}, {"arrows": "to", "from": "Important minerals", "to": "(iii) Fluoraptite, Ca3(PO4)2CaF2"}, {"arrows": "to", "from": "Important minerals", "to": "(iv) Vivianite, Fe3(PO4)2\u00b78H2O"}, {"arrows": "to", "from": "Important minerals", "to": "(v) Redonda phosphate, AlPO4"}, {"arrows": "to", "from": "Procedure", "to": "Add sample to acetic acid and excess KI"}, {"arrows": "to", "from": "Procedure", "to": "Yellow-brown solution (I3\u2013)"}, {"arrows": "to", "from": "Procedure", "to": "Add starch solution (blue color)"}, {"arrows": "to", "from": "Procedure", "to": "Titrate with hypo"}, {"arrows": "to", "from": "Reactions", "to": "CaOCl2 + 2CH3COOH -\u003e (CH3COO)2Ca + H2O + Cl2"}, {"arrows": "to", "from": "Reactions", "to": "Cl2 + 2KI -\u003e 2KCl + I2"}, {"arrows": "to", "from": "Reactions", "to": "I2 + 2S2O32\u2013 -\u003e S4O62\u2013 + 2I\u2013"}, {"arrows": "to", "from": "Calculation", "to": "%Cl = (V x M x 71 / W) x 100"}, {"arrows": "to", "from": "Formation", "to": "Inert gas molecules trapped in water cages"}, {"arrows": "to", "from": "Composition", "to": "6 water molecules : 1 inert gas molecule (approx)"}, {"arrows": "to", "from": "Examples", "to": "Xe, Kr, Rn trapped in ice"}, {"arrows": "to", "from": "Examples", "to": "Other organic liquids like dihydroxybenzene (quinol)"}, {"arrows": "to", "from": "XENON DIFLUORIDE (XeF2)", "to": "PREPARATION"}, {"arrows": "to", "from": "XENON DIFLUORIDE (XeF2)", "to": "PROPERTIES"}, {"arrows": "to", "from": "XENON TRIOXIDE (XeO3)", "to": "PREPARATION"}, {"arrows": "to", "from": "XENON TRIOXIDE (XeO3)", "to": "PROPERTIES"}, {"arrows": "to", "from": "XENON TETRAFLUORIDE (XeF4)", "to": "PREPARATION"}, {"arrows": "to", "from": "XENON TETRAFLUORIDE (XeF4)", "to": "PROPERTIES"}, {"arrows": "to", "from": "XENON HEXAFLUORIDE (XeF6)", "to": "PREPARATION"}, {"arrows": "to", "from": "XENON HEXAFLUORIDE (XeF6)", "to": "PROPERTIES"}, {"arrows": "to", "from": "PREPARATION", "to": "Ca(OH)2 + Cl2 -\u003e Ca(OCl)Cl + H2O"}, {"arrows": "to", "from": "PROPERTIES", "to": "Releases Cl2 with dilute acids and CO2"}, {"arrows": "to", "from": "PROPERTIES", "to": "Bleaching action (oxidation)"}, {"arrows": "to", "from": "PROPERTIES", "to": "CaOCl2 + 2HCl -\u003e CaCl2 + H2O + Cl2"}, {"arrows": "to", "from": "USES", "to": "Manufacture of fertilizers"}, {"arrows": "to", "from": "USES", "to": "Laboratory reagent"}, {"arrows": "to", "from": "USES", "to": "Storage batteries"}, {"arrows": "to", "from": "USES", "to": "Industries (leather, textile, paper, dyeing)"}, {"arrows": "to", "from": "Lead Chamber Process", "to": "2SO2 + O2 + 2H2O + [NO] -\u003e 2H2SO4 + [NO]"}, {"arrows": "to", "from": "Contact Process", "to": "2SO2 + O2 -\u003e 2SO3 (catalyst: V2O5)"}, {"arrows": "to", "from": "Contact Process", "to": "H2SO4 + SO3 -\u003e H2S2O7 (oleum)"}, {"arrows": "to", "from": "Contact Process", "to": "H2S2O7 + H2O -\u003e 2H2SO4"}, {"arrows": "to", "from": "Thermal stability", "to": "4HNO3 -\u003e 2H2O + 4NO2 + O2"}, {"arrows": "to", "from": "Oxidising properties", "to": "H2SO4 -\u003e H2O + SO2 + [O]"}, {"arrows": "to", "from": "Oxidising properties", "to": "C + 2H2SO4 -\u003e CO2 + 2SO2 + 2H2O"}, {"arrows": "to", "from": "Oxidising properties", "to": "Cu + 2H2SO4 -\u003e CuSO4 + SO2 + 2H2O"}, {"arrows": "to", "from": "Oxidising properties", "to": "2KI + 2H2SO4 -\u003e K2SO4 + SO2 + I2 + 2H2O"}, {"arrows": "to", "from": "Dehydrating agent", "to": "C12H22O11 -\u003e 12C + 11H2O"}, {"arrows": "to", "from": "Dehydrating agent", "to": "C + 2H2SO4 -\u003e CO2 + 2SO2 + 2H2O"}, {"arrows": "to", "from": "Miscellaneous reactions", "to": "Sulphonation of benzene"}, {"arrows": "to", "from": "Miscellaneous reactions", "to": "Reaction with PCl5"}, {"arrows": "to", "from": "Miscellaneous reactions", "to": "K4[Fe(CN)6] + H2SO4 -\u003e products"}, {"arrows": "to", "from": "Miscellaneous reactions", "to": "3KClO3 + 3H2SO4 -\u003e products"}, {"arrows": "to", "from": "General Information", "to": "Halogens (F, Cl, Br, I, At)"}, {"arrows": "to", "from": "General Information", "to": "Electronic Configuration"}, {"arrows": "to", "from": "General Information", "to": "Occurrence"}, {"arrows": "to", "from": "Chemical Properties", "to": "Oxidation States"}, {"arrows": "to", "from": "Chemical Properties", "to": "Trends in chemical reactivity"}, {"arrows": "to", "from": "Chemical Properties", "to": "Reactivity with hydrogen"}, {"arrows": "to", "from": "Chemical Properties", "to": "Reactivity with oxygen"}, {"arrows": "to", "from": "Chemical Properties", "to": "Reactivity toward the halogens"}, {"arrows": "to", "from": "Chemical Properties", "to": "Reactivity towards metals"}, {"arrows": "to", "from": "Electronic Configuration", "to": "ns2 np5"}, {"arrows": "to", "from": "Reactivity with hydrogen", "to": "Formation of hydrides (HX)"}, {"arrows": "to", "from": "Reactivity with hydrogen", "to": "Acidic character increases: HF \u003c HCl \u003c HBr \u003c HI"}, {"arrows": "to", "from": "Reactivity with hydrogen", "to": "Thermal stability decreases: HF \u003e HCl \u003e HBr \u003e HI"}, {"arrows": "to", "from": "Reactivity with hydrogen", "to": "Reducing power increases: HF \u003c HCl \u003c HBr \u003c HI"}, {"arrows": "to", "from": "Reactivity with oxygen", "to": "Formation of oxides (OX, OX2, OX3)"}, {"arrows": "to", "from": "Reactivity with oxygen", "to": "Stability: F \u003e Cl \u003e Br \u003e I"}, {"arrows": "to", "from": "Reactivity with oxygen", "to": "Oxidizing power: ClO4- \u003e ClO3- \u003e ClO2- \u003e ClO- "}, {"arrows": "to", "from": "Reactivity toward the halogens", "to": "Formation of interhalogen compounds (XX\u0027)"}, {"arrows": "to", "from": "Reactivity toward the halogens", "to": "Types: AB, AB3, AB5, AB7"}, {"arrows": "to", "from": "Reactivity toward the halogens", "to": "Stability: F \u003e Cl \u003e Br \u003e I"}, {"arrows": "to", "from": "HYPO-CHLOROUS ACID [HClO]", "to": "PREPARATION"}, {"arrows": "to", "from": "HYPO-CHLOROUS ACID [HClO]", "to": "PROPERTIES"}, {"arrows": "to", "from": "CHLOROUS ACID [HClO2]", "to": "PREPARATION"}, {"arrows": "to", "from": "CHLOROUS ACID [HClO2]", "to": "PROPERTIES"}, {"arrows": "to", "from": "CHLORIC ACID [HClO3]", "to": "PREPARATION"}, {"arrows": "to", "from": "CHLORIC ACID [HClO3]", "to": "PROPERTIES"}, {"arrows": "to", "from": "Per-Chloric Acid  [HClO4]", "to": "PREPARATION"}, {"arrows": "to", "from": "Per-Chloric Acid  [HClO4]", "to": "PROPERTIES"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

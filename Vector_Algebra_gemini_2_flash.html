@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "LINEAR DEPENDENCE", "label": "LINEAR DEPENDENCE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If three vectors c, b, a are linearly dependent, then tetrahedron is regular it is equidistant from the vertices and the four faces of the tetrahedron.", "label": "If three vectors c, b, a are linearly dependent, then tetrahedron is regular it is equidistant from the vertices and the four faces of the tetrahedron.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vectors \u0026 m, n are scalars, then:", "label": "Vectors \u0026 m, n are scalars, then:", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Are vectors \u0026 m, n are scalars, then :", "label": "Are vectors \u0026 m, n are scalars, then :", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Are linearly dependent if a is parallel to b i.e. 0 = \u03bb b a", "label": "Are linearly dependent if a is parallel to b i.e. 0 = \u03bb b a", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If three vectors c ,b ,a", "label": "If three vectors c ,b ,a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " \u0026 are non-coplanar, then :", "label": " \u0026 are non-coplanar, then :", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "vector triple product", "label": "vector triple product", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "VECTOR \u0026 3D", "label": "VECTOR \u0026 3D", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "VECTOR \u0026 3-D", "label": "VECTOR \u0026 3-D", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "PRODUCT OF VECTORS", "label": "PRODUCT OF VECTORS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that", "label": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "the angle \u03b8 between a \u0026 b  is b a 1 2 b a  R \u2013{0}.", "label": "the angle \u03b8 between a \u0026 b  is b a 1 2 b a  R \u2013{0}.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Scalar product of two vectors", "label": "Scalar product of two vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a \u0026 b are two vectors \u0026 \u03b8 is the angle between them then b a b a cos \u03b8= |a||b|cos\u03b8", "label": "If a \u0026 b are two vectors \u0026 \u03b8 is the angle between them then b a b a cos \u03b8= |a||b|cos\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The angle between a \u0026 b is  b a /ab cos \u03b8= |a||b|", "label": "The angle between a \u0026 b is  b a /ab cos \u03b8= |a||b|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If c, b, a are two sets of Non-Coplanar Vectors such then :", "label": "If c, b, a are two sets of Non-Coplanar Vectors such then :", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Projection of  b on a is defined as FRM", "label": "Projection of  b on a is defined as FRM", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "where r is the pv of P wrt \u0027O\u0027. The direction of M is", "label": "where r is the pv of P wrt \u0027O\u0027. The direction of M is", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "whose modulus is |m| times that of a. This multiplication is called Scalar Multiplication.", "label": "whose modulus is |m| times that of a. This multiplication is called Scalar Multiplication.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If a \u0026 b are the unit vector", "label": "If a \u0026 b are the unit vector", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "scalars.", "label": "scalars.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If c ,b ,a are the p.v\u0027s of it\u0027s angular vertices a, b, c then the position vector of the centroid of \u0394ABC bisector.", "label": "If c ,b ,a are the p.v\u0027s of it\u0027s angular vertices a, b, c then the position vector of the centroid of \u0394ABC bisector.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(d) Moment of the couple F about O is defined as ) c b (a", "label": "(d) Moment of the couple F about O is defined as ) c b (a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Collinear vectors are always parallel to their direction. Consequently, two non \u2013 zero vectors a \u0026 b are equal if:", "label": "Collinear vectors are always parallel to their direction. Consequently, two non \u2013 zero vectors a \u0026 b are equal if:", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " scalars.", "label": " scalars.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "c. (b a) /cxy where x and y are", "label": "c. (b a) /cxy where x and y are", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Coplanar Vector", "label": "Coplanar Vector", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Linear Combinations", "label": "Linear Combinations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a = ^3i + 2j + 5k then a is expressed as a Linear Combination of vectors ^ ^ ^k ,j, i", "label": "If a = ^3i + 2j + 5k then a is expressed as a Linear Combination of vectors ^ ^ ^k ,j, i", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If a is a vector \u0026 m is a scalar, then m a is a vector whose", "label": "If a is a vector \u0026 m is a scalar, then m a is a vector whose", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Dependent.", "label": "Dependent.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a=\u03bb1i^+\u03bb2j^+\u03bb3k^ and b= \u03bb1i^+\u03bb2j^+\u03bb3k^ then  a=b iff they have the same magnitude, direction \u0026 represent the same physical quantity.", "label": "If a=\u03bb1i^+\u03bb2j^+\u03bb3k^ and b= \u03bb1i^+\u03bb2j^+\u03bb3k^ then  a=b iff they have the same magnitude, direction \u0026 represent the same physical quantity.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "parallels disregards to their direction. Collinear vectors are", "label": "parallels disregards to their direction. Collinear vectors are", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Symbolically, two non \u2013 zero vectors a \u0026 b are said to be Parallel Vector . If b =ma", "label": "Symbolically, two non \u2013 zero vectors a \u0026 b are said to be Parallel Vector . If b =ma", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Vector product of two vectors", "label": "Vector product of two vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "b a b a sin \u03b8^n = |a||b|sin\u03b8 n^", "label": "b a b a sin \u03b8^n = |a||b|sin\u03b8 n^", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The angle between a \u0026 b is babasin\u03b8, where \u03b8n is the unit vector", "label": "The angle between a \u0026 b is babasin\u03b8, where \u03b8n is the unit vector", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "area of parallelogram whose two adjacent sides are represented by a \u0026 b is | b a", "label": "area of parallelogram whose two adjacent sides are represented by a \u0026 b is | b a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If c ,b ,a are three vectors \u0026 c and perpendicular to a. Hence we can express )c b (a in terms of b \u0026 c i.e. ) c b(a = cy bx where x and y are", "label": "If c ,b ,a are three vectors \u0026 c and perpendicular to a. Hence we can express )c b (a in terms of b \u0026 c i.e. ) c b(a = cy bx where x and y are", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two vectors are said to be equal if  they have the same magnitude,", "label": "Two vectors are said to be equal if  they have the same magnitude,", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vector \u0026 3D", "label": "Vector \u0026 3D", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Initial \u0026 Terminal point , is called a Zero Vector. It is", "label": "Initial \u0026 Terminal point , is called a Zero Vector. It is", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "denoted by O", "label": "denoted by O", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The direction of zero vector is indeterminate.", "label": "The direction of zero vector is indeterminate.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The magnitude is |m| times that of a. This", "label": "The magnitude is |m| times that of a. This", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Reciprocal System of Vectors", "label": "Reciprocal System of Vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "^i \u00d7 i = j \u00d7 j = k \u00d7 k =0.", "label": "^i \u00d7 i = j \u00d7 j = k \u00d7 k =0.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Projection of b on a = ( b a )a^", "label": "Projection of b on a = ( b a )a^", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the volume of the tetrahedron OABC with O as origin \u0026  a, b, c and are given, is defined as  [ c b a ]6 1", "label": "the volume of the tetrahedron OABC with O as origin \u0026  a, b, c and are given, is defined as  [ c b a ]6 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Initial \u0026 terminal point , is called a Zero Vector. It is", "label": "Initial \u0026 terminal point , is called a Zero Vector. It is", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The magnetitude of vector AB is expressed as  AB", "label": "The magnetitude of vector AB is expressed as  AB", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "equal", "label": "equal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the two unit vectors  a \u0026 b is  b a", "label": "the two unit vectors  a \u0026 b is  b a", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Collinear vectors.", "label": "Collinear vectors.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "b ,a are coplanar if If a = ^3i + 2j + 5k then a is expressed as a Linear Combination of vectors ^ ^ ^k ,j, i", "label": "b ,a are coplanar if If a = ^3i + 2j + 5k then a is expressed as a Linear Combination of vectors ^ ^ ^k ,j, i", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "c) b a /cba", "label": "c) b a /cba", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the points A and B, then  b a AB  p.v of B \u2013 p.v of A.", "label": "the points A and B, then  b a AB  p.v of B \u2013 p.v of A.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "two points A Aand B, then, the p.v. of a point which divides AB in the ratio m : n is given by:", "label": "two points A Aand B, then, the p.v. of a point which divides AB in the ratio m : n is given by:", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The Scalar triple product geometrically represents the volume of the parallelopiped whose three adjacent sides are represented by a, b \u0026 c  i.e.", "label": "The Scalar triple product geometrically represents the volume of the parallelopiped whose three adjacent sides are represented by a, b \u0026 c  i.e.", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "LINEAR DEPENDENCE", "to": "If three vectors c, b, a are linearly dependent, then tetrahedron is regular it is equidistant from the vertices and the four faces of the tetrahedron."}, {"arrows": "to", "from": "LINEAR DEPENDENCE", "to": "Vectors \u0026 m, n are scalars, then:"}, {"arrows": "to", "from": "LINEAR DEPENDENCE", "to": "Are vectors \u0026 m, n are scalars, then :"}, {"arrows": "to", "from": "LINEAR DEPENDENCE", "to": "Are linearly dependent if a is parallel to b i.e. 0 = \u03bb b a"}, {"arrows": "to", "from": "If three vectors c ,b ,a", "to": " \u0026 are non-coplanar, then :"}, {"arrows": "to", "from": "If three vectors c ,b ,a", "to": "vector triple product"}, {"arrows": "to", "from": "VECTOR \u0026 3D", "to": "VECTOR \u0026 3-D"}, {"arrows": "to", "from": "PRODUCT OF VECTORS", "to": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that"}, {"arrows": "to", "from": "PRODUCT OF VECTORS", "to": "the angle \u03b8 between a \u0026 b  is b a 1 2 b a  R \u2013{0}."}, {"arrows": "to", "from": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that", "to": "the volume of the tetrahedron OABC with O as origin \u0026  a, b, c and are given, is defined as  [ c b a ]6 1"}, {"arrows": "to", "from": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that", "to": "Initial \u0026 terminal point , is called a Zero Vector. It is"}, {"arrows": "to", "from": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that", "to": "The direction of zero vector is indeterminate."}, {"arrows": "to", "from": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that", "to": "The magnetitude of vector AB is expressed as  AB"}, {"arrows": "to", "from": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that", "to": "equal"}, {"arrows": "to", "from": "If c, b ,a \u0026 \u0027 c, b, a \u0027 are two sets of non- coplanar vectors such that", "to": "the two unit vectors  a \u0026 b is  b a"}, {"arrows": "to", "from": "the angle \u03b8 between a \u0026 b  is b a 1 2 b a  R \u2013{0}.", "to": "Coplanar Vector"}, {"arrows": "to", "from": "the angle \u03b8 between a \u0026 b  is b a 1 2 b a  R \u2013{0}.", "to": "Collinear vectors."}, {"arrows": "to", "from": "Scalar product of two vectors", "to": "If a \u0026 b are two vectors \u0026 \u03b8 is the angle between them then b a b a cos \u03b8= |a||b|cos\u03b8"}, {"arrows": "to", "from": "Scalar product of two vectors", "to": "The angle between a \u0026 b is  b a /ab cos \u03b8= |a||b|"}, {"arrows": "to", "from": "Scalar product of two vectors", "to": "If c, b, a are two sets of Non-Coplanar Vectors such then :"}, {"arrows": "to", "from": "Scalar product of two vectors", "to": "Projection of  b on a is defined as FRM"}, {"arrows": "to", "from": "Scalar product of two vectors", "to": "where r is the pv of P wrt \u0027O\u0027. The direction of M is"}, {"arrows": "to", "from": "Scalar product of two vectors", "to": "whose modulus is |m| times that of a. This multiplication is called Scalar Multiplication."}, {"arrows": "to", "from": "Scalar product of two vectors", "to": "If a \u0026 b are the unit vector"}, {"arrows": "to", "from": "Scalar product of two vectors", "to": "scalars."}, {"arrows": "to", "from": "If a \u0026 b are the unit vector", "to": "If c ,b ,a are the p.v\u0027s of it\u0027s angular vertices a, b, c then the position vector of the centroid of \u0394ABC bisector."}, {"arrows": "to", "from": "scalars.", "to": "Coplanar Vector"}, {"arrows": "to", "from": "scalars.", "to": "Linear Combinations"}, {"arrows": "to", "from": "If c ,b ,a are the p.v\u0027s of it\u0027s angular vertices a, b, c then the position vector of the centroid of \u0394ABC bisector.", "to": "(d) Moment of the couple F about O is defined as ) c b (a"}, {"arrows": "to", "from": "If c ,b ,a are the p.v\u0027s of it\u0027s angular vertices a, b, c then the position vector of the centroid of \u0394ABC bisector.", "to": "Collinear vectors are always parallel to their direction. Consequently, two non \u2013 zero vectors a \u0026 b are equal if:"}, {"arrows": "to", "from": "If c ,b ,a are the p.v\u0027s of it\u0027s angular vertices a, b, c then the position vector of the centroid of \u0394ABC bisector.", "to": " scalars."}, {"arrows": "to", "from": "If c ,b ,a are the p.v\u0027s of it\u0027s angular vertices a, b, c then the position vector of the centroid of \u0394ABC bisector.", "to": "c. (b a) /cxy where x and y are"}, {"arrows": "to", "from": "Coplanar Vector", "to": "b ,a are coplanar if If a = ^3i + 2j + 5k then a is expressed as a Linear Combination of vectors ^ ^ ^k ,j, i"}, {"arrows": "to", "from": "Linear Combinations", "to": "If a = ^3i + 2j + 5k then a is expressed as a Linear Combination of vectors ^ ^ ^k ,j, i"}, {"arrows": "to", "from": "Linear Combinations", "to": "If a is a vector \u0026 m is a scalar, then m a is a vector whose"}, {"arrows": "to", "from": "If a is a vector \u0026 m is a scalar, then m a is a vector whose", "to": "the points A and B, then  b a AB  p.v of B \u2013 p.v of A."}, {"arrows": "to", "from": "If a is a vector \u0026 m is a scalar, then m a is a vector whose", "to": "two points A Aand B, then, the p.v. of a point which divides AB in the ratio m : n is given by:"}, {"arrows": "to", "from": "If a is a vector \u0026 m is a scalar, then m a is a vector whose", "to": "The Scalar triple product geometrically represents the volume of the parallelopiped whose three adjacent sides are represented by a, b \u0026 c  i.e."}, {"arrows": "to", "from": "Dependent.", "to": "If a = ^3i + 2j + 5k then a is expressed as a Linear Combination of vectors ^ ^ ^k ,j, i"}, {"arrows": "to", "from": "Dependent.", "to": "If a=\u03bb1i^+\u03bb2j^+\u03bb3k^ and b= \u03bb1i^+\u03bb2j^+\u03bb3k^ then  a=b iff they have the same magnitude, direction \u0026 represent the same physical quantity."}, {"arrows": "to", "from": "Dependent.", "to": "parallels disregards to their direction. Collinear vectors are"}, {"arrows": "to", "from": "Dependent.", "to": "Symbolically, two non \u2013 zero vectors a \u0026 b are said to be Parallel Vector . If b =ma"}, {"arrows": "to", "from": "Vector product of two vectors", "to": "b a b a sin \u03b8^n = |a||b|sin\u03b8 n^"}, {"arrows": "to", "from": "Vector product of two vectors", "to": "The angle between a \u0026 b is babasin\u03b8, where \u03b8n is the unit vector"}, {"arrows": "to", "from": "Vector product of two vectors", "to": "area of parallelogram whose two adjacent sides are represented by a \u0026 b is | b a"}, {"arrows": "to", "from": "Vector product of two vectors", "to": "If c ,b ,a are three vectors \u0026 c and perpendicular to a. Hence we can express )c b (a in terms of b \u0026 c i.e. ) c b(a = cy bx where x and y are"}, {"arrows": "to", "from": "Vector product of two vectors", "to": "Two vectors are said to be equal if  they have the same magnitude,"}, {"arrows": "to", "from": "Vector product of two vectors", "to": "Vector \u0026 3D"}, {"arrows": "to", "from": "Vector \u0026 3D", "to": "Initial \u0026 Terminal point , is called a Zero Vector. It is"}, {"arrows": "to", "from": "Vector \u0026 3D", "to": "denoted by O"}, {"arrows": "to", "from": "Vector \u0026 3D", "to": "The direction of zero vector is indeterminate."}, {"arrows": "to", "from": "Vector \u0026 3D", "to": "The magnitude is |m| times that of a. This"}, {"arrows": "to", "from": "Reciprocal System of Vectors", "to": "^i \u00d7 i = j \u00d7 j = k \u00d7 k =0."}, {"arrows": "to", "from": "Reciprocal System of Vectors", "to": "Projection of b on a = ( b a )a^"}, {"arrows": "to", "from": "Collinear vectors.", "to": "c) b a /cba"}, {"arrows": "to", "from": "Collinear vectors.", "to": "Linear Combinations"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

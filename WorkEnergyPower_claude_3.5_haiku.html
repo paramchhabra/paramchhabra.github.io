@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Work and Energy", "label": "Work and Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Net Work", "label": "Net Work", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gravitational Potential Energy", "label": "Gravitational Potential Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservative Forces", "label": "Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Circular Motion", "label": "Circular Motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done against force between two points", "label": "Work done against force between two points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends only on location of two points", "label": "Depends only on location of two points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Displacement is 180\u00b0", "label": "Displacement is 180\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cos \u03b8 = cos 180\u00b0 = -1", "label": "Cos \u03b8 = cos 180\u00b0 = -1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy possessed by body due to its position", "label": "Energy possessed by body due to its position", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends on height and mass", "label": "Depends on height and mass", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Calculated as mgh", "label": "Calculated as mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Changes with conservative force", "label": "Changes with conservative force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work independent of path", "label": "Work independent of path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Total mechanical energy conserved", "label": "Total mechanical energy conserved", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Gravitational and Elastic forces", "label": "Examples: Gravitational and Elastic forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done = Change in Kinetic Energy", "label": "Work done = Change in Kinetic Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Centripetal force responsible for circular motion", "label": "Centripetal force responsible for circular motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Velocity changes direction constantly", "label": "Velocity changes direction constantly", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by centripetal force is zero", "label": "Work done by centripetal force is zero", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum velocity at bottom of circle", "label": "Minimum velocity at bottom of circle", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Work and Energy", "to": "Net Work"}, {"arrows": "to", "from": "Work and Energy", "to": "Gravitational Potential Energy"}, {"arrows": "to", "from": "Work and Energy", "to": "Conservative Forces"}, {"arrows": "to", "from": "Work and Energy", "to": "Circular Motion"}, {"arrows": "to", "from": "Net Work", "to": "Work done against force between two points"}, {"arrows": "to", "from": "Net Work", "to": "Depends only on location of two points"}, {"arrows": "to", "from": "Net Work", "to": "Displacement is 180\u00b0"}, {"arrows": "to", "from": "Net Work", "to": "Cos \u03b8 = cos 180\u00b0 = -1"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "Energy possessed by body due to its position"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "Depends on height and mass"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "Calculated as mgh"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "Changes with conservative force"}, {"arrows": "to", "from": "Conservative Forces", "to": "Work independent of path"}, {"arrows": "to", "from": "Conservative Forces", "to": "Total mechanical energy conserved"}, {"arrows": "to", "from": "Conservative Forces", "to": "Examples: Gravitational and Elastic forces"}, {"arrows": "to", "from": "Conservative Forces", "to": "Work done = Change in Kinetic Energy"}, {"arrows": "to", "from": "Circular Motion", "to": "Centripetal force responsible for circular motion"}, {"arrows": "to", "from": "Circular Motion", "to": "Velocity changes direction constantly"}, {"arrows": "to", "from": "Circular Motion", "to": "Work done by centripetal force is zero"}, {"arrows": "to", "from": "Circular Motion", "to": "Minimum velocity at bottom of circle"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

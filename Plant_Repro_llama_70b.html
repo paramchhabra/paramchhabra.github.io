@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Sexual Reproduction in Flowering Plants", "label": "Sexual Reproduction in Flowering Plants", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen Grain Formation", "label": "Pollen Grain Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryo Sac Formation", "label": "Embryo Sac Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fertilization", "label": "Fertilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Microspore Formation", "label": "Microspore Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Exine and Intine Formation", "label": "Exine and Intine Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen Grain Structure", "label": "Pollen Grain Structure", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Microspore Mother Cell", "label": "Microspore Mother Cell", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Meiosis", "label": "Meiosis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Microspore Tetrad", "label": "Microspore Tetrad", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Exine Composition", "label": "Exine Composition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intine Composition", "label": "Intine Composition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ektexine", "label": "Ektexine", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endexine", "label": "Endexine", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pores and Furrows", "label": "Pores and Furrows", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Megasporogenesis", "label": "Megasporogenesis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Megaspore Mother Cell", "label": "Megaspore Mother Cell", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Megasporogenesis Stages", "label": "Megasporogenesis Stages", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Megasporocyte", "label": "Megasporocyte", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Megaspore Tetrad", "label": "Megaspore Tetrad", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Double Fertilization", "label": "Double Fertilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Syngamy", "label": "Syngamy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Triple Fusion", "label": "Triple Fusion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Generative Fertilization", "label": "Generative Fertilization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vegetative Fertilization", "label": "Vegetative Fertilization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Male Gamete and Egg Cell Fusion", "label": "Male Gamete and Egg Cell Fusion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Male Gamete and Polar Nuclei Fusion", "label": "Male Gamete and Polar Nuclei Fusion", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Post-Fertilization", "label": "Post-Fertilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endosperm Development", "label": "Endosperm Development", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryo Development", "label": "Embryo Development", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fruit and Seed Development", "label": "Fruit and Seed Development", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endosperm Types", "label": "Endosperm Types", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endosperm Functions", "label": "Endosperm Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nuclear Endosperm", "label": "Nuclear Endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cellular Endosperm", "label": "Cellular Endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Helobial Endosperm", "label": "Helobial Endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutrient Storage", "label": "Nutrient Storage", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo Nourishment", "label": "Embryo Nourishment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryogenesis", "label": "Embryogenesis", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryo Stages", "label": "Embryo Stages", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zygote", "label": "Zygote", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Proembryo", "label": "Proembryo", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Globular Stage", "label": "Globular Stage", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heart-Shaped Stage", "label": "Heart-Shaped Stage", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Torpedo Stage", "label": "Torpedo Stage", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cotyledonary Stage", "label": "Cotyledonary Stage", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pericarp Development", "label": "Pericarp Development", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed Coat Formation", "label": "Seed Coat Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryo and Endosperm Maturation", "label": "Embryo and Endosperm Maturation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Exocarp", "label": "Exocarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mesocarp", "label": "Mesocarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endocarp", "label": "Endocarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Testa", "label": "Testa", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tegmen", "label": "Tegmen", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Desiccation", "label": "Desiccation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dormancy", "label": "Dormancy", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Pollen Grain Formation"}, {"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Embryo Sac Formation"}, {"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Fertilization"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Microspore Formation"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Exine and Intine Formation"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Pollen Grain Structure"}, {"arrows": "to", "from": "Embryo Sac Formation", "to": "Megasporogenesis"}, {"arrows": "to", "from": "Embryo Sac Formation", "to": "Megaspore Mother Cell"}, {"arrows": "to", "from": "Embryo Sac Formation", "to": "Megasporogenesis Stages"}, {"arrows": "to", "from": "Fertilization", "to": "Double Fertilization"}, {"arrows": "to", "from": "Fertilization", "to": "Syngamy"}, {"arrows": "to", "from": "Fertilization", "to": "Triple Fusion"}, {"arrows": "to", "from": "Microspore Formation", "to": "Microspore Mother Cell"}, {"arrows": "to", "from": "Microspore Formation", "to": "Meiosis"}, {"arrows": "to", "from": "Microspore Formation", "to": "Microspore Tetrad"}, {"arrows": "to", "from": "Exine and Intine Formation", "to": "Exine Composition"}, {"arrows": "to", "from": "Exine and Intine Formation", "to": "Intine Composition"}, {"arrows": "to", "from": "Pollen Grain Structure", "to": "Ektexine"}, {"arrows": "to", "from": "Pollen Grain Structure", "to": "Endexine"}, {"arrows": "to", "from": "Pollen Grain Structure", "to": "Pores and Furrows"}, {"arrows": "to", "from": "Megasporogenesis", "to": "Megasporocyte"}, {"arrows": "to", "from": "Megasporogenesis", "to": "Meiosis"}, {"arrows": "to", "from": "Megasporogenesis", "to": "Megaspore Tetrad"}, {"arrows": "to", "from": "Double Fertilization", "to": "Generative Fertilization"}, {"arrows": "to", "from": "Double Fertilization", "to": "Vegetative Fertilization"}, {"arrows": "to", "from": "Syngamy", "to": "Male Gamete and Egg Cell Fusion"}, {"arrows": "to", "from": "Triple Fusion", "to": "Male Gamete and Polar Nuclei Fusion"}, {"arrows": "to", "from": "Post-Fertilization", "to": "Endosperm Development"}, {"arrows": "to", "from": "Post-Fertilization", "to": "Embryo Development"}, {"arrows": "to", "from": "Post-Fertilization", "to": "Fruit and Seed Development"}, {"arrows": "to", "from": "Endosperm Development", "to": "Endosperm Types"}, {"arrows": "to", "from": "Endosperm Development", "to": "Endosperm Functions"}, {"arrows": "to", "from": "Embryo Development", "to": "Embryogenesis"}, {"arrows": "to", "from": "Embryo Development", "to": "Embryo Stages"}, {"arrows": "to", "from": "Fruit and Seed Development", "to": "Pericarp Development"}, {"arrows": "to", "from": "Fruit and Seed Development", "to": "Seed Coat Formation"}, {"arrows": "to", "from": "Fruit and Seed Development", "to": "Embryo and Endosperm Maturation"}, {"arrows": "to", "from": "Endosperm Types", "to": "Nuclear Endosperm"}, {"arrows": "to", "from": "Endosperm Types", "to": "Cellular Endosperm"}, {"arrows": "to", "from": "Endosperm Types", "to": "Helobial Endosperm"}, {"arrows": "to", "from": "Endosperm Functions", "to": "Nutrient Storage"}, {"arrows": "to", "from": "Endosperm Functions", "to": "Embryo Nourishment"}, {"arrows": "to", "from": "Embryogenesis", "to": "Zygote"}, {"arrows": "to", "from": "Embryogenesis", "to": "Proembryo"}, {"arrows": "to", "from": "Embryogenesis", "to": "Globular Stage"}, {"arrows": "to", "from": "Embryo Stages", "to": "Heart-Shaped Stage"}, {"arrows": "to", "from": "Embryo Stages", "to": "Torpedo Stage"}, {"arrows": "to", "from": "Embryo Stages", "to": "Cotyledonary Stage"}, {"arrows": "to", "from": "Pericarp Development", "to": "Exocarp"}, {"arrows": "to", "from": "Pericarp Development", "to": "Mesocarp"}, {"arrows": "to", "from": "Pericarp Development", "to": "Endocarp"}, {"arrows": "to", "from": "Seed Coat Formation", "to": "Testa"}, {"arrows": "to", "from": "Seed Coat Formation", "to": "Tegmen"}, {"arrows": "to", "from": "Embryo and Endosperm Maturation", "to": "Desiccation"}, {"arrows": "to", "from": "Embryo and Endosperm Maturation", "to": "Dormancy"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

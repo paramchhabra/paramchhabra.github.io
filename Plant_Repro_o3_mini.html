@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Flowering Plant Reproduction", "label": "Flowering Plant Reproduction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen Structure", "label": "Pollen Structure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed \u0026 Fruit Formation", "label": "Seed \u0026 Fruit Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollination", "label": "Pollination", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryogeny", "label": "Embryogeny", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ovule Structure", "label": "Ovule Structure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Anther Structure", "label": "Anther Structure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sexual Reproduction", "label": "Sexual Reproduction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Exine", "label": "Exine", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Intine", "label": "Intine", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen Grain Cytoplasm", "label": "Pollen Grain Cytoplasm", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollinium", "label": "Pollinium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inner Endexine", "label": "Inner Endexine", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Outer Ektexine", "label": "Outer Ektexine", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Continuous Foot Layer (inner)", "label": "Continuous Foot Layer (inner)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Discontinuous Baculate Layer (middle)", "label": "Discontinuous Baculate Layer (middle)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Discontinuous Tectum (outer, aids pollen identification)", "label": "Discontinuous Tectum (outer, aids pollen identification)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Made of Cellulose \u0026 Pectin", "label": "Made of Cellulose \u0026 Pectin", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Extends to form Pollen Tube during germination", "label": "Extends to form Pollen Tube during germination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rich in Starch and Unsaturated Oils", "label": "Rich in Starch and Unsaturated Oils", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Initially Uninucleate then becomes 2-3 celled", "label": "Initially Uninucleate then becomes 2-3 celled", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Characteristic mass formation in Calotropis and Orchids", "label": "Characteristic mass formation in Calotropis and Orchids", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endosperm Formation", "label": "Endosperm Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed Viability", "label": "Seed Viability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fruit Development", "label": "Fruit Development", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nuclear Endosperm (e.g., most crop plants)", "label": "Nuclear Endosperm (e.g., most crop plants)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cellular Endosperm (walls form after each division, e.g., Datura)", "label": "Cellular Endosperm (walls form after each division, e.g., Datura)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Helobial Endosperm (first division yields 2 cells, e.g., Asphodelus)", "label": "Helobial Endosperm (first division yields 2 cells, e.g., Asphodelus)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Xenia (male gene effects on endosperm)", "label": "Xenia (male gene effects on endosperm)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metaxenia (pollen effect on seed coat/pericarp)", "label": "Metaxenia (pollen effect on seed coat/pericarp)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Determined by Respiration (TTC test: colorless triphenyl tetrazolium chloride to pink formazan)", "label": "Determined by Respiration (TTC test: colorless triphenyl tetrazolium chloride to pink formazan)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Germination Test", "label": "Germination Test", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Lotus (\u003e1000 years), 2000-year-old Phoenix dactylifera, 10,000-year-old Lupinus arcticus", "label": "Examples: Lotus (\u003e1000 years), 2000-year-old Phoenix dactylifera, 10,000-year-old Lupinus arcticus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Parthenocarpic Fruits (seedless, useful in greenhouses and for quick processing)", "label": "Parthenocarpic Fruits (seedless, useful in greenhouses and for quick processing)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed Coat Formation (Testa from outer integuments, Tegmen from inner integuments)", "label": "Seed Coat Formation (Testa from outer integuments, Tegmen from inner integuments)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Additional Structures: Aril and Caruncle (e.g., castor bean caruncle aids water absorption)", "label": "Additional Structures: Aril and Caruncle (e.g., castor bean caruncle aids water absorption)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integuments", "label": "Integuments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chalaza (place of origin of integuments)", "label": "Chalaza (place of origin of integuments)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Micropyle (pore at end opposite chalaza)", "label": "Micropyle (pore at end opposite chalaza)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nucellus (parenchymatous tissue; tenuinucellate vs. crassinucellate)", "label": "Nucellus (parenchymatous tissue; tenuinucellate vs. crassinucellate)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Funiculus and Hilum (seed attachment and scar)", "label": "Funiculus and Hilum (seed attachment and scar)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Raphe (ridge on fusion of funiculus with ovule body)", "label": "Raphe (ridge on fusion of funiculus with ovule body)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: Unitegmic, Bitegmic, Tritegmic, Ategmic", "label": "Types: Unitegmic, Bitegmic, Tritegmic, Ategmic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Can provide additional coverings (e.g., aril in litchi)", "label": "Can provide additional coverings (e.g., aril in litchi)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Entomophily", "label": "Entomophily", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ornithophily", "label": "Ornithophily", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Chiropterophily", "label": "Chiropterophily", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hydrophily", "label": "Hydrophily", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Flowers: Colored (bluish-purplish, violet, yellow) and aromatic", "label": "Flowers: Colored (bluish-purplish, violet, yellow) and aromatic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reward: Nectar and Pollen (sticky due to pollenkitt)", "label": "Reward: Nectar and Pollen (sticky due to pollenkitt)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sticky Stigma", "label": "Sticky Stigma", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollinated by Birds (e.g., sunbirds and hummingbirds)", "label": "Pollinated by Birds (e.g., sunbirds and hummingbirds)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Flowers: Large, strong, abundant nectar \u0026 edible parts", "label": "Flowers: Large, strong, abundant nectar \u0026 edible parts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Bombax, Agave, Butea, Bignonia", "label": "Examples: Bombax, Agave, Butea, Bignonia", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollination by Bats", "label": "Pollination by Bats", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Flowers: Large, dull colored, strong aroma, abundant pollen and nectar", "label": "Flowers: Large, dull colored, strong aroma, abundant pollen and nectar", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Flowers: Small, colorless, odorless, nectarless", "label": "Flowers: Small, colorless, odorless, nectarless", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stigma: Long, sticky, unwettable", "label": "Stigma: Long, sticky, unwettable", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: Epihydrophily (on water surface, e.g., Vallisneria) and Hypohydrophily (underwater, e.g., Zostera)", "label": "Types: Epihydrophily (on water surface, e.g., Vallisneria) and Hypohydrophily (underwater, e.g., Zostera)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Dicot Embryogeny", "label": "Dicot Embryogeny", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Monocot Embryogeny", "label": "Monocot Embryogeny", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nucellar Embryony", "label": "Nucellar Embryony", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zygote divides unequally into a larger suspensor cell (toward micropyle) and a smaller embryo cell (toward antipodal region)", "label": "Zygote divides unequally into a larger suspensor cell (toward micropyle) and a smaller embryo cell (toward antipodal region)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Suspensor develops (haustorium and hypophysis; hypophysis forms radicle)", "label": "Suspensor develops (haustorium and hypophysis; hypophysis forms radicle)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo develops into globular, then heart-shaped stage leading to cotyledons and plumule", "label": "Embryo develops into globular, then heart-shaped stage leading to cotyledons and plumule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sagittaria Type: Zygote divides transversely producing a vesicular suspensor cell (micropylar) and embryo cell (chalazal)", "label": "Sagittaria Type: Zygote divides transversely producing a vesicular suspensor cell (micropylar) and embryo cell (chalazal)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo cell further divides forming terminal and middle cells, eventually a globular embryo", "label": "Embryo cell further divides forming terminal and middle cells, eventually a globular embryo", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wall Layers", "label": "Wall Layers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Tapetum", "label": "Tapetum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Epidermis (protective outer layer)", "label": "Epidermis (protective outer layer)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endothecium (cellulose thickening assists in anther dehiscence)", "label": "Endothecium (cellulose thickening assists in anther dehiscence)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Middle Layers (1\u20136 layers, degenerate at maturity)", "label": "Middle Layers (1\u20136 layers, degenerate at maturity)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tapetum (innermost layer in contact with PMCs)", "label": "Tapetum (innermost layer in contact with PMCs)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Secretary/Glandular Type (remains in situ, degenerates later)", "label": "Secretary/Glandular Type (remains in situ, degenerates later)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Amoeboid/Periplasmodial Type (protoplast migrates into pollen chamber, forms periplasmodium)", "label": "Amoeboid/Periplasmodial Type (protoplast migrates into pollen chamber, forms periplasmodium)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pre-fertilization", "label": "Pre-fertilization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Double Fertilization", "label": "Double Fertilization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Post-fertilization", "label": "Post-fertilization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen Grain Formation (microspore development, tetrad separation, two layered wall formation)", "label": "Pollen Grain Formation (microspore development, tetrad separation, two layered wall formation)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo Sac Formation", "label": "Embryo Sac Formation", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Flowering Plant Reproduction", "to": "Pollen Structure"}, {"arrows": "to", "from": "Flowering Plant Reproduction", "to": "Seed \u0026 Fruit Formation"}, {"arrows": "to", "from": "Flowering Plant Reproduction", "to": "Pollination"}, {"arrows": "to", "from": "Flowering Plant Reproduction", "to": "Embryogeny"}, {"arrows": "to", "from": "Flowering Plant Reproduction", "to": "Ovule Structure"}, {"arrows": "to", "from": "Flowering Plant Reproduction", "to": "Anther Structure"}, {"arrows": "to", "from": "Flowering Plant Reproduction", "to": "Sexual Reproduction"}, {"arrows": "to", "from": "Pollen Structure", "to": "Exine"}, {"arrows": "to", "from": "Pollen Structure", "to": "Intine"}, {"arrows": "to", "from": "Pollen Structure", "to": "Pollen Grain Cytoplasm"}, {"arrows": "to", "from": "Pollen Structure", "to": "Pollinium"}, {"arrows": "to", "from": "Seed \u0026 Fruit Formation", "to": "Endosperm Formation"}, {"arrows": "to", "from": "Seed \u0026 Fruit Formation", "to": "Seed Viability"}, {"arrows": "to", "from": "Seed \u0026 Fruit Formation", "to": "Fruit Development"}, {"arrows": "to", "from": "Pollination", "to": "Entomophily"}, {"arrows": "to", "from": "Pollination", "to": "Ornithophily"}, {"arrows": "to", "from": "Pollination", "to": "Chiropterophily"}, {"arrows": "to", "from": "Pollination", "to": "Hydrophily"}, {"arrows": "to", "from": "Embryogeny", "to": "Dicot Embryogeny"}, {"arrows": "to", "from": "Embryogeny", "to": "Monocot Embryogeny"}, {"arrows": "to", "from": "Embryogeny", "to": "Nucellar Embryony"}, {"arrows": "to", "from": "Ovule Structure", "to": "Integuments"}, {"arrows": "to", "from": "Ovule Structure", "to": "Chalaza (place of origin of integuments)"}, {"arrows": "to", "from": "Ovule Structure", "to": "Micropyle (pore at end opposite chalaza)"}, {"arrows": "to", "from": "Ovule Structure", "to": "Nucellus (parenchymatous tissue; tenuinucellate vs. crassinucellate)"}, {"arrows": "to", "from": "Ovule Structure", "to": "Funiculus and Hilum (seed attachment and scar)"}, {"arrows": "to", "from": "Ovule Structure", "to": "Raphe (ridge on fusion of funiculus with ovule body)"}, {"arrows": "to", "from": "Anther Structure", "to": "Wall Layers"}, {"arrows": "to", "from": "Anther Structure", "to": "Tapetum"}, {"arrows": "to", "from": "Sexual Reproduction", "to": "Pre-fertilization"}, {"arrows": "to", "from": "Sexual Reproduction", "to": "Double Fertilization"}, {"arrows": "to", "from": "Sexual Reproduction", "to": "Post-fertilization"}, {"arrows": "to", "from": "Exine", "to": "Inner Endexine"}, {"arrows": "to", "from": "Exine", "to": "Outer Ektexine"}, {"arrows": "to", "from": "Intine", "to": "Made of Cellulose \u0026 Pectin"}, {"arrows": "to", "from": "Intine", "to": "Extends to form Pollen Tube during germination"}, {"arrows": "to", "from": "Pollen Grain Cytoplasm", "to": "Rich in Starch and Unsaturated Oils"}, {"arrows": "to", "from": "Pollen Grain Cytoplasm", "to": "Initially Uninucleate then becomes 2-3 celled"}, {"arrows": "to", "from": "Pollinium", "to": "Characteristic mass formation in Calotropis and Orchids"}, {"arrows": "to", "from": "Outer Ektexine", "to": "Continuous Foot Layer (inner)"}, {"arrows": "to", "from": "Outer Ektexine", "to": "Discontinuous Baculate Layer (middle)"}, {"arrows": "to", "from": "Outer Ektexine", "to": "Discontinuous Tectum (outer, aids pollen identification)"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Nuclear Endosperm (e.g., most crop plants)"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Cellular Endosperm (walls form after each division, e.g., Datura)"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Helobial Endosperm (first division yields 2 cells, e.g., Asphodelus)"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Xenia (male gene effects on endosperm)"}, {"arrows": "to", "from": "Endosperm Formation", "to": "Metaxenia (pollen effect on seed coat/pericarp)"}, {"arrows": "to", "from": "Seed Viability", "to": "Determined by Respiration (TTC test: colorless triphenyl tetrazolium chloride to pink formazan)"}, {"arrows": "to", "from": "Seed Viability", "to": "Germination Test"}, {"arrows": "to", "from": "Seed Viability", "to": "Examples: Lotus (\u003e1000 years), 2000-year-old Phoenix dactylifera, 10,000-year-old Lupinus arcticus"}, {"arrows": "to", "from": "Fruit Development", "to": "Parthenocarpic Fruits (seedless, useful in greenhouses and for quick processing)"}, {"arrows": "to", "from": "Fruit Development", "to": "Seed Coat Formation (Testa from outer integuments, Tegmen from inner integuments)"}, {"arrows": "to", "from": "Fruit Development", "to": "Additional Structures: Aril and Caruncle (e.g., castor bean caruncle aids water absorption)"}, {"arrows": "to", "from": "Integuments", "to": "Types: Unitegmic, Bitegmic, Tritegmic, Ategmic"}, {"arrows": "to", "from": "Integuments", "to": "Can provide additional coverings (e.g., aril in litchi)"}, {"arrows": "to", "from": "Entomophily", "to": "Flowers: Colored (bluish-purplish, violet, yellow) and aromatic"}, {"arrows": "to", "from": "Entomophily", "to": "Reward: Nectar and Pollen (sticky due to pollenkitt)"}, {"arrows": "to", "from": "Entomophily", "to": "Sticky Stigma"}, {"arrows": "to", "from": "Ornithophily", "to": "Pollinated by Birds (e.g., sunbirds and hummingbirds)"}, {"arrows": "to", "from": "Ornithophily", "to": "Flowers: Large, strong, abundant nectar \u0026 edible parts"}, {"arrows": "to", "from": "Ornithophily", "to": "Examples: Bombax, Agave, Butea, Bignonia"}, {"arrows": "to", "from": "Chiropterophily", "to": "Pollination by Bats"}, {"arrows": "to", "from": "Chiropterophily", "to": "Flowers: Large, dull colored, strong aroma, abundant pollen and nectar"}, {"arrows": "to", "from": "Hydrophily", "to": "Flowers: Small, colorless, odorless, nectarless"}, {"arrows": "to", "from": "Hydrophily", "to": "Stigma: Long, sticky, unwettable"}, {"arrows": "to", "from": "Hydrophily", "to": "Types: Epihydrophily (on water surface, e.g., Vallisneria) and Hypohydrophily (underwater, e.g., Zostera)"}, {"arrows": "to", "from": "Dicot Embryogeny", "to": "Zygote divides unequally into a larger suspensor cell (toward micropyle) and a smaller embryo cell (toward antipodal region)"}, {"arrows": "to", "from": "Dicot Embryogeny", "to": "Suspensor develops (haustorium and hypophysis; hypophysis forms radicle)"}, {"arrows": "to", "from": "Dicot Embryogeny", "to": "Embryo develops into globular, then heart-shaped stage leading to cotyledons and plumule"}, {"arrows": "to", "from": "Monocot Embryogeny", "to": "Sagittaria Type: Zygote divides transversely producing a vesicular suspensor cell (micropylar) and embryo cell (chalazal)"}, {"arrows": "to", "from": "Monocot Embryogeny", "to": "Embryo cell further divides forming terminal and middle cells, eventually a globular embryo"}, {"arrows": "to", "from": "Wall Layers", "to": "Epidermis (protective outer layer)"}, {"arrows": "to", "from": "Wall Layers", "to": "Endothecium (cellulose thickening assists in anther dehiscence)"}, {"arrows": "to", "from": "Wall Layers", "to": "Middle Layers (1\u20136 layers, degenerate at maturity)"}, {"arrows": "to", "from": "Wall Layers", "to": "Tapetum (innermost layer in contact with PMCs)"}, {"arrows": "to", "from": "Tapetum", "to": "Secretary/Glandular Type (remains in situ, degenerates later)"}, {"arrows": "to", "from": "Tapetum", "to": "Amoeboid/Periplasmodial Type (protoplast migrates into pollen chamber, forms periplasmodium)"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Pollen Grain Formation (microspore development, tetrad separation, two layered wall formation)"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Embryo Sac Formation"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Pollination"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

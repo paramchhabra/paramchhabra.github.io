@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Radioactive Sample (Curie)", "label": "Radioactive Sample (Curie)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Radioactive Sample Definition", "label": "Radioactive Sample Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Radioactive Atom Disintegration", "label": "Radioactive Atom Disintegration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "De-Broglie Wavelength", "label": "De-Broglie Wavelength", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications of Photoelectric Cells", "label": "Applications of Photoelectric Cells", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Laws of Radioactive Decay", "label": "Laws of Radioactive Decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties of Cathode Rays", "label": "Properties of Cathode Rays", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cathode Ray Properties", "label": "Cathode Ray Properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Radioactive Sample Undergoes Disintegration", "label": "Radioactive Sample Undergoes Disintegration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "h-particle or g-particle emission", "label": "h-particle or g-particle emission", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interaction Affects Radiation Path", "label": "Interaction Affects Radiation Path", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Matter Explanation", "label": "Matter Explanation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rate of Nuclear Disintegration", "label": "Rate of Nuclear Disintegration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reflection, Refraction, etc.", "label": "Reflection, Refraction, etc.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gas Discharge \u0026 Air Direction", "label": "Gas Discharge \u0026 Air Direction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Position Doesn\u0027t Affect Propagation", "label": "Position Doesn\u0027t Affect Propagation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Based on Nature of Radiations", "label": "Based on Nature of Radiations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wavelength", "label": "Wavelength", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Minimum Wavelength exists", "label": "Minimum Wavelength exists", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Activity = Rutherford if disintegration is 10^6 per second", "label": "Activity = Rutherford if disintegration is 10^6 per second", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "N1 = Landing Orbit", "label": "N1 = Landing Orbit", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "X-Rays", "label": "X-Rays", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrons spread over remaining part of Atom", "label": "Electrons spread over remaining part of Atom", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Laws of Radioactivity Decay", "label": "Laws of Radioactivity Decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Photoelectric Effect", "label": "Photoelectric Effect", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cathode Rays Properties", "label": "Cathode Rays Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rutherford and Soddy studied", "label": "Rutherford and Soddy studied", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Suitable radiation incident", "label": "Suitable radiation incident", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When a suitable radiation incident on the electrode E, electrons emit.", "label": "When a suitable radiation incident on the electrode E, electrons emit.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Laws of Photoelectric Emission", "label": "Laws of Photoelectric Emission", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Television Studios", "label": "Television Studios", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Light to Electric", "label": "Light to Electric", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Collecting electrode made more and more +ve (iii)", "label": "Collecting electrode made more and more +ve (iii)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Critical Frequency", "label": "Critical Frequency", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metal Function", "label": "Metal Function", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electron absorbs radiation energy only if it jumps from lower to higher orbit", "label": "Electron absorbs radiation energy only if it jumps from lower to higher orbit", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Frequency \u003e Certain critical value, characteristics of that metal. The critical", "label": "Frequency \u003e Certain critical value, characteristics of that metal. The critical", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrons emitted, or electromagnetic radiation", "label": "Electrons emitted, or electromagnetic radiation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Working - Photo emissive Cells : It consists of two electrodes", "label": "Working - Photo emissive Cells : It consists of two electrodes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "High evacuated glass", "label": "High evacuated glass", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Radiations", "label": "Radiations", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Straight Line", "label": "Straight Line", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "cathode Rays", "label": "cathode Rays", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Alpha Particle", "label": "Alpha Particle", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Impact on Matter", "label": "Impact on Matter", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Radii are transferred", "label": "Radii are transferred", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wavelength varies", "label": "Wavelength varies", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gradually, the X-rays are called continuous x-rays.", "label": "Gradually, the X-rays are called continuous x-rays.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Natural radioactivity", "label": "Natural radioactivity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " Emission of some particle", "label": " Emission of some particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "NN ddt.", "label": "NN ddt.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Or loge0NN=KtOr0NN=ekt", "label": "Or loge0NN=KtOr0NN=ekt", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Transfered in thick walled lead", "label": "Transfered in thick walled lead", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "The emission", "label": "The emission", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "As the work required to be done to separate the nucleon and an infinite", "label": "As the work required to be done to separate the nucleon and an infinite", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electromagnetics", "label": "Electromagnetics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Number atoms", "label": "Number atoms", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Radiation is natural", "label": "Radiation is natural", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "From Equation", "label": "From Equation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "NNd tOr", "label": "NNd tOr", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Coolidge and Heat Exchange", "label": "Coolidge and Heat Exchange", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Application of cathode ray", "label": "Application of cathode ray", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Law of Radioactivity Decay", "label": "Law of Radioactivity Decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When a sutable radiation incident", "label": "When a sutable radiation incident", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emission particle", "label": "Emission particle", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Radioactive Sample (Curie)", "to": "Radioactive Sample Definition"}, {"arrows": "to", "from": "Radioactive Sample (Curie)", "to": "Radioactive Atom Disintegration"}, {"arrows": "to", "from": "Radioactive Sample (Curie)", "to": "De-Broglie Wavelength"}, {"arrows": "to", "from": "Radioactive Sample (Curie)", "to": "Applications of Photoelectric Cells"}, {"arrows": "to", "from": "Radioactive Sample (Curie)", "to": "Laws of Radioactive Decay"}, {"arrows": "to", "from": "Radioactive Sample (Curie)", "to": "Properties of Cathode Rays"}, {"arrows": "to", "from": "Radioactive Sample (Curie)", "to": "Cathode Ray Properties"}, {"arrows": "to", "from": "Radioactive Sample Definition", "to": "Radioactive Sample Undergoes Disintegration"}, {"arrows": "to", "from": "Radioactive Atom Disintegration", "to": "h-particle or g-particle emission"}, {"arrows": "to", "from": "Radioactive Atom Disintegration", "to": "Interaction Affects Radiation Path"}, {"arrows": "to", "from": "Radioactive Atom Disintegration", "to": "Matter Explanation"}, {"arrows": "to", "from": "Radioactive Atom Disintegration", "to": "Rate of Nuclear Disintegration"}, {"arrows": "to", "from": "De-Broglie Wavelength", "to": "Laws of Radioactivity Decay"}, {"arrows": "to", "from": "De-Broglie Wavelength", "to": "Photoelectric Effect"}, {"arrows": "to", "from": "De-Broglie Wavelength", "to": "Cathode Rays Properties"}, {"arrows": "to", "from": "Applications of Photoelectric Cells", "to": "Television Studios"}, {"arrows": "to", "from": "Applications of Photoelectric Cells", "to": "Laws of Radioactivity Decay"}, {"arrows": "to", "from": "Applications of Photoelectric Cells", "to": "Cathode Ray Properties"}, {"arrows": "to", "from": "Properties of Cathode Rays", "to": "Radiations"}, {"arrows": "to", "from": "h-particle or g-particle emission", "to": "Reflection, Refraction, etc."}, {"arrows": "to", "from": "h-particle or g-particle emission", "to": "Gas Discharge \u0026 Air Direction"}, {"arrows": "to", "from": "h-particle or g-particle emission", "to": "Position Doesn\u0027t Affect Propagation"}, {"arrows": "to", "from": "Matter Explanation", "to": "Based on Nature of Radiations"}, {"arrows": "to", "from": "Rate of Nuclear Disintegration", "to": "Wavelength"}, {"arrows": "to", "from": "Wavelength", "to": "Minimum Wavelength exists"}, {"arrows": "to", "from": "Wavelength", "to": "Activity = Rutherford if disintegration is 10^6 per second"}, {"arrows": "to", "from": "Minimum Wavelength exists", "to": "N1 = Landing Orbit"}, {"arrows": "to", "from": "Minimum Wavelength exists", "to": "X-Rays"}, {"arrows": "to", "from": "X-Rays", "to": "Activity = Rutherford if disintegration is 10^6 per second"}, {"arrows": "to", "from": "X-Rays", "to": "Electrons spread over remaining part of Atom"}, {"arrows": "to", "from": "Laws of Radioactivity Decay", "to": "Rutherford and Soddy studied"}, {"arrows": "to", "from": "Laws of Radioactivity Decay", "to": "Suitable radiation incident"}, {"arrows": "to", "from": "Photoelectric Effect", "to": "Applications of Photoelectric Cells"}, {"arrows": "to", "from": "Photoelectric Effect", "to": "Laws of Photoelectric Emission"}, {"arrows": "to", "from": "Cathode Rays Properties", "to": "Electrons emitted, or electromagnetic radiation"}, {"arrows": "to", "from": "Cathode Rays Properties", "to": "Working - Photo emissive Cells : It consists of two electrodes"}, {"arrows": "to", "from": "Cathode Rays Properties", "to": "Properties of Cathode Rays"}, {"arrows": "to", "from": "Rutherford and Soddy studied", "to": "When a suitable radiation incident on the electrode E, electrons emit."}, {"arrows": "to", "from": "Television Studios", "to": "Light to Electric"}, {"arrows": "to", "from": "Television Studios", "to": "Collecting electrode made more and more +ve (iii)"}, {"arrows": "to", "from": "Television Studios", "to": "Critical Frequency"}, {"arrows": "to", "from": "Light to Electric", "to": "Metal Function"}, {"arrows": "to", "from": "Collecting electrode made more and more +ve (iii)", "to": "Electron absorbs radiation energy only if it jumps from lower to higher orbit"}, {"arrows": "to", "from": "Collecting electrode made more and more +ve (iii)", "to": "Frequency \u003e Certain critical value, characteristics of that metal. The critical"}, {"arrows": "to", "from": "Electrons emitted, or electromagnetic radiation", "to": "Properties of Cathode Rays"}, {"arrows": "to", "from": "Working - Photo emissive Cells : It consists of two electrodes", "to": "High evacuated glass"}, {"arrows": "to", "from": "Radiations", "to": "Wavelength varies"}, {"arrows": "to", "from": "Radiations", "to": "Gradually, the X-rays are called continuous x-rays."}, {"arrows": "to", "from": "Straight Line", "to": "cathode Rays"}, {"arrows": "to", "from": "cathode Rays", "to": "Radiations"}, {"arrows": "to", "from": "cathode Rays", "to": "Alpha Particle"}, {"arrows": "to", "from": "Alpha Particle", "to": "Transfered in thick walled lead"}, {"arrows": "to", "from": "Alpha Particle", "to": "The emission"}, {"arrows": "to", "from": "Impact on Matter", "to": "Radii are transferred"}, {"arrows": "to", "from": "Impact on Matter", "to": "Properties of Cathode Rays"}, {"arrows": "to", "from": "Natural radioactivity", "to": " Emission of some particle"}, {"arrows": "to", "from": "Natural radioactivity", "to": "NN ddt."}, {"arrows": "to", "from": "Natural radioactivity", "to": "Or loge0NN=KtOr0NN=ekt"}, {"arrows": "to", "from": "Transfered in thick walled lead", "to": "As the work required to be done to separate the nucleon and an infinite"}, {"arrows": "to", "from": "The emission", "to": "Electromagnetics"}, {"arrows": "to", "from": "The emission", "to": "Natural radioactivity"}, {"arrows": "to", "from": "Electromagnetics", "to": "Number atoms"}, {"arrows": "to", "from": "Electromagnetics", "to": "Radiation is natural"}, {"arrows": "to", "from": "Number atoms", "to": "From Equation"}, {"arrows": "to", "from": "Number atoms", "to": "NNd tOr"}, {"arrows": "to", "from": "Radiation is natural", "to": "Coolidge and Heat Exchange"}, {"arrows": "to", "from": "Coolidge and Heat Exchange", "to": "Application of cathode ray"}, {"arrows": "to", "from": "Application of cathode ray", "to": "Application of cathode ray"}, {"arrows": "to", "from": "Application of cathode ray", "to": "Law of Radioactivity Decay"}, {"arrows": "to", "from": "Law of Radioactivity Decay", "to": "When a sutable radiation incident"}, {"arrows": "to", "from": "Law of Radioactivity Decay", "to": "From Equation"}, {"arrows": "to", "from": "When a sutable radiation incident", "to": "Emission particle"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

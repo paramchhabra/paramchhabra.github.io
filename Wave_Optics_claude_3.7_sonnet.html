@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Wave Optics", "label": "Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Interference", "label": "Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction", "label": "Diffraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polarization", "label": "Polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Huygens\u0027 Principle", "label": "Huygens\u0027 Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Optical Instruments", "label": "Optical Instruments", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conditions for Interference", "label": "Conditions for Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Path Difference", "label": "Path Difference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Phase Difference", "label": "Phase Difference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Resultant Intensity", "label": "Resultant Intensity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thin Film Interference", "label": "Thin Film Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Young\u0027s Double Slit Experiment", "label": "Young\u0027s Double Slit Experiment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Redistribution of energy in the form of maxima and minima", "label": "Redistribution of energy in the form of maxima and minima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Results from superposition of coherent waves", "label": "Results from superposition of coherent waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Same frequency/wavelength", "label": "Same frequency/wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Constant phase difference", "label": "Constant phase difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Same polarization state", "label": "Same polarization state", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Small amplitude", "label": "Small amplitude", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u0394x = x\u2082 - x\u2081", "label": "\u0394x = x\u2082 - x\u2081", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference = n\u03bb for constructive interference", "label": "Path difference = n\u03bb for constructive interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference = (n+1/2)\u03bb for destructive interference", "label": "Path difference = (n+1/2)\u03bb for destructive interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03c6 = 2\u03c0(\u0394x)/\u03bb", "label": "\u03c6 = 2\u03c0(\u0394x)/\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03c6 = 0, 2\u03c0, 4\u03c0... for constructive interference", "label": "\u03c6 = 0, 2\u03c0, 4\u03c0... for constructive interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03c6 = \u03c0, 3\u03c0, 5\u03c0... for destructive interference", "label": "\u03c6 = \u03c0, 3\u03c0, 5\u03c0... for destructive interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = I\u2081 + I\u2082 + 2\u221a(I\u2081I\u2082)cos\u03c6", "label": "I = I\u2081 + I\u2082 + 2\u221a(I\u2081I\u2082)cos\u03c6", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I\u2098\u2090\u2093 = (a\u2081 + a\u2082)\u00b2 = 4a\u2080\u00b2 (when a\u2081=a\u2082=a\u2080)", "label": "I\u2098\u2090\u2093 = (a\u2081 + a\u2082)\u00b2 = 4a\u2080\u00b2 (when a\u2081=a\u2082=a\u2080)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I\u2098\u1d62\u2099 = (a\u2081 - a\u2082)\u00b2 = 0 (when a\u2081=a\u2082)", "label": "I\u2098\u1d62\u2099 = (a\u2081 - a\u2082)\u00b2 = 0 (when a\u2081=a\u2082)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference between waves reflected from top and bottom surfaces", "label": "Interference between waves reflected from top and bottom surfaces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Applications: Anti-reflection coatings, Newton\u0027s rings", "label": "Applications: Anti-reflection coatings, Newton\u0027s rings", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For constructive: 2\u03bct = (m+1/2)\u03bb", "label": "For constructive: 2\u03bct = (m+1/2)\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For destructive: 2\u03bct = m\u03bb", "label": "For destructive: 2\u03bct = m\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Position of maxima: d sin\u03b8 = n\u03bb", "label": "Position of maxima: d sin\u03b8 = n\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Position of minima: d sin\u03b8 = (n+1/2)\u03bb", "label": "Position of minima: d sin\u03b8 = (n+1/2)\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fringe width: \u03b2 = \u03bbD/d", "label": "Fringe width: \u03b2 = \u03bbD/d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity distribution: I = 4I\u2080cos\u00b2(\u03c0dsin\u03b8/\u03bb)", "label": "Intensity distribution: I = 4I\u2080cos\u00b2(\u03c0dsin\u03b8/\u03bb)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Single Slit Diffraction", "label": "Single Slit Diffraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction at Straight Edge", "label": "Diffraction at Straight Edge", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction Grating", "label": "Diffraction Grating", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Resolving Power", "label": "Resolving Power", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Position of minima: a sin\u03b8 = n\u03bb", "label": "Position of minima: a sin\u03b8 = n\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Width of central maximum: 2\u03bb/a", "label": "Width of central maximum: 2\u03bb/a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity distribution: I = I\u2080(sin\u00b2\u03b1/\u03b1\u00b2) where \u03b1 = (\u03c0a sin\u03b8)/\u03bb", "label": "Intensity distribution: I = I\u2080(sin\u00b2\u03b1/\u03b1\u00b2) where \u03b1 = (\u03c0a sin\u03b8)/\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fresnel diffraction pattern", "label": "Fresnel diffraction pattern", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Alternating bright and dark fringes", "label": "Alternating bright and dark fringes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity gradually changes from maximum to minimum", "label": "Intensity gradually changes from maximum to minimum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multiple slits producing interference", "label": "Multiple slits producing interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Principal maxima: d sin\u03b8 = n\u03bb", "label": "Principal maxima: d sin\u03b8 = n\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "N slits produce N-2 secondary maxima between principal maxima", "label": "N slits produce N-2 secondary maxima between principal maxima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resolving power: R = Nm (N=number of slits, m=order)", "label": "Resolving power: R = Nm (N=number of slits, m=order)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ability to distinguish closely spaced objects", "label": "Ability to distinguish closely spaced objects", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rayleigh criterion: two objects resolvable if central maximum of one coincides with first minimum of other", "label": "Rayleigh criterion: two objects resolvable if central maximum of one coincides with first minimum of other", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For circular aperture: \u03b8\u2098\u1d62\u2099 = 1.22\u03bb/D", "label": "For circular aperture: \u03b8\u2098\u1d62\u2099 = 1.22\u03bb/D", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Polarization", "label": "Types of Polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Brewster\u0027s Law", "label": "Brewster\u0027s Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Malus\u0027 Law", "label": "Malus\u0027 Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polarization by Scattering", "label": "Polarization by Scattering", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Optical Activity", "label": "Optical Activity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plane polarization", "label": "Plane polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Circular polarization", "label": "Circular polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Elliptical polarization", "label": "Elliptical polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Unpolarized light: oscillations in all planes perpendicular to direction of propagation", "label": "Unpolarized light: oscillations in all planes perpendicular to direction of propagation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan\u03b8\u209a = n\u2082/n\u2081", "label": "tan\u03b8\u209a = n\u2082/n\u2081", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "At polarizing angle, reflected light is completely plane polarized", "label": "At polarizing angle, reflected light is completely plane polarized", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For glass: \u03b8\u209a \u2248 57\u00b0, for water: \u03b8\u209a \u2248 53\u00b0", "label": "For glass: \u03b8\u209a \u2248 57\u00b0, for water: \u03b8\u209a \u2248 53\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = I\u2080cos\u00b2\u03b8", "label": "I = I\u2080cos\u00b2\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 is angle between transmission axis of analyzer and polarizer", "label": "\u03b8 is angle between transmission axis of analyzer and polarizer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity of transmitted polarized light is half the intensity of unpolarized light", "label": "Intensity of transmitted polarized light is half the intensity of unpolarized light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Scattered light is partially or completely polarized", "label": "Scattered light is partially or completely polarized", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Light scattered at 90\u00b0 to incident beam is completely polarized", "label": "Light scattered at 90\u00b0 to incident beam is completely polarized", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Explains blue color of sky", "label": "Explains blue color of sky", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rotation of plane of polarization by certain substances", "label": "Rotation of plane of polarization by certain substances", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Specific rotation depends on substance, concentration, and path length", "label": "Specific rotation depends on substance, concentration, and path length", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Applications in sugar concentration measurement", "label": "Applications in sugar concentration measurement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Every point on wavefront acts as source of secondary wavelets", "label": "Every point on wavefront acts as source of secondary wavelets", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "New wavefront is envelope of secondary wavelets", "label": "New wavefront is envelope of secondary wavelets", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Explains reflection, refraction, and diffraction", "label": "Explains reflection, refraction, and diffraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wavefront: locus of all particles vibrating in phase", "label": "Wavefront: locus of all particles vibrating in phase", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Microscope", "label": "Microscope", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Telescope", "label": "Telescope", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction Limitations", "label": "Diffraction Limitations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resolution limited by diffraction", "label": "Resolution limited by diffraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resolving power: d = 0.61\u03bb/\u03bcsin\u03b8", "label": "Resolving power: d = 0.61\u03bb/\u03bcsin\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Immersion oil increases resolving power by increasing \u03bc", "label": "Immersion oil increases resolving power by increasing \u03bc", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Angular resolution: \u03b8 = 1.22\u03bb/D", "label": "Angular resolution: \u03b8 = 1.22\u03bb/D", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Larger aperture gives better resolution", "label": "Larger aperture gives better resolution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction limits ability to form clear images", "label": "Diffraction limits ability to form clear images", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ray optics is limiting case of wave optics", "label": "Ray optics is limiting case of wave optics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction effects become significant when aperture size comparable to wavelength", "label": "Diffraction effects become significant when aperture size comparable to wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sets fundamental limit on resolution of optical instruments", "label": "Sets fundamental limit on resolution of optical instruments", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Wave Optics", "to": "Interference"}, {"arrows": "to", "from": "Wave Optics", "to": "Diffraction"}, {"arrows": "to", "from": "Wave Optics", "to": "Polarization"}, {"arrows": "to", "from": "Wave Optics", "to": "Huygens\u0027 Principle"}, {"arrows": "to", "from": "Wave Optics", "to": "Optical Instruments"}, {"arrows": "to", "from": "Interference", "to": "Definition"}, {"arrows": "to", "from": "Interference", "to": "Conditions for Interference"}, {"arrows": "to", "from": "Interference", "to": "Path Difference"}, {"arrows": "to", "from": "Interference", "to": "Phase Difference"}, {"arrows": "to", "from": "Interference", "to": "Resultant Intensity"}, {"arrows": "to", "from": "Interference", "to": "Thin Film Interference"}, {"arrows": "to", "from": "Interference", "to": "Young\u0027s Double Slit Experiment"}, {"arrows": "to", "from": "Diffraction", "to": "Single Slit Diffraction"}, {"arrows": "to", "from": "Diffraction", "to": "Diffraction at Straight Edge"}, {"arrows": "to", "from": "Diffraction", "to": "Diffraction Grating"}, {"arrows": "to", "from": "Diffraction", "to": "Resolving Power"}, {"arrows": "to", "from": "Polarization", "to": "Types of Polarization"}, {"arrows": "to", "from": "Polarization", "to": "Brewster\u0027s Law"}, {"arrows": "to", "from": "Polarization", "to": "Malus\u0027 Law"}, {"arrows": "to", "from": "Polarization", "to": "Polarization by Scattering"}, {"arrows": "to", "from": "Polarization", "to": "Optical Activity"}, {"arrows": "to", "from": "Huygens\u0027 Principle", "to": "Every point on wavefront acts as source of secondary wavelets"}, {"arrows": "to", "from": "Huygens\u0027 Principle", "to": "New wavefront is envelope of secondary wavelets"}, {"arrows": "to", "from": "Huygens\u0027 Principle", "to": "Explains reflection, refraction, and diffraction"}, {"arrows": "to", "from": "Huygens\u0027 Principle", "to": "Wavefront: locus of all particles vibrating in phase"}, {"arrows": "to", "from": "Optical Instruments", "to": "Microscope"}, {"arrows": "to", "from": "Optical Instruments", "to": "Telescope"}, {"arrows": "to", "from": "Optical Instruments", "to": "Diffraction Limitations"}, {"arrows": "to", "from": "Definition", "to": "Redistribution of energy in the form of maxima and minima"}, {"arrows": "to", "from": "Definition", "to": "Results from superposition of coherent waves"}, {"arrows": "to", "from": "Conditions for Interference", "to": "Same frequency/wavelength"}, {"arrows": "to", "from": "Conditions for Interference", "to": "Constant phase difference"}, {"arrows": "to", "from": "Conditions for Interference", "to": "Same polarization state"}, {"arrows": "to", "from": "Conditions for Interference", "to": "Small amplitude"}, {"arrows": "to", "from": "Path Difference", "to": "\u0394x = x\u2082 - x\u2081"}, {"arrows": "to", "from": "Path Difference", "to": "Path difference = n\u03bb for constructive interference"}, {"arrows": "to", "from": "Path Difference", "to": "Path difference = (n+1/2)\u03bb for destructive interference"}, {"arrows": "to", "from": "Phase Difference", "to": "\u03c6 = 2\u03c0(\u0394x)/\u03bb"}, {"arrows": "to", "from": "Phase Difference", "to": "\u03c6 = 0, 2\u03c0, 4\u03c0... for constructive interference"}, {"arrows": "to", "from": "Phase Difference", "to": "\u03c6 = \u03c0, 3\u03c0, 5\u03c0... for destructive interference"}, {"arrows": "to", "from": "Resultant Intensity", "to": "I = I\u2081 + I\u2082 + 2\u221a(I\u2081I\u2082)cos\u03c6"}, {"arrows": "to", "from": "Resultant Intensity", "to": "I\u2098\u2090\u2093 = (a\u2081 + a\u2082)\u00b2 = 4a\u2080\u00b2 (when a\u2081=a\u2082=a\u2080)"}, {"arrows": "to", "from": "Resultant Intensity", "to": "I\u2098\u1d62\u2099 = (a\u2081 - a\u2082)\u00b2 = 0 (when a\u2081=a\u2082)"}, {"arrows": "to", "from": "Thin Film Interference", "to": "Interference between waves reflected from top and bottom surfaces"}, {"arrows": "to", "from": "Thin Film Interference", "to": "Applications: Anti-reflection coatings, Newton\u0027s rings"}, {"arrows": "to", "from": "Thin Film Interference", "to": "For constructive: 2\u03bct = (m+1/2)\u03bb"}, {"arrows": "to", "from": "Thin Film Interference", "to": "For destructive: 2\u03bct = m\u03bb"}, {"arrows": "to", "from": "Young\u0027s Double Slit Experiment", "to": "Position of maxima: d sin\u03b8 = n\u03bb"}, {"arrows": "to", "from": "Young\u0027s Double Slit Experiment", "to": "Position of minima: d sin\u03b8 = (n+1/2)\u03bb"}, {"arrows": "to", "from": "Young\u0027s Double Slit Experiment", "to": "Fringe width: \u03b2 = \u03bbD/d"}, {"arrows": "to", "from": "Young\u0027s Double Slit Experiment", "to": "Intensity distribution: I = 4I\u2080cos\u00b2(\u03c0dsin\u03b8/\u03bb)"}, {"arrows": "to", "from": "Single Slit Diffraction", "to": "Position of minima: a sin\u03b8 = n\u03bb"}, {"arrows": "to", "from": "Single Slit Diffraction", "to": "Width of central maximum: 2\u03bb/a"}, {"arrows": "to", "from": "Single Slit Diffraction", "to": "Intensity distribution: I = I\u2080(sin\u00b2\u03b1/\u03b1\u00b2) where \u03b1 = (\u03c0a sin\u03b8)/\u03bb"}, {"arrows": "to", "from": "Diffraction at Straight Edge", "to": "Fresnel diffraction pattern"}, {"arrows": "to", "from": "Diffraction at Straight Edge", "to": "Alternating bright and dark fringes"}, {"arrows": "to", "from": "Diffraction at Straight Edge", "to": "Intensity gradually changes from maximum to minimum"}, {"arrows": "to", "from": "Diffraction Grating", "to": "Multiple slits producing interference"}, {"arrows": "to", "from": "Diffraction Grating", "to": "Principal maxima: d sin\u03b8 = n\u03bb"}, {"arrows": "to", "from": "Diffraction Grating", "to": "N slits produce N-2 secondary maxima between principal maxima"}, {"arrows": "to", "from": "Diffraction Grating", "to": "Resolving power: R = Nm (N=number of slits, m=order)"}, {"arrows": "to", "from": "Resolving Power", "to": "Ability to distinguish closely spaced objects"}, {"arrows": "to", "from": "Resolving Power", "to": "Rayleigh criterion: two objects resolvable if central maximum of one coincides with first minimum of other"}, {"arrows": "to", "from": "Resolving Power", "to": "For circular aperture: \u03b8\u2098\u1d62\u2099 = 1.22\u03bb/D"}, {"arrows": "to", "from": "Types of Polarization", "to": "Plane polarization"}, {"arrows": "to", "from": "Types of Polarization", "to": "Circular polarization"}, {"arrows": "to", "from": "Types of Polarization", "to": "Elliptical polarization"}, {"arrows": "to", "from": "Types of Polarization", "to": "Unpolarized light: oscillations in all planes perpendicular to direction of propagation"}, {"arrows": "to", "from": "Brewster\u0027s Law", "to": "tan\u03b8\u209a = n\u2082/n\u2081"}, {"arrows": "to", "from": "Brewster\u0027s Law", "to": "At polarizing angle, reflected light is completely plane polarized"}, {"arrows": "to", "from": "Brewster\u0027s Law", "to": "For glass: \u03b8\u209a \u2248 57\u00b0, for water: \u03b8\u209a \u2248 53\u00b0"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "I = I\u2080cos\u00b2\u03b8"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "\u03b8 is angle between transmission axis of analyzer and polarizer"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "Intensity of transmitted polarized light is half the intensity of unpolarized light"}, {"arrows": "to", "from": "Polarization by Scattering", "to": "Scattered light is partially or completely polarized"}, {"arrows": "to", "from": "Polarization by Scattering", "to": "Light scattered at 90\u00b0 to incident beam is completely polarized"}, {"arrows": "to", "from": "Polarization by Scattering", "to": "Explains blue color of sky"}, {"arrows": "to", "from": "Optical Activity", "to": "Rotation of plane of polarization by certain substances"}, {"arrows": "to", "from": "Optical Activity", "to": "Specific rotation depends on substance, concentration, and path length"}, {"arrows": "to", "from": "Optical Activity", "to": "Applications in sugar concentration measurement"}, {"arrows": "to", "from": "Microscope", "to": "Resolution limited by diffraction"}, {"arrows": "to", "from": "Microscope", "to": "Resolving power: d = 0.61\u03bb/\u03bcsin\u03b8"}, {"arrows": "to", "from": "Microscope", "to": "Immersion oil increases resolving power by increasing \u03bc"}, {"arrows": "to", "from": "Telescope", "to": "Angular resolution: \u03b8 = 1.22\u03bb/D"}, {"arrows": "to", "from": "Telescope", "to": "Larger aperture gives better resolution"}, {"arrows": "to", "from": "Telescope", "to": "Diffraction limits ability to form clear images"}, {"arrows": "to", "from": "Diffraction Limitations", "to": "Ray optics is limiting case of wave optics"}, {"arrows": "to", "from": "Diffraction Limitations", "to": "Diffraction effects become significant when aperture size comparable to wavelength"}, {"arrows": "to", "from": "Diffraction Limitations", "to": "Sets fundamental limit on resolution of optical instruments"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

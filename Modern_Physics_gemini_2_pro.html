@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Radioactivity", "label": "Radioactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Natural Radioactivity", "label": "Natural Radioactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Radioactive Decay Law", "label": "Radioactive Decay Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Units of Radioactivity", "label": "Units of Radioactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Alpha Decay", "label": "Alpha Decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Beta Decay", "label": "Beta Decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gamma Decay", "label": "Gamma Decay", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Spontaneous emission of particles or electromagnetic radiation.", "label": "Definition: Spontaneous emission of particles or electromagnetic radiation.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Uranium, Radium", "label": "Example: Uranium, Radium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Statement: Rate of disintegration is proportional to the number of atoms present.", "label": "Statement: Rate of disintegration is proportional to the number of atoms present.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: dN/dt = -\u03bbN", "label": "Formula: dN/dt = -\u03bbN", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "N = N\u2080e^(-\u03bbt)", "label": "N = N\u2080e^(-\u03bbt)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Logarithmic Form: log(N/N\u2080) = -\u03bbt", "label": "Logarithmic Form: log(N/N\u2080) = -\u03bbt", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Half-life (T\u2081/\u2082): Time for half the atoms to decay.", "label": "Half-life (T\u2081/\u2082): Time for half the atoms to decay.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T\u2081/\u2082 = 0.693/\u03bb", "label": "T\u2081/\u2082 = 0.693/\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mean/Average Life (\u03c4): \u03c4 = 1/\u03bb", "label": "Mean/Average Life (\u03c4): \u03c4 = 1/\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Curie (Ci): Activity of a sample undergoing 3.7 x 10\u00b9\u2070 disintegrations per second.", "label": "Curie (Ci): Activity of a sample undergoing 3.7 x 10\u00b9\u2070 disintegrations per second.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rutherford (Rd): Activity of a sample undergoing 10\u2076 disintegrations per second.", "label": "Rutherford (Rd): Activity of a sample undergoing 10\u2076 disintegrations per second.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Becquerel (Bq): SI unit, 1 disintegration per second.", "label": "Becquerel (Bq): SI unit, 1 disintegration per second.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emission of an alpha particle (Helium nucleus, \u2074\u2082He).", "label": "Emission of an alpha particle (Helium nucleus, \u2074\u2082He).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Atomic number decreases by 2, mass number decreases by 4.", "label": "Atomic number decreases by 2, mass number decreases by 4.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example:  \u00b2\u00b3\u2078\u2089\u2082U \u2192 \u00b2\u00b3\u2074\u2089\u2080Th + \u2074\u2082He", "label": "Example:  \u00b2\u00b3\u2078\u2089\u2082U \u2192 \u00b2\u00b3\u2074\u2089\u2080Th + \u2074\u2082He", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b2\u207b decay: Emission of an electron (\u2070\u208b\u2081e) and an antineutrino.", "label": "\u03b2\u207b decay: Emission of an electron (\u2070\u208b\u2081e) and an antineutrino.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Atomic number increases by 1, mass number remains the same.", "label": "Atomic number increases by 1, mass number remains the same.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b2\u207a decay: Emission of a positron (\u2070\u208a\u2081e) and a neutrino.", "label": "\u03b2\u207a decay: Emission of a positron (\u2070\u208a\u2081e) and a neutrino.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Atomic number decreases by 1, mass number remains the same.", "label": "Atomic number decreases by 1, mass number remains the same.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example (\u03b2\u207b): \u00b9\u2074\u2086C \u2192 \u00b9\u2074\u2087N + \u2070\u208b\u2081e + \u03bd\u0304", "label": "Example (\u03b2\u207b): \u00b9\u2074\u2086C \u2192 \u00b9\u2074\u2087N + \u2070\u208b\u2081e + \u03bd\u0304", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emission of a high-energy photon (\u03b3).", "label": "Emission of a high-energy photon (\u03b3).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "No change in atomic number or mass number.", "label": "No change in atomic number or mass number.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Occurs after alpha or beta decay to release excess energy.", "label": "Occurs after alpha or beta decay to release excess energy.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Excited state of a nucleus emits \u03b3 photon.", "label": "Example: Excited state of a nucleus emits \u03b3 photon.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Nuclear Reactions", "label": "Nuclear Reactions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nuclear Fission", "label": "Nuclear Fission", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nuclear Fusion", "label": "Nuclear Fusion", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Chain Reaction", "label": "Chain Reaction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Splitting of a heavy nucleus into two smaller nuclei.", "label": "Splitting of a heavy nucleus into two smaller nuclei.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Induced by neutron absorption.", "label": "Induced by neutron absorption.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Releases large amounts of energy.", "label": "Releases large amounts of energy.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u00b2\u00b3\u2075\u2089\u2082U + \u00b9\u2080n \u2192 \u00b9\u2074\u00b9\u2085\u2086Ba + \u2079\u00b2\u2083\u2086Kr + 3\u00b9\u2080n + Energy", "label": "Example: \u00b2\u00b3\u2075\u2089\u2082U + \u00b9\u2080n \u2192 \u00b9\u2074\u00b9\u2085\u2086Ba + \u2079\u00b2\u2083\u2086Kr + 3\u00b9\u2080n + Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Combining of two light nuclei to form a heavier nucleus.", "label": "Combining of two light nuclei to form a heavier nucleus.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Releases even larger amounts of energy than fission.", "label": "Releases even larger amounts of energy than fission.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Requires extremely high temperatures.", "label": "Requires extremely high temperatures.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u00b9\u2081H + \u00b9\u2081H \u2192 \u00b2\u2081H + \u2070\u208a\u2081e + \u03bd", "label": "Example: \u00b9\u2081H + \u00b9\u2081H \u2192 \u00b2\u2081H + \u2070\u208a\u2081e + \u03bd", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Self-sustaining fission reaction.", "label": "Self-sustaining fission reaction.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Neutrons released from one fission cause further fissions.", "label": "Neutrons released from one fission cause further fissions.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Controlled in nuclear reactors, uncontrolled in atomic bombs.", "label": "Controlled in nuclear reactors, uncontrolled in atomic bombs.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Nuclear Reactor", "label": "Nuclear Reactor", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Components", "label": "Components", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Working", "label": "Working", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fuel: Fissile material (e.g., U-235).", "label": "Fuel: Fissile material (e.g., U-235).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Moderator: Slows down neutrons (e.g., graphite, heavy water).", "label": "Moderator: Slows down neutrons (e.g., graphite, heavy water).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Control Rods: Absorb neutrons to control the reaction rate (e.g., cadmium, boron).", "label": "Control Rods: Absorb neutrons to control the reaction rate (e.g., cadmium, boron).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coolant: Removes heat from the reactor core (e.g., water, heavy water).", "label": "Coolant: Removes heat from the reactor core (e.g., water, heavy water).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shielding: Protects from radiation.", "label": "Shielding: Protects from radiation.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Controlled chain reaction.", "label": "Controlled chain reaction.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heat generated is used to produce steam.", "label": "Heat generated is used to produce steam.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Steam drives turbines to generate electricity.", "label": "Steam drives turbines to generate electricity.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Bohr\u0027s Atomic Model", "label": "Bohr\u0027s Atomic Model", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Postulates", "label": "Postulates", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Limitations", "label": "Limitations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrons revolve in specific orbits without emitting radiation.", "label": "Electrons revolve in specific orbits without emitting radiation.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Angular momentum is quantized: mvr = nh/2\u03c0", "label": "Angular momentum is quantized: mvr = nh/2\u03c0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy is emitted or absorbed when electrons jump between orbits: \u0394E = h\u03bd = E\u2082 - E\u2081", "label": "Energy is emitted or absorbed when electrons jump between orbits: \u0394E = h\u03bd = E\u2082 - E\u2081", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Radius of nth orbit: r\u2099 = (0.529 \u00c5)n\u00b2/Z ; (1\u00c5 = 10\u207b\u00b9\u2070 m); r\u2099\u221d n\u00b2", "label": "Radius of nth orbit: r\u2099 = (0.529 \u00c5)n\u00b2/Z ; (1\u00c5 = 10\u207b\u00b9\u2070 m); r\u2099\u221d n\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Velocity of electron in nth orbit v\u2099= (2.18 x10^6 m/s) * Z/n", "label": "Velocity of electron in nth orbit v\u2099= (2.18 x10^6 m/s) * Z/n", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Only applicable to single-electron species (H, He\u207a, Li\u00b2\u207a, etc.).", "label": "Only applicable to single-electron species (H, He\u207a, Li\u00b2\u207a, etc.).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Doesn\u0027t explain the intensities of spectral lines.", "label": "Doesn\u0027t explain the intensities of spectral lines.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Doesn\u0027t explain the fine structure of spectral lines.", "label": "Doesn\u0027t explain the fine structure of spectral lines.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Violates Heisenberg\u0027s Uncertainty Principle.", "label": "Violates Heisenberg\u0027s Uncertainty Principle.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Hydrogen Spectrum", "label": "Hydrogen Spectrum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Series of spectral lines.", "label": "Series of spectral lines.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Lyman Series: Ultraviolet, transitions to n\u2081 = 1.", "label": "Lyman Series: Ultraviolet, transitions to n\u2081 = 1.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Balmer Series: Visible, transitions to n\u2082 = 2.", "label": "Balmer Series: Visible, transitions to n\u2082 = 2.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Paschen Series: Infrared, transitions to n\u2083 = 3.", "label": "Paschen Series: Infrared, transitions to n\u2083 = 3.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Brackett Series: Infrared, transitions to n\u2084 = 4.", "label": "Brackett Series: Infrared, transitions to n\u2084 = 4.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pfund Series: Infrared, transitions to n\u2085= 5.", "label": "Pfund Series: Infrared, transitions to n\u2085= 5.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: 1/\u03bb = R(1/n\u2081\u00b2 - 1/n\u2082\u00b2), where R is the Rydberg constant (1.097 x 10\u2077 m\u207b\u00b9).", "label": "Formula: 1/\u03bb = R(1/n\u2081\u00b2 - 1/n\u2082\u00b2), where R is the Rydberg constant (1.097 x 10\u2077 m\u207b\u00b9).", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "X-rays", "label": "X-rays", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Production", "label": "Production", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties", "label": "Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types", "label": "Types", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fast-moving electrons striking a metal target.", "label": "Fast-moving electrons striking a metal target.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Deceleration of electrons produces X-rays (Bremsstrahlung).", "label": "Deceleration of electrons produces X-rays (Bremsstrahlung).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Characteristic X-rays: Electrons knocking out inner-shell electrons of the target atoms.", "label": "Characteristic X-rays: Electrons knocking out inner-shell electrons of the target atoms.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electromagnetic radiation of very short wavelength (0.1 \u00c5 to 10 \u00c5).", "label": "Electromagnetic radiation of very short wavelength (0.1 \u00c5 to 10 \u00c5).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Travel in straight lines.", "label": "Travel in straight lines.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Unaffected by electric and magnetic fields.", "label": "Unaffected by electric and magnetic fields.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Can ionize gases.", "label": "Can ionize gases.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Can penetrate matter.", "label": "Can penetrate matter.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity of x ray depend upon atomic number of element", "label": "Intensity of x ray depend upon atomic number of element", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Continuous X-rays: Produced by Bremsstrahlung, have a range of wavelengths.", "label": "Continuous X-rays: Produced by Bremsstrahlung, have a range of wavelengths.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Characteristic X-rays: Produced by electron transitions in the target atoms, have specific wavelengths.", "label": "Characteristic X-rays: Produced by electron transitions in the target atoms, have specific wavelengths.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Moseley\u0027s Law", "label": "Moseley\u0027s Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Relationship between the frequency of characteristic X-rays and the atomic number (Z) of the target element.", "label": "Relationship between the frequency of characteristic X-rays and the atomic number (Z) of the target element.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: \u221a\u03bd = a(Z - b), where \u03bd is frequency, a and b are constants.", "label": "Formula: \u221a\u03bd = a(Z - b), where \u03bd is frequency, a and b are constants.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Photoelectric Effect", "label": "Photoelectric Effect", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Laws", "label": "Laws", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Function", "label": "Work Function", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications", "label": "Applications", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stopping Potential", "label": "Stopping Potential", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emission of electrons from a metal surface when light of sufficient frequency shines on it.", "label": "Emission of electrons from a metal surface when light of sufficient frequency shines on it.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The number of photoelectrons emitted is directly proportional to the intensity of the incident light.", "label": "The number of photoelectrons emitted is directly proportional to the intensity of the incident light.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The maximum kinetic energy of the photoelectrons is independent of the intensity of the incident light.", "label": "The maximum kinetic energy of the photoelectrons is independent of the intensity of the incident light.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The maximum kinetic energy of the photoelectrons depends on the frequency of the incident light.", "label": "The maximum kinetic energy of the photoelectrons depends on the frequency of the incident light.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "There is a threshold frequency (\u03bd\u2080) below which no photoelectrons are emitted, regardless of the intensity.", "label": "There is a threshold frequency (\u03bd\u2080) below which no photoelectrons are emitted, regardless of the intensity.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Work Function (\u03a6)", "label": "Work Function (\u03a6)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum energy required to remove an electron from the metal surface.", "label": "Minimum energy required to remove an electron from the metal surface.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03a6 = h\u03bd\u2080", "label": "\u03a6 = h\u03bd\u2080", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Different for different metals.", "label": "Different for different metals.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Photoelectric cells", "label": "Photoelectric cells", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Television studio to convert the light", "label": "Television studio to convert the light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Automatic door", "label": "Automatic door", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measure intensity of radiation", "label": "Measure intensity of radiation", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Stopping Potential (V\u2080)", "label": "Stopping Potential (V\u2080)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The negative potential applied to the collecting electrode that stops the most energetic photoelectrons.", "label": "The negative potential applied to the collecting electrode that stops the most energetic photoelectrons.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "eV\u2080 = (1/2)mv\u00b2_max = h\u03bd - \u03a6", "label": "eV\u2080 = (1/2)mv\u00b2_max = h\u03bd - \u03a6", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Einstein Photoelectric Equation", "label": "Einstein Photoelectric Equation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Formula", "label": "Formula", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Explanation", "label": "Explanation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "h\u03bd = \u03a6 + (1/2)mv\u00b2_max", "label": "h\u03bd = \u03a6 + (1/2)mv\u00b2_max", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "h\u03bd = h\u03bd\u2080 + eV\u2080", "label": "h\u03bd = h\u03bd\u2080 + eV\u2080", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy of incident photon (h\u03bd) is used to overcome the work function (\u03a6) and provide kinetic energy to the emitted electron.", "label": "Energy of incident photon (h\u03bd) is used to overcome the work function (\u03a6) and provide kinetic energy to the emitted electron.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "de Broglie Hypothesis", "label": "de Broglie Hypothesis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave-particle duality.", "label": "Wave-particle duality.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "de Broglie wavelength: \u03bb = h/p = h/mv, where p is momentum.", "label": "de Broglie wavelength: \u03bb = h/p = h/mv, where p is momentum.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Applicable to all particles, but more significant for microscopic particles.", "label": "Applicable to all particles, but more significant for microscopic particles.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Rutherford Scattering", "label": "Rutherford Scattering", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Impact Parameter", "label": "Impact Parameter", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Scattering Angle", "label": "Scattering Angle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Distance of Closest Approach", "label": "Distance of Closest Approach", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Perpendicular distance of the velocity vector of the alpha particle from the center of the nucleus.", "label": "Perpendicular distance of the velocity vector of the alpha particle from the center of the nucleus.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: b = (Ze\u00b2cot(\u03b8/2))/(4\u03c0\u03b5\u2080K) where K is Kinetic energy of alpha particle.", "label": "Formula: b = (Ze\u00b2cot(\u03b8/2))/(4\u03c0\u03b5\u2080K) where K is Kinetic energy of alpha particle.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Angle by which an alpha particle is deflected from its original path.", "label": "Angle by which an alpha particle is deflected from its original path.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inversely related to the impact parameter.", "label": "Inversely related to the impact parameter.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The smallest distance between the alpha particle and the nucleus.", "label": "The smallest distance between the alpha particle and the nucleus.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula for head on colision: r\u2080 = (2Ze\u00b2)/(4\u03c0\u03b5\u2080K)", "label": "Formula for head on colision: r\u2080 = (2Ze\u00b2)/(4\u03c0\u03b5\u2080K)", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Radioactivity", "to": "Natural Radioactivity"}, {"arrows": "to", "from": "Radioactivity", "to": "Radioactive Decay Law"}, {"arrows": "to", "from": "Radioactivity", "to": "Units of Radioactivity"}, {"arrows": "to", "from": "Radioactivity", "to": "Alpha Decay"}, {"arrows": "to", "from": "Radioactivity", "to": "Beta Decay"}, {"arrows": "to", "from": "Radioactivity", "to": "Gamma Decay"}, {"arrows": "to", "from": "Natural Radioactivity", "to": "Definition: Spontaneous emission of particles or electromagnetic radiation."}, {"arrows": "to", "from": "Natural Radioactivity", "to": "Example: Uranium, Radium"}, {"arrows": "to", "from": "Radioactive Decay Law", "to": "Statement: Rate of disintegration is proportional to the number of atoms present."}, {"arrows": "to", "from": "Radioactive Decay Law", "to": "Formula: dN/dt = -\u03bbN"}, {"arrows": "to", "from": "Radioactive Decay Law", "to": "N = N\u2080e^(-\u03bbt)"}, {"arrows": "to", "from": "Radioactive Decay Law", "to": "Logarithmic Form: log(N/N\u2080) = -\u03bbt"}, {"arrows": "to", "from": "Radioactive Decay Law", "to": "Half-life (T\u2081/\u2082): Time for half the atoms to decay."}, {"arrows": "to", "from": "Radioactive Decay Law", "to": "T\u2081/\u2082 = 0.693/\u03bb"}, {"arrows": "to", "from": "Radioactive Decay Law", "to": "Mean/Average Life (\u03c4): \u03c4 = 1/\u03bb"}, {"arrows": "to", "from": "Units of Radioactivity", "to": "Curie (Ci): Activity of a sample undergoing 3.7 x 10\u00b9\u2070 disintegrations per second."}, {"arrows": "to", "from": "Units of Radioactivity", "to": "Rutherford (Rd): Activity of a sample undergoing 10\u2076 disintegrations per second."}, {"arrows": "to", "from": "Units of Radioactivity", "to": "Becquerel (Bq): SI unit, 1 disintegration per second."}, {"arrows": "to", "from": "Alpha Decay", "to": "Emission of an alpha particle (Helium nucleus, \u2074\u2082He)."}, {"arrows": "to", "from": "Alpha Decay", "to": "Atomic number decreases by 2, mass number decreases by 4."}, {"arrows": "to", "from": "Alpha Decay", "to": "Example:  \u00b2\u00b3\u2078\u2089\u2082U \u2192 \u00b2\u00b3\u2074\u2089\u2080Th + \u2074\u2082He"}, {"arrows": "to", "from": "Beta Decay", "to": "\u03b2\u207b decay: Emission of an electron (\u2070\u208b\u2081e) and an antineutrino."}, {"arrows": "to", "from": "Beta Decay", "to": "Atomic number increases by 1, mass number remains the same."}, {"arrows": "to", "from": "Beta Decay", "to": "\u03b2\u207a decay: Emission of a positron (\u2070\u208a\u2081e) and a neutrino."}, {"arrows": "to", "from": "Beta Decay", "to": "Atomic number decreases by 1, mass number remains the same."}, {"arrows": "to", "from": "Beta Decay", "to": "Example (\u03b2\u207b): \u00b9\u2074\u2086C \u2192 \u00b9\u2074\u2087N + \u2070\u208b\u2081e + \u03bd\u0304"}, {"arrows": "to", "from": "Gamma Decay", "to": "Emission of a high-energy photon (\u03b3)."}, {"arrows": "to", "from": "Gamma Decay", "to": "No change in atomic number or mass number."}, {"arrows": "to", "from": "Gamma Decay", "to": "Occurs after alpha or beta decay to release excess energy."}, {"arrows": "to", "from": "Gamma Decay", "to": "Example: Excited state of a nucleus emits \u03b3 photon."}, {"arrows": "to", "from": "Nuclear Reactions", "to": "Nuclear Fission"}, {"arrows": "to", "from": "Nuclear Reactions", "to": "Nuclear Fusion"}, {"arrows": "to", "from": "Nuclear Reactions", "to": "Chain Reaction"}, {"arrows": "to", "from": "Nuclear Fission", "to": "Splitting of a heavy nucleus into two smaller nuclei."}, {"arrows": "to", "from": "Nuclear Fission", "to": "Induced by neutron absorption."}, {"arrows": "to", "from": "Nuclear Fission", "to": "Releases large amounts of energy."}, {"arrows": "to", "from": "Nuclear Fission", "to": "Example: \u00b2\u00b3\u2075\u2089\u2082U + \u00b9\u2080n \u2192 \u00b9\u2074\u00b9\u2085\u2086Ba + \u2079\u00b2\u2083\u2086Kr + 3\u00b9\u2080n + Energy"}, {"arrows": "to", "from": "Nuclear Fusion", "to": "Combining of two light nuclei to form a heavier nucleus."}, {"arrows": "to", "from": "Nuclear Fusion", "to": "Releases even larger amounts of energy than fission."}, {"arrows": "to", "from": "Nuclear Fusion", "to": "Requires extremely high temperatures."}, {"arrows": "to", "from": "Nuclear Fusion", "to": "Example: \u00b9\u2081H + \u00b9\u2081H \u2192 \u00b2\u2081H + \u2070\u208a\u2081e + \u03bd"}, {"arrows": "to", "from": "Chain Reaction", "to": "Self-sustaining fission reaction."}, {"arrows": "to", "from": "Chain Reaction", "to": "Neutrons released from one fission cause further fissions."}, {"arrows": "to", "from": "Chain Reaction", "to": "Controlled in nuclear reactors, uncontrolled in atomic bombs."}, {"arrows": "to", "from": "Nuclear Reactor", "to": "Components"}, {"arrows": "to", "from": "Nuclear Reactor", "to": "Working"}, {"arrows": "to", "from": "Components", "to": "Fuel: Fissile material (e.g., U-235)."}, {"arrows": "to", "from": "Components", "to": "Moderator: Slows down neutrons (e.g., graphite, heavy water)."}, {"arrows": "to", "from": "Components", "to": "Control Rods: Absorb neutrons to control the reaction rate (e.g., cadmium, boron)."}, {"arrows": "to", "from": "Components", "to": "Coolant: Removes heat from the reactor core (e.g., water, heavy water)."}, {"arrows": "to", "from": "Components", "to": "Shielding: Protects from radiation."}, {"arrows": "to", "from": "Working", "to": "Controlled chain reaction."}, {"arrows": "to", "from": "Working", "to": "Heat generated is used to produce steam."}, {"arrows": "to", "from": "Working", "to": "Steam drives turbines to generate electricity."}, {"arrows": "to", "from": "Bohr\u0027s Atomic Model", "to": "Postulates"}, {"arrows": "to", "from": "Bohr\u0027s Atomic Model", "to": "Limitations"}, {"arrows": "to", "from": "Postulates", "to": "Electrons revolve in specific orbits without emitting radiation."}, {"arrows": "to", "from": "Postulates", "to": "Angular momentum is quantized: mvr = nh/2\u03c0"}, {"arrows": "to", "from": "Postulates", "to": "Energy is emitted or absorbed when electrons jump between orbits: \u0394E = h\u03bd = E\u2082 - E\u2081"}, {"arrows": "to", "from": "Postulates", "to": "Radius of nth orbit: r\u2099 = (0.529 \u00c5)n\u00b2/Z ; (1\u00c5 = 10\u207b\u00b9\u2070 m); r\u2099\u221d n\u00b2"}, {"arrows": "to", "from": "Postulates", "to": "Velocity of electron in nth orbit v\u2099= (2.18 x10^6 m/s) * Z/n"}, {"arrows": "to", "from": "Limitations", "to": "Only applicable to single-electron species (H, He\u207a, Li\u00b2\u207a, etc.)."}, {"arrows": "to", "from": "Limitations", "to": "Doesn\u0027t explain the intensities of spectral lines."}, {"arrows": "to", "from": "Limitations", "to": "Doesn\u0027t explain the fine structure of spectral lines."}, {"arrows": "to", "from": "Limitations", "to": "Violates Heisenberg\u0027s Uncertainty Principle."}, {"arrows": "to", "from": "Hydrogen Spectrum", "to": "Series of spectral lines."}, {"arrows": "to", "from": "Hydrogen Spectrum", "to": "Lyman Series: Ultraviolet, transitions to n\u2081 = 1."}, {"arrows": "to", "from": "Hydrogen Spectrum", "to": "Balmer Series: Visible, transitions to n\u2082 = 2."}, {"arrows": "to", "from": "Hydrogen Spectrum", "to": "Paschen Series: Infrared, transitions to n\u2083 = 3."}, {"arrows": "to", "from": "Hydrogen Spectrum", "to": "Brackett Series: Infrared, transitions to n\u2084 = 4."}, {"arrows": "to", "from": "Hydrogen Spectrum", "to": "Pfund Series: Infrared, transitions to n\u2085= 5."}, {"arrows": "to", "from": "Hydrogen Spectrum", "to": "Formula: 1/\u03bb = R(1/n\u2081\u00b2 - 1/n\u2082\u00b2), where R is the Rydberg constant (1.097 x 10\u2077 m\u207b\u00b9)."}, {"arrows": "to", "from": "X-rays", "to": "Production"}, {"arrows": "to", "from": "X-rays", "to": "Properties"}, {"arrows": "to", "from": "X-rays", "to": "Types"}, {"arrows": "to", "from": "Production", "to": "Fast-moving electrons striking a metal target."}, {"arrows": "to", "from": "Production", "to": "Deceleration of electrons produces X-rays (Bremsstrahlung)."}, {"arrows": "to", "from": "Production", "to": "Characteristic X-rays: Electrons knocking out inner-shell electrons of the target atoms."}, {"arrows": "to", "from": "Properties", "to": "Electromagnetic radiation of very short wavelength (0.1 \u00c5 to 10 \u00c5)."}, {"arrows": "to", "from": "Properties", "to": "Travel in straight lines."}, {"arrows": "to", "from": "Properties", "to": "Unaffected by electric and magnetic fields."}, {"arrows": "to", "from": "Properties", "to": "Can ionize gases."}, {"arrows": "to", "from": "Properties", "to": "Can penetrate matter."}, {"arrows": "to", "from": "Properties", "to": "Intensity of x ray depend upon atomic number of element"}, {"arrows": "to", "from": "Types", "to": "Continuous X-rays: Produced by Bremsstrahlung, have a range of wavelengths."}, {"arrows": "to", "from": "Types", "to": "Characteristic X-rays: Produced by electron transitions in the target atoms, have specific wavelengths."}, {"arrows": "to", "from": "Moseley\u0027s Law", "to": "Relationship between the frequency of characteristic X-rays and the atomic number (Z) of the target element."}, {"arrows": "to", "from": "Moseley\u0027s Law", "to": "Formula: \u221a\u03bd = a(Z - b), where \u03bd is frequency, a and b are constants."}, {"arrows": "to", "from": "Photoelectric Effect", "to": "Definition"}, {"arrows": "to", "from": "Photoelectric Effect", "to": "Laws"}, {"arrows": "to", "from": "Photoelectric Effect", "to": "Work Function"}, {"arrows": "to", "from": "Photoelectric Effect", "to": "Applications"}, {"arrows": "to", "from": "Photoelectric Effect", "to": "Stopping Potential"}, {"arrows": "to", "from": "Definition", "to": "Emission of electrons from a metal surface when light of sufficient frequency shines on it."}, {"arrows": "to", "from": "Laws", "to": "The number of photoelectrons emitted is directly proportional to the intensity of the incident light."}, {"arrows": "to", "from": "Laws", "to": "The maximum kinetic energy of the photoelectrons is independent of the intensity of the incident light."}, {"arrows": "to", "from": "Laws", "to": "The maximum kinetic energy of the photoelectrons depends on the frequency of the incident light."}, {"arrows": "to", "from": "Laws", "to": "There is a threshold frequency (\u03bd\u2080) below which no photoelectrons are emitted, regardless of the intensity."}, {"arrows": "to", "from": "Applications", "to": "Photoelectric cells"}, {"arrows": "to", "from": "Applications", "to": "Television studio to convert the light"}, {"arrows": "to", "from": "Applications", "to": "Automatic door"}, {"arrows": "to", "from": "Applications", "to": "Measure intensity of radiation"}, {"arrows": "to", "from": "Work Function (\u03a6)", "to": "Minimum energy required to remove an electron from the metal surface."}, {"arrows": "to", "from": "Work Function (\u03a6)", "to": "\u03a6 = h\u03bd\u2080"}, {"arrows": "to", "from": "Work Function (\u03a6)", "to": "Different for different metals."}, {"arrows": "to", "from": "Stopping Potential (V\u2080)", "to": "The negative potential applied to the collecting electrode that stops the most energetic photoelectrons."}, {"arrows": "to", "from": "Stopping Potential (V\u2080)", "to": "eV\u2080 = (1/2)mv\u00b2_max = h\u03bd - \u03a6"}, {"arrows": "to", "from": "Einstein Photoelectric Equation", "to": "Formula"}, {"arrows": "to", "from": "Einstein Photoelectric Equation", "to": "Explanation"}, {"arrows": "to", "from": "Formula", "to": "h\u03bd = \u03a6 + (1/2)mv\u00b2_max"}, {"arrows": "to", "from": "Formula", "to": "h\u03bd = h\u03bd\u2080 + eV\u2080"}, {"arrows": "to", "from": "Explanation", "to": "Energy of incident photon (h\u03bd) is used to overcome the work function (\u03a6) and provide kinetic energy to the emitted electron."}, {"arrows": "to", "from": "de Broglie Hypothesis", "to": "Wave-particle duality."}, {"arrows": "to", "from": "de Broglie Hypothesis", "to": "de Broglie wavelength: \u03bb = h/p = h/mv, where p is momentum."}, {"arrows": "to", "from": "de Broglie Hypothesis", "to": "Applicable to all particles, but more significant for microscopic particles."}, {"arrows": "to", "from": "Rutherford Scattering", "to": "Impact Parameter"}, {"arrows": "to", "from": "Rutherford Scattering", "to": "Scattering Angle"}, {"arrows": "to", "from": "Rutherford Scattering", "to": "Distance of Closest Approach"}, {"arrows": "to", "from": "Impact Parameter", "to": "Perpendicular distance of the velocity vector of the alpha particle from the center of the nucleus."}, {"arrows": "to", "from": "Impact Parameter", "to": "Formula: b = (Ze\u00b2cot(\u03b8/2))/(4\u03c0\u03b5\u2080K) where K is Kinetic energy of alpha particle."}, {"arrows": "to", "from": "Scattering Angle", "to": "Angle by which an alpha particle is deflected from its original path."}, {"arrows": "to", "from": "Scattering Angle", "to": "Inversely related to the impact parameter."}, {"arrows": "to", "from": "Distance of Closest Approach", "to": "The smallest distance between the alpha particle and the nucleus."}, {"arrows": "to", "from": "Distance of Closest Approach", "to": "Formula for head on colision: r\u2080 = (2Ze\u00b2)/(4\u03c0\u03b5\u2080K)"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#ffcc00", "id": "INVERSE TRIGONOMETRIC FUNCTIONS", "label": "INVERSE TRIGONOMETRIC FUNCTIONS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "BASIC CONCEPTS", "label": "BASIC CONCEPTS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "INVERSE CIRCULAR FUNCTIONS", "label": "INVERSE CIRCULAR FUNCTIONS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Function", "label": "Function", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Domain", "label": "Domain", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Range", "label": "Range", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "REMEMBER THAT :", "label": "REMEMBER THAT :", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "PROPERTY \u2013 I", "label": "PROPERTY \u2013 I", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "PROPERTY \u2013 III", "label": "PROPERTY \u2013 III", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1. y = sin^{-1} x iff x = sin y", "label": "1. y = sin^{-1} x iff x = sin y", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2. y = cos^{-1} x iff x = cos y", "label": "2. y = cos^{-1} x iff x = cos y", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "3. y = tan^{-1} x iff x = tan y", "label": "3. y = tan^{-1} x iff x = tan y", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "4. y = cot^{-1} x iff x = cot y", "label": "4. y = cot^{-1} x iff x = cot y", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "5. y = cosec^{-1} x iff x = cosec y,", "label": "5. y = cosec^{-1} x iff x = cosec y,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "6. y = sec^{-1} x iff x = sec y,", "label": "6. y = sec^{-1} x iff x = sec y,", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Function Domain", "label": "Function Domain", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "-1 \u003c x \u003c 1", "label": "-1 \u003c x \u003c 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x\u2208R", "label": "x\u2208R", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x \u2208 (\u2013 \u221e, \u2013 1] \u222a [1, \u221e)", "label": "x \u2208 (\u2013 \u221e, \u2013 1] \u222a [1, \u221e)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Function Range", "label": "Function Range", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[-\u03c0/2, \u03c0/2]", "label": "[-\u03c0/2, \u03c0/2]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[0, \u03c0]", "label": "[0, \u03c0]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(-\u03c0/2, \u03c0/2)", "label": "(-\u03c0/2, \u03c0/2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[-\u03c0/2, \u03c0/2] - {0}", "label": "[-\u03c0/2, \u03c0/2] - {0}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[0, \u03c0] - {\u03c0/2}", "label": "[0, \u03c0] - {\u03c0/2}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i)sin^{-1} x + sin^{-1} y + sin^{-1} z =  3\u03c0/2 \u27f9 x = y = z = 1", "label": "(i)sin^{-1} x + sin^{-1} y + sin^{-1} z =  3\u03c0/2 \u27f9 x = y = z = 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) cos^{-1}x + cos^{-1} y + cos^{-1} z = 3\u03c0 \u27f9 x = y = z = -1", "label": "(ii) cos^{-1}x + cos^{-1} y + cos^{-1} z = 3\u03c0 \u27f9 x = y = z = -1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) sin^{-1} x +  cos^{-1} x = \u03c0/2, for all x \u2208 [ -1, 1]", "label": "(i) sin^{-1} x +  cos^{-1} x = \u03c0/2, for all x \u2208 [ -1, 1]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) tan^{-1} x + cot^{-1} x = \u03c0/2", "label": "(ii) tan^{-1} x + cot^{-1} x = \u03c0/2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iii) sec^{-1} + cosec^{-1} x =  \u03c0/2", "label": "(iii) sec^{-1} + cosec^{-1} x =  \u03c0/2", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "PROPERTY \u2013 I, Proof", "label": "PROPERTY \u2013 I, Proof", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. Let,  sin^{-1} x = \u03b8 ... (i)", "label": "Sol. Let,  sin^{-1} x = \u03b8 ... (i)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2\u03b8\u2208[- \u03c0/2, \u03c0/2]", "label": "\u21d2\u03b8\u2208[- \u03c0/2, \u03c0/2]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 \u2212 \u03c0/2  \u2264 \u03b8 \u2264 \u03c0/2", "label": "\u21d2 \u2212 \u03c0/2  \u2264 \u03b8 \u2264 \u03c0/2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 \u2212 \u03c0/2  \u2264 \u2212\u03b8 \u2264 \u03c0/2", "label": "\u21d2 \u2212 \u03c0/2  \u2264 \u2212\u03b8 \u2264 \u03c0/2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 0\u2264\u03c0/2\u2212\u03b8\u2264\u03c0", "label": "\u21d2 0\u2264\u03c0/2\u2212\u03b8\u2264\u03c0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2\u03c0/2\u2212\u03b8\u2208[0, \u03c0]", "label": "\u21d2\u03c0/2\u2212\u03b8\u2208[0, \u03c0]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Now, sin^{-1} x = \u03b8", "label": "Now, sin^{-1} x = \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 x = sin \u03b8", "label": "\u21d2 x = sin \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 x = cos(\u03c0/2-\u03b8)", "label": "\u21d2 x = cos(\u03c0/2-\u03b8)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 \u03b8 +  cos^{-1} x = \u03c0/2 ... (ii)", "label": "\u21d2 \u03b8 +  cos^{-1} x = \u03c0/2 ... (ii)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "from (i) and (ii), we get", "label": "from (i) and (ii), we get", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) sin^{-1} (\u2013x) = \u2013  sin^{-1} (x), for all x \u2208 [\u20131,  1]", "label": "(i) sin^{-1} (\u2013x) = \u2013  sin^{-1} (x), for all x \u2208 [\u20131,  1]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) cosec^{-1} (\u2013x) = \u2013 cosec^{-1} x,", "label": "(ii) cosec^{-1} (\u2013x) = \u2013 cosec^{-1} x,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iii) cot^{-1} (\u2013x) =  \u03c0 \u2013  cot^{-1}  x,", "label": "(iii) cot^{-1} (\u2013x) =  \u03c0 \u2013  cot^{-1}  x,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(iv) cosec^{-1} (\u2013x) = \u2013  cosec^{-1} x,  for all x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)", "label": "(iv) cosec^{-1} (\u2013x) = \u2013  cosec^{-1} x,  for all x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(v) tan^{-1} (\u2013x) = \u2013 tan^{-1} x, for all x \u2208 R", "label": "(v) tan^{-1} (\u2013x) = \u2013 tan^{-1} x, for all x \u2208 R", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(vi) sec^{-1}, (\u2013x) = \u03c0 \u2013  sec^{-1} x, for all x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)", "label": "(vi) sec^{-1}, (\u2013x) = \u03c0 \u2013  sec^{-1} x, for all x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "PROPERTY \u2013 III, Proof", "label": "PROPERTY \u2013 III, Proof", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. (ii) Clearly, \u2013 x \u2208 [\u20131,  1] for all x \u2208 [\u20131,  1]", "label": "Sol. (ii) Clearly, \u2013 x \u2208 [\u20131,  1] for all x \u2208 [\u20131,  1]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "let sin^{-1} (\u2013x) = \u03b8", "label": "let sin^{-1} (\u2013x) = \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "then, \u2013 x = sin \u03b8 ... (i)", "label": "then, \u2013 x = sin \u03b8 ... (i)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 x = \u2013 sin \u03b8", "label": "\u21d2 x = \u2013 sin \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 x = sin (\u2013\u03b8)", "label": "\u21d2 x = sin (\u2013\u03b8)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 \u2013 \u03b8 =  sin^{-1} x", "label": "\u21d2 \u2013 \u03b8 =  sin^{-1} x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin^{-1} (\u2013x) = \u2013  sin^{-1} (x)", "label": "sin^{-1} (\u2013x) = \u2013  sin^{-1} (x)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "INVERSE TRIGONOMETRIC FUNCTIONS, graphs", "label": "INVERSE TRIGONOMETRIC FUNCTIONS, graphs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "y = sin^{-1} (sin x)", "label": "y = sin^{-1} (sin x)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "y = cos^{-1} (cos x)", "label": "y = cos^{-1} (cos x)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "y = tan^{-1} (tan x).", "label": "y = tan^{-1} (tan x).", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "y = cot^{-1} (cot x)", "label": "y = cot^{-1} (cot x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " y = cosec^{-1} (cosec x)", "label": " y = cosec^{-1} (cosec x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " y = sec^{-1} (sec x)", "label": " y = sec^{-1} (sec x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. As, y =  sin^{-1} (sin x) is periodic with period 2\u03c0.", "label": "Sol. As, y =  sin^{-1} (sin x) is periodic with period 2\u03c0.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "to draw this graph we should draw the graph for one interval", "label": "to draw this graph we should draw the graph for one interval", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "of length 2\u03c0 and repeat for entire values of x.", "label": "of length 2\u03c0 and repeat for entire values of x.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "As we know,", "label": "As we know,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin^{-1} (sin \u03b8)  \u2208 \u03b8, \u03b8\u2208[-\u03c0/2, \u03c0/2].", "label": "sin^{-1} (sin \u03b8)  \u2208 \u03b8, \u03b8\u2208[-\u03c0/2, \u03c0/2].", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thus, the graph for y =  sin^{\u20131} (sin  x), is a straight line up and", "label": "Thus, the graph for y =  sin^{\u20131} (sin  x), is a straight line up and", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "y = sin^{-1} (sin x), graph plotting", "label": "y = sin^{-1} (sin x), graph plotting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin^{-1} (sin \u03b8) \u2248\u03b8, if  \u03b8\u2208[\u2013 \u03c0/2,  \u03c0/2]. In fact, we have", "label": "sin^{-1} (sin \u03b8) \u2248\u03b8, if  \u03b8\u2208[\u2013 \u03c0/2,  \u03c0/2]. In fact, we have", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin^{-1}(sinx) ={...\u2212\u03c0\u2212x,ifx\u2208[-3\u03c0/2,-\u03c0/2]", "label": "sin^{-1}(sinx) ={...\u2212\u03c0\u2212x,ifx\u2208[-3\u03c0/2,-\u03c0/2]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03c0-x,ifx\u2208[\u03c0/2,3\u03c0/2]...", "label": "\u03c0-x,ifx\u2208[\u03c0/2,3\u03c0/2]...", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x\u22122\u03c0,ifx\u2208[3\u03c0/2,5\u03c0/2]", "label": "x\u22122\u03c0,ifx\u2208[3\u03c0/2,5\u03c0/2]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thus, it has been defined for 0 \u003c x\u003c 2\u03c0 that has length 2\u03c0.", "label": "Thus, it has been defined for 0 \u003c x\u003c 2\u03c0 that has length 2\u03c0.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "So, its graph could be plotted as;", "label": "So, its graph could be plotted as;", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. As, y = cos^{-1} (cos x) is periodic with period 2\u03c0.", "label": "Sol. As, y = cos^{-1} (cos x) is periodic with period 2\u03c0.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "y = cos^{-1} (cos x), graph plotting", "label": "y = cos^{-1} (cos x), graph plotting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thus, it has been defined for 0 \u003c x\u003c 2\u03c0/2 that has length 2\u03c0.", "label": "Thus, it has been defined for 0 \u003c x\u003c 2\u03c0/2 that has length 2\u03c0.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. As, y = tan^{-1} (tan x) is periodic with period \u03c0.", "label": "Sol. As, y = tan^{-1} (tan x) is periodic with period \u03c0.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "y = tan^{-1} (tan x)., graph plotting", "label": "y = tan^{-1} (tan x)., graph plotting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "of length \u03c0/2 and repeat for entire values of x.", "label": "of length \u03c0/2 and repeat for entire values of x.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "As we know;  tan^{-1} (tan x) =  x;", "label": "As we know;  tan^{-1} (tan x) =  x;", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thus, the curve for y =  tan^{-1} (tan  x), where y is not defined", "label": "Thus, the curve for y =  tan^{-1} (tan  x), where y is not defined", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. Let, cot^{-1} x = \u03b8.  Then x\u2208R, x \u2208 0  and  \u03b8\u2208[0, \u03c0]             ... (i)", "label": "Sol. Let, cot^{-1} x = \u03b8.  Then x\u2208R, x \u2208 0  and  \u03b8\u2208[0, \u03c0]             ... (i)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Now two cases arises :", "label": "Now two cases arises :", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "y = cot^{-1} (cot x), case and graph plotting", "label": "y = cot^{-1} (cot x), case and graph plotting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case I : When x \u003e 0", "label": "Case I : When x \u003e 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cot^{-1} x = \u03b8", "label": "cot^{-1} x = \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2 x = cot \u03b8", "label": "\u21d2 x = cot \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u21d2   x = cot (\u03c0\u2212\u03b8)", "label": "\u21d2   x = cot (\u03c0\u2212\u03b8)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hence, cot^{-1} (cot x) = {\u03c0 + x, if x\u003c0 \n x, if x\u003e0", "label": "Hence, cot^{-1} (cot x) = {\u03c0 + x, if x\u003c0 \n x, if x\u003e0", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "y = cosec^{-1} (cosec x)", "label": "y = cosec^{-1} (cosec x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. Let,  cosec^{-1} x = \u03b8 ... (i)", "label": "Sol. Let,  cosec^{-1} x = \u03b8 ... (i)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "then, \u03b8\u2208[0, \u03c0] \u2013 {\u03c0/2}  and x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e).", "label": "then, \u03b8\u2208[0, \u03c0] \u2013 {\u03c0/2}  and x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Now, cosec^{-1} x = \u03b8 \u21d2 x = cosec \u03b8", "label": "Now, cosec^{-1} x = \u03b8 \u21d2 x = cosec \u03b8", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "y = cosec^{-1} (cosec x), graph plotting", "label": "y = cosec^{-1} (cosec x), graph plotting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x \u2208 [\u20131, 1] \u2013 {0}", "label": "x \u2208 [\u20131, 1] \u2013 {0}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cosec^{-1} x = \u03b8\u21d2\u03b8\u2208[\u2013 \u03c0/2, \u03c0/2]  \u2013 {0}", "label": "cosec^{-1} x = \u03b8\u21d2\u03b8\u2208[\u2013 \u03c0/2, \u03c0/2]  \u2013 {0}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) cos^{\u20131} (1/x) = sec^{\u20131}x", "label": "(ii) cos^{\u20131} (1/x) = sec^{\u20131}x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "... (ii)", "label": "... (ii)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "from (i) and (ii); we get", "label": "from (i) and (ii); we get", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cosec^{-1} (cosec x) = {...\u2212\u03c0\u2212x", "label": "cosec^{-1} (cosec x) = {...\u2212\u03c0\u2212x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x", "label": "x", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "y = sec^{-1} (sec x)", "label": "y = sec^{-1} (sec x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. Let,  sec^{-1} x = \u03b8 ... (i)", "label": "Sol. Let,  sec^{-1} x = \u03b8 ... (i)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "then,\u03b8\u2208[0, \u03c0] \u2013 {\u03c0/2} and x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)", "label": "then,\u03b8\u2208[0, \u03c0] \u2013 {\u03c0/2} and x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Now, sec^{-1} x = \u03b8 \u21d2 x = sec \u03b8", "label": "Now, sec^{-1} x = \u03b8 \u21d2 x = sec \u03b8", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "y = sec^{-1} (sec x), graph plotting", "label": "y = sec^{-1} (sec x), graph plotting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sec^{-1} x  = \u03b8\u21d2\u03b8\u2208[\u2013 \u03c0/2, \u03c0/2]  \u2013 {0}", "label": "sec^{-1} x  = \u03b8\u21d2\u03b8\u2208[\u2013 \u03c0/2, \u03c0/2]  \u2013 {0}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " ... (ii)", "label": " ... (ii)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sec^{-1} (sec x) ={ ...\u2212\u03c0\u2212x", "label": "sec^{-1} (sec x) ={ ...\u2212\u03c0\u2212x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) Sketch the graph for y =  sin^{-1} (sin  x)", "label": "(i) Sketch the graph for y =  sin^{-1} (sin  x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii) Sketch the graph for y = cos^{-1} (cos x).", "label": "(ii) Sketch the graph for y = cos^{-1} (cos x).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Students are adviced to learn the definition of sin^{-1} (sin x) as,", "label": "Students are adviced to learn the definition of sin^{-1} (sin x) as,", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "INVERSE CIRCULAR FUNCTIONS, SOL.", "label": "INVERSE CIRCULAR FUNCTIONS, SOL.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sol. We know that, if  f : A \u2192  B is a bijection, then f^{-1}  :  B \u2192 A", "label": "Sol. We know that, if  f : A \u2192  B is a bijection, then f^{-1}  :  B \u2192 A", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "exists such that  fof^{-1} (y) = f (f^{-1} (y)) = y for all y \u2208 B.", "label": "exists such that  fof^{-1} (y) = f (f^{-1} (y)) = y for all y \u2208 B.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Clearly,  all these results  are direct consequences  of this", "label": "Clearly,  all these results  are direct consequences  of this", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "INVERSE CIRCULAR FUNCTIONS, SOL.,  property.", "label": "INVERSE CIRCULAR FUNCTIONS, SOL.,  property.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "property.", "label": "property.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Alter : Let \u03b8\u2208[\u2013\u03c0/2, \u03c0/2] and x \u2208 [\u20131, 1] such that sin \u03b8 =", "label": "Alter : Let \u03b8\u2208[\u2013\u03c0/2, \u03c0/2] and x \u2208 [\u20131, 1] such that sin \u03b8 =", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x .", "label": "x .", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "then, \u03b8 = sin^{-1} x", "label": "then, \u03b8 = sin^{-1} x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u27f9 x = sin \u03b8 = sin (sin^{-1}  x)", "label": "\u27f9 x = sin \u03b8 = sin (sin^{-1}  x)", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS", "to": "BASIC CONCEPTS"}, {"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS", "to": "INVERSE TRIGONOMETRIC FUNCTIONS"}, {"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS", "to": "INVERSE CIRCULAR FUNCTIONS"}, {"arrows": "to", "from": "BASIC CONCEPTS", "to": "Function"}, {"arrows": "to", "from": "BASIC CONCEPTS", "to": "Domain"}, {"arrows": "to", "from": "BASIC CONCEPTS", "to": "Range"}, {"arrows": "to", "from": "BASIC CONCEPTS", "to": "REMEMBER THAT :"}, {"arrows": "to", "from": "BASIC CONCEPTS", "to": "PROPERTY \u2013 I"}, {"arrows": "to", "from": "BASIC CONCEPTS", "to": "PROPERTY \u2013 III"}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS", "to": "(i) Sketch the graph for y =  sin^{-1} (sin  x)"}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS", "to": "(ii) Sketch the graph for y = cos^{-1} (cos x)."}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS", "to": "Students are adviced to learn the definition of sin^{-1} (sin x) as,"}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS", "to": "sin^{-1} (sin \u03b8) \u2248\u03b8, if  \u03b8\u2208[\u2013 \u03c0/2,  \u03c0/2]. In fact, we have"}, {"arrows": "to", "from": "Function", "to": "1. y = sin^{-1} x iff x = sin y"}, {"arrows": "to", "from": "Function", "to": "2. y = cos^{-1} x iff x = cos y"}, {"arrows": "to", "from": "Function", "to": "3. y = tan^{-1} x iff x = tan y"}, {"arrows": "to", "from": "Function", "to": "4. y = cot^{-1} x iff x = cot y"}, {"arrows": "to", "from": "Function", "to": "5. y = cosec^{-1} x iff x = cosec y,"}, {"arrows": "to", "from": "Function", "to": "6. y = sec^{-1} x iff x = sec y,"}, {"arrows": "to", "from": "REMEMBER THAT :", "to": "(i)sin^{-1} x + sin^{-1} y + sin^{-1} z =  3\u03c0/2 \u27f9 x = y = z = 1"}, {"arrows": "to", "from": "REMEMBER THAT :", "to": "(ii) cos^{-1}x + cos^{-1} y + cos^{-1} z = 3\u03c0 \u27f9 x = y = z = -1"}, {"arrows": "to", "from": "PROPERTY \u2013 I", "to": "(i) sin^{-1} x +  cos^{-1} x = \u03c0/2, for all x \u2208 [ -1, 1]"}, {"arrows": "to", "from": "PROPERTY \u2013 I", "to": "(ii) tan^{-1} x + cot^{-1} x = \u03c0/2"}, {"arrows": "to", "from": "PROPERTY \u2013 I", "to": "(iii) sec^{-1} + cosec^{-1} x =  \u03c0/2"}, {"arrows": "to", "from": "PROPERTY \u2013 III", "to": "(i) sin^{-1} (\u2013x) = \u2013  sin^{-1} (x), for all x \u2208 [\u20131,  1]"}, {"arrows": "to", "from": "PROPERTY \u2013 III", "to": "(ii) cosec^{-1} (\u2013x) = \u2013 cosec^{-1} x,"}, {"arrows": "to", "from": "PROPERTY \u2013 III", "to": "(iii) cot^{-1} (\u2013x) =  \u03c0 \u2013  cot^{-1}  x,"}, {"arrows": "to", "from": "PROPERTY \u2013 III", "to": "(iv) cosec^{-1} (\u2013x) = \u2013  cosec^{-1} x,  for all x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)"}, {"arrows": "to", "from": "PROPERTY \u2013 III", "to": "(v) tan^{-1} (\u2013x) = \u2013 tan^{-1} x, for all x \u2208 R"}, {"arrows": "to", "from": "PROPERTY \u2013 III", "to": "(vi) sec^{-1}, (\u2013x) = \u03c0 \u2013  sec^{-1} x, for all x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)"}, {"arrows": "to", "from": "Function Domain", "to": "-1 \u003c x \u003c 1"}, {"arrows": "to", "from": "Function Domain", "to": "x\u2208R"}, {"arrows": "to", "from": "Function Domain", "to": "x \u2208 (\u2013 \u221e, \u2013 1] \u222a [1, \u221e)"}, {"arrows": "to", "from": "Function Range", "to": "[-\u03c0/2, \u03c0/2]"}, {"arrows": "to", "from": "Function Range", "to": "[0, \u03c0]"}, {"arrows": "to", "from": "Function Range", "to": "(-\u03c0/2, \u03c0/2)"}, {"arrows": "to", "from": "Function Range", "to": "[-\u03c0/2, \u03c0/2] - {0}"}, {"arrows": "to", "from": "Function Range", "to": "[0, \u03c0] - {\u03c0/2}"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "Sol. Let,  sin^{-1} x = \u03b8 ... (i)"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "\u21d2\u03b8\u2208[- \u03c0/2, \u03c0/2]"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "\u21d2 \u2212 \u03c0/2  \u2264 \u03b8 \u2264 \u03c0/2"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "\u21d2 \u2212 \u03c0/2  \u2264 \u2212\u03b8 \u2264 \u03c0/2"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "\u21d2 0\u2264\u03c0/2\u2212\u03b8\u2264\u03c0"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "\u21d2\u03c0/2\u2212\u03b8\u2208[0, \u03c0]"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "Now, sin^{-1} x = \u03b8"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "\u21d2 x = sin \u03b8"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "\u21d2 x = cos(\u03c0/2-\u03b8)"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "\u21d2 \u03b8 +  cos^{-1} x = \u03c0/2 ... (ii)"}, {"arrows": "to", "from": "PROPERTY \u2013 I, Proof", "to": "from (i) and (ii), we get"}, {"arrows": "to", "from": "PROPERTY \u2013 III, Proof", "to": "Sol. (ii) Clearly, \u2013 x \u2208 [\u20131,  1] for all x \u2208 [\u20131,  1]"}, {"arrows": "to", "from": "PROPERTY \u2013 III, Proof", "to": "let sin^{-1} (\u2013x) = \u03b8"}, {"arrows": "to", "from": "PROPERTY \u2013 III, Proof", "to": "then, \u2013 x = sin \u03b8 ... (i)"}, {"arrows": "to", "from": "PROPERTY \u2013 III, Proof", "to": "\u21d2 x = \u2013 sin \u03b8"}, {"arrows": "to", "from": "PROPERTY \u2013 III, Proof", "to": "\u21d2 x = sin (\u2013\u03b8)"}, {"arrows": "to", "from": "PROPERTY \u2013 III, Proof", "to": "\u21d2 \u2013 \u03b8 =  sin^{-1} x"}, {"arrows": "to", "from": "PROPERTY \u2013 III, Proof", "to": "sin^{-1} (\u2013x) = \u2013  sin^{-1} (x)"}, {"arrows": "to", "from": "PROPERTY \u2013 III, Proof", "to": "from (i) and (ii), we get"}, {"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS, graphs", "to": "y = sin^{-1} (sin x)"}, {"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS, graphs", "to": "y = cos^{-1} (cos x)"}, {"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS, graphs", "to": "y = tan^{-1} (tan x)."}, {"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS, graphs", "to": "y = cot^{-1} (cot x)"}, {"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS, graphs", "to": " y = cosec^{-1} (cosec x)"}, {"arrows": "to", "from": "INVERSE TRIGONOMETRIC FUNCTIONS, graphs", "to": " y = sec^{-1} (sec x)"}, {"arrows": "to", "from": "y = sin^{-1} (sin x)", "to": "Sol. As, y =  sin^{-1} (sin x) is periodic with period 2\u03c0."}, {"arrows": "to", "from": "y = sin^{-1} (sin x)", "to": "to draw this graph we should draw the graph for one interval"}, {"arrows": "to", "from": "y = sin^{-1} (sin x)", "to": "of length 2\u03c0 and repeat for entire values of x."}, {"arrows": "to", "from": "y = sin^{-1} (sin x)", "to": "As we know,"}, {"arrows": "to", "from": "y = sin^{-1} (sin x)", "to": "sin^{-1} (sin \u03b8)  \u2208 \u03b8, \u03b8\u2208[-\u03c0/2, \u03c0/2]."}, {"arrows": "to", "from": "y = sin^{-1} (sin x)", "to": "Thus, the graph for y =  sin^{\u20131} (sin  x), is a straight line up and"}, {"arrows": "to", "from": "y = cos^{-1} (cos x)", "to": "Sol. As, y = cos^{-1} (cos x) is periodic with period 2\u03c0."}, {"arrows": "to", "from": "y = cos^{-1} (cos x)", "to": "to draw this graph we should draw the graph for one interval"}, {"arrows": "to", "from": "y = tan^{-1} (tan x).", "to": "Sol. As, y = tan^{-1} (tan x) is periodic with period \u03c0."}, {"arrows": "to", "from": "y = tan^{-1} (tan x).", "to": "to draw this graph we should draw the graph for one interval"}, {"arrows": "to", "from": "y = cot^{-1} (cot x)", "to": "Sol. Let, cot^{-1} x = \u03b8.  Then x\u2208R, x \u2208 0  and  \u03b8\u2208[0, \u03c0]             ... (i)"}, {"arrows": "to", "from": "y = cot^{-1} (cot x)", "to": "Now two cases arises :"}, {"arrows": "to", "from": "y = sin^{-1} (sin x), graph plotting", "to": "sin^{-1} (sin \u03b8) \u2248\u03b8, if  \u03b8\u2208[\u2013 \u03c0/2,  \u03c0/2]. In fact, we have"}, {"arrows": "to", "from": "y = sin^{-1} (sin x), graph plotting", "to": "sin^{-1}(sinx) ={...\u2212\u03c0\u2212x,ifx\u2208[-3\u03c0/2,-\u03c0/2]"}, {"arrows": "to", "from": "y = sin^{-1} (sin x), graph plotting", "to": "\u03c0-x,ifx\u2208[\u03c0/2,3\u03c0/2]..."}, {"arrows": "to", "from": "y = sin^{-1} (sin x), graph plotting", "to": "x\u22122\u03c0,ifx\u2208[3\u03c0/2,5\u03c0/2]"}, {"arrows": "to", "from": "y = sin^{-1} (sin x), graph plotting", "to": "Thus, it has been defined for 0 \u003c x\u003c 2\u03c0 that has length 2\u03c0."}, {"arrows": "to", "from": "y = sin^{-1} (sin x), graph plotting", "to": "So, its graph could be plotted as;"}, {"arrows": "to", "from": "y = cos^{-1} (cos x), graph plotting", "to": "Thus, it has been defined for 0 \u003c x\u003c 2\u03c0/2 that has length 2\u03c0."}, {"arrows": "to", "from": "y = cos^{-1} (cos x), graph plotting", "to": "So, its graph could be plotted as;"}, {"arrows": "to", "from": "y = tan^{-1} (tan x)., graph plotting", "to": "of length \u03c0/2 and repeat for entire values of x."}, {"arrows": "to", "from": "y = tan^{-1} (tan x)., graph plotting", "to": "As we know;  tan^{-1} (tan x) =  x;"}, {"arrows": "to", "from": "y = tan^{-1} (tan x)., graph plotting", "to": "Thus, the curve for y =  tan^{-1} (tan  x), where y is not defined"}, {"arrows": "to", "from": "y = cot^{-1} (cot x), case and graph plotting", "to": "Case I : When x \u003e 0"}, {"arrows": "to", "from": "y = cot^{-1} (cot x), case and graph plotting", "to": "cot^{-1} x = \u03b8"}, {"arrows": "to", "from": "y = cot^{-1} (cot x), case and graph plotting", "to": "\u21d2 x = cot \u03b8"}, {"arrows": "to", "from": "y = cot^{-1} (cot x), case and graph plotting", "to": "\u21d2   x = cot (\u03c0\u2212\u03b8)"}, {"arrows": "to", "from": "y = cot^{-1} (cot x), case and graph plotting", "to": "Hence, cot^{-1} (cot x) = {\u03c0 + x, if x\u003c0 \n x, if x\u003e0"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x)", "to": "Sol. Let,  cosec^{-1} x = \u03b8 ... (i)"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x)", "to": "then, \u03b8\u2208[0, \u03c0] \u2013 {\u03c0/2}  and x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)."}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x)", "to": "Now, cosec^{-1} x = \u03b8 \u21d2 x = cosec \u03b8"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x), graph plotting", "to": "x \u2208 [\u20131, 1] \u2013 {0}"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x), graph plotting", "to": "cosec^{-1} x = \u03b8\u21d2\u03b8\u2208[\u2013 \u03c0/2, \u03c0/2]  \u2013 {0}"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x), graph plotting", "to": "(ii) cos^{\u20131} (1/x) = sec^{\u20131}x"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x), graph plotting", "to": "... (ii)"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x), graph plotting", "to": "from (i) and (ii); we get"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x), graph plotting", "to": "cosec^{-1} (cosec x) = {...\u2212\u03c0\u2212x"}, {"arrows": "to", "from": "y = cosec^{-1} (cosec x), graph plotting", "to": "x"}, {"arrows": "to", "from": "y = sec^{-1} (sec x)", "to": "Sol. Let,  sec^{-1} x = \u03b8 ... (i)"}, {"arrows": "to", "from": "y = sec^{-1} (sec x)", "to": "then,\u03b8\u2208[0, \u03c0] \u2013 {\u03c0/2} and x \u2208 (\u2013\u221e,  \u2013 1] \u222a [1, \u221e)"}, {"arrows": "to", "from": "y = sec^{-1} (sec x)", "to": "Now, sec^{-1} x = \u03b8 \u21d2 x = sec \u03b8"}, {"arrows": "to", "from": "y = sec^{-1} (sec x)", "to": "x \u2208 [\u20131, 1] \u2013 {0}"}, {"arrows": "to", "from": "y = sec^{-1} (sec x), graph plotting", "to": "sec^{-1} x  = \u03b8\u21d2\u03b8\u2208[\u2013 \u03c0/2, \u03c0/2]  \u2013 {0}"}, {"arrows": "to", "from": "y = sec^{-1} (sec x), graph plotting", "to": " ... (ii)"}, {"arrows": "to", "from": "y = sec^{-1} (sec x), graph plotting", "to": "from (i) and (ii); we get"}, {"arrows": "to", "from": "y = sec^{-1} (sec x), graph plotting", "to": "sec^{-1} (sec x) ={ ...\u2212\u03c0\u2212x"}, {"arrows": "to", "from": "y = sec^{-1} (sec x), graph plotting", "to": "x"}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS, SOL.", "to": "Sol. We know that, if  f : A \u2192  B is a bijection, then f^{-1}  :  B \u2192 A"}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS, SOL.", "to": "exists such that  fof^{-1} (y) = f (f^{-1} (y)) = y for all y \u2208 B."}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS, SOL.", "to": "Clearly,  all these results  are direct consequences  of this"}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS, SOL.,  property.", "to": "property."}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS, SOL.,  property.", "to": "Alter : Let \u03b8\u2208[\u2013\u03c0/2, \u03c0/2] and x \u2208 [\u20131, 1] such that sin \u03b8 ="}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS, SOL.,  property.", "to": "x ."}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS, SOL.,  property.", "to": "then, \u03b8 = sin^{-1} x"}, {"arrows": "to", "from": "INVERSE CIRCULAR FUNCTIONS, SOL.,  property.", "to": "\u27f9 x = sin \u03b8 = sin (sin^{-1}  x)"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

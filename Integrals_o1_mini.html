@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Integration Techniques", "label": "Integration Techniques", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Basic Integration Rules", "label": "Basic Integration Rules", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Substitution Method", "label": "Substitution Method", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration by Parts", "label": "Integration by Parts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Trigonometric Integrals", "label": "Trigonometric Integrals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Partial Fraction Decomposition", "label": "Partial Fraction Decomposition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Trigonometric Substitutions", "label": "Trigonometric Substitutions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration of Rational Functions", "label": "Integration of Rational Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Improper Integrals", "label": "Improper Integrals", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definite Integrals", "label": "Definite Integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Power Rule: \u222bx^n dx = (x^(n+1))/(n+1) + C", "label": "Power Rule: \u222bx^n dx = (x^(n+1))/(n+1) + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sum/Difference Rule: \u222b(f(x) \u00b1 g(x)) dx = \u222bf(x)dx \u00b1 \u222bg(x)dx", "label": "Sum/Difference Rule: \u222b(f(x) \u00b1 g(x)) dx = \u222bf(x)dx \u00b1 \u222bg(x)dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Constant Multiple Rule: \u222bk f(x)dx = k \u222bf(x)dx", "label": "Constant Multiple Rule: \u222bk f(x)dx = k \u222bf(x)dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integration of Exponential Functions: \u222be^x dx = e^x + C", "label": "Integration of Exponential Functions: \u222be^x dx = e^x + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "u-substitution: Let u = g(x), then du = g\u0027(x) dx", "label": "u-substitution: Let u = g(x), then du = g\u0027(x) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reverse Chain Rule", "label": "Reverse Chain Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b2x e^{x\u00b2} dx = e^{x\u00b2} + C", "label": "Example: \u222b2x e^{x\u00b2} dx = e^{x\u00b2} + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: \u222bu dv = uv - \u222bv du", "label": "Formula: \u222bu dv = uv - \u222bv du", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Choosing u and dv", "label": "Choosing u and dv", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bx e^x dx = x e^x - \u222be^x dx = x e^x - e^x + C", "label": "Example: \u222bx e^x dx = x e^x - \u222be^x dx = x e^x - e^x + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrals involving sin x and cos x", "label": "Integrals involving sin x and cos x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Odd Powers: Use substitution", "label": "Odd Powers: Use substitution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Even Powers: Use identities", "label": "Even Powers: Use identities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bsin\u00b3x dx = -cosx + (cos\u00b3x)/3 + C", "label": "Example: \u222bsin\u00b3x dx = -cosx + (cos\u00b3x)/3 + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Expressing rational functions as sum of simpler fractions", "label": "Expressing rational functions as sum of simpler fractions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Steps: Factor denominator, set up decomposition, solve for coefficients", "label": "Steps: Factor denominator, set up decomposition, solve for coefficients", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: (2x + 3)/(x(x+1)) = A/x + B/(x+1)", "label": "Example: (2x + 3)/(x(x+1)) = A/x + B/(x+1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Solution: A = 3, B = -1", "label": "Solution: A = 3, B = -1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used for integrals involving \u221a(a\u00b2 - x\u00b2), \u221a(a\u00b2 + x\u00b2), \u221a(x\u00b2 - a\u00b2)", "label": "Used for integrals involving \u221a(a\u00b2 - x\u00b2), \u221a(a\u00b2 + x\u00b2), \u221a(x\u00b2 - a\u00b2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Substitutions: x = a sin\u03b8, x = a tan\u03b8, x = a sec\u03b8", "label": "Substitutions: x = a sin\u03b8, x = a tan\u03b8, x = a sec\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222bdx/\u221a(a\u00b2 - x\u00b2) = arcsin(x/a) + C", "label": "Example: \u222bdx/\u221a(a\u00b2 - x\u00b2) = arcsin(x/a) + C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Factor denominator, apply partial fractions", "label": "Factor denominator, apply partial fractions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Use substitution if possible", "label": "Use substitution if possible", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b(x + 1)/(x\u00b2 + x) dx", "label": "Example: \u222b(x + 1)/(x\u00b2 + x) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrals with infinite limits or integrand approaches infinity", "label": "Integrals with infinite limits or integrand approaches infinity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Evaluate using limits", "label": "Evaluate using limits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b\u2081^\u221e 1/x\u00b2 dx = 1", "label": "Example: \u222b\u2081^\u221e 1/x\u00b2 dx = 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Evaluate \u222b\u2090\u1d47 f(x) dx using antiderivatives", "label": "Evaluate \u222b\u2090\u1d47 f(x) dx using antiderivatives", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fundamental Theorem of Calculus", "label": "Fundamental Theorem of Calculus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: \u222b\u2080\u00b9 x dx = 1/2", "label": "Example: \u222b\u2080\u00b9 x dx = 1/2", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Integration Techniques", "to": "Basic Integration Rules"}, {"arrows": "to", "from": "Integration Techniques", "to": "Substitution Method"}, {"arrows": "to", "from": "Integration Techniques", "to": "Integration by Parts"}, {"arrows": "to", "from": "Integration Techniques", "to": "Trigonometric Integrals"}, {"arrows": "to", "from": "Integration Techniques", "to": "Partial Fraction Decomposition"}, {"arrows": "to", "from": "Integration Techniques", "to": "Trigonometric Substitutions"}, {"arrows": "to", "from": "Integration Techniques", "to": "Integration of Rational Functions"}, {"arrows": "to", "from": "Integration Techniques", "to": "Improper Integrals"}, {"arrows": "to", "from": "Integration Techniques", "to": "Definite Integrals"}, {"arrows": "to", "from": "Basic Integration Rules", "to": "Power Rule: \u222bx^n dx = (x^(n+1))/(n+1) + C"}, {"arrows": "to", "from": "Basic Integration Rules", "to": "Sum/Difference Rule: \u222b(f(x) \u00b1 g(x)) dx = \u222bf(x)dx \u00b1 \u222bg(x)dx"}, {"arrows": "to", "from": "Basic Integration Rules", "to": "Constant Multiple Rule: \u222bk f(x)dx = k \u222bf(x)dx"}, {"arrows": "to", "from": "Basic Integration Rules", "to": "Integration of Exponential Functions: \u222be^x dx = e^x + C"}, {"arrows": "to", "from": "Substitution Method", "to": "u-substitution: Let u = g(x), then du = g\u0027(x) dx"}, {"arrows": "to", "from": "Substitution Method", "to": "Reverse Chain Rule"}, {"arrows": "to", "from": "Substitution Method", "to": "Example: \u222b2x e^{x\u00b2} dx = e^{x\u00b2} + C"}, {"arrows": "to", "from": "Integration by Parts", "to": "Formula: \u222bu dv = uv - \u222bv du"}, {"arrows": "to", "from": "Integration by Parts", "to": "Choosing u and dv"}, {"arrows": "to", "from": "Integration by Parts", "to": "Example: \u222bx e^x dx = x e^x - \u222be^x dx = x e^x - e^x + C"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "Integrals involving sin x and cos x"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "Odd Powers: Use substitution"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "Even Powers: Use identities"}, {"arrows": "to", "from": "Trigonometric Integrals", "to": "Example: \u222bsin\u00b3x dx = -cosx + (cos\u00b3x)/3 + C"}, {"arrows": "to", "from": "Partial Fraction Decomposition", "to": "Expressing rational functions as sum of simpler fractions"}, {"arrows": "to", "from": "Partial Fraction Decomposition", "to": "Steps: Factor denominator, set up decomposition, solve for coefficients"}, {"arrows": "to", "from": "Partial Fraction Decomposition", "to": "Example: (2x + 3)/(x(x+1)) = A/x + B/(x+1)"}, {"arrows": "to", "from": "Partial Fraction Decomposition", "to": "Solution: A = 3, B = -1"}, {"arrows": "to", "from": "Trigonometric Substitutions", "to": "Used for integrals involving \u221a(a\u00b2 - x\u00b2), \u221a(a\u00b2 + x\u00b2), \u221a(x\u00b2 - a\u00b2)"}, {"arrows": "to", "from": "Trigonometric Substitutions", "to": "Substitutions: x = a sin\u03b8, x = a tan\u03b8, x = a sec\u03b8"}, {"arrows": "to", "from": "Trigonometric Substitutions", "to": "Example: \u222bdx/\u221a(a\u00b2 - x\u00b2) = arcsin(x/a) + C"}, {"arrows": "to", "from": "Integration of Rational Functions", "to": "Factor denominator, apply partial fractions"}, {"arrows": "to", "from": "Integration of Rational Functions", "to": "Use substitution if possible"}, {"arrows": "to", "from": "Integration of Rational Functions", "to": "Example: \u222b(x + 1)/(x\u00b2 + x) dx"}, {"arrows": "to", "from": "Improper Integrals", "to": "Integrals with infinite limits or integrand approaches infinity"}, {"arrows": "to", "from": "Improper Integrals", "to": "Evaluate using limits"}, {"arrows": "to", "from": "Improper Integrals", "to": "Example: \u222b\u2081^\u221e 1/x\u00b2 dx = 1"}, {"arrows": "to", "from": "Definite Integrals", "to": "Evaluate \u222b\u2090\u1d47 f(x) dx using antiderivatives"}, {"arrows": "to", "from": "Definite Integrals", "to": "Fundamental Theorem of Calculus"}, {"arrows": "to", "from": "Definite Integrals", "to": "Example: \u222b\u2080\u00b9 x dx = 1/2"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

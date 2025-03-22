@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "VECTOR \u0026 3\u00adD", "label": "VECTOR \u0026 3\u00adD", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "5.  PRODUCT OF VECTORS", "label": "5.  PRODUCT OF VECTORS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "2.2 Multiplication of a Vector by a scalar", "label": "2.2 Multiplication of a Vector by a scalar", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "1.5 Coplanar Vectors", "label": "1.5 Coplanar Vectors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "5.4  Vector triple product", "label": "5.4  Vector triple product", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "6.  LINEAR COMBINATIONS", "label": "6.  LINEAR COMBINATIONS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "5.2  Vector product of two vectors", "label": "5.2  Vector product of two vectors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "7.  RECIPROCAL SYSTEM OF VECTORS", "label": "7.  RECIPROCAL SYSTEM OF VECTORS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "1. Vector \u0026 3-", "label": "1. Vector \u0026 3-", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "5.1  Scalar product of two vectors", "label": "5.1  Scalar product of two vectors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "3. Collinear Vectors", "label": "3. Collinear Vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[a b c] = [b c a] = [c a b]", "label": "[a b c] = [b c a] = [c a b]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Geometrically represents the volume", "label": "Geometrically represents the volume", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a\u0300 is a vector \u0026 m is a scalar, then m a\u0300 is vector parallel to a\u0300", "label": "If a\u0300 is a vector \u0026 m is a scalar, then m a\u0300 is vector parallel to a\u0300", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "m (na\u0300) = n(ma\u0300) = (mn) a\u0300", "label": "m (na\u0300) = n(ma\u0300) = (mn) a\u0300", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(m + n) a\u0300 = ma\u0300 + na\u0300", "label": "(m + n) a\u0300 = ma\u0300 + na\u0300", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "m (\u0300b\u0301/\u0300\u0300a\u0314\u0300) = m a\u0300 + m\u0300b\u0301", "label": "m (\u0300b\u0301/\u0300\u0300a\u0314\u0300) = m a\u0300 + m\u0300b\u0301", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "linear dependence of a\u0300 \u0026 \u0300b\u0301.", "label": "linear dependence of a\u0300 \u0026 \u0300b\u0301.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Converse: If [a b c]=0, vectors are linearly independent.", "label": "Converse: If [a b c]=0, vectors are linearly independent.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "then the vectors are linearly independent.", "label": "then the vectors are linearly independent.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a,b,c are coplanar.", "label": "a,b,c are coplanar.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Remember that :[0] accbba[", "label": "Remember that :[0] accbba[", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "It is a cross product of two vectors", "label": "It is a cross product of two vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(a\u0300\u00d7\u0300b\u0301)\u00d7c\u0300 is a vector perpendicular to the plane", "label": "(a\u0300\u00d7\u0300b\u0301)\u00d7c\u0300 is a vector perpendicular to the plane", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(a\u0300\u00d7\u0300b\u0301)\u00d7\u0300c\u0300 = \u0300c\u0300xb\u0300y\u0300", "label": "(a\u0300\u00d7\u0300b\u0301)\u00d7\u0300c\u0300 = \u0300c\u0300xb\u0300y\u0300", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "where x and y are", "label": "where x and y are", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "linearly independent.", "label": "linearly independent.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "are linearly dependent", "label": "are linearly dependent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "3 Collinear vectors.", "label": "3 Collinear vectors.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a = 3i + 2j + 5k", "label": "a = 3i + 2j + 5k", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a\u0300\u0026\u0300b\u0301 are two vectors \u0026 \u03b8 is the angle between them", "label": "If a\u0300\u0026\u0300b\u0301 are two vectors \u0026 \u03b8 is the angle between them", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "|a||b| sin \u03b8\u0302n, where \u0302n is the unit vector", "label": "|a||b| sin \u03b8\u0302n, where \u0302n is the unit vector", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Moment : r\u0300\u0301w\u0178V\u0300\u0301\u0301\u0301", "label": "Moment : r\u0300\u0301w\u0178V\u0300\u0301\u0301\u0301", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vector area of triangle ABC = [abc]2", "label": "Vector area of triangle ABC = [abc]2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If \u0300c\u0301,\u0300b\u0301,\u0300a\u0300\u0300\u0300\u0300\u0026 \u0300\u0027c\u0301,\u0300\u0027b\u0301,\u0027\u0300a\u0300\u0300\u0300 are two sets of non-\u0300c\u0301\u030fpl\u0300a\u0300n\u0300a\u0300r vectors such", "label": "If \u0300c\u0301,\u0300b\u0301,\u0300a\u0300\u0300\u0300\u0300\u0026 \u0300\u0027c\u0301,\u0300\u0027b\u0301,\u0027\u0300a\u0300\u0300\u0300 are two sets of non-\u0300c\u0301\u030fpl\u0300a\u0300n\u0300a\u0300r vectors such", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two vectors are equal", "label": "Two vectors are equal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zero Vector.", "label": "Zero Vector.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A is initial point and B is terminal point.", "label": "A is initial point and B is terminal point.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "pv\u2019s", "label": "pv\u2019s", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "pv of a point ", "label": "pv of a point ", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Collinear vectors are", "label": "Collinear vectors are", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a.b= |a||b| cos \u03b8 (0\u2264\u03b8\u2264\u03c0)", "label": "a.b= |a||b| cos \u03b8 (0\u2264\u03b8\u2264\u03c0)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "i\u00d7i = j\u00d7j=k\u00d7k=0", "label": "i\u00d7i = j\u00d7j=k\u00d7k=0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "i.i = j.j = k.k = 1", "label": "i.i = j.j = k.k = 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Workdone", "label": "Workdone", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two vectors \u0300b\u0301\u0026\u0300a\u0300", "label": "Two vectors \u0300b\u0301\u0026\u0300a\u0300", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "parallel disregards to their direction.", "label": "parallel disregards to their direction.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If and only, if b=Ka", "label": "If and only, if b=Ka", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Symbolically, two non \u2013 zero vectors a\u0300 and b are collinear if", "label": "Symbolically, two non \u2013 zero vectors a\u0300 and b are collinear if", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "5.  PRODUCT OF VECTORS"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "2.2 Multiplication of a Vector by a scalar"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "1.5 Coplanar Vectors"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "5.4  Vector triple product"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "6.  LINEAR COMBINATIONS"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "5.2  Vector product of two vectors"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "7.  RECIPROCAL SYSTEM OF VECTORS"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "1. Vector \u0026 3-"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "5.1  Scalar product of two vectors"}, {"arrows": "to", "from": "VECTOR \u0026 3\u00adD", "to": "3. Collinear Vectors"}, {"arrows": "to", "from": "5.  PRODUCT OF VECTORS", "to": "[a b c] = [b c a] = [c a b]"}, {"arrows": "to", "from": "5.  PRODUCT OF VECTORS", "to": "Geometrically represents the volume"}, {"arrows": "to", "from": "2.2 Multiplication of a Vector by a scalar", "to": "If a\u0300 is a vector \u0026 m is a scalar, then m a\u0300 is vector parallel to a\u0300"}, {"arrows": "to", "from": "2.2 Multiplication of a Vector by a scalar", "to": "m (na\u0300) = n(ma\u0300) = (mn) a\u0300"}, {"arrows": "to", "from": "2.2 Multiplication of a Vector by a scalar", "to": "(m + n) a\u0300 = ma\u0300 + na\u0300"}, {"arrows": "to", "from": "2.2 Multiplication of a Vector by a scalar", "to": "m (\u0300b\u0301/\u0300\u0300a\u0314\u0300) = m a\u0300 + m\u0300b\u0301"}, {"arrows": "to", "from": "1.5 Coplanar Vectors", "to": "linear dependence of a\u0300 \u0026 \u0300b\u0301."}, {"arrows": "to", "from": "1.5 Coplanar Vectors", "to": "Converse: If [a b c]=0, vectors are linearly independent."}, {"arrows": "to", "from": "1.5 Coplanar Vectors", "to": "then the vectors are linearly independent."}, {"arrows": "to", "from": "1.5 Coplanar Vectors", "to": "a,b,c are coplanar."}, {"arrows": "to", "from": "5.4  Vector triple product", "to": "Remember that :[0] accbba["}, {"arrows": "to", "from": "5.4  Vector triple product", "to": "It is a cross product of two vectors"}, {"arrows": "to", "from": "5.4  Vector triple product", "to": "(a\u0300\u00d7\u0300b\u0301)\u00d7c\u0300 is a vector perpendicular to the plane"}, {"arrows": "to", "from": "5.4  Vector triple product", "to": "(a\u0300\u00d7\u0300b\u0301)\u00d7\u0300c\u0300 = \u0300c\u0300xb\u0300y\u0300"}, {"arrows": "to", "from": "5.4  Vector triple product", "to": "where x and y are"}, {"arrows": "to", "from": "6.  LINEAR COMBINATIONS", "to": "linearly independent."}, {"arrows": "to", "from": "6.  LINEAR COMBINATIONS", "to": "are linearly dependent"}, {"arrows": "to", "from": "6.  LINEAR COMBINATIONS", "to": "3 Collinear vectors."}, {"arrows": "to", "from": "6.  LINEAR COMBINATIONS", "to": "a = 3i + 2j + 5k"}, {"arrows": "to", "from": "5.2  Vector product of two vectors", "to": "If a\u0300\u0026\u0300b\u0301 are two vectors \u0026 \u03b8 is the angle between them"}, {"arrows": "to", "from": "5.2  Vector product of two vectors", "to": "|a||b| sin \u03b8\u0302n, where \u0302n is the unit vector"}, {"arrows": "to", "from": "5.2  Vector product of two vectors", "to": "Moment : r\u0300\u0301w\u0178V\u0300\u0301\u0301\u0301"}, {"arrows": "to", "from": "5.2  Vector product of two vectors", "to": "Vector area of triangle ABC = [abc]2"}, {"arrows": "to", "from": "7.  RECIPROCAL SYSTEM OF VECTORS", "to": "If \u0300c\u0301,\u0300b\u0301,\u0300a\u0300\u0300\u0300\u0300\u0026 \u0300\u0027c\u0301,\u0300\u0027b\u0301,\u0027\u0300a\u0300\u0300\u0300 are two sets of non-\u0300c\u0301\u030fpl\u0300a\u0300n\u0300a\u0300r vectors such"}, {"arrows": "to", "from": "1. Vector \u0026 3-", "to": "Two vectors are equal"}, {"arrows": "to", "from": "1. Vector \u0026 3-", "to": "Zero Vector."}, {"arrows": "to", "from": "1. Vector \u0026 3-", "to": "A is initial point and B is terminal point."}, {"arrows": "to", "from": "1. Vector \u0026 3-", "to": "pv\u2019s"}, {"arrows": "to", "from": "1. Vector \u0026 3-", "to": "pv of a point "}, {"arrows": "to", "from": "1. Vector \u0026 3-", "to": "Collinear vectors are"}, {"arrows": "to", "from": "5.1  Scalar product of two vectors", "to": "a.b= |a||b| cos \u03b8 (0\u2264\u03b8\u2264\u03c0)"}, {"arrows": "to", "from": "5.1  Scalar product of two vectors", "to": "i\u00d7i = j\u00d7j=k\u00d7k=0"}, {"arrows": "to", "from": "5.1  Scalar product of two vectors", "to": "i.i = j.j = k.k = 1"}, {"arrows": "to", "from": "5.1  Scalar product of two vectors", "to": "Workdone"}, {"arrows": "to", "from": "3. Collinear Vectors", "to": "Two vectors \u0300b\u0301\u0026\u0300a\u0300"}, {"arrows": "to", "from": "3. Collinear Vectors", "to": "parallel disregards to their direction."}, {"arrows": "to", "from": "3. Collinear Vectors", "to": "If and only, if b=Ka"}, {"arrows": "to", "from": "3. Collinear Vectors", "to": "Symbolically, two non \u2013 zero vectors a\u0300 and b are collinear if"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

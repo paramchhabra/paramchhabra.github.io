@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "METALLURGY", "label": "METALLURGY", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "following steps given in flow sheet.", "label": "following steps given in flow sheet.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "FLOW SHEET FOR THE EXTRACTION OF COPPER", "label": "FLOW SHEET FOR THE EXTRACTION OF COPPER", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "sodium cyanide in the presence of air. The silver from the", "label": "sodium cyanide in the presence of air. The silver from the", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "ore is dissolved in the cyanide solution forming sodium", "label": "ore is dissolved in the cyanide solution forming sodium", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When the molten pig iron is cooled at once, the iron is called", "label": "When the molten pig iron is cooled at once, the iron is called", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "white cast iron, which contains carbon in the form of cementite", "label": "white cast iron, which contains carbon in the form of cementite", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "3/uni0020/uni0063/uni0061/uni0072/uni0062/uni006F/uni006E/uni0020/uni0061/uni006E/uni006F/uni0064/uni0065/uni0020/uni0069/uni0073/uni0020/uni0062/uni0075/uni0072/uni006E/uni0074/uni0020/uni0061/uni0077/uni0061/uni0079/uni002E", "label": "3/uni0020/uni0063/uni0061/uni0072/uni0062/uni006F/uni006E/uni0020/uni0061/uni006E/uni006F/uni0064/uni0065/uni0020/uni0069/uni0073/uni0020/uni0062/uni0075/uni0072/uni006E/uni0074/uni0020/uni0061/uni0077/uni0061/uni0079/uni002E", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(ii)The volatile compound should be easily decomposable, so that the recovery is easy.", "label": "(ii)The volatile compound should be easily decomposable, so that the recovery is easy.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Electrical reactions are:", "label": "Electrical reactions are:", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "regent. (i) Concentration of the ore (ii) Reduction (iii) Purification", "label": "regent. (i) Concentration of the ore (ii) Reduction (iii) Purification", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Concentration of the ore:(i) Concentration of the ore (ii) Reduction (iii) Purification", "label": "Concentration of the ore:(i) Concentration of the ore (ii) Reduction (iii) Purification", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) Concentration of the ore (ii) Reduction (iii) Purification", "label": "(i) Concentration of the ore (ii) Reduction (iii) Purification", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "SOME IMPORTANT COMPOUNDS, MINERALS, MIXTURES \u0026 THE FORMULA\u0027S", "label": "SOME IMPORTANT COMPOUNDS, MINERALS, MIXTURES \u0026 THE FORMULA\u0027S", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Chlorargyrite (Horn silver) AgCl. Stefenite Ag5SbS4 Proustite Ag3AsS3", "label": "Chlorargyrite (Horn silver) AgCl. Stefenite Ag5SbS4 Proustite Ag3AsS3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "AgCl", "label": "AgCl", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ag5SbS4", "label": "Ag5SbS4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ag3AsS3", "label": "Ag3AsS3", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Removal of ferric oxide and silica from bauxite ore is essential before it is subjected to electrolysis. Thus, the extraction", "label": "Removal of ferric oxide and silica from bauxite ore is essential before it is subjected to electrolysis. Thus, the extraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Zn (s) + C(s)  K1270 Zn(g) + CO(g)", "label": "Zn (s) + C(s)  K1270 Zn(g) + CO(g)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "is considerable negative and thus, reduction of ZnO with", "label": "is considerable negative and thus, reduction of ZnO with", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "reduction of Fe2O3 with carbon will be positive and hence, reduction is not possible. However, it is observed from", "label": "reduction of Fe2O3 with carbon will be positive and hence, reduction is not possible. However, it is observed from", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "three liquid layers. The bottom layer is molten impure Al,", "label": "three liquid layers. The bottom layer is molten impure Al,", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " the middle is a fused salt layer containing aluminium fluoride", "label": " the middle is a fused salt layer containing aluminium fluoride", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "the middle is a fused salt layer containing aluminium fluoride", "label": "the middle is a fused salt layer containing aluminium fluoride", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "where H is the enthalpy change and S is the entropy", "label": "where H is the enthalpy change and S is the entropy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the acid Bessemer\u0027s convertor to remove Si, Mn and a part of", "label": "the acid Bessemer\u0027s convertor to remove Si, Mn and a part of", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "the free energy change is also related to", "label": "the free energy change is also related to", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "the equilibrium constant \u2018K\u2019 of the reaction at temperature", "label": "the equilibrium constant \u2018K\u2019 of the reaction at temperature", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "the belt at the other end, magnetic component of the ore is", "label": "the belt at the other end, magnetic component of the ore is", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "attracted by the magnetic roller and falls nearer to the roller", "label": "attracted by the magnetic roller and falls nearer to the roller", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Ff impurities", "label": "Ff impurities", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Elimination diagram for the reducing nature of carbon", "label": "Elimination diagram for the reducing nature of carbon", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Same process is employed for the extraction of gold (Au)", "label": "Same process is employed for the extraction of gold (Au)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "blowing of O2 into the convertor is stopped. Here it should", "label": "blowing of O2 into the convertor is stopped. Here it should", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "be noted that the formation of slags. After all the impurities", "label": "be noted that the formation of slags. After all the impurities", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "wetted by water while the ore particles are wetted by oil. In", "label": "wetted by water while the ore particles are wetted by oil. In", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "this process one or more chemical frothing agents are added.", "label": "this process one or more chemical frothing agents are added.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "with calcium hydroxide when magnesium hydroxide gets", "label": "with calcium hydroxide when magnesium hydroxide gets", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "precipitated. It is dissolved in dilute HCl. The solution", "label": "precipitated. It is dissolved in dilute HCl. The solution", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "used as reducing agent Al powder + ore is called thermite", "label": "used as reducing agent Al powder + ore is called thermite", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "and this process is called Gold-Schmidt Alumino Thermite", "label": "and this process is called Gold-Schmidt Alumino Thermite", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The oxides of less electropositive metals like Pb, Zn, Fe, Sn,", "label": "The oxides of less electropositive metals like Pb, Zn, Fe, Sn,", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cu etc. are reduced by strongly heating them with coal or", "label": "Cu etc. are reduced by strongly heating them with coal or", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When a mineral contains other minerals as impurities. The", "label": "When a mineral contains other minerals as impurities. The", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "addition of these agents activates or depresses the flotation", "label": "addition of these agents activates or depresses the flotation", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "the addition of these agents activates or depresses the flotation", "label": "the addition of these agents activates or depresses the flotation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "the temperature. The free energy change is also related to", "label": "the temperature. The free energy change is also related to", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "the ore. The aqueous solution of the compound is reacted", "label": "the ore. The aqueous solution of the compound is reacted", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "with a more electropositive metal which displaces, the metal", "label": "with a more electropositive metal which displaces, the metal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) The metal should form a volatile compound with an available", "label": "(i) The metal should form a volatile compound with an available", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "reaction is carried out. For the feasibility of any reaction", "label": "reaction is carried out. For the feasibility of any reaction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "at any temperature the value of G must be negative at", "label": "at any temperature the value of G must be negative at", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "The removal of unwanted useless impurities from the ore is", "label": "The removal of unwanted useless impurities from the ore is", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "called dressing, concentration or beneficiation of ore.", "label": "called dressing, concentration or beneficiation of ore.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(i) Purification of bauxite ore, i.e., removal of ferric oxide and", "label": "(i) Purification of bauxite ore, i.e., removal of ferric oxide and", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "METALLURGY", "to": "following steps given in flow sheet."}, {"arrows": "to", "from": "METALLURGY", "to": "FLOW SHEET FOR THE EXTRACTION OF COPPER"}, {"arrows": "to", "from": "METALLURGY", "to": "sodium cyanide in the presence of air. The silver from the"}, {"arrows": "to", "from": "METALLURGY", "to": "ore is dissolved in the cyanide solution forming sodium"}, {"arrows": "to", "from": "METALLURGY", "to": "When the molten pig iron is cooled at once, the iron is called"}, {"arrows": "to", "from": "METALLURGY", "to": "white cast iron, which contains carbon in the form of cementite"}, {"arrows": "to", "from": "following steps given in flow sheet.", "to": "FLOW SHEET FOR THE EXTRACTION OF COPPER"}, {"arrows": "to", "from": "FLOW SHEET FOR THE EXTRACTION OF COPPER", "to": "sodium cyanide in the presence of air. The silver from the"}, {"arrows": "to", "from": "sodium cyanide in the presence of air. The silver from the", "to": "ore is dissolved in the cyanide solution forming sodium"}, {"arrows": "to", "from": "ore is dissolved in the cyanide solution forming sodium", "to": "When the molten pig iron is cooled at once, the iron is called"}, {"arrows": "to", "from": "When the molten pig iron is cooled at once, the iron is called", "to": "white cast iron, which contains carbon in the form of cementite"}, {"arrows": "to", "from": "white cast iron, which contains carbon in the form of cementite", "to": "reaction is carried out. For the feasibility of any reaction"}, {"arrows": "to", "from": "white cast iron, which contains carbon in the form of cementite", "to": "at any temperature the value of G must be negative at"}, {"arrows": "to", "from": "3/uni0020/uni0063/uni0061/uni0072/uni0062/uni006F/uni006E/uni0020/uni0061/uni006E/uni006F/uni0064/uni0065/uni0020/uni0069/uni0073/uni0020/uni0062/uni0075/uni0072/uni006E/uni0074/uni0020/uni0061/uni0077/uni0061/uni0079/uni002E", "to": "(ii)The volatile compound should be easily decomposable, so that the recovery is easy."}, {"arrows": "to", "from": "Electrical reactions are:", "to": "regent. (i) Concentration of the ore (ii) Reduction (iii) Purification"}, {"arrows": "to", "from": "regent. (i) Concentration of the ore (ii) Reduction (iii) Purification", "to": "Concentration of the ore:(i) Concentration of the ore (ii) Reduction (iii) Purification"}, {"arrows": "to", "from": "Concentration of the ore:(i) Concentration of the ore (ii) Reduction (iii) Purification", "to": "(i) Concentration of the ore (ii) Reduction (iii) Purification"}, {"arrows": "to", "from": "SOME IMPORTANT COMPOUNDS, MINERALS, MIXTURES \u0026 THE FORMULA\u0027S", "to": "Chlorargyrite (Horn silver) AgCl. Stefenite Ag5SbS4 Proustite Ag3AsS3"}, {"arrows": "to", "from": "Chlorargyrite (Horn silver) AgCl. Stefenite Ag5SbS4 Proustite Ag3AsS3", "to": "AgCl"}, {"arrows": "to", "from": "Chlorargyrite (Horn silver) AgCl. Stefenite Ag5SbS4 Proustite Ag3AsS3", "to": "Ag5SbS4"}, {"arrows": "to", "from": "Chlorargyrite (Horn silver) AgCl. Stefenite Ag5SbS4 Proustite Ag3AsS3", "to": "Ag3AsS3"}, {"arrows": "to", "from": "Removal of ferric oxide and silica from bauxite ore is essential before it is subjected to electrolysis. Thus, the extraction", "to": "Zn (s) + C(s)  K1270 Zn(g) + CO(g)"}, {"arrows": "to", "from": "Zn (s) + C(s)  K1270 Zn(g) + CO(g)", "to": "is considerable negative and thus, reduction of ZnO with"}, {"arrows": "to", "from": "Zn (s) + C(s)  K1270 Zn(g) + CO(g)", "to": "reduction of Fe2O3 with carbon will be positive and hence, reduction is not possible. However, it is observed from"}, {"arrows": "to", "from": "reduction of Fe2O3 with carbon will be positive and hence, reduction is not possible. However, it is observed from", "to": "three liquid layers. The bottom layer is molten impure Al,"}, {"arrows": "to", "from": "three liquid layers. The bottom layer is molten impure Al,", "to": " the middle is a fused salt layer containing aluminium fluoride"}, {"arrows": "to", "from": "the middle is a fused salt layer containing aluminium fluoride", "to": "where H is the enthalpy change and S is the entropy"}, {"arrows": "to", "from": "the middle is a fused salt layer containing aluminium fluoride", "to": "the acid Bessemer\u0027s convertor to remove Si, Mn and a part of"}, {"arrows": "to", "from": "where H is the enthalpy change and S is the entropy", "to": "the free energy change is also related to"}, {"arrows": "to", "from": "where H is the enthalpy change and S is the entropy", "to": "the equilibrium constant \u2018K\u2019 of the reaction at temperature"}, {"arrows": "to", "from": "the free energy change is also related to", "to": "the belt at the other end, magnetic component of the ore is"}, {"arrows": "to", "from": "the equilibrium constant \u2018K\u2019 of the reaction at temperature", "to": "the ore. The aqueous solution of the compound is reacted"}, {"arrows": "to", "from": "the equilibrium constant \u2018K\u2019 of the reaction at temperature", "to": "with a more electropositive metal which displaces, the metal"}, {"arrows": "to", "from": "the belt at the other end, magnetic component of the ore is", "to": "attracted by the magnetic roller and falls nearer to the roller"}, {"arrows": "to", "from": "Ff impurities", "to": "the free energy change is also related to"}, {"arrows": "to", "from": "Elimination diagram for the reducing nature of carbon", "to": "Zn (s) + C(s)  K1270 Zn(g) + CO(g)"}, {"arrows": "to", "from": "Same process is employed for the extraction of gold (Au)", "to": "blowing of O2 into the convertor is stopped. Here it should"}, {"arrows": "to", "from": "blowing of O2 into the convertor is stopped. Here it should", "to": "be noted that the formation of slags. After all the impurities"}, {"arrows": "to", "from": "be noted that the formation of slags. After all the impurities", "to": "wetted by water while the ore particles are wetted by oil. In"}, {"arrows": "to", "from": "wetted by water while the ore particles are wetted by oil. In", "to": "this process one or more chemical frothing agents are added."}, {"arrows": "to", "from": "this process one or more chemical frothing agents are added.", "to": "with calcium hydroxide when magnesium hydroxide gets"}, {"arrows": "to", "from": "with calcium hydroxide when magnesium hydroxide gets", "to": "precipitated. It is dissolved in dilute HCl. The solution"}, {"arrows": "to", "from": "precipitated. It is dissolved in dilute HCl. The solution", "to": "used as reducing agent Al powder + ore is called thermite"}, {"arrows": "to", "from": "used as reducing agent Al powder + ore is called thermite", "to": "and this process is called Gold-Schmidt Alumino Thermite"}, {"arrows": "to", "from": "The oxides of less electropositive metals like Pb, Zn, Fe, Sn,", "to": "Cu etc. are reduced by strongly heating them with coal or"}, {"arrows": "to", "from": "Cu etc. are reduced by strongly heating them with coal or", "to": "When a mineral contains other minerals as impurities. The"}, {"arrows": "to", "from": "When a mineral contains other minerals as impurities. The", "to": "addition of these agents activates or depresses the flotation"}, {"arrows": "to", "from": "the addition of these agents activates or depresses the flotation", "to": "the temperature. The free energy change is also related to"}, {"arrows": "to", "from": "the temperature. The free energy change is also related to", "to": "the equilibrium constant \u2018K\u2019 of the reaction at temperature"}, {"arrows": "to", "from": "the ore. The aqueous solution of the compound is reacted", "to": "(i) The metal should form a volatile compound with an available"}, {"arrows": "to", "from": "reaction is carried out. For the feasibility of any reaction", "to": "at any temperature the value of G must be negative at"}, {"arrows": "to", "from": "at any temperature the value of G must be negative at", "to": "The removal of unwanted useless impurities from the ore is"}, {"arrows": "to", "from": "The removal of unwanted useless impurities from the ore is", "to": "called dressing, concentration or beneficiation of ore."}, {"arrows": "to", "from": "called dressing, concentration or beneficiation of ore.", "to": "(i) Purification of bauxite ore, i.e., removal of ferric oxide and"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

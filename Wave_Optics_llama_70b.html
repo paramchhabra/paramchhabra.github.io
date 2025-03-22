@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Wave Interference", "label": "Wave Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Maxima and Minima", "label": "Maxima and Minima", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Average Intensity", "label": "Average Intensity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Condition for Maxima", "label": "Condition for Maxima", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Condition for Minima", "label": "Condition for Minima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path Difference = n\u03bb", "label": "Path Difference = n\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resultant Amplitude = 2a\u2080", "label": "Resultant Amplitude = 2a\u2080", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path Difference = (n + 1/2)\u03bb", "label": "Path Difference = (n + 1/2)\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resultant Amplitude = 0", "label": "Resultant Amplitude = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I avocado = 4I\u2080", "label": "I avocado = 4I\u2080", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When two waves of same amplitude interfere", "label": "When two waves of same amplitude interfere", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Shift", "label": "Shift", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dependent on wave length", "label": "Dependent on wave length", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "6. Phase difference", "label": "6. Phase difference", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Wave Optics", "label": "Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Huygens\u0027 Principle", "label": "Huygens\u0027 Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reflection and Refraction", "label": "Reflection and Refraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Light travels in all directions from a point source", "label": "Light travels in all directions from a point source", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Each point produces a wavelet", "label": "Each point produces a wavelet", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Laws of Reflection and Refraction", "label": "Laws of Reflection and Refraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Snell\u0027s Law", "label": "Snell\u0027s Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u2220i = \u2220r", "label": "\u2220i = \u2220r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "n\u2081 sin i = n\u2082 sin r", "label": "n\u2081 sin i = n\u2082 sin r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "n\u2081 / n\u2082 = sin r / sin i", "label": "n\u2081 / n\u2082 = sin r / sin i", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "for transparent media", "label": "for transparent media", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Reflected Light", "label": "Reflected Light", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Path difference for reflected light", "label": "Path difference for reflected light", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Phase difference", "label": "Phase difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2d sin \u03b8 = m\u03bb", "label": "2d sin \u03b8 = m\u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Condition for constructive interference", "label": "Condition for constructive interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "due to reflection", "label": "due to reflection", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "additional path difference", "label": "additional path difference", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Interference", "label": "Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "from two coherent sources", "label": "from two coherent sources", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "resultant intensity", "label": "resultant intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " Young\u0027s Double Slit Experiment", "label": " Young\u0027s Double Slit Experiment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fringe Width", "label": "Fringe Width", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Resultant intensity", "label": "Resultant intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = 4I\u2080 cos\u00b2(\u03c0d/\u03bb)", "label": "I = 4I\u2080 cos\u00b2(\u03c0d/\u03bb)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Polarization", "label": "Polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "linearly polarized light", "label": "linearly polarized light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "by reflection", "label": "by reflection", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Brewster\u0027s Law", "label": "Brewster\u0027s Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Malus\u0027 Law", "label": "Malus\u0027 Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan \u03b8 = n\u2082 / n\u2081", "label": "tan \u03b8 = n\u2082 / n\u2081", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "polarization by reflection", "label": "polarization by reflection", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = I\u2080 cos\u00b2 \u03b8", "label": "I = I\u2080 cos\u00b2 \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "intensity after analyzer", "label": "intensity after analyzer", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Optics", "label": "Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Refraction", "label": "Refraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reflection", "label": "Reflection", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction", "label": "Diffraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "total internal reflection", "label": "total internal reflection", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Laws of Reflection", "label": "Laws of Reflection", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "regular and diffuse reflection", "label": "regular and diffuse reflection", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "single-slit diffraction", "label": "single-slit diffraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fresnel and Fraunhofer diffraction", "label": "Fresnel and Fraunhofer diffraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fresnel Diffraction", "label": "Fresnel Diffraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fraunhofer Diffraction", "label": "Fraunhofer Diffraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "near-field diffraction", "label": "near-field diffraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "circular apertures", "label": "circular apertures", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "far-field diffraction", "label": "far-field diffraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": " rectangular apertures", "label": " rectangular apertures", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Wave Interference", "to": "Maxima and Minima"}, {"arrows": "to", "from": "Wave Interference", "to": "Average Intensity"}, {"arrows": "to", "from": "Maxima and Minima", "to": "Condition for Maxima"}, {"arrows": "to", "from": "Maxima and Minima", "to": "Condition for Minima"}, {"arrows": "to", "from": "Average Intensity", "to": "I avocado = 4I\u2080"}, {"arrows": "to", "from": "Average Intensity", "to": "When two waves of same amplitude interfere"}, {"arrows": "to", "from": "Condition for Maxima", "to": "Path Difference = n\u03bb"}, {"arrows": "to", "from": "Condition for Maxima", "to": "Resultant Amplitude = 2a\u2080"}, {"arrows": "to", "from": "Condition for Minima", "to": "Path Difference = (n + 1/2)\u03bb"}, {"arrows": "to", "from": "Condition for Minima", "to": "Resultant Amplitude = 0"}, {"arrows": "to", "from": "Shift", "to": "Dependent on wave length"}, {"arrows": "to", "from": "Shift", "to": "6. Phase difference"}, {"arrows": "to", "from": "Wave Optics", "to": "Huygens\u0027 Principle"}, {"arrows": "to", "from": "Wave Optics", "to": "Reflection and Refraction"}, {"arrows": "to", "from": "Huygens\u0027 Principle", "to": "Light travels in all directions from a point source"}, {"arrows": "to", "from": "Huygens\u0027 Principle", "to": "Each point produces a wavelet"}, {"arrows": "to", "from": "Reflection and Refraction", "to": "Laws of Reflection and Refraction"}, {"arrows": "to", "from": "Reflection and Refraction", "to": "Snell\u0027s Law"}, {"arrows": "to", "from": "Laws of Reflection and Refraction", "to": "\u2220i = \u2220r"}, {"arrows": "to", "from": "Laws of Reflection and Refraction", "to": "n\u2081 sin i = n\u2082 sin r"}, {"arrows": "to", "from": "Snell\u0027s Law", "to": "n\u2081 / n\u2082 = sin r / sin i"}, {"arrows": "to", "from": "Snell\u0027s Law", "to": "for transparent media"}, {"arrows": "to", "from": "Reflected Light", "to": "Path difference for reflected light"}, {"arrows": "to", "from": "Reflected Light", "to": "Phase difference"}, {"arrows": "to", "from": "Path difference for reflected light", "to": "2d sin \u03b8 = m\u03bb"}, {"arrows": "to", "from": "Path difference for reflected light", "to": "Condition for constructive interference"}, {"arrows": "to", "from": "Phase difference", "to": "due to reflection"}, {"arrows": "to", "from": "Phase difference", "to": "additional path difference"}, {"arrows": "to", "from": "Interference", "to": "from two coherent sources"}, {"arrows": "to", "from": "Interference", "to": "resultant intensity"}, {"arrows": "to", "from": "from two coherent sources", "to": " Young\u0027s Double Slit Experiment"}, {"arrows": "to", "from": "from two coherent sources", "to": "Fringe Width"}, {"arrows": "to", "from": "Resultant intensity", "to": "I = 4I\u2080 cos\u00b2(\u03c0d/\u03bb)"}, {"arrows": "to", "from": "Polarization", "to": "linearly polarized light"}, {"arrows": "to", "from": "Polarization", "to": "by reflection"}, {"arrows": "to", "from": "linearly polarized light", "to": "Brewster\u0027s Law"}, {"arrows": "to", "from": "linearly polarized light", "to": "Malus\u0027 Law"}, {"arrows": "to", "from": "Brewster\u0027s Law", "to": "tan \u03b8 = n\u2082 / n\u2081"}, {"arrows": "to", "from": "Brewster\u0027s Law", "to": "polarization by reflection"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "I = I\u2080 cos\u00b2 \u03b8"}, {"arrows": "to", "from": "Malus\u0027 Law", "to": "intensity after analyzer"}, {"arrows": "to", "from": "Optics", "to": "Refraction"}, {"arrows": "to", "from": "Optics", "to": "Reflection"}, {"arrows": "to", "from": "Optics", "to": "Diffraction"}, {"arrows": "to", "from": "Refraction", "to": "Snell\u0027s Law"}, {"arrows": "to", "from": "Refraction", "to": "total internal reflection"}, {"arrows": "to", "from": "Reflection", "to": "Laws of Reflection"}, {"arrows": "to", "from": "Reflection", "to": "regular and diffuse reflection"}, {"arrows": "to", "from": "Diffraction", "to": "single-slit diffraction"}, {"arrows": "to", "from": "Diffraction", "to": "Fresnel and Fraunhofer diffraction"}, {"arrows": "to", "from": "single-slit diffraction", "to": "Fresnel Diffraction"}, {"arrows": "to", "from": "single-slit diffraction", "to": "Fraunhofer Diffraction"}, {"arrows": "to", "from": "Fresnel Diffraction", "to": "near-field diffraction"}, {"arrows": "to", "from": "Fresnel Diffraction", "to": "circular apertures"}, {"arrows": "to", "from": "Fraunhofer Diffraction", "to": "far-field diffraction"}, {"arrows": "to", "from": "Fraunhofer Diffraction", "to": " rectangular apertures"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

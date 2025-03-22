@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Mathematics", "label": "Mathematics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Algebra", "label": "Algebra", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Geometry", "label": "Geometry", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Calculus", "label": "Calculus", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polynomials", "label": "Polynomials", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Equations", "label": "Equations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Inequalities", "label": "Inequalities", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Functions", "label": "Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types", "label": "Types", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Operations", "label": "Operations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Roots", "label": "Roots", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear", "label": "Linear", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quadratic", "label": "Quadratic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cubic", "label": "Cubic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Addition", "label": "Addition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multiplication", "label": "Multiplication", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finding roots", "label": "Finding roots", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rational Root Theorem", "label": "Rational Root Theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear equations", "label": "Linear equations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quadratic equations", "label": "Quadratic equations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear inequalities", "label": "Linear inequalities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quadratic inequalities", "label": "Quadratic inequalities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types of functions", "label": "Types of functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Transformations", "label": "Transformations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Shapes", "label": "Shapes", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Theorems", "label": "Theorems", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Coordinate Geometry", "label": "Coordinate Geometry", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triangles", "label": "Triangles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Circles", "label": "Circles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polygons", "label": "Polygons", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pythagorean Theorem", "label": "Pythagorean Theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Congruence", "label": "Congruence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Similarity", "label": "Similarity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Distance formula", "label": "Distance formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Midpoint formula", "label": "Midpoint formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Slope", "label": "Slope", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Limits", "label": "Limits", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Derivatives", "label": "Derivatives", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals", "label": "Integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Techniques to find limits", "label": "Techniques to find limits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rules for differentiation", "label": "Rules for differentiation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definite integrals", "label": "Definite integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Indefinite integrals", "label": "Indefinite integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fundamental Theorem of Calculus", "label": "Fundamental Theorem of Calculus", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Mathematics", "to": "Algebra"}, {"arrows": "to", "from": "Mathematics", "to": "Geometry"}, {"arrows": "to", "from": "Mathematics", "to": "Calculus"}, {"arrows": "to", "from": "Algebra", "to": "Polynomials"}, {"arrows": "to", "from": "Algebra", "to": "Equations"}, {"arrows": "to", "from": "Algebra", "to": "Inequalities"}, {"arrows": "to", "from": "Algebra", "to": "Functions"}, {"arrows": "to", "from": "Geometry", "to": "Shapes"}, {"arrows": "to", "from": "Geometry", "to": "Theorems"}, {"arrows": "to", "from": "Geometry", "to": "Coordinate Geometry"}, {"arrows": "to", "from": "Calculus", "to": "Limits"}, {"arrows": "to", "from": "Calculus", "to": "Derivatives"}, {"arrows": "to", "from": "Calculus", "to": "Integrals"}, {"arrows": "to", "from": "Polynomials", "to": "Types"}, {"arrows": "to", "from": "Polynomials", "to": "Operations"}, {"arrows": "to", "from": "Polynomials", "to": "Roots"}, {"arrows": "to", "from": "Equations", "to": "Linear equations"}, {"arrows": "to", "from": "Equations", "to": "Quadratic equations"}, {"arrows": "to", "from": "Inequalities", "to": "Linear inequalities"}, {"arrows": "to", "from": "Inequalities", "to": "Quadratic inequalities"}, {"arrows": "to", "from": "Functions", "to": "Types of functions"}, {"arrows": "to", "from": "Functions", "to": "Transformations"}, {"arrows": "to", "from": "Types", "to": "Linear"}, {"arrows": "to", "from": "Types", "to": "Quadratic"}, {"arrows": "to", "from": "Types", "to": "Cubic"}, {"arrows": "to", "from": "Operations", "to": "Addition"}, {"arrows": "to", "from": "Operations", "to": "Multiplication"}, {"arrows": "to", "from": "Roots", "to": "Finding roots"}, {"arrows": "to", "from": "Roots", "to": "Rational Root Theorem"}, {"arrows": "to", "from": "Shapes", "to": "Triangles"}, {"arrows": "to", "from": "Shapes", "to": "Circles"}, {"arrows": "to", "from": "Shapes", "to": "Polygons"}, {"arrows": "to", "from": "Theorems", "to": "Pythagorean Theorem"}, {"arrows": "to", "from": "Theorems", "to": "Congruence"}, {"arrows": "to", "from": "Theorems", "to": "Similarity"}, {"arrows": "to", "from": "Coordinate Geometry", "to": "Distance formula"}, {"arrows": "to", "from": "Coordinate Geometry", "to": "Midpoint formula"}, {"arrows": "to", "from": "Coordinate Geometry", "to": "Slope"}, {"arrows": "to", "from": "Limits", "to": "Definition"}, {"arrows": "to", "from": "Limits", "to": "Techniques to find limits"}, {"arrows": "to", "from": "Derivatives", "to": "Definition"}, {"arrows": "to", "from": "Derivatives", "to": "Rules for differentiation"}, {"arrows": "to", "from": "Integrals", "to": "Definite integrals"}, {"arrows": "to", "from": "Integrals", "to": "Indefinite integrals"}, {"arrows": "to", "from": "Integrals", "to": "Fundamental Theorem of Calculus"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

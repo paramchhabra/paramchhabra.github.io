@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Integration Techniques", "label": "Integration Techniques", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quadratic Factor", "label": "Quadratic Factor", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Trigonometric Functions", "label": "Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Substitution Methods", "label": "Substitution Methods", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Standard Integral Techniques", "label": "Standard Integral Techniques", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (ax\u00b2 + bx + c)(x - h\u2083)(x - h\u2084)...(x - h\u2099)", "label": "g(x) = (ax\u00b2 + bx + c)(x - h\u2083)(x - h\u2084)...(x - h\u2099)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cannot be factorized further", "label": "Cannot be factorized further", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Special cases of integration", "label": "Special cases of integration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Inverse Trigonometric Functions", "label": "Inverse Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sine and Cosine Integration", "label": "Sine and Cosine Integration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Power of Trigonometric Terms", "label": "Power of Trigonometric Terms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Change of Variable Technique", "label": "Change of Variable Technique", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Algebraic Substitution", "label": "Algebraic Substitution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Trigonometric Substitution", "label": "Trigonometric Substitution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Splitting Integrals", "label": "Splitting Integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Partial Fraction Decomposition", "label": "Partial Fraction Decomposition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Algebraic Sum of Integrals", "label": "Algebraic Sum of Integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "First function in ILATE method", "label": "First function in ILATE method", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Derivative and Integral Relationship", "label": "Derivative and Integral Relationship", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Even and Odd Power Handling", "label": "Even and Odd Power Handling", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coefficient Matching Techniques", "label": "Coefficient Matching Techniques", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Trigonometric Identities", "label": "Trigonometric Identities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Simplify Complex Integrands", "label": "Simplify Complex Integrands", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Variable Transformation", "label": "Variable Transformation", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Integration Techniques", "to": "Quadratic Factor"}, {"arrows": "to", "from": "Integration Techniques", "to": "Trigonometric Functions"}, {"arrows": "to", "from": "Integration Techniques", "to": "Substitution Methods"}, {"arrows": "to", "from": "Integration Techniques", "to": "Standard Integral Techniques"}, {"arrows": "to", "from": "Quadratic Factor", "to": "g(x) = (ax\u00b2 + bx + c)(x - h\u2083)(x - h\u2084)...(x - h\u2099)"}, {"arrows": "to", "from": "Quadratic Factor", "to": "Cannot be factorized further"}, {"arrows": "to", "from": "Quadratic Factor", "to": "Special cases of integration"}, {"arrows": "to", "from": "Trigonometric Functions", "to": "Inverse Trigonometric Functions"}, {"arrows": "to", "from": "Trigonometric Functions", "to": "Sine and Cosine Integration"}, {"arrows": "to", "from": "Trigonometric Functions", "to": "Power of Trigonometric Terms"}, {"arrows": "to", "from": "Substitution Methods", "to": "Change of Variable Technique"}, {"arrows": "to", "from": "Substitution Methods", "to": "Algebraic Substitution"}, {"arrows": "to", "from": "Substitution Methods", "to": "Trigonometric Substitution"}, {"arrows": "to", "from": "Standard Integral Techniques", "to": "Splitting Integrals"}, {"arrows": "to", "from": "Standard Integral Techniques", "to": "Partial Fraction Decomposition"}, {"arrows": "to", "from": "Standard Integral Techniques", "to": "Algebraic Sum of Integrals"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "First function in ILATE method"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "Derivative and Integral Relationship"}, {"arrows": "to", "from": "Sine and Cosine Integration", "to": "Even and Odd Power Handling"}, {"arrows": "to", "from": "Sine and Cosine Integration", "to": "Coefficient Matching Techniques"}, {"arrows": "to", "from": "Sine and Cosine Integration", "to": "Trigonometric Identities"}, {"arrows": "to", "from": "Algebraic Substitution", "to": "Simplify Complex Integrands"}, {"arrows": "to", "from": "Algebraic Substitution", "to": "Trigonometric Substitution"}, {"arrows": "to", "from": "Algebraic Substitution", "to": "Variable Transformation"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

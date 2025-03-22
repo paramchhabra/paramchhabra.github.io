@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "p-Block Elements", "label": "p-Block Elements", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Group 17 Elements", "label": "Group 17 Elements", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Group 16 Elements", "label": "Group 16 Elements", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Halogen Family", "label": "Halogen Family", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Oxy-Acids of Halogens", "label": "Oxy-Acids of Halogens", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties of Halogens", "label": "Properties of Halogens", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reactivity of Halogens", "label": "Reactivity of Halogens", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Atomic Properties", "label": "Atomic Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Physical Properties", "label": "Physical Properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electronegativity", "label": "Electronegativity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ionization Enthalpy", "label": "Ionization Enthalpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Melting Point", "label": "Melting Point", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Boiling Point", "label": "Boiling Point", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reactivity with Hydrogen", "label": "Reactivity with Hydrogen", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reactivity with Oxygen", "label": "Reactivity with Oxygen", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of Hydrides", "label": "Formation of Hydrides", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Acidic Character", "label": "Acidic Character", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of Oxides", "label": "Formation of Oxides", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Oxidising Properties", "label": "Oxidising Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hypo-Chlorous Acid", "label": "Hypo-Chlorous Acid", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Chloric Acid", "label": "Chloric Acid", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Per-Chloric Acid", "label": "Per-Chloric Acid", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Preparation", "label": "Preparation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties", "label": "Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sulphur", "label": "Sulphur", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Selenium", "label": "Selenium", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Tellurium", "label": "Tellurium", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Allotropic Forms", "label": "Allotropic Forms", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Oxy-Acids of Sulphur", "label": "Oxy-Acids of Sulphur", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rhombic Sulphur", "label": "Rhombic Sulphur", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Monoclinic Sulphur", "label": "Monoclinic Sulphur", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sulphurous Acid", "label": "Sulphurous Acid", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sulphuric Acid", "label": "Sulphuric Acid", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Oxy-Acids of Selenium", "label": "Oxy-Acids of Selenium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Oxy-Acids of Tellurium", "label": "Oxy-Acids of Tellurium", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Bleaching Powder", "label": "Bleaching Powder", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Xenon Compounds", "label": "Xenon Compounds", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Xenon Fluorides", "label": "Xenon Fluorides", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Xenon Oxides", "label": "Xenon Oxides", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "XeF2", "label": "XeF2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "XeF4", "label": "XeF4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "XeF6", "label": "XeF6", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "XeO3", "label": "XeO3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "XeO4", "label": "XeO4", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "p-Block Elements", "to": "Group 17 Elements"}, {"arrows": "to", "from": "p-Block Elements", "to": "Group 16 Elements"}, {"arrows": "to", "from": "Group 17 Elements", "to": "Halogen Family"}, {"arrows": "to", "from": "Group 17 Elements", "to": "Oxy-Acids of Halogens"}, {"arrows": "to", "from": "Group 16 Elements", "to": "Sulphur"}, {"arrows": "to", "from": "Group 16 Elements", "to": "Selenium"}, {"arrows": "to", "from": "Group 16 Elements", "to": "Tellurium"}, {"arrows": "to", "from": "Halogen Family", "to": "Properties of Halogens"}, {"arrows": "to", "from": "Halogen Family", "to": "Reactivity of Halogens"}, {"arrows": "to", "from": "Oxy-Acids of Halogens", "to": "Hypo-Chlorous Acid"}, {"arrows": "to", "from": "Oxy-Acids of Halogens", "to": "Chloric Acid"}, {"arrows": "to", "from": "Oxy-Acids of Halogens", "to": "Per-Chloric Acid"}, {"arrows": "to", "from": "Properties of Halogens", "to": "Atomic Properties"}, {"arrows": "to", "from": "Properties of Halogens", "to": "Physical Properties"}, {"arrows": "to", "from": "Reactivity of Halogens", "to": "Reactivity with Hydrogen"}, {"arrows": "to", "from": "Reactivity of Halogens", "to": "Reactivity with Oxygen"}, {"arrows": "to", "from": "Atomic Properties", "to": "Electronegativity"}, {"arrows": "to", "from": "Atomic Properties", "to": "Ionization Enthalpy"}, {"arrows": "to", "from": "Physical Properties", "to": "Melting Point"}, {"arrows": "to", "from": "Physical Properties", "to": "Boiling Point"}, {"arrows": "to", "from": "Reactivity with Hydrogen", "to": "Formation of Hydrides"}, {"arrows": "to", "from": "Reactivity with Hydrogen", "to": "Acidic Character"}, {"arrows": "to", "from": "Reactivity with Oxygen", "to": "Formation of Oxides"}, {"arrows": "to", "from": "Reactivity with Oxygen", "to": "Oxidising Properties"}, {"arrows": "to", "from": "Hypo-Chlorous Acid", "to": "Preparation"}, {"arrows": "to", "from": "Hypo-Chlorous Acid", "to": "Properties"}, {"arrows": "to", "from": "Chloric Acid", "to": "Preparation"}, {"arrows": "to", "from": "Chloric Acid", "to": "Properties"}, {"arrows": "to", "from": "Per-Chloric Acid", "to": "Preparation"}, {"arrows": "to", "from": "Per-Chloric Acid", "to": "Properties"}, {"arrows": "to", "from": "Sulphur", "to": "Allotropic Forms"}, {"arrows": "to", "from": "Sulphur", "to": "Oxy-Acids of Sulphur"}, {"arrows": "to", "from": "Selenium", "to": "Allotropic Forms"}, {"arrows": "to", "from": "Selenium", "to": "Oxy-Acids of Selenium"}, {"arrows": "to", "from": "Tellurium", "to": "Allotropic Forms"}, {"arrows": "to", "from": "Tellurium", "to": "Oxy-Acids of Tellurium"}, {"arrows": "to", "from": "Allotropic Forms", "to": "Rhombic Sulphur"}, {"arrows": "to", "from": "Allotropic Forms", "to": "Monoclinic Sulphur"}, {"arrows": "to", "from": "Oxy-Acids of Sulphur", "to": "Sulphurous Acid"}, {"arrows": "to", "from": "Oxy-Acids of Sulphur", "to": "Sulphuric Acid"}, {"arrows": "to", "from": "Sulphurous Acid", "to": "Preparation"}, {"arrows": "to", "from": "Sulphurous Acid", "to": "Properties"}, {"arrows": "to", "from": "Sulphuric Acid", "to": "Preparation"}, {"arrows": "to", "from": "Sulphuric Acid", "to": "Properties"}, {"arrows": "to", "from": "Bleaching Powder", "to": "Preparation"}, {"arrows": "to", "from": "Bleaching Powder", "to": "Properties"}, {"arrows": "to", "from": "Xenon Compounds", "to": "Xenon Fluorides"}, {"arrows": "to", "from": "Xenon Compounds", "to": "Xenon Oxides"}, {"arrows": "to", "from": "Xenon Fluorides", "to": "XeF2"}, {"arrows": "to", "from": "Xenon Fluorides", "to": "XeF4"}, {"arrows": "to", "from": "Xenon Fluorides", "to": "XeF6"}, {"arrows": "to", "from": "Xenon Oxides", "to": "XeO3"}, {"arrows": "to", "from": "Xenon Oxides", "to": "XeO4"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

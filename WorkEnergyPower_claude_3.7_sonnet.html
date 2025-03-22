@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Work, Energy and Power", "label": "Work, Energy and Power", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done by a Force", "label": "Work Done by a Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservative Forces", "label": "Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Conservative Forces", "label": "Non-Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Potential Energy", "label": "Potential Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Kinetic Energy", "label": "Kinetic Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work-Energy Theorem", "label": "Work-Energy Theorem", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Power", "label": "Power", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Practical Applications", "label": "Practical Applications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition: W = F\u00b7s\u00b7cos\u03b8", "label": "Definition: W = F\u00b7s\u00b7cos\u03b8", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Units: Joule (J) or kg\u00b7m\u00b2/s\u00b2", "label": "Units: Joule (J) or kg\u00b7m\u00b2/s\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work is a scalar quantity", "label": "Work is a scalar quantity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zero work when F\u22a5s (\u03b8=90\u00b0)", "label": "Zero work when F\u22a5s (\u03b8=90\u00b0)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Negative work when 90\u00b0\u003c\u03b8\u003c270\u00b0", "label": "Negative work when 90\u00b0\u003c\u03b8\u003c270\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Positive work when 0\u00b0\u003c\u03b8\u003c90\u00b0 or 270\u00b0\u003c\u03b8\u003c360\u00b0", "label": "Positive work when 0\u00b0\u003c\u03b8\u003c90\u00b0 or 270\u00b0\u003c\u03b8\u003c360\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = applied force", "label": "F = applied force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "s = displacement", "label": "s = displacement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 = angle between force and displacement", "label": "\u03b8 = angle between force and displacement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1 J = 1 N\u00b7m", "label": "1 J = 1 N\u00b7m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1 erg = 1 dyne\u00b7cm = 10\u207b\u2077 J", "label": "1 erg = 1 dyne\u00b7cm = 10\u207b\u2077 J", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done is path independent", "label": "Work done is path independent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends only on initial and final positions", "label": "Depends only on initial and final positions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done in closed loop is zero", "label": "Work done in closed loop is zero", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Associated with potential energy", "label": "Associated with potential energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Examples of Conservative Forces", "label": "Examples of Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gravitational force", "label": "Gravitational force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Elastic spring force", "label": "Elastic spring force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrostatic force", "label": "Electrostatic force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by gravity: W = mgh", "label": "Work done by gravity: W = mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Negative when moving upward", "label": "Negative when moving upward", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Positive when moving downward", "label": "Positive when moving downward", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by spring: W = \u00bdkx\u00b2", "label": "Work done by spring: W = \u00bdkx\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spring constant k measures stiffness", "label": "Spring constant k measures stiffness", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Follows Hooke\u0027s Law: F = -kx", "label": "Follows Hooke\u0027s Law: F = -kx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done is path dependent", "label": "Work done is path dependent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done in closed loop is non-zero", "label": "Work done in closed loop is non-zero", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy is dissipated as heat", "label": "Energy is dissipated as heat", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Examples of Non-Conservative Forces", "label": "Examples of Non-Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Friction", "label": "Friction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Air resistance", "label": "Air resistance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Viscous forces", "label": "Viscous forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by friction: W = -f\u00b7x", "label": "Work done by friction: W = -f\u00b7x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Always opposes motion", "label": "Always opposes motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Converts mechanical energy to heat", "label": "Converts mechanical energy to heat", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy due to position or configuration", "label": "Energy due to position or configuration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Potential Energy", "label": "Types of Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Change in PE = negative of work done by conservative force", "label": "Change in PE = negative of work done by conservative force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u0394PE = -W", "label": "\u0394PE = -W", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gravitational Potential Energy", "label": "Gravitational Potential Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Elastic Potential Energy", "label": "Elastic Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electric Potential Energy", "label": "Electric Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PE = mgh", "label": "PE = mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "h = height above reference level", "label": "h = height above reference level", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Increases with height", "label": "Increases with height", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zero at chosen reference level", "label": "Zero at chosen reference level", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PE = \u00bdkx\u00b2", "label": "PE = \u00bdkx\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x = displacement from equilibrium", "label": "x = displacement from equilibrium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stored in compressed/stretched springs", "label": "Stored in compressed/stretched springs", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy due to motion", "label": "Energy due to motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "KE = \u00bdmv\u00b2", "label": "KE = \u00bdmv\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Always positive", "label": "Always positive", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Scalar quantity", "label": "Scalar quantity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends on reference frame", "label": "Depends on reference frame", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Net work = change in kinetic energy", "label": "Net work = change in kinetic energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wnet = \u0394KE = KEfinal - KEinitial", "label": "Wnet = \u0394KE = KEfinal - KEinitial", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Applies to both conservative and non-conservative forces", "label": "Applies to both conservative and non-conservative forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For conservative forces: \u0394KE = -\u0394PE", "label": "For conservative forces: \u0394KE = -\u0394PE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rate of doing work", "label": "Rate of doing work", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P = W/t", "label": "P = W/t", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P = F\u00b7v", "label": "P = F\u00b7v", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Units: Watt (W) or J/s", "label": "Units: Watt (W) or J/s", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Average power vs. instantaneous power", "label": "Average power vs. instantaneous power", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1 W = 1 J/s", "label": "1 W = 1 J/s", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1 HP (horsepower) = 746 W", "label": "1 HP (horsepower) = 746 W", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conical Pendulum", "label": "Conical Pendulum", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vertical Circular Motion", "label": "Vertical Circular Motion", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done by Variable Forces", "label": "Work Done by Variable Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "String makes constant angle \u03b8 with vertical", "label": "String makes constant angle \u03b8 with vertical", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tension balances weight component", "label": "Tension balances weight component", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T\u00b7sin\u03b8 provides centripetal force", "label": "T\u00b7sin\u03b8 provides centripetal force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T\u00b7cos\u03b8 balances mg", "label": "T\u00b7cos\u03b8 balances mg", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Period: T = 2\u03c0\u221a(r\u00b7cos\u03b8/g)", "label": "Period: T = 2\u03c0\u221a(r\u00b7cos\u03b8/g)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum velocity at bottom: v = \u221a(gr)", "label": "Minimum velocity at bottom: v = \u221a(gr)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum velocity at top: v = \u221a(5gr/2)", "label": "Minimum velocity at top: v = \u221a(5gr/2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Net force varies with position", "label": "Net force varies with position", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy conservation applies", "label": "Energy conservation applies", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "W = \u222bF(x)dx", "label": "W = \u222bF(x)dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Graphically: area under F-x curve", "label": "Graphically: area under F-x curve", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spring example: W = \u222b(-kx)dx = -\u00bdkx\u00b2", "label": "Spring example: W = \u222b(-kx)dx = -\u00bdkx\u00b2", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Work, Energy and Power", "to": "Work Done by a Force"}, {"arrows": "to", "from": "Work, Energy and Power", "to": "Conservative Forces"}, {"arrows": "to", "from": "Work, Energy and Power", "to": "Non-Conservative Forces"}, {"arrows": "to", "from": "Work, Energy and Power", "to": "Potential Energy"}, {"arrows": "to", "from": "Work, Energy and Power", "to": "Kinetic Energy"}, {"arrows": "to", "from": "Work, Energy and Power", "to": "Work-Energy Theorem"}, {"arrows": "to", "from": "Work, Energy and Power", "to": "Power"}, {"arrows": "to", "from": "Work, Energy and Power", "to": "Practical Applications"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Definition: W = F\u00b7s\u00b7cos\u03b8"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Units: Joule (J) or kg\u00b7m\u00b2/s\u00b2"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Work is a scalar quantity"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Zero work when F\u22a5s (\u03b8=90\u00b0)"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Negative work when 90\u00b0\u003c\u03b8\u003c270\u00b0"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Positive work when 0\u00b0\u003c\u03b8\u003c90\u00b0 or 270\u00b0\u003c\u03b8\u003c360\u00b0"}, {"arrows": "to", "from": "Conservative Forces", "to": "Work done is path independent"}, {"arrows": "to", "from": "Conservative Forces", "to": "Depends only on initial and final positions"}, {"arrows": "to", "from": "Conservative Forces", "to": "Work done in closed loop is zero"}, {"arrows": "to", "from": "Conservative Forces", "to": "Associated with potential energy"}, {"arrows": "to", "from": "Conservative Forces", "to": "Examples of Conservative Forces"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Work done is path dependent"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Work done in closed loop is non-zero"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Energy is dissipated as heat"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Examples of Non-Conservative Forces"}, {"arrows": "to", "from": "Potential Energy", "to": "Energy due to position or configuration"}, {"arrows": "to", "from": "Potential Energy", "to": "Types of Potential Energy"}, {"arrows": "to", "from": "Potential Energy", "to": "Change in PE = negative of work done by conservative force"}, {"arrows": "to", "from": "Potential Energy", "to": "\u0394PE = -W"}, {"arrows": "to", "from": "Kinetic Energy", "to": "Energy due to motion"}, {"arrows": "to", "from": "Kinetic Energy", "to": "KE = \u00bdmv\u00b2"}, {"arrows": "to", "from": "Kinetic Energy", "to": "Always positive"}, {"arrows": "to", "from": "Kinetic Energy", "to": "Scalar quantity"}, {"arrows": "to", "from": "Kinetic Energy", "to": "Depends on reference frame"}, {"arrows": "to", "from": "Work-Energy Theorem", "to": "Net work = change in kinetic energy"}, {"arrows": "to", "from": "Work-Energy Theorem", "to": "Wnet = \u0394KE = KEfinal - KEinitial"}, {"arrows": "to", "from": "Work-Energy Theorem", "to": "Applies to both conservative and non-conservative forces"}, {"arrows": "to", "from": "Work-Energy Theorem", "to": "For conservative forces: \u0394KE = -\u0394PE"}, {"arrows": "to", "from": "Power", "to": "Rate of doing work"}, {"arrows": "to", "from": "Power", "to": "P = W/t"}, {"arrows": "to", "from": "Power", "to": "P = F\u00b7v"}, {"arrows": "to", "from": "Power", "to": "Units: Watt (W) or J/s"}, {"arrows": "to", "from": "Power", "to": "Average power vs. instantaneous power"}, {"arrows": "to", "from": "Practical Applications", "to": "Conical Pendulum"}, {"arrows": "to", "from": "Practical Applications", "to": "Vertical Circular Motion"}, {"arrows": "to", "from": "Practical Applications", "to": "Work Done by Variable Forces"}, {"arrows": "to", "from": "Definition: W = F\u00b7s\u00b7cos\u03b8", "to": "F = applied force"}, {"arrows": "to", "from": "Definition: W = F\u00b7s\u00b7cos\u03b8", "to": "s = displacement"}, {"arrows": "to", "from": "Definition: W = F\u00b7s\u00b7cos\u03b8", "to": "\u03b8 = angle between force and displacement"}, {"arrows": "to", "from": "Units: Joule (J) or kg\u00b7m\u00b2/s\u00b2", "to": "1 J = 1 N\u00b7m"}, {"arrows": "to", "from": "Units: Joule (J) or kg\u00b7m\u00b2/s\u00b2", "to": "1 erg = 1 dyne\u00b7cm = 10\u207b\u2077 J"}, {"arrows": "to", "from": "Examples of Conservative Forces", "to": "Gravitational force"}, {"arrows": "to", "from": "Examples of Conservative Forces", "to": "Elastic spring force"}, {"arrows": "to", "from": "Examples of Conservative Forces", "to": "Electrostatic force"}, {"arrows": "to", "from": "Gravitational force", "to": "Work done by gravity: W = mgh"}, {"arrows": "to", "from": "Gravitational force", "to": "Negative when moving upward"}, {"arrows": "to", "from": "Gravitational force", "to": "Positive when moving downward"}, {"arrows": "to", "from": "Elastic spring force", "to": "Work done by spring: W = \u00bdkx\u00b2"}, {"arrows": "to", "from": "Elastic spring force", "to": "Spring constant k measures stiffness"}, {"arrows": "to", "from": "Elastic spring force", "to": "Follows Hooke\u0027s Law: F = -kx"}, {"arrows": "to", "from": "Examples of Non-Conservative Forces", "to": "Friction"}, {"arrows": "to", "from": "Examples of Non-Conservative Forces", "to": "Air resistance"}, {"arrows": "to", "from": "Examples of Non-Conservative Forces", "to": "Viscous forces"}, {"arrows": "to", "from": "Friction", "to": "Work done by friction: W = -f\u00b7x"}, {"arrows": "to", "from": "Friction", "to": "Always opposes motion"}, {"arrows": "to", "from": "Friction", "to": "Converts mechanical energy to heat"}, {"arrows": "to", "from": "Types of Potential Energy", "to": "Gravitational Potential Energy"}, {"arrows": "to", "from": "Types of Potential Energy", "to": "Elastic Potential Energy"}, {"arrows": "to", "from": "Types of Potential Energy", "to": "Electric Potential Energy"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "PE = mgh"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "h = height above reference level"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "Increases with height"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "Zero at chosen reference level"}, {"arrows": "to", "from": "Elastic Potential Energy", "to": "PE = \u00bdkx\u00b2"}, {"arrows": "to", "from": "Elastic Potential Energy", "to": "x = displacement from equilibrium"}, {"arrows": "to", "from": "Elastic Potential Energy", "to": "Stored in compressed/stretched springs"}, {"arrows": "to", "from": "Units: Watt (W) or J/s", "to": "1 W = 1 J/s"}, {"arrows": "to", "from": "Units: Watt (W) or J/s", "to": "1 HP (horsepower) = 746 W"}, {"arrows": "to", "from": "Conical Pendulum", "to": "String makes constant angle \u03b8 with vertical"}, {"arrows": "to", "from": "Conical Pendulum", "to": "Tension balances weight component"}, {"arrows": "to", "from": "Conical Pendulum", "to": "T\u00b7sin\u03b8 provides centripetal force"}, {"arrows": "to", "from": "Conical Pendulum", "to": "T\u00b7cos\u03b8 balances mg"}, {"arrows": "to", "from": "Conical Pendulum", "to": "Period: T = 2\u03c0\u221a(r\u00b7cos\u03b8/g)"}, {"arrows": "to", "from": "Vertical Circular Motion", "to": "Minimum velocity at bottom: v = \u221a(gr)"}, {"arrows": "to", "from": "Vertical Circular Motion", "to": "Minimum velocity at top: v = \u221a(5gr/2)"}, {"arrows": "to", "from": "Vertical Circular Motion", "to": "Net force varies with position"}, {"arrows": "to", "from": "Vertical Circular Motion", "to": "Energy conservation applies"}, {"arrows": "to", "from": "Work Done by Variable Forces", "to": "W = \u222bF(x)dx"}, {"arrows": "to", "from": "Work Done by Variable Forces", "to": "Graphically: area under F-x curve"}, {"arrows": "to", "from": "Work Done by Variable Forces", "to": "Spring example: W = \u222b(-kx)dx = -\u00bdkx\u00b2"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

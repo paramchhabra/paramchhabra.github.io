@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "MOVING CHARGES AND MAGNETISM", "label": "MOVING CHARGES AND MAGNETISM", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Force on a Moving Charge", "label": "Force on a Moving Charge", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Magnetic Field Strength (B)", "label": "Magnetic Field Strength (B)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Biot-Savart\u0027s Law", "label": "Biot-Savart\u0027s Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications of Biot-Savart\u0027s Law", "label": "Applications of Biot-Savart\u0027s Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ampere\u0027s Circuital Law", "label": "Ampere\u0027s Circuital Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications of Ampere\u0027s Circuital Law", "label": "Applications of Ampere\u0027s Circuital Law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Motion of a Charged Particle in Uniform Electric Field", "label": "Motion of a Charged Particle in Uniform Electric Field", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Motion of a Charged Particle in a Magnetic Field", "label": "Motion of a Charged Particle in a Magnetic Field", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cyclotron", "label": "Cyclotron", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Force on a Current-Carrying Conductor", "label": "Force on a Current-Carrying Conductor", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Force Between Two Parallel Conductors", "label": "Force Between Two Parallel Conductors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Torque on a Current-Carrying Coil", "label": "Torque on a Current-Carrying Coil", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Moving Coil Galvanometer", "label": "Moving Coil Galvanometer", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Galvanometer Sensitivity", "label": "Galvanometer Sensitivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conversion of Galvanometer", "label": "Conversion of Galvanometer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: F = qvBsin\u03b8", "label": "Formula: F = qvBsin\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vector Form: F = q(v x B)", "label": "Vector Form: F = q(v x B)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dependence: F \u221d q, F \u221d vsin\u03b8, F \u221d B", "label": "Dependence: F \u221d q, F \u221d vsin\u03b8, F \u221d B", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Special Cases", "label": "Special Cases", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 = 0\u00b0 or 180\u00b0 (Parallel): F = 0", "label": "\u03b8 = 0\u00b0 or 180\u00b0 (Parallel): F = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "v = 0 (Rest): F = 0", "label": "v = 0 (Rest): F = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 = 90\u00b0 (Perpendicular): F = qvB (Maximum)", "label": "\u03b8 = 90\u00b0 (Perpendicular): F = qvB (Maximum)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Force experienced by a unit charge moving with unit velocity perpendicular to the magnetic field.", "label": "Definition: Force experienced by a unit charge moving with unit velocity perpendicular to the magnetic field.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "From Formula: If q=1, v=1, sin\u03b8=1, then F=B", "label": "From Formula: If q=1, v=1, sin\u03b8=1, then F=B", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "SI Unit: Tesla (T)", "label": "SI Unit: Tesla (T)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: 1T is the field strength where 1C charge moving at 1 m/s perpendicular to the field experiences 1N force.", "label": "Definition: 1T is the field strength where 1C charge moving at 1 m/s perpendicular to the field experiences 1N force.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: dB = (\u03bc\u2080/4\u03c0) * (Idl sin\u03b8 / r\u00b2)", "label": "Formula: dB = (\u03bc\u2080/4\u03c0) * (Idl sin\u03b8 / r\u00b2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vector Form: dB = (\u03bc\u2080/4\u03c0) * (Idl x r) / r\u00b3", "label": "Vector Form: dB = (\u03bc\u2080/4\u03c0) * (Idl x r) / r\u00b3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03bc\u2080: Permeability of free space = 4\u03c0 x 10\u207b\u2077 TA\u207b\u00b9m", "label": "\u03bc\u2080: Permeability of free space = 4\u03c0 x 10\u207b\u2077 TA\u207b\u00b9m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dB \u221d I, dB \u221d dl, dB \u221d sin\u03b8, dB \u221d 1/r\u00b2", "label": "dB \u221d I, dB \u221d dl, dB \u221d sin\u03b8, dB \u221d 1/r\u00b2", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Circular Coil (Center): B = (\u03bc\u2080nI) / 2r", "label": "Circular Coil (Center): B = (\u03bc\u2080nI) / 2r", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Straight Conductor: B = (\u03bc\u2080I/4\u03c0a) * (sin\u03c6\u2081 + sin\u03c6\u2082)", "label": "Straight Conductor: B = (\u03bc\u2080I/4\u03c0a) * (sin\u03c6\u2081 + sin\u03c6\u2082)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Infinitely Long Straight Conductor: B = \u03bc\u2080I / 2\u03c0a", "label": "Infinitely Long Straight Conductor: B = \u03bc\u2080I / 2\u03c0a", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Circular Coil (Axis): B = (\u03bc\u2080 / 4\u03c0) * (2M / x\u00b3 ) (Far away)", "label": "Circular Coil (Axis): B = (\u03bc\u2080 / 4\u03c0) * (2M / x\u00b3 ) (Far away)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "n: Number of turns", "label": "n: Number of turns", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I: Current", "label": "I: Current", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "r: Radius", "label": "r: Radius", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a: Perpendicular distance", "label": "a: Perpendicular distance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03c6\u2081, \u03c6\u2082: Angles from the ends", "label": "\u03c6\u2081, \u03c6\u2082: Angles from the ends", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "M = nIA: Magnetic dipole moment", "label": "M = nIA: Magnetic dipole moment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: \u222e B.dl = \u03bc\u2080I", "label": "Formula: \u222e B.dl = \u03bc\u2080I", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I: Total current through the closed path", "label": "I: Total current through the closed path", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Solenoid: B = \u03bc\u2080nI", "label": "Solenoid: B = \u03bc\u2080nI", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Toroid: B = \u03bc\u2080nI", "label": "Toroid: B = \u03bc\u2080nI", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Edge of Short Solenoid: B= \u03bc\u2080nI/2", "label": "Edge of Short Solenoid: B= \u03bc\u2080nI/2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "n: Number of turns per unit length", "label": "n: Number of turns per unit length", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path: Parabola", "label": "Path: Parabola", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Equation: y = (qE / 2mv\u00b2)x\u00b2", "label": "Equation: y = (qE / 2mv\u00b2)x\u00b2", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Path: Helix (in general, if velocity has components parallel and perpendicular to B)", "label": "Path: Helix (in general, if velocity has components parallel and perpendicular to B)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Circular Path: If v is perpendicular to B", "label": "Circular Path: If v is perpendicular to B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Radius: r = mv / Bq", "label": "Radius: r = mv / Bq", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Time Period: T=2\u03c0m/Bq", "label": "Time Period: T=2\u03c0m/Bq", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Frequency: \u03bd = Bq / 2\u03c0m", "label": "Frequency: \u03bd = Bq / 2\u03c0m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Angular Frequency: \u03c9 = Bq/m", "label": "Angular Frequency: \u03c9 = Bq/m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Centripetal Force = Magnetic Force", "label": "Centripetal Force = Magnetic Force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "mv\u00b2/r = qvB", "label": "mv\u00b2/r = qvB", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "v cos\u03b8:  Motion along B (no force)", "label": "v cos\u03b8:  Motion along B (no force)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "v sin\u03b8: Circular motion perpendicular to B", "label": "v sin\u03b8: Circular motion perpendicular to B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pitch of Helix", "label": "Pitch of Helix", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Purpose: Accelerate charged particles", "label": "Purpose: Accelerate charged particles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Principle: Electric field accelerates, magnetic field guides in circular path", "label": "Principle: Electric field accelerates, magnetic field guides in circular path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Time Period: T = 2\u03c0m / Bq", "label": "Time Period: T = 2\u03c0m / Bq", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Frequency (Cyclotron Frequency): \u03bd = Bq / 2\u03c0m", "label": "Frequency (Cyclotron Frequency): \u03bd = Bq / 2\u03c0m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Max Kinetic Energy: (K.E.)max = (B\u00b2q\u00b2r\u2080\u00b2) / 2m", "label": "Max Kinetic Energy: (K.E.)max = (B\u00b2q\u00b2r\u2080\u00b2) / 2m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: F = I(l x B)", "label": "Formula: F = I(l x B)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnitude: F = IlBsin\u03b8", "label": "Magnitude: F = IlBsin\u03b8", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Force on a Current-Carrying Conductor Special Cases", "label": "Force on a Current-Carrying Conductor Special Cases", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 = 0\u00b0 or 180\u00b0: F = 0", "label": "\u03b8 = 0\u00b0 or 180\u00b0: F = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 = 90\u00b0: F = IlB (Maximum)", "label": "\u03b8 = 90\u00b0: F = IlB (Maximum)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: F = (\u03bc\u2080I\u2081I\u2082 / 2\u03c0r) * l", "label": "Formula: F = (\u03bc\u2080I\u2081I\u2082 / 2\u03c0r) * l", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Force per unit length: F/l =(\u03bc\u2080I\u2081I\u2082 / 2\u03c0r)", "label": "Force per unit length: F/l =(\u03bc\u2080I\u2081I\u2082 / 2\u03c0r)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Same Direction: Attraction", "label": "Same Direction: Attraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Opposite Direction: Repulsion", "label": "Opposite Direction: Repulsion", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition of 1 Ampere", "label": "Definition of 1 Ampere", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Current that produces a force of 2 x 10\u207b\u2077 N/m between two parallel conductors 1m apart in vacuum.", "label": "Current that produces a force of 2 x 10\u207b\u2077 N/m between two parallel conductors 1m apart in vacuum.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: \u03c4 = M x B", "label": "Formula: \u03c4 = M x B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnitude: \u03c4 = MBsin\u03b1 = nIBA sin\u03b1", "label": "Magnitude: \u03c4 = MBsin\u03b1 = nIBA sin\u03b1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "M: Magnetic dipole moment = nIA", "label": "M: Magnetic dipole moment = nIA", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Torque on a Current-Carrying Coil Special Cases", "label": "Torque on a Current-Carrying Coil Special Cases", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coil Parallel to Field (\u03b1 = 90\u00b0, \u03b8 = 0\u00b0): \u03c4 = nIBA (Maximum)", "label": "Coil Parallel to Field (\u03b1 = 90\u00b0, \u03b8 = 0\u00b0): \u03c4 = nIBA (Maximum)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coil Perpendicular to Field (\u03b1=0\u00b0, \u03b8=90\u00b0): \u03c4 = 0", "label": "Coil Perpendicular to Field (\u03b1=0\u00b0, \u03b8=90\u00b0): \u03c4 = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Principle: Torque on a current-carrying coil in a magnetic field", "label": "Principle: Torque on a current-carrying coil in a magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Deflecting Torque = Restoring Torque", "label": "Deflecting Torque = Restoring Torque", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "nIBA = k\u03b8", "label": "nIBA = k\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = (k/nBA)\u03b8 = G\u03b8", "label": "I = (k/nBA)\u03b8 = G\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "G: Galvanometer constant", "label": "G: Galvanometer constant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Current Sensitivity: Is = \u03b8/I = nBA/k", "label": "Current Sensitivity: Is = \u03b8/I = nBA/k", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Voltage Sensitivity: Vs = \u03b8/V = nBA/kR", "label": "Voltage Sensitivity: Vs = \u03b8/V = nBA/kR", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Condition for the maximum sensitivity of the galvanometer:-", "label": "Condition for the maximum sensitivity of the galvanometer:-", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "n is large", "label": "n is large", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "B is large", "label": "B is large", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A is large", "label": "A is large", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "k is small", "label": "k is small", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "To Ammeter: Connect low resistance (shunt) in parallel", "label": "To Ammeter: Connect low resistance (shunt) in parallel", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "To Voltmeter: Connect high resistance in series", "label": "To Voltmeter: Connect high resistance in series", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shunt Resistance: S = (IgRg) / (I - Ig)", "label": "Shunt Resistance: S = (IgRg) / (I - Ig)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Effective Resistance: R = (RgS) / (Rg + S)", "label": "Effective Resistance: R = (RgS) / (Rg + S)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ideal Ammeter: Zero Resistance", "label": "Ideal Ammeter: Zero Resistance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Series Resistance: R = (V/Ig) - Rg", "label": "Series Resistance: R = (V/Ig) - Rg", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Total Resistance = Rg + R", "label": "Total Resistance = Rg + R", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Force on a Moving Charge"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Magnetic Field Strength (B)"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Biot-Savart\u0027s Law"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Applications of Biot-Savart\u0027s Law"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Ampere\u0027s Circuital Law"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Applications of Ampere\u0027s Circuital Law"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Motion of a Charged Particle in Uniform Electric Field"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Motion of a Charged Particle in a Magnetic Field"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Cyclotron"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Force on a Current-Carrying Conductor"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Force Between Two Parallel Conductors"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Torque on a Current-Carrying Coil"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Moving Coil Galvanometer"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Galvanometer Sensitivity"}, {"arrows": "to", "from": "MOVING CHARGES AND MAGNETISM", "to": "Conversion of Galvanometer"}, {"arrows": "to", "from": "Force on a Moving Charge", "to": "Formula: F = qvBsin\u03b8"}, {"arrows": "to", "from": "Force on a Moving Charge", "to": "Vector Form: F = q(v x B)"}, {"arrows": "to", "from": "Force on a Moving Charge", "to": "Dependence: F \u221d q, F \u221d vsin\u03b8, F \u221d B"}, {"arrows": "to", "from": "Force on a Moving Charge", "to": "Special Cases"}, {"arrows": "to", "from": "Magnetic Field Strength (B)", "to": "Definition: Force experienced by a unit charge moving with unit velocity perpendicular to the magnetic field."}, {"arrows": "to", "from": "Magnetic Field Strength (B)", "to": "From Formula: If q=1, v=1, sin\u03b8=1, then F=B"}, {"arrows": "to", "from": "Magnetic Field Strength (B)", "to": "SI Unit: Tesla (T)"}, {"arrows": "to", "from": "Biot-Savart\u0027s Law", "to": "Formula: dB = (\u03bc\u2080/4\u03c0) * (Idl sin\u03b8 / r\u00b2)"}, {"arrows": "to", "from": "Biot-Savart\u0027s Law", "to": "Vector Form: dB = (\u03bc\u2080/4\u03c0) * (Idl x r) / r\u00b3"}, {"arrows": "to", "from": "Biot-Savart\u0027s Law", "to": "\u03bc\u2080: Permeability of free space = 4\u03c0 x 10\u207b\u2077 TA\u207b\u00b9m"}, {"arrows": "to", "from": "Biot-Savart\u0027s Law", "to": "dB \u221d I, dB \u221d dl, dB \u221d sin\u03b8, dB \u221d 1/r\u00b2"}, {"arrows": "to", "from": "Applications of Biot-Savart\u0027s Law", "to": "Circular Coil (Center): B = (\u03bc\u2080nI) / 2r"}, {"arrows": "to", "from": "Applications of Biot-Savart\u0027s Law", "to": "Straight Conductor: B = (\u03bc\u2080I/4\u03c0a) * (sin\u03c6\u2081 + sin\u03c6\u2082)"}, {"arrows": "to", "from": "Applications of Biot-Savart\u0027s Law", "to": "Infinitely Long Straight Conductor: B = \u03bc\u2080I / 2\u03c0a"}, {"arrows": "to", "from": "Applications of Biot-Savart\u0027s Law", "to": "Circular Coil (Axis): B = (\u03bc\u2080 / 4\u03c0) * (2M / x\u00b3 ) (Far away)"}, {"arrows": "to", "from": "Ampere\u0027s Circuital Law", "to": "Formula: \u222e B.dl = \u03bc\u2080I"}, {"arrows": "to", "from": "Ampere\u0027s Circuital Law", "to": "I: Total current through the closed path"}, {"arrows": "to", "from": "Applications of Ampere\u0027s Circuital Law", "to": "Solenoid: B = \u03bc\u2080nI"}, {"arrows": "to", "from": "Applications of Ampere\u0027s Circuital Law", "to": "Toroid: B = \u03bc\u2080nI"}, {"arrows": "to", "from": "Applications of Ampere\u0027s Circuital Law", "to": "Edge of Short Solenoid: B= \u03bc\u2080nI/2"}, {"arrows": "to", "from": "Motion of a Charged Particle in Uniform Electric Field", "to": "Path: Parabola"}, {"arrows": "to", "from": "Motion of a Charged Particle in Uniform Electric Field", "to": "Equation: y = (qE / 2mv\u00b2)x\u00b2"}, {"arrows": "to", "from": "Motion of a Charged Particle in a Magnetic Field", "to": "Path: Helix (in general, if velocity has components parallel and perpendicular to B)"}, {"arrows": "to", "from": "Motion of a Charged Particle in a Magnetic Field", "to": "Circular Path: If v is perpendicular to B"}, {"arrows": "to", "from": "Motion of a Charged Particle in a Magnetic Field", "to": "Radius: r = mv / Bq"}, {"arrows": "to", "from": "Motion of a Charged Particle in a Magnetic Field", "to": "Time Period: T=2\u03c0m/Bq"}, {"arrows": "to", "from": "Motion of a Charged Particle in a Magnetic Field", "to": "Frequency: \u03bd = Bq / 2\u03c0m"}, {"arrows": "to", "from": "Motion of a Charged Particle in a Magnetic Field", "to": "Angular Frequency: \u03c9 = Bq/m"}, {"arrows": "to", "from": "Cyclotron", "to": "Purpose: Accelerate charged particles"}, {"arrows": "to", "from": "Cyclotron", "to": "Principle: Electric field accelerates, magnetic field guides in circular path"}, {"arrows": "to", "from": "Cyclotron", "to": "Radius: r = mv / Bq"}, {"arrows": "to", "from": "Cyclotron", "to": "Time Period: T = 2\u03c0m / Bq"}, {"arrows": "to", "from": "Cyclotron", "to": "Frequency (Cyclotron Frequency): \u03bd = Bq / 2\u03c0m"}, {"arrows": "to", "from": "Cyclotron", "to": "Angular Frequency: \u03c9 = Bq/m"}, {"arrows": "to", "from": "Cyclotron", "to": "Max Kinetic Energy: (K.E.)max = (B\u00b2q\u00b2r\u2080\u00b2) / 2m"}, {"arrows": "to", "from": "Force on a Current-Carrying Conductor", "to": "Formula: F = I(l x B)"}, {"arrows": "to", "from": "Force on a Current-Carrying Conductor", "to": "Magnitude: F = IlBsin\u03b8"}, {"arrows": "to", "from": "Force on a Current-Carrying Conductor", "to": "Special Cases"}, {"arrows": "to", "from": "Force Between Two Parallel Conductors", "to": "Formula: F = (\u03bc\u2080I\u2081I\u2082 / 2\u03c0r) * l"}, {"arrows": "to", "from": "Force Between Two Parallel Conductors", "to": "Force per unit length: F/l =(\u03bc\u2080I\u2081I\u2082 / 2\u03c0r)"}, {"arrows": "to", "from": "Force Between Two Parallel Conductors", "to": "Same Direction: Attraction"}, {"arrows": "to", "from": "Force Between Two Parallel Conductors", "to": "Opposite Direction: Repulsion"}, {"arrows": "to", "from": "Force Between Two Parallel Conductors", "to": "Definition of 1 Ampere"}, {"arrows": "to", "from": "Torque on a Current-Carrying Coil", "to": "Formula: \u03c4 = M x B"}, {"arrows": "to", "from": "Torque on a Current-Carrying Coil", "to": "Magnitude: \u03c4 = MBsin\u03b1 = nIBA sin\u03b1"}, {"arrows": "to", "from": "Torque on a Current-Carrying Coil", "to": "M: Magnetic dipole moment = nIA"}, {"arrows": "to", "from": "Torque on a Current-Carrying Coil", "to": "Special Cases"}, {"arrows": "to", "from": "Moving Coil Galvanometer", "to": "Principle: Torque on a current-carrying coil in a magnetic field"}, {"arrows": "to", "from": "Moving Coil Galvanometer", "to": "Deflecting Torque = Restoring Torque"}, {"arrows": "to", "from": "Moving Coil Galvanometer", "to": "nIBA = k\u03b8"}, {"arrows": "to", "from": "Moving Coil Galvanometer", "to": "I = (k/nBA)\u03b8 = G\u03b8"}, {"arrows": "to", "from": "Moving Coil Galvanometer", "to": "G: Galvanometer constant"}, {"arrows": "to", "from": "Galvanometer Sensitivity", "to": "Current Sensitivity: Is = \u03b8/I = nBA/k"}, {"arrows": "to", "from": "Galvanometer Sensitivity", "to": "Voltage Sensitivity: Vs = \u03b8/V = nBA/kR"}, {"arrows": "to", "from": "Conversion of Galvanometer", "to": "To Ammeter: Connect low resistance (shunt) in parallel"}, {"arrows": "to", "from": "Conversion of Galvanometer", "to": "To Voltmeter: Connect high resistance in series"}, {"arrows": "to", "from": "Special Cases", "to": "\u03b8 = 0\u00b0 or 180\u00b0 (Parallel): F = 0"}, {"arrows": "to", "from": "Special Cases", "to": "v = 0 (Rest): F = 0"}, {"arrows": "to", "from": "Special Cases", "to": "\u03b8 = 90\u00b0 (Perpendicular): F = qvB (Maximum)"}, {"arrows": "to", "from": "SI Unit: Tesla (T)", "to": "Definition: 1T is the field strength where 1C charge moving at 1 m/s perpendicular to the field experiences 1N force."}, {"arrows": "to", "from": "Circular Coil (Center): B = (\u03bc\u2080nI) / 2r", "to": "n: Number of turns"}, {"arrows": "to", "from": "Circular Coil (Center): B = (\u03bc\u2080nI) / 2r", "to": "I: Current"}, {"arrows": "to", "from": "Circular Coil (Center): B = (\u03bc\u2080nI) / 2r", "to": "r: Radius"}, {"arrows": "to", "from": "Straight Conductor: B = (\u03bc\u2080I/4\u03c0a) * (sin\u03c6\u2081 + sin\u03c6\u2082)", "to": "a: Perpendicular distance"}, {"arrows": "to", "from": "Straight Conductor: B = (\u03bc\u2080I/4\u03c0a) * (sin\u03c6\u2081 + sin\u03c6\u2082)", "to": "\u03c6\u2081, \u03c6\u2082: Angles from the ends"}, {"arrows": "to", "from": "Circular Coil (Axis): B = (\u03bc\u2080 / 4\u03c0) * (2M / x\u00b3 ) (Far away)", "to": "M = nIA: Magnetic dipole moment"}, {"arrows": "to", "from": "Solenoid: B = \u03bc\u2080nI", "to": "n: Number of turns per unit length"}, {"arrows": "to", "from": "Toroid: B = \u03bc\u2080nI", "to": "n: Number of turns per unit length"}, {"arrows": "to", "from": "Path: Helix (in general, if velocity has components parallel and perpendicular to B)", "to": "v cos\u03b8:  Motion along B (no force)"}, {"arrows": "to", "from": "Path: Helix (in general, if velocity has components parallel and perpendicular to B)", "to": "v sin\u03b8: Circular motion perpendicular to B"}, {"arrows": "to", "from": "Path: Helix (in general, if velocity has components parallel and perpendicular to B)", "to": "Pitch of Helix"}, {"arrows": "to", "from": "Circular Path: If v is perpendicular to B", "to": "Centripetal Force = Magnetic Force"}, {"arrows": "to", "from": "Circular Path: If v is perpendicular to B", "to": "mv\u00b2/r = qvB"}, {"arrows": "to", "from": "Force on a Current-Carrying Conductor Special Cases", "to": "\u03b8 = 0\u00b0 or 180\u00b0: F = 0"}, {"arrows": "to", "from": "Force on a Current-Carrying Conductor Special Cases", "to": "\u03b8 = 90\u00b0: F = IlB (Maximum)"}, {"arrows": "to", "from": "Definition of 1 Ampere", "to": "Current that produces a force of 2 x 10\u207b\u2077 N/m between two parallel conductors 1m apart in vacuum."}, {"arrows": "to", "from": "Torque on a Current-Carrying Coil Special Cases", "to": "Coil Parallel to Field (\u03b1 = 90\u00b0, \u03b8 = 0\u00b0): \u03c4 = nIBA (Maximum)"}, {"arrows": "to", "from": "Torque on a Current-Carrying Coil Special Cases", "to": "Coil Perpendicular to Field (\u03b1=0\u00b0, \u03b8=90\u00b0): \u03c4 = 0"}, {"arrows": "to", "from": "Condition for the maximum sensitivity of the galvanometer:-", "to": "n is large"}, {"arrows": "to", "from": "Condition for the maximum sensitivity of the galvanometer:-", "to": "B is large"}, {"arrows": "to", "from": "Condition for the maximum sensitivity of the galvanometer:-", "to": "A is large"}, {"arrows": "to", "from": "Condition for the maximum sensitivity of the galvanometer:-", "to": "k is small"}, {"arrows": "to", "from": "To Ammeter: Connect low resistance (shunt) in parallel", "to": "Shunt Resistance: S = (IgRg) / (I - Ig)"}, {"arrows": "to", "from": "To Ammeter: Connect low resistance (shunt) in parallel", "to": "Effective Resistance: R = (RgS) / (Rg + S)"}, {"arrows": "to", "from": "To Ammeter: Connect low resistance (shunt) in parallel", "to": "Ideal Ammeter: Zero Resistance"}, {"arrows": "to", "from": "To Voltmeter: Connect high resistance in series", "to": "Series Resistance: R = (V/Ig) - Rg"}, {"arrows": "to", "from": "To Voltmeter: Connect high resistance in series", "to": "Total Resistance = Rg + R"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

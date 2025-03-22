@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Radioactivity", "label": "Radioactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Curie (CI)", "label": "Curie (CI)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Radioactive Sample Characteristics", "label": "Radioactive Sample Characteristics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Laws of Radioactive Decay", "label": "Laws of Radioactive Decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Photoemissive Cells", "label": "Photoemissive Cells", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cathode Ray Properties", "label": "Cathode Ray Properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measure of radioactive sample activity", "label": "Measure of radioactive sample activity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "One curie equals 3.7 \u00d7 10^10 disintegrations per second", "label": "One curie equals 3.7 \u00d7 10^10 disintegrations per second", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Disintegration Process", "label": "Disintegration Process", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wavelength Dependence", "label": "Wavelength Dependence", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electron Behavior", "label": "Electron Behavior", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Radioactive atoms split into two nearly comparable masses", "label": "Radioactive atoms split into two nearly comparable masses", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy liberation during splitting", "label": "Energy liberation during splitting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spontaneous nuclear transformation", "label": "Spontaneous nuclear transformation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "De-Broglie wavelength independent of particle charge", "label": "De-Broglie wavelength independent of particle charge", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wavelength relates to particle momentum", "label": "Wavelength relates to particle momentum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum mechanical interpretation", "label": "Quantum mechanical interpretation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrons spread across atom\u0027s remaining space", "label": "Electrons spread across atom\u0027s remaining space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Can absorb or radiate energy when jumping orbits", "label": "Can absorb or radiate energy when jumping orbits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Critical energy threshold for radiation", "label": "Critical energy threshold for radiation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rutherford-Soddy Studies", "label": "Rutherford-Soddy Studies", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Decay Constant", "label": "Decay Constant", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mean Life Concept", "label": "Mean Life Concept", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Discovered radioactivity decay phenomenon", "label": "Discovered radioactivity decay phenomenon", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Explained nuclear transformation process", "label": "Explained nuclear transformation process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Identified natural radioactivity mechanism", "label": "Identified natural radioactivity mechanism", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Characteristic of specific radioactive isotope", "label": "Characteristic of specific radioactive isotope", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Determines rate of nuclear disintegration", "label": "Determines rate of nuclear disintegration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independent of external conditions", "label": "Independent of external conditions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Average time an atom remains radioactive", "label": "Average time an atom remains radioactive", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends on nuclear structure", "label": "Depends on nuclear structure", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inversely proportional to decay constant", "label": "Inversely proportional to decay constant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two electrode system", "label": "Two electrode system", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cathode and Anode configuration", "label": "Cathode and Anode configuration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Light conversion mechanism", "label": "Light conversion mechanism", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Constant decay characteristics", "label": "Constant decay characteristics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cannot be altered by known methods", "label": "Cannot be altered by known methods", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Specific nuclear emission properties", "label": "Specific nuclear emission properties", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Radioactivity", "to": "Curie (CI)"}, {"arrows": "to", "from": "Radioactivity", "to": "Radioactive Sample Characteristics"}, {"arrows": "to", "from": "Radioactivity", "to": "Laws of Radioactive Decay"}, {"arrows": "to", "from": "Radioactivity", "to": "Photoemissive Cells"}, {"arrows": "to", "from": "Radioactivity", "to": "Cathode Ray Properties"}, {"arrows": "to", "from": "Curie (CI)", "to": "Measure of radioactive sample activity"}, {"arrows": "to", "from": "Curie (CI)", "to": "One curie equals 3.7 \u00d7 10^10 disintegrations per second"}, {"arrows": "to", "from": "Radioactive Sample Characteristics", "to": "Disintegration Process"}, {"arrows": "to", "from": "Radioactive Sample Characteristics", "to": "Wavelength Dependence"}, {"arrows": "to", "from": "Radioactive Sample Characteristics", "to": "Electron Behavior"}, {"arrows": "to", "from": "Laws of Radioactive Decay", "to": "Rutherford-Soddy Studies"}, {"arrows": "to", "from": "Laws of Radioactive Decay", "to": "Decay Constant"}, {"arrows": "to", "from": "Laws of Radioactive Decay", "to": "Mean Life Concept"}, {"arrows": "to", "from": "Photoemissive Cells", "to": "Two electrode system"}, {"arrows": "to", "from": "Photoemissive Cells", "to": "Cathode and Anode configuration"}, {"arrows": "to", "from": "Photoemissive Cells", "to": "Light conversion mechanism"}, {"arrows": "to", "from": "Cathode Ray Properties", "to": "Constant decay characteristics"}, {"arrows": "to", "from": "Cathode Ray Properties", "to": "Cannot be altered by known methods"}, {"arrows": "to", "from": "Cathode Ray Properties", "to": "Specific nuclear emission properties"}, {"arrows": "to", "from": "Disintegration Process", "to": "Radioactive atoms split into two nearly comparable masses"}, {"arrows": "to", "from": "Disintegration Process", "to": "Energy liberation during splitting"}, {"arrows": "to", "from": "Disintegration Process", "to": "Spontaneous nuclear transformation"}, {"arrows": "to", "from": "Wavelength Dependence", "to": "De-Broglie wavelength independent of particle charge"}, {"arrows": "to", "from": "Wavelength Dependence", "to": "Wavelength relates to particle momentum"}, {"arrows": "to", "from": "Wavelength Dependence", "to": "Quantum mechanical interpretation"}, {"arrows": "to", "from": "Electron Behavior", "to": "Electrons spread across atom\u0027s remaining space"}, {"arrows": "to", "from": "Electron Behavior", "to": "Can absorb or radiate energy when jumping orbits"}, {"arrows": "to", "from": "Electron Behavior", "to": "Critical energy threshold for radiation"}, {"arrows": "to", "from": "Rutherford-Soddy Studies", "to": "Discovered radioactivity decay phenomenon"}, {"arrows": "to", "from": "Rutherford-Soddy Studies", "to": "Explained nuclear transformation process"}, {"arrows": "to", "from": "Rutherford-Soddy Studies", "to": "Identified natural radioactivity mechanism"}, {"arrows": "to", "from": "Decay Constant", "to": "Characteristic of specific radioactive isotope"}, {"arrows": "to", "from": "Decay Constant", "to": "Determines rate of nuclear disintegration"}, {"arrows": "to", "from": "Decay Constant", "to": "Independent of external conditions"}, {"arrows": "to", "from": "Mean Life Concept", "to": "Average time an atom remains radioactive"}, {"arrows": "to", "from": "Mean Life Concept", "to": "Depends on nuclear structure"}, {"arrows": "to", "from": "Mean Life Concept", "to": "Inversely proportional to decay constant"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

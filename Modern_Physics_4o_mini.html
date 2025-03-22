@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Main Topic", "label": "Main Topic", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Radial Actuative Sample", "label": "Radial Actuative Sample", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Actitivity of a Radiactive Sample", "label": "Actitivity of a Radiactive Sample", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Decay Constant (\u03bb)", "label": "Decay Constant (\u03bb)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Half-Life (T\u2081/\u2082)", "label": "Half-Life (T\u2081/\u2082)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Number of Atoms (N)", "label": "Number of Atoms (N)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Exponential Decay", "label": "Exponential Decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications of Radioactivity", "label": "Applications of Radioactivity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used in various fields", "label": "Used in various fields", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples include medical imaging and cancer treatment", "label": "Examples include medical imaging and cancer treatment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A = \u03bbN", "label": "A = \u03bbN", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Where A = activity, \u03bb = decay constant, N = number of atoms", "label": "Where A = activity, \u03bb = decay constant, N = number of atoms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03bb = ln(2) / T\u2081/\u2082", "label": "\u03bb = ln(2) / T\u2081/\u2082", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Units: s\u207b\u00b9", "label": "Units: s\u207b\u00b9", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Time taken for half the radioactive nuclei to decay", "label": "Time taken for half the radioactive nuclei to decay", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: If T\u2081/\u2082 = 5 years, then after 5 years, half the atoms remain.", "label": "Example: If T\u2081/\u2082 = 5 years, then after 5 years, half the atoms remain.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "N = N\u2080 e^(-\u03bbt)", "label": "N = N\u2080 e^(-\u03bbt)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Where N\u2080 is the initial number of atoms and t is time", "label": "Where N\u2080 is the initial number of atoms and t is time", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "N(t) = N\u2080 e^(-\u03bbt)", "label": "N(t) = N\u2080 e^(-\u03bbt)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Demonstrates how the amount of radioactive substance decreases over time", "label": "Demonstrates how the amount of radioactive substance decreases over time", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Medical applications", "label": "Medical applications", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Industrial applications", "label": "Industrial applications", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Research and Development", "label": "Research and Development", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Main Topic", "to": "Radial Actuative Sample"}, {"arrows": "to", "from": "Main Topic", "to": "Actitivity of a Radiactive Sample"}, {"arrows": "to", "from": "Main Topic", "to": "Decay Constant (\u03bb)"}, {"arrows": "to", "from": "Main Topic", "to": "Half-Life (T\u2081/\u2082)"}, {"arrows": "to", "from": "Main Topic", "to": "Number of Atoms (N)"}, {"arrows": "to", "from": "Main Topic", "to": "Exponential Decay"}, {"arrows": "to", "from": "Main Topic", "to": "Applications of Radioactivity"}, {"arrows": "to", "from": "Radial Actuative Sample", "to": "Used in various fields"}, {"arrows": "to", "from": "Radial Actuative Sample", "to": "Examples include medical imaging and cancer treatment"}, {"arrows": "to", "from": "Actitivity of a Radiactive Sample", "to": "A = \u03bbN"}, {"arrows": "to", "from": "Actitivity of a Radiactive Sample", "to": "Where A = activity, \u03bb = decay constant, N = number of atoms"}, {"arrows": "to", "from": "Decay Constant (\u03bb)", "to": "\u03bb = ln(2) / T\u2081/\u2082"}, {"arrows": "to", "from": "Decay Constant (\u03bb)", "to": "Units: s\u207b\u00b9"}, {"arrows": "to", "from": "Half-Life (T\u2081/\u2082)", "to": "Time taken for half the radioactive nuclei to decay"}, {"arrows": "to", "from": "Half-Life (T\u2081/\u2082)", "to": "Example: If T\u2081/\u2082 = 5 years, then after 5 years, half the atoms remain."}, {"arrows": "to", "from": "Number of Atoms (N)", "to": "N = N\u2080 e^(-\u03bbt)"}, {"arrows": "to", "from": "Number of Atoms (N)", "to": "Where N\u2080 is the initial number of atoms and t is time"}, {"arrows": "to", "from": "Exponential Decay", "to": "N(t) = N\u2080 e^(-\u03bbt)"}, {"arrows": "to", "from": "Exponential Decay", "to": "Demonstrates how the amount of radioactive substance decreases over time"}, {"arrows": "to", "from": "Applications of Radioactivity", "to": "Medical applications"}, {"arrows": "to", "from": "Applications of Radioactivity", "to": "Industrial applications"}, {"arrows": "to", "from": "Applications of Radioactivity", "to": "Research and Development"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Work Done", "label": "Work Done", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done Against the Force", "label": "Work Done Against the Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work done by Gravity", "label": "Work done by Gravity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Circular Motion and Centripetal Force", "label": "Circular Motion and Centripetal Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work done by variable force", "label": "Work done by variable force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends only on the location of two points", "label": "Depends only on the location of two points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Displacement is 180\u00b0", "label": "Displacement is 180\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cos \u03b8 = cos 180\u00b0 = -1", "label": "cos \u03b8 = cos 180\u00b0 = -1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by gravity is -mgh (downward)", "label": "Work done by gravity is -mgh (downward)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Displacement is 0\u00b0", "label": "Displacement is 0\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cos \u03b8 = cos 0\u00b0 = 1", "label": "cos \u03b8 = cos 0\u00b0 = 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by gravity is +mgh (downward)", "label": "Work done by gravity is +mgh (downward)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Centripetal Force is a constant", "label": "Centripetal Force is a constant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "String is always inclined at angle \u03b8", "label": "String is always inclined at angle \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "arrangement is known as conical pendulum", "label": "arrangement is known as conical pendulum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Find the minimum velocity at the bottom", "label": "Find the minimum velocity at the bottom", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done is found by integrating Force (x)", "label": "Work done is found by integrating Force (x)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "When spring is compressed", "label": "When spring is compressed", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done is said to be one kg-m", "label": "Work done is said to be one kg-m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by a force of 1 kg", "label": "Work done by a force of 1 kg", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work done by the spring", "label": "Work done by the spring", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Force is equal to - kx", "label": "Force is equal to - kx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "K is the spring constant", "label": "K is the spring constant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spring constant is the spring constant", "label": "Spring constant is the spring constant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done is always against the spring force", "label": "Work done is always against the spring force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "if Force F or the displacement x or both are changing", "label": "if Force F or the displacement x or both are changing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the work done is done by us which is positive", "label": "the work done is done by us which is positive", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the force applied is in opposite direction.", "label": "the force applied is in opposite direction.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Displacement is against the direction of force", "label": "Displacement is against the direction of force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done is Zero Work", "label": "Work done is Zero Work", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Zero Work", "label": "Zero Work", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "when force is perpendicular to displacement", "label": "when force is perpendicular to displacement", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If force is doing positive work, then displacement will be in the direction of force", "label": "If force is doing positive work, then displacement will be in the direction of force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "change in K.E. = Work", "label": "change in K.E. = Work", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Important Topics", "label": "Important Topics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Potential Energy", "label": "Potential Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Forces", "label": "Types of Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservative Force", "label": "Conservative Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non Conservative Force", "label": "Non Conservative Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mechanical Energy", "label": "Mechanical Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gravitational Potential Energy", "label": "Gravitational Potential Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Elastic Potential Energy", "label": "Elastic Potential Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Potential Energy Function", "label": "Potential Energy Function", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "U=mgh", "label": "U=mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "U = 1/2 kx^2", "label": "U = 1/2 kx^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Force is the negative gradient of potential energy", "label": "Force is the negative gradient of potential energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F(x) = -dU/dx", "label": "F(x) = -dU/dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done depends only on the initial and final positions", "label": "Work done depends only on the initial and final positions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done in a closed loop is zero", "label": "Work done in a closed loop is zero", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Gravity, Elastic Force", "label": "Examples: Gravity, Elastic Force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done depends on the path taken", "label": "Work done depends on the path taken", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done in a closed loop is not zero", "label": "Work done in a closed loop is not zero", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Friction, Viscous force", "label": "Examples: Friction, Viscous force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sum of potential energy and kinetic energy", "label": "Sum of potential energy and kinetic energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For conservative forces, mechanical energy is conserved", "label": "For conservative forces, mechanical energy is conserved", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For non-conservative forces, mechanical energy is not conserved", "label": "For non-conservative forces, mechanical energy is not conserved", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Examples of Work Done", "label": "Examples of Work Done", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Heat Energy", "label": "Heat Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sound Energy", "label": "Sound Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Chemical Energy", "label": "Chemical Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by friction converts mechanical energy into heat", "label": "Work done by friction converts mechanical energy into heat", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done by a vibrating object converts mechanical energy into sound", "label": "Work done by a vibrating object converts mechanical energy into sound", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work done in chemical reactions converts mechanical energy into chemical energy", "label": "Work done in chemical reactions converts mechanical energy into chemical energy", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "For a conical pendulum", "label": "For a conical pendulum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g/cos2 \u03b8", "label": "g/cos2 \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T = 2\u03c0 \u221a(l cos\u03b8/g) (Because cos \u03b8 \u003c 1)", "label": "T = 2\u03c0 \u221a(l cos\u03b8/g) (Because cos \u03b8 \u003c 1)", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Work Done", "to": "Work Done Against the Force"}, {"arrows": "to", "from": "Work Done", "to": "Work done by Gravity"}, {"arrows": "to", "from": "Work Done", "to": "Circular Motion and Centripetal Force"}, {"arrows": "to", "from": "Work Done", "to": "Work done by variable force"}, {"arrows": "to", "from": "Work Done Against the Force", "to": "Depends only on the location of two points"}, {"arrows": "to", "from": "Work Done Against the Force", "to": "Displacement is 180\u00b0"}, {"arrows": "to", "from": "Work Done Against the Force", "to": "cos \u03b8 = cos 180\u00b0 = -1"}, {"arrows": "to", "from": "Work Done Against the Force", "to": "Work done by gravity is -mgh (downward)"}, {"arrows": "to", "from": "Work done by Gravity", "to": "Displacement is 0\u00b0"}, {"arrows": "to", "from": "Work done by Gravity", "to": "cos \u03b8 = cos 0\u00b0 = 1"}, {"arrows": "to", "from": "Work done by Gravity", "to": "Work done by gravity is +mgh (downward)"}, {"arrows": "to", "from": "Circular Motion and Centripetal Force", "to": "Centripetal Force is a constant"}, {"arrows": "to", "from": "Circular Motion and Centripetal Force", "to": "String is always inclined at angle \u03b8"}, {"arrows": "to", "from": "Circular Motion and Centripetal Force", "to": "arrangement is known as conical pendulum"}, {"arrows": "to", "from": "Circular Motion and Centripetal Force", "to": "Find the minimum velocity at the bottom"}, {"arrows": "to", "from": "Work done by variable force", "to": "Work done is found by integrating Force (x)"}, {"arrows": "to", "from": "Work done by variable force", "to": "When spring is compressed"}, {"arrows": "to", "from": "Work done by variable force", "to": "Work done is said to be one kg-m"}, {"arrows": "to", "from": "Work done by variable force", "to": "Work done by a force of 1 kg"}, {"arrows": "to", "from": "Work done by variable force", "to": "Work done by the spring"}, {"arrows": "to", "from": "When spring is compressed", "to": "the work done is done by us which is positive"}, {"arrows": "to", "from": "When spring is compressed", "to": "the force applied is in opposite direction."}, {"arrows": "to", "from": "When spring is compressed", "to": "Displacement is against the direction of force"}, {"arrows": "to", "from": "When spring is compressed", "to": "Work done is Zero Work"}, {"arrows": "to", "from": "Work done by the spring", "to": "Force is equal to - kx"}, {"arrows": "to", "from": "Work done by the spring", "to": "K is the spring constant"}, {"arrows": "to", "from": "Work done by the spring", "to": "Spring constant is the spring constant"}, {"arrows": "to", "from": "Work done by the spring", "to": "Work done is always against the spring force"}, {"arrows": "to", "from": "Work done by the spring", "to": "if Force F or the displacement x or both are changing"}, {"arrows": "to", "from": "Zero Work", "to": "when force is perpendicular to displacement"}, {"arrows": "to", "from": "If force is doing positive work, then displacement will be in the direction of force", "to": "change in K.E. = Work"}, {"arrows": "to", "from": "Important Topics", "to": "Potential Energy"}, {"arrows": "to", "from": "Important Topics", "to": "Types of Forces"}, {"arrows": "to", "from": "Important Topics", "to": "Conservative Force"}, {"arrows": "to", "from": "Important Topics", "to": "Non Conservative Force"}, {"arrows": "to", "from": "Important Topics", "to": "Mechanical Energy"}, {"arrows": "to", "from": "Potential Energy", "to": "Gravitational Potential Energy"}, {"arrows": "to", "from": "Potential Energy", "to": "Elastic Potential Energy"}, {"arrows": "to", "from": "Potential Energy", "to": "Potential Energy Function"}, {"arrows": "to", "from": "Types of Forces", "to": "Conservative Force"}, {"arrows": "to", "from": "Types of Forces", "to": "Non Conservative Force"}, {"arrows": "to", "from": "Conservative Force", "to": "Work done depends only on the initial and final positions"}, {"arrows": "to", "from": "Conservative Force", "to": "Work done in a closed loop is zero"}, {"arrows": "to", "from": "Conservative Force", "to": "Examples: Gravity, Elastic Force"}, {"arrows": "to", "from": "Non Conservative Force", "to": "Work done depends on the path taken"}, {"arrows": "to", "from": "Non Conservative Force", "to": "Work done in a closed loop is not zero"}, {"arrows": "to", "from": "Non Conservative Force", "to": "Examples: Friction, Viscous force"}, {"arrows": "to", "from": "Mechanical Energy", "to": "Sum of potential energy and kinetic energy"}, {"arrows": "to", "from": "Mechanical Energy", "to": "For conservative forces, mechanical energy is conserved"}, {"arrows": "to", "from": "Mechanical Energy", "to": "For non-conservative forces, mechanical energy is not conserved"}, {"arrows": "to", "from": "Gravitational Potential Energy", "to": "U=mgh"}, {"arrows": "to", "from": "Elastic Potential Energy", "to": "U = 1/2 kx^2"}, {"arrows": "to", "from": "Potential Energy Function", "to": "Force is the negative gradient of potential energy"}, {"arrows": "to", "from": "Potential Energy Function", "to": "F(x) = -dU/dx"}, {"arrows": "to", "from": "Examples of Work Done", "to": "Heat Energy"}, {"arrows": "to", "from": "Examples of Work Done", "to": "Sound Energy"}, {"arrows": "to", "from": "Examples of Work Done", "to": "Chemical Energy"}, {"arrows": "to", "from": "Heat Energy", "to": "Work done by friction converts mechanical energy into heat"}, {"arrows": "to", "from": "Sound Energy", "to": "Work done by a vibrating object converts mechanical energy into sound"}, {"arrows": "to", "from": "Chemical Energy", "to": "Work done in chemical reactions converts mechanical energy into chemical energy"}, {"arrows": "to", "from": "For a conical pendulum", "to": "g/cos2 \u03b8"}, {"arrows": "to", "from": "For a conical pendulum", "to": "T = 2\u03c0 \u221a(l cos\u03b8/g) (Because cos \u03b8 \u003c 1)"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

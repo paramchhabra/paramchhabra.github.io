@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Experiments", "label": "Experiments", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Random Experiment", "label": "Random Experiment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sample-space", "label": "Sample-space", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Example", "label": "Example", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The mean of a random variable does not give us information about the variability in the values of the random variable", "label": "The mean of a random variable does not give us information about the variability in the values of the random variable", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Consider the experiment of tossing a coin two times in succession. Sample space of the experiment is S = {HH, HT, TH, TT}. If X denotes the number of heads obtained, then X is a random variable", "label": "Consider the experiment of tossing a coin two times in succession. Sample space of the experiment is S = {HH, HT, TH, TT}. If X denotes the number of heads obtained, then X is a random variable", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Event", "label": "Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types", "label": "Types", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Simple Event", "label": "Simple Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Compound Event", "label": "Compound Event", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Probability", "label": "Probability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Formula", "label": "Formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03c3^2 = \u2211(x_i - \u03bc)^2 * p_i", "label": "\u03c3^2 = \u2211(x_i - \u03bc)^2 * p_i", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Independent Events", "label": "Independent Events", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Random Variables and its Probability Distributions", "label": "Random Variables and its Probability Distributions", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Binomial Distribution", "label": "Binomial Distribution", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Mean of a Random Variable", "label": "Mean of a Random Variable", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Variance of a Random Variable", "label": "Variance of a Random Variable", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Experiments", "to": "Random Experiment"}, {"arrows": "to", "from": "Experiments", "to": "Sample-space"}, {"arrows": "to", "from": "Random Experiment", "to": "Definition"}, {"arrows": "to", "from": "Random Experiment", "to": "Example"}, {"arrows": "to", "from": "Sample-space", "to": "Definition"}, {"arrows": "to", "from": "Sample-space", "to": "Example"}, {"arrows": "to", "from": "Definition", "to": "The mean of a random variable does not give us information about the variability in the values of the random variable"}, {"arrows": "to", "from": "Example", "to": "Consider the experiment of tossing a coin two times in succession. Sample space of the experiment is S = {HH, HT, TH, TT}. If X denotes the number of heads obtained, then X is a random variable"}, {"arrows": "to", "from": "Event", "to": "Definition"}, {"arrows": "to", "from": "Event", "to": "Types"}, {"arrows": "to", "from": "Types", "to": "Simple Event"}, {"arrows": "to", "from": "Types", "to": "Compound Event"}, {"arrows": "to", "from": "Simple Event", "to": "Definition"}, {"arrows": "to", "from": "Simple Event", "to": "Example"}, {"arrows": "to", "from": "Compound Event", "to": "Definition"}, {"arrows": "to", "from": "Compound Event", "to": "Example"}, {"arrows": "to", "from": "Probability", "to": "Definition"}, {"arrows": "to", "from": "Probability", "to": "Formula"}, {"arrows": "to", "from": "Formula", "to": "\u03c3^2 = \u2211(x_i - \u03bc)^2 * p_i"}, {"arrows": "to", "from": "Independent Events", "to": "Definition"}, {"arrows": "to", "from": "Independent Events", "to": "Example"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Definition"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Example"}, {"arrows": "to", "from": "Binomial Distribution", "to": "Definition"}, {"arrows": "to", "from": "Binomial Distribution", "to": "Formula"}, {"arrows": "to", "from": "Mean of a Random Variable", "to": "Definition"}, {"arrows": "to", "from": "Mean of a Random Variable", "to": "Formula"}, {"arrows": "to", "from": "Variance of a Random Variable", "to": "Definition"}, {"arrows": "to", "from": "Variance of a Random Variable", "to": "Formula"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

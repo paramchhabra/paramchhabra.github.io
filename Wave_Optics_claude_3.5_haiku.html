@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Wave Optics", "label": "Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Interference of Energy", "label": "Interference of Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Redistribution of Energy", "label": "Redistribution of Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Average Intensity", "label": "Average Intensity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Shift in Wavelength", "label": "Shift in Wavelength", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Illustrations of Interference", "label": "Illustrations of Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thin Films", "label": "Thin Films", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Resultant Amplitude", "label": "Resultant Amplitude", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction and Optical Instruments", "label": "Diffraction and Optical Instruments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Takes place in the form of maxima and minima", "label": "Takes place in the form of maxima and minima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Average intensity is 2", "label": "Average intensity is 2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shift is independent of wavelength", "label": "Shift is independent of wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Maximum and minimum energy transfer", "label": "Maximum and minimum energy transfer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference between waves", "label": "Path difference between waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coherent sources required", "label": "Coherent sources required", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends on individual wave amplitudes", "label": "Depends on individual wave amplitudes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phase difference between waves", "label": "Phase difference between waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resultant intensity calculation", "label": "Resultant intensity calculation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independent of wavelength", "label": "Independent of wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Occurs in wave optics", "label": "Occurs in wave optics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Affects wave propagation", "label": "Affects wave propagation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Young\u0027s Double Slit Experiment", "label": "Young\u0027s Double Slit Experiment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wavelength spectrum analysis", "label": "Wavelength spectrum analysis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coherent source requirements", "label": "Coherent source requirements", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference between reflected waves", "label": "Interference between reflected waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference considerations", "label": "Path difference considerations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resultant amplitude at observation point", "label": "Resultant amplitude at observation point", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depends on wave amplitudes", "label": "Depends on wave amplitudes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phase difference calculation", "label": "Phase difference calculation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity variation", "label": "Intensity variation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Limits of light spreading", "label": "Limits of light spreading", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plane wave front analysis", "label": "Plane wave front analysis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Optical instrument resolution", "label": "Optical instrument resolution", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Wave Optics", "to": "Interference of Energy"}, {"arrows": "to", "from": "Wave Optics", "to": "Redistribution of Energy"}, {"arrows": "to", "from": "Wave Optics", "to": "Average Intensity"}, {"arrows": "to", "from": "Wave Optics", "to": "Shift in Wavelength"}, {"arrows": "to", "from": "Wave Optics", "to": "Illustrations of Interference"}, {"arrows": "to", "from": "Wave Optics", "to": "Thin Films"}, {"arrows": "to", "from": "Wave Optics", "to": "Resultant Amplitude"}, {"arrows": "to", "from": "Wave Optics", "to": "Diffraction and Optical Instruments"}, {"arrows": "to", "from": "Interference of Energy", "to": "Takes place in the form of maxima and minima"}, {"arrows": "to", "from": "Interference of Energy", "to": "Average intensity is 2"}, {"arrows": "to", "from": "Interference of Energy", "to": "Shift is independent of wavelength"}, {"arrows": "to", "from": "Redistribution of Energy", "to": "Maximum and minimum energy transfer"}, {"arrows": "to", "from": "Redistribution of Energy", "to": "Path difference between waves"}, {"arrows": "to", "from": "Redistribution of Energy", "to": "Coherent sources required"}, {"arrows": "to", "from": "Average Intensity", "to": "Depends on individual wave amplitudes"}, {"arrows": "to", "from": "Average Intensity", "to": "Phase difference between waves"}, {"arrows": "to", "from": "Average Intensity", "to": "Resultant intensity calculation"}, {"arrows": "to", "from": "Shift in Wavelength", "to": "Independent of wavelength"}, {"arrows": "to", "from": "Shift in Wavelength", "to": "Occurs in wave optics"}, {"arrows": "to", "from": "Shift in Wavelength", "to": "Affects wave propagation"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "Young\u0027s Double Slit Experiment"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "Wavelength spectrum analysis"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "Coherent source requirements"}, {"arrows": "to", "from": "Thin Films", "to": "Interference between reflected waves"}, {"arrows": "to", "from": "Thin Films", "to": "Path difference considerations"}, {"arrows": "to", "from": "Thin Films", "to": "Resultant amplitude at observation point"}, {"arrows": "to", "from": "Resultant Amplitude", "to": "Depends on wave amplitudes"}, {"arrows": "to", "from": "Resultant Amplitude", "to": "Phase difference calculation"}, {"arrows": "to", "from": "Resultant Amplitude", "to": "Intensity variation"}, {"arrows": "to", "from": "Diffraction and Optical Instruments", "to": "Limits of light spreading"}, {"arrows": "to", "from": "Diffraction and Optical Instruments", "to": "Plane wave front analysis"}, {"arrows": "to", "from": "Diffraction and Optical Instruments", "to": "Optical instrument resolution"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

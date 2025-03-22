@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "SEXUAL REPRODUCTION IN FLOWERING PLANTS", "label": "SEXUAL REPRODUCTION IN FLOWERING PLANTS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "PRE-FERTILISATION: STRUCTURE AND EVENTS", "label": "PRE-FERTILISATION: STRUCTURE AND EVENTS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "DOUBLE FERTILIZATION", "label": "DOUBLE FERTILIZATION", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "label": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen grain formation", "label": "Pollen grain formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryo sac formation", "label": "Embryo sac formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollination", "label": "Pollination", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Male reproductive unit (Stamen)", "label": "Male reproductive unit (Stamen)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Anther development", "label": "Anther development", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wall layers of anther", "label": "Wall layers of anther", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Development of male gametophyte", "label": "Development of male gametophyte", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen products", "label": "Pollen products", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen viability", "label": "Pollen viability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen allergy", "label": "Pollen allergy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Anther structure (bilobed, pollen sacs)", "label": "Anther structure (bilobed, pollen sacs)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dithecous anther", "label": "Dithecous anther", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Microsporangia", "label": "Microsporangia", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Connective", "label": "Connective", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Archesporial cells", "label": "Archesporial cells", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Microspores formation", "label": "Microspores formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Epidermis", "label": "Epidermis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endothecium", "label": "Endothecium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Middle layers", "label": "Middle layers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Tapetum", "label": "Tapetum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutritive function", "label": "Nutritive function", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multinucleated and polyploid cells", "label": "Multinucleated and polyploid cells", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ubisch bodies", "label": "Ubisch bodies", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: Secretory/glandular, Amoeboid/periplasmodial", "label": "Types: Secretory/glandular, Amoeboid/periplasmodial", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vegetative cell and generative cell", "label": "Vegetative cell and generative cell", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen grain stages", "label": "Pollen grain stages", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Generative cell division", "label": "Generative cell division", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen food supplements", "label": "Pollen food supplements", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen creams", "label": "Pollen creams", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Viability duration", "label": "Viability duration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Factors affecting viability", "label": "Factors affecting viability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cryopreservation", "label": "Cryopreservation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Causes: pollen grains", "label": "Causes: pollen grains", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples of allergy-causing plants", "label": "Examples of allergy-causing plants", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hay fever", "label": "Hay fever", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Megasporogenesis", "label": "Megasporogenesis", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Formation of embryo sac", "label": "Formation of embryo sac", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Egg apparatus, synergids, antipodals", "label": "Egg apparatus, synergids, antipodals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Functional megaspore", "label": "Functional megaspore", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mitotic divisions and nuclear stages (2, 4, 8-nucleate)", "label": "Mitotic divisions and nuclear stages (2, 4, 8-nucleate)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cell wall formation", "label": "Cell wall formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mitosis and nuclei movement", "label": "Mitosis and nuclei movement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cellular organization", "label": "Cellular organization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polar nuclei", "label": "Polar nuclei", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Egg cell and synergids", "label": "Egg cell and synergids", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Filiform apparatus", "label": "Filiform apparatus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Antipodal cells", "label": "Antipodal cells", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of pollination", "label": "Types of pollination", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Significance of pollination", "label": "Significance of pollination", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Post pollination events", "label": "Post pollination events", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen \u2013 pistil interaction", "label": "Pollen \u2013 pistil interaction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Self-pollination (Autogamy, Geitonogamy)", "label": "Self-pollination (Autogamy, Geitonogamy)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cross-pollination", "label": "Cross-pollination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed and fruit production", "label": "Seed and fruit production", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ovary growth stimulation", "label": "Ovary growth stimulation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hybrid seed production", "label": "Hybrid seed production", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutritional source", "label": "Nutritional source", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen tube formation", "label": "Pollen tube formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Generative nucleus division", "label": "Generative nucleus division", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen tube entry into ovule (Porogamy, Chalazogamy, Mesogamy)", "label": "Pollen tube entry into ovule (Porogamy, Chalazogamy, Mesogamy)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Porogamy: Through Micropyle", "label": "Porogamy: Through Micropyle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chalazogamy: Through Chalaza", "label": "Chalazogamy: Through Chalaza", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mesogamy: Through Integuments", "label": "Mesogamy: Through Integuments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Compatibility", "label": "Compatibility", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Germination control", "label": "Germination control", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hybridization techniques (emasculation, bagging)", "label": "Hybridization techniques (emasculation, bagging)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fertilization process", "label": "Fertilization process", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Syngamy", "label": "Syngamy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Triple fusion", "label": "Triple fusion", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Double fertilization", "label": "Double fertilization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fusion of gametes", "label": "Fusion of gametes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zygote and embryo formation", "label": "Zygote and embryo formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fusion of male gamete with egg", "label": "Fusion of male gamete with egg", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diploid zygote", "label": "Diploid zygote", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fusion of second male gamete with polar nuclei", "label": "Fusion of second male gamete with polar nuclei", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triploid primary endosperm nucleus", "label": "Triploid primary endosperm nucleus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two sexual fusions in embryo sac", "label": "Two sexual fusions in embryo sac", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endosperms", "label": "Endosperms", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embyrogeny (embryo formation)", "label": "Embyrogeny (embryo formation)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed formation", "label": "Seed formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fruit formation", "label": "Fruit formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Apomixis", "label": "Apomixis", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Parthenocarpy", "label": "Parthenocarpy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polyembryony", "label": "Polyembryony", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Endosperm development", "label": "Endosperm development", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of endosperm", "label": "Types of endosperm", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Functions of endosperms", "label": "Functions of endosperms", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Xenia and Metaxenia", "label": "Xenia and Metaxenia", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutritive tissue", "label": "Nutritive tissue", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triploid nature", "label": "Triploid nature", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nuclear endosperm", "label": "Nuclear endosperm", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cellular endosperm", "label": "Cellular endosperm", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Helobial endosperm", "label": "Helobial endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Free nuclear division", "label": "Free nuclear division", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Central vacuole formation", "label": "Central vacuole formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples (maize, wheat, rice)", "label": "Examples (maize, wheat, rice)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cell wall formation after each division", "label": "Cell wall formation after each division", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example (Datura, balsam, Petunia)", "label": "Example (Datura, balsam, Petunia)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "First division results in two cells", "label": "First division results in two cells", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Further division patterns", "label": "Further division patterns", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples (Eremurus, Asphodelus)", "label": "Examples (Eremurus, Asphodelus)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutrition for embryo (albuminous seeds)", "label": "Nutrition for embryo (albuminous seeds)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutrition to developing embryo", "label": "Nutrition to developing embryo", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hormone source (cytokinins, auxins, GA)", "label": "Hormone source (cytokinins, auxins, GA)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Xenia - effects of pollen on endosperm", "label": "Xenia - effects of pollen on endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metaxenia - effects of pollen on seed coat/pericarp", "label": "Metaxenia - effects of pollen on seed coat/pericarp", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryo development stages", "label": "Embryo development stages", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Dicot embryogeny", "label": "Dicot embryogeny", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Monocot embryogeny", "label": "Monocot embryogeny", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pro-embryo formation (axial symmetry)", "label": "Pro-embryo formation (axial symmetry)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Globular stage", "label": "Globular stage", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zygote division", "label": "Zygote division", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Suspensor formation", "label": "Suspensor formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo cell divisions", "label": "Embryo cell divisions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo structure (cotyledons, epicotyl, hypocotyl, radicle)", "label": "Embryo structure (cotyledons, epicotyl, hypocotyl, radicle)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Terminal cell and Middle Cell formation", "label": "Terminal cell and Middle Cell formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Globular embryo development", "label": "Globular embryo development", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cotyledon, plumule, and coleoptile formation", "label": "Cotyledon, plumule, and coleoptile formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ovule to seed transformation", "label": "Ovule to seed transformation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed structure", "label": "Seed structure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Seed viability", "label": "Seed viability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Importance of seeds", "label": "Importance of seeds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integuments (testa, tegmen)", "label": "Integuments (testa, tegmen)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo maturation", "label": "Embryo maturation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed coat (testa, tegmen)", "label": "Seed coat (testa, tegmen)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endosperm (presence/absence)", "label": "Endosperm (presence/absence)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo (cotyledons, plumule, radicle)", "label": "Embryo (cotyledons, plumule, radicle)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Caruncle", "label": "Caruncle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Funiculus (Hilum, Raphe)", "label": "Funiculus (Hilum, Raphe)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Viability period", "label": "Viability period", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples of viability ranges", "label": "Examples of viability ranges", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed testing (respiration, germination)", "label": "Seed testing (respiration, germination)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Evolutionary achievement", "label": "Evolutionary achievement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Food reserves", "label": "Food reserves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dispersal and colonization", "label": "Dispersal and colonization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Genetic variation", "label": "Genetic variation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Agriculture and civilization", "label": "Agriculture and civilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fruit definition", "label": "Fruit definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pericarp layers", "label": "Pericarp layers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Importance of parthenocarpic fruits", "label": "Importance of parthenocarpic fruits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ripened/fertilized ovary", "label": "Ripened/fertilized ovary", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Epicarp", "label": "Epicarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mesocarp", "label": "Mesocarp", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endocarp", "label": "Endocarp", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Parthenocarpy types", "label": "Parthenocarpy types", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seedless fruits", "label": "Seedless fruits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Greenhouse production", "label": "Greenhouse production", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quicker food processing", "label": "Quicker food processing", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Apomixis definition", "label": "Apomixis definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Amphimixis vs. Apomixis", "label": "Amphimixis vs. Apomixis", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Apomixis", "label": "Types of Apomixis", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Apogamy", "label": "Apogamy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Parthenogenesis", "label": "Parthenogenesis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Asexual seed formation mimicking sexual reproduction", "label": "Asexual seed formation mimicking sexual reproduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Amphimixis: Normal sexual reproduction", "label": "Amphimixis: Normal sexual reproduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Apomixis: Asexual reproduction", "label": "Apomixis: Asexual reproduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of asexual seeds", "label": "Formation of asexual seeds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sporophytic budding", "label": "Sporophytic budding", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Development of a new individual from a single gamete", "label": "Development of a new individual from a single gamete", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Haploid and diploid parthenogenesis", "label": "Haploid and diploid parthenogenesis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of sporophyte directly from cells of gametophyte", "label": "Formation of sporophyte directly from cells of gametophyte", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Genetic", "label": "Genetic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Environmental", "label": "Environmental", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chemically induced", "label": "Chemically induced", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Genetic parthenocarpy", "label": "Genetic parthenocarpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mutation or hybridization induced", "label": "Mutation or hybridization induced", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples (banana, apple)", "label": "Examples (banana, apple)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Environmental parthenocarpy", "label": "Environmental parthenocarpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Induced by environmental conditions (low temperature, frost)", "label": "Induced by environmental conditions (low temperature, frost)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples (pear, olive)", "label": "Examples (pear, olive)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Chemically induced parthenocarpy", "label": "Chemically induced parthenocarpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Induced by auxins and gibberellins", "label": "Induced by auxins and gibberellins", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples (tomato, citrus)", "label": "Examples (tomato, citrus)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polyembryony definition", "label": "Polyembryony definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of polyembryony", "label": "Types of polyembryony", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Causes of polyembryony", "label": "Causes of polyembryony", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "More than one embryo in a seed", "label": "More than one embryo in a seed", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Simple", "label": "Simple", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "False embryony", "label": "False embryony", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cleavage of proembryo", "label": "Cleavage of proembryo", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Development from other cells of embryo sac", "label": "Development from other cells of embryo sac", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Multiple embryo sacs", "label": "Multiple embryo sacs", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation from structures outside embryo sac", "label": "Formation from structures outside embryo sac", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "SEXUAL REPRODUCTION IN FLOWERING PLANTS", "to": "PRE-FERTILISATION: STRUCTURE AND EVENTS"}, {"arrows": "to", "from": "SEXUAL REPRODUCTION IN FLOWERING PLANTS", "to": "DOUBLE FERTILIZATION"}, {"arrows": "to", "from": "SEXUAL REPRODUCTION IN FLOWERING PLANTS", "to": "POST-FERTILIZATION: STRUCTURE AND EVENTS"}, {"arrows": "to", "from": "PRE-FERTILISATION: STRUCTURE AND EVENTS", "to": "Pollen grain formation"}, {"arrows": "to", "from": "PRE-FERTILISATION: STRUCTURE AND EVENTS", "to": "Embryo sac formation"}, {"arrows": "to", "from": "PRE-FERTILISATION: STRUCTURE AND EVENTS", "to": "Pollination"}, {"arrows": "to", "from": "DOUBLE FERTILIZATION", "to": "Fertilization process"}, {"arrows": "to", "from": "DOUBLE FERTILIZATION", "to": "Syngamy"}, {"arrows": "to", "from": "DOUBLE FERTILIZATION", "to": "Triple fusion"}, {"arrows": "to", "from": "DOUBLE FERTILIZATION", "to": "Double fertilization"}, {"arrows": "to", "from": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "to": "Endosperms"}, {"arrows": "to", "from": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "to": "Embyrogeny (embryo formation)"}, {"arrows": "to", "from": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "to": "Seed formation"}, {"arrows": "to", "from": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "to": "Fruit formation"}, {"arrows": "to", "from": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "to": "Apomixis"}, {"arrows": "to", "from": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "to": "Parthenocarpy"}, {"arrows": "to", "from": "POST-FERTILIZATION: STRUCTURE AND EVENTS", "to": "Polyembryony"}, {"arrows": "to", "from": "Pollen grain formation", "to": "Male reproductive unit (Stamen)"}, {"arrows": "to", "from": "Pollen grain formation", "to": "Anther development"}, {"arrows": "to", "from": "Pollen grain formation", "to": "Wall layers of anther"}, {"arrows": "to", "from": "Pollen grain formation", "to": "Development of male gametophyte"}, {"arrows": "to", "from": "Pollen grain formation", "to": "Pollen products"}, {"arrows": "to", "from": "Pollen grain formation", "to": "Pollen viability"}, {"arrows": "to", "from": "Pollen grain formation", "to": "Pollen allergy"}, {"arrows": "to", "from": "Embryo sac formation", "to": "Megasporogenesis"}, {"arrows": "to", "from": "Embryo sac formation", "to": "Formation of embryo sac"}, {"arrows": "to", "from": "Embryo sac formation", "to": "Egg apparatus, synergids, antipodals"}, {"arrows": "to", "from": "Pollination", "to": "Types of pollination"}, {"arrows": "to", "from": "Pollination", "to": "Significance of pollination"}, {"arrows": "to", "from": "Pollination", "to": "Post pollination events"}, {"arrows": "to", "from": "Pollination", "to": "Pollen \u2013 pistil interaction"}, {"arrows": "to", "from": "Male reproductive unit (Stamen)", "to": "Anther structure (bilobed, pollen sacs)"}, {"arrows": "to", "from": "Male reproductive unit (Stamen)", "to": "Dithecous anther"}, {"arrows": "to", "from": "Male reproductive unit (Stamen)", "to": "Microsporangia"}, {"arrows": "to", "from": "Male reproductive unit (Stamen)", "to": "Connective"}, {"arrows": "to", "from": "Anther development", "to": "Archesporial cells"}, {"arrows": "to", "from": "Anther development", "to": "Microspores formation"}, {"arrows": "to", "from": "Wall layers of anther", "to": "Epidermis"}, {"arrows": "to", "from": "Wall layers of anther", "to": "Endothecium"}, {"arrows": "to", "from": "Wall layers of anther", "to": "Middle layers"}, {"arrows": "to", "from": "Wall layers of anther", "to": "Tapetum"}, {"arrows": "to", "from": "Development of male gametophyte", "to": "Vegetative cell and generative cell"}, {"arrows": "to", "from": "Development of male gametophyte", "to": "Pollen grain stages"}, {"arrows": "to", "from": "Development of male gametophyte", "to": "Generative cell division"}, {"arrows": "to", "from": "Pollen products", "to": "Pollen food supplements"}, {"arrows": "to", "from": "Pollen products", "to": "Pollen creams"}, {"arrows": "to", "from": "Pollen viability", "to": "Viability duration"}, {"arrows": "to", "from": "Pollen viability", "to": "Factors affecting viability"}, {"arrows": "to", "from": "Pollen viability", "to": "Cryopreservation"}, {"arrows": "to", "from": "Pollen allergy", "to": "Causes: pollen grains"}, {"arrows": "to", "from": "Pollen allergy", "to": "Examples of allergy-causing plants"}, {"arrows": "to", "from": "Pollen allergy", "to": "Hay fever"}, {"arrows": "to", "from": "Tapetum", "to": "Nutritive function"}, {"arrows": "to", "from": "Tapetum", "to": "Multinucleated and polyploid cells"}, {"arrows": "to", "from": "Tapetum", "to": "Ubisch bodies"}, {"arrows": "to", "from": "Tapetum", "to": "Types: Secretory/glandular, Amoeboid/periplasmodial"}, {"arrows": "to", "from": "Megasporogenesis", "to": "Functional megaspore"}, {"arrows": "to", "from": "Megasporogenesis", "to": "Mitotic divisions and nuclear stages (2, 4, 8-nucleate)"}, {"arrows": "to", "from": "Megasporogenesis", "to": "Cell wall formation"}, {"arrows": "to", "from": "Formation of embryo sac", "to": "Mitosis and nuclei movement"}, {"arrows": "to", "from": "Formation of embryo sac", "to": "Cellular organization"}, {"arrows": "to", "from": "Formation of embryo sac", "to": "Polar nuclei"}, {"arrows": "to", "from": "Egg apparatus, synergids, antipodals", "to": "Egg cell and synergids"}, {"arrows": "to", "from": "Egg apparatus, synergids, antipodals", "to": "Filiform apparatus"}, {"arrows": "to", "from": "Egg apparatus, synergids, antipodals", "to": "Antipodal cells"}, {"arrows": "to", "from": "Types of pollination", "to": "Self-pollination (Autogamy, Geitonogamy)"}, {"arrows": "to", "from": "Types of pollination", "to": "Cross-pollination"}, {"arrows": "to", "from": "Significance of pollination", "to": "Seed and fruit production"}, {"arrows": "to", "from": "Significance of pollination", "to": "Ovary growth stimulation"}, {"arrows": "to", "from": "Significance of pollination", "to": "Hybrid seed production"}, {"arrows": "to", "from": "Significance of pollination", "to": "Nutritional source"}, {"arrows": "to", "from": "Post pollination events", "to": "Pollen tube formation"}, {"arrows": "to", "from": "Post pollination events", "to": "Generative nucleus division"}, {"arrows": "to", "from": "Post pollination events", "to": "Pollen tube entry into ovule (Porogamy, Chalazogamy, Mesogamy)"}, {"arrows": "to", "from": "Pollen \u2013 pistil interaction", "to": "Compatibility"}, {"arrows": "to", "from": "Pollen \u2013 pistil interaction", "to": "Germination control"}, {"arrows": "to", "from": "Pollen \u2013 pistil interaction", "to": "Hybridization techniques (emasculation, bagging)"}, {"arrows": "to", "from": "Pollen tube entry into ovule (Porogamy, Chalazogamy, Mesogamy)", "to": "Porogamy: Through Micropyle"}, {"arrows": "to", "from": "Pollen tube entry into ovule (Porogamy, Chalazogamy, Mesogamy)", "to": "Chalazogamy: Through Chalaza"}, {"arrows": "to", "from": "Pollen tube entry into ovule (Porogamy, Chalazogamy, Mesogamy)", "to": "Mesogamy: Through Integuments"}, {"arrows": "to", "from": "Fertilization process", "to": "Fusion of gametes"}, {"arrows": "to", "from": "Fertilization process", "to": "Zygote and embryo formation"}, {"arrows": "to", "from": "Syngamy", "to": "Fusion of male gamete with egg"}, {"arrows": "to", "from": "Syngamy", "to": "Diploid zygote"}, {"arrows": "to", "from": "Triple fusion", "to": "Fusion of second male gamete with polar nuclei"}, {"arrows": "to", "from": "Triple fusion", "to": "Triploid primary endosperm nucleus"}, {"arrows": "to", "from": "Double fertilization", "to": "Two sexual fusions in embryo sac"}, {"arrows": "to", "from": "Endosperms", "to": "Endosperm development"}, {"arrows": "to", "from": "Endosperms", "to": "Types of endosperm"}, {"arrows": "to", "from": "Endosperms", "to": "Functions of endosperms"}, {"arrows": "to", "from": "Endosperms", "to": "Xenia and Metaxenia"}, {"arrows": "to", "from": "Embyrogeny (embryo formation)", "to": "Embryo development stages"}, {"arrows": "to", "from": "Embyrogeny (embryo formation)", "to": "Dicot embryogeny"}, {"arrows": "to", "from": "Embyrogeny (embryo formation)", "to": "Monocot embryogeny"}, {"arrows": "to", "from": "Seed formation", "to": "Ovule to seed transformation"}, {"arrows": "to", "from": "Seed formation", "to": "Seed structure"}, {"arrows": "to", "from": "Seed formation", "to": "Seed viability"}, {"arrows": "to", "from": "Seed formation", "to": "Importance of seeds"}, {"arrows": "to", "from": "Fruit formation", "to": "Fruit definition"}, {"arrows": "to", "from": "Fruit formation", "to": "Pericarp layers"}, {"arrows": "to", "from": "Fruit formation", "to": "Parthenocarpy"}, {"arrows": "to", "from": "Fruit formation", "to": "Importance of parthenocarpic fruits"}, {"arrows": "to", "from": "Apomixis", "to": "Apomixis definition"}, {"arrows": "to", "from": "Apomixis", "to": "Amphimixis vs. Apomixis"}, {"arrows": "to", "from": "Apomixis", "to": "Types of Apomixis"}, {"arrows": "to", "from": "Apomixis", "to": "Apogamy"}, {"arrows": "to", "from": "Apomixis", "to": "Parthenogenesis"}, {"arrows": "to", "from": "Parthenocarpy", "to": "Parthenocarpy types"}, {"arrows": "to", "from": "Polyembryony", "to": "Polyembryony definition"}, {"arrows": "to", "from": "Polyembryony", "to": "Types of polyembryony"}, {"arrows": "to", "from": "Polyembryony", "to": "Causes of polyembryony"}, {"arrows": "to", "from": "Endosperm development", "to": "Nutritive tissue"}, {"arrows": "to", "from": "Endosperm development", "to": "Triploid nature"}, {"arrows": "to", "from": "Endosperm development", "to": "Xenia and Metaxenia"}, {"arrows": "to", "from": "Types of endosperm", "to": "Nuclear endosperm"}, {"arrows": "to", "from": "Types of endosperm", "to": "Cellular endosperm"}, {"arrows": "to", "from": "Types of endosperm", "to": "Helobial endosperm"}, {"arrows": "to", "from": "Functions of endosperms", "to": "Nutrition for embryo (albuminous seeds)"}, {"arrows": "to", "from": "Functions of endosperms", "to": "Nutrition to developing embryo"}, {"arrows": "to", "from": "Functions of endosperms", "to": "Hormone source (cytokinins, auxins, GA)"}, {"arrows": "to", "from": "Xenia and Metaxenia", "to": "Xenia - effects of pollen on endosperm"}, {"arrows": "to", "from": "Xenia and Metaxenia", "to": "Metaxenia - effects of pollen on seed coat/pericarp"}, {"arrows": "to", "from": "Nuclear endosperm", "to": "Free nuclear division"}, {"arrows": "to", "from": "Nuclear endosperm", "to": "Central vacuole formation"}, {"arrows": "to", "from": "Nuclear endosperm", "to": "Cell wall formation"}, {"arrows": "to", "from": "Nuclear endosperm", "to": "Examples (maize, wheat, rice)"}, {"arrows": "to", "from": "Cellular endosperm", "to": "Cell wall formation after each division"}, {"arrows": "to", "from": "Cellular endosperm", "to": "Example (Datura, balsam, Petunia)"}, {"arrows": "to", "from": "Helobial endosperm", "to": "First division results in two cells"}, {"arrows": "to", "from": "Helobial endosperm", "to": "Further division patterns"}, {"arrows": "to", "from": "Helobial endosperm", "to": "Examples (Eremurus, Asphodelus)"}, {"arrows": "to", "from": "Embryo development stages", "to": "Pro-embryo formation (axial symmetry)"}, {"arrows": "to", "from": "Embryo development stages", "to": "Globular stage"}, {"arrows": "to", "from": "Dicot embryogeny", "to": "Zygote division"}, {"arrows": "to", "from": "Dicot embryogeny", "to": "Suspensor formation"}, {"arrows": "to", "from": "Dicot embryogeny", "to": "Embryo cell divisions"}, {"arrows": "to", "from": "Dicot embryogeny", "to": "Embryo structure (cotyledons, epicotyl, hypocotyl, radicle)"}, {"arrows": "to", "from": "Monocot embryogeny", "to": "Zygote division"}, {"arrows": "to", "from": "Monocot embryogeny", "to": "Terminal cell and Middle Cell formation"}, {"arrows": "to", "from": "Monocot embryogeny", "to": "Globular embryo development"}, {"arrows": "to", "from": "Monocot embryogeny", "to": "Cotyledon, plumule, and coleoptile formation"}, {"arrows": "to", "from": "Ovule to seed transformation", "to": "Integuments (testa, tegmen)"}, {"arrows": "to", "from": "Ovule to seed transformation", "to": "Endosperm development"}, {"arrows": "to", "from": "Ovule to seed transformation", "to": "Embryo maturation"}, {"arrows": "to", "from": "Seed structure", "to": "Seed coat (testa, tegmen)"}, {"arrows": "to", "from": "Seed structure", "to": "Endosperm (presence/absence)"}, {"arrows": "to", "from": "Seed structure", "to": "Embryo (cotyledons, plumule, radicle)"}, {"arrows": "to", "from": "Seed structure", "to": "Caruncle"}, {"arrows": "to", "from": "Seed structure", "to": "Funiculus (Hilum, Raphe)"}, {"arrows": "to", "from": "Seed viability", "to": "Viability period"}, {"arrows": "to", "from": "Seed viability", "to": "Factors affecting viability"}, {"arrows": "to", "from": "Seed viability", "to": "Examples of viability ranges"}, {"arrows": "to", "from": "Seed viability", "to": "Seed testing (respiration, germination)"}, {"arrows": "to", "from": "Importance of seeds", "to": "Evolutionary achievement"}, {"arrows": "to", "from": "Importance of seeds", "to": "Food reserves"}, {"arrows": "to", "from": "Importance of seeds", "to": "Dispersal and colonization"}, {"arrows": "to", "from": "Importance of seeds", "to": "Genetic variation"}, {"arrows": "to", "from": "Importance of seeds", "to": "Agriculture and civilization"}, {"arrows": "to", "from": "Fruit definition", "to": "Ripened/fertilized ovary"}, {"arrows": "to", "from": "Pericarp layers", "to": "Epicarp"}, {"arrows": "to", "from": "Pericarp layers", "to": "Mesocarp"}, {"arrows": "to", "from": "Pericarp layers", "to": "Endocarp"}, {"arrows": "to", "from": "Importance of parthenocarpic fruits", "to": "Seedless fruits"}, {"arrows": "to", "from": "Importance of parthenocarpic fruits", "to": "Greenhouse production"}, {"arrows": "to", "from": "Importance of parthenocarpic fruits", "to": "Quicker food processing"}, {"arrows": "to", "from": "Parthenocarpy types", "to": "Genetic"}, {"arrows": "to", "from": "Parthenocarpy types", "to": "Environmental"}, {"arrows": "to", "from": "Parthenocarpy types", "to": "Chemically induced"}, {"arrows": "to", "from": "Apomixis definition", "to": "Asexual seed formation mimicking sexual reproduction"}, {"arrows": "to", "from": "Amphimixis vs. Apomixis", "to": "Amphimixis: Normal sexual reproduction"}, {"arrows": "to", "from": "Amphimixis vs. Apomixis", "to": "Apomixis: Asexual reproduction"}, {"arrows": "to", "from": "Types of Apomixis", "to": "Formation of asexual seeds"}, {"arrows": "to", "from": "Types of Apomixis", "to": "Sporophytic budding"}, {"arrows": "to", "from": "Apogamy", "to": "Formation of sporophyte directly from cells of gametophyte"}, {"arrows": "to", "from": "Parthenogenesis", "to": "Development of a new individual from a single gamete"}, {"arrows": "to", "from": "Parthenogenesis", "to": "Haploid and diploid parthenogenesis"}, {"arrows": "to", "from": "Genetic parthenocarpy", "to": "Mutation or hybridization induced"}, {"arrows": "to", "from": "Genetic parthenocarpy", "to": "Examples (banana, apple)"}, {"arrows": "to", "from": "Environmental parthenocarpy", "to": "Induced by environmental conditions (low temperature, frost)"}, {"arrows": "to", "from": "Environmental parthenocarpy", "to": "Examples (pear, olive)"}, {"arrows": "to", "from": "Chemically induced parthenocarpy", "to": "Induced by auxins and gibberellins"}, {"arrows": "to", "from": "Chemically induced parthenocarpy", "to": "Examples (tomato, citrus)"}, {"arrows": "to", "from": "Polyembryony definition", "to": "More than one embryo in a seed"}, {"arrows": "to", "from": "Types of polyembryony", "to": "Simple"}, {"arrows": "to", "from": "Types of polyembryony", "to": "False embryony"}, {"arrows": "to", "from": "Causes of polyembryony", "to": "Cleavage of proembryo"}, {"arrows": "to", "from": "Causes of polyembryony", "to": "Development from other cells of embryo sac"}, {"arrows": "to", "from": "Causes of polyembryony", "to": "Multiple embryo sacs"}, {"arrows": "to", "from": "Causes of polyembryony", "to": "Formation from structures outside embryo sac"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
