@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Force on a moving charge", "label": "Force on a moving charge", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Equation for force", "label": "Equation for force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Special cases", "label": "Special cases", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Formula", "label": "Formula", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Example", "label": "Example", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shunt = g/R", "label": "Shunt = g/R", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "General formula", "label": "General formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = qBv sin \uf071", "label": "F = qBv sin \uf071", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "k = constant", "label": "k = constant", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Special case when \uf071 = 90\u00b0", "label": "Special case when \uf071 = 90\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fmax. = I \uf06cB", "label": "Fmax. = I \uf06cB", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If the coil is placed parallel to magnetic field", "label": "If the coil is placed parallel to magnetic field", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If the coil is placed perpendicular to magnetic field", "label": "If the coil is placed perpendicular to magnetic field", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "When \uf071 = 0\u00b0 or 180\u00b0", "label": "When \uf071 = 0\u00b0 or 180\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = 0", "label": "F = 0", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If v = 0", "label": "If v = 0", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If \uf071 = 90\u00b0", "label": "If \uf071 = 90\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fmax. = qvB", "label": "Fmax. = qvB", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Magnetic field strength (B)", "label": "Magnetic field strength (B)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Strength of magnetic field at a point", "label": "Strength of magnetic field at a point", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Cyclotron", "label": "Cyclotron", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Operation", "label": "Operation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Energy calculation", "label": "Energy calculation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Particle acceleration", "label": "Particle acceleration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Circular path", "label": "Circular path", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Centripetal force equation", "label": "Centripetal force equation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Time period equation", "label": "Time period equation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "mv Bq = r", "label": "mv Bq = r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "T = 2 mBq", "label": "T = 2 mBq", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Time period independence", "label": "Time period independence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Explanation", "label": "Explanation", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Force on a current carrying conductor placed in a magnetic field", "label": "Force on a current carrying conductor placed in a magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If q = 1C, v = 1m/s, \uf071 = 90\u00b0 then B = 1T", "label": "If q = 1C, v = 1m/s, \uf071 = 90\u00b0 then B = 1T", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Biot-Savart\u2019s law", "label": "Biot-Savart\u2019s law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications", "label": "Applications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Magnetic field at the Centre of a Circular Coil Carrying Current", "label": "Magnetic field at the Centre of a Circular Coil Carrying Current", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Force between two parallel conductors carrying current", "label": "Force between two parallel conductors carrying current", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Moving Charges and Magnetism", "label": "Moving Charges and Magnetism", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "S.I. unit of magnetic field intensity", "label": "S.I. unit of magnetic field intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tesla (T)", "label": "Tesla (T)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "12. Force between two parallel conductors carrying current", "label": "12. Force between two parallel conductors carrying current", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "13. Torque on a current carrying coil placed in a magnetic field", "label": "13. Torque on a current carrying coil placed in a magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "max. nIBA\uf074 \uf03d", "label": "max. nIBA\uf074 \uf03d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\uf074 = 0", "label": "\uf074 = 0", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "14. Motion of a charged particle in uniform electric field", "label": "14. Motion of a charged particle in uniform electric field", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Path equation", "label": "Path equation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2m(vsin )r = qE", "label": "2m(vsin )r = qE", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "15. Condition for the maximum sensitivity of the galvanometer", "label": "15. Condition for the maximum sensitivity of the galvanometer", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Factors affecting sensitivity", "label": "Factors affecting sensitivity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "n", "label": "n", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "B", "label": "B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A", "label": "A", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "k", "label": "k", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "16. Conversion of galvanometer into voltmeter and ammeter", "label": "16. Conversion of galvanometer into voltmeter and ammeter", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Voltmeter", "label": "Voltmeter", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ammeter", "label": "Ammeter", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Range", "label": "Range", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "0 \u2013 I A", "label": "0 \u2013 I A", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Force on a moving charge", "to": "Equation for force"}, {"arrows": "to", "from": "Force on a moving charge", "to": "Special cases"}, {"arrows": "to", "from": "Equation for force", "to": "Formula"}, {"arrows": "to", "from": "Equation for force", "to": "Example"}, {"arrows": "to", "from": "Special cases", "to": "If the coil is placed parallel to magnetic field"}, {"arrows": "to", "from": "Special cases", "to": "If the coil is placed perpendicular to magnetic field"}, {"arrows": "to", "from": "Formula", "to": "Shunt = g/R"}, {"arrows": "to", "from": "Example", "to": "If q = 1C, v = 1m/s, \uf071 = 90\u00b0 then B = 1T"}, {"arrows": "to", "from": "General formula", "to": "F = qBv sin \uf071"}, {"arrows": "to", "from": "General formula", "to": "k = constant"}, {"arrows": "to", "from": "Special case when \uf071 = 90\u00b0", "to": "Fmax. = I \uf06cB"}, {"arrows": "to", "from": "If the coil is placed parallel to magnetic field", "to": "max. nIBA\uf074 \uf03d"}, {"arrows": "to", "from": "If the coil is placed perpendicular to magnetic field", "to": "\uf074 = 0"}, {"arrows": "to", "from": "When \uf071 = 0\u00b0 or 180\u00b0", "to": "F = 0"}, {"arrows": "to", "from": "If v = 0", "to": "F = 0"}, {"arrows": "to", "from": "If \uf071 = 90\u00b0", "to": "Fmax. = qvB"}, {"arrows": "to", "from": "Magnetic field strength (B)", "to": "Definition"}, {"arrows": "to", "from": "Magnetic field strength (B)", "to": "Example"}, {"arrows": "to", "from": "Definition", "to": "Strength of magnetic field at a point"}, {"arrows": "to", "from": "Cyclotron", "to": "Operation"}, {"arrows": "to", "from": "Cyclotron", "to": "Energy calculation"}, {"arrows": "to", "from": "Operation", "to": "Particle acceleration"}, {"arrows": "to", "from": "Operation", "to": "Circular path"}, {"arrows": "to", "from": "Energy calculation", "to": "Centripetal force equation"}, {"arrows": "to", "from": "Energy calculation", "to": "Time period equation"}, {"arrows": "to", "from": "Centripetal force equation", "to": "mv Bq = r"}, {"arrows": "to", "from": "Time period equation", "to": "T = 2 mBq"}, {"arrows": "to", "from": "Time period independence", "to": "Explanation"}, {"arrows": "to", "from": "Force on a current carrying conductor placed in a magnetic field", "to": "Formula"}, {"arrows": "to", "from": "Force on a current carrying conductor placed in a magnetic field", "to": "Special case when \uf071 = 90\u00b0"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "Formula"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "Applications"}, {"arrows": "to", "from": "Applications", "to": "Magnetic field at the Centre of a Circular Coil Carrying Current"}, {"arrows": "to", "from": "Applications", "to": "Force between two parallel conductors carrying current"}, {"arrows": "to", "from": "Magnetic field at the Centre of a Circular Coil Carrying Current", "to": "Formula"}, {"arrows": "to", "from": "Force between two parallel conductors carrying current", "to": "Formula"}, {"arrows": "to", "from": "Moving Charges and Magnetism", "to": "S.I. unit of magnetic field intensity"}, {"arrows": "to", "from": "Moving Charges and Magnetism", "to": "Biot-Savart\u2019s law"}, {"arrows": "to", "from": "S.I. unit of magnetic field intensity", "to": "Tesla (T)"}, {"arrows": "to", "from": "12. Force between two parallel conductors carrying current", "to": "Formula"}, {"arrows": "to", "from": "13. Torque on a current carrying coil placed in a magnetic field", "to": "Formula"}, {"arrows": "to", "from": "13. Torque on a current carrying coil placed in a magnetic field", "to": "Special cases"}, {"arrows": "to", "from": "14. Motion of a charged particle in uniform electric field", "to": "Path equation"}, {"arrows": "to", "from": "Path equation", "to": "2m(vsin )r = qE"}, {"arrows": "to", "from": "15. Condition for the maximum sensitivity of the galvanometer", "to": "Factors affecting sensitivity"}, {"arrows": "to", "from": "Factors affecting sensitivity", "to": "n"}, {"arrows": "to", "from": "Factors affecting sensitivity", "to": "B"}, {"arrows": "to", "from": "Factors affecting sensitivity", "to": "A"}, {"arrows": "to", "from": "Factors affecting sensitivity", "to": "k"}, {"arrows": "to", "from": "16. Conversion of galvanometer into voltmeter and ammeter", "to": "Voltmeter"}, {"arrows": "to", "from": "16. Conversion of galvanometer into voltmeter and ammeter", "to": "Ammeter"}, {"arrows": "to", "from": "Voltmeter", "to": "Formula"}, {"arrows": "to", "from": "Voltmeter", "to": "Range"}, {"arrows": "to", "from": "Ammeter", "to": "Formula"}, {"arrows": "to", "from": "Ammeter", "to": "Range"}, {"arrows": "to", "from": "Range", "to": "0 \u2013 I A"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

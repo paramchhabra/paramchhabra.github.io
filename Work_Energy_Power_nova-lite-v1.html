@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "The net work done on a mass moving against the force of gravity", "label": "The net work done on a mass moving against the force of gravity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Basic Concept", "label": "Basic Concept", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Formula", "label": "Formula", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Example", "label": "Example", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Motion under central force", "label": "Motion under central force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Force acting along the line joining the center and the object", "label": "Force acting along the line joining the center and the object", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u0394K = W", "label": "\u0394K = W", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Where \u0394K is the change in kinetic energy and W is the work done.", "label": "Where \u0394K is the change in kinetic energy and W is the work done.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example of calculating the net work done lifting an object against gravity.", "label": "Example of calculating the net work done lifting an object against gravity.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Lifting a 5 kg object 2 meters against gravity requires a force of 5 * 9.8 * 2 = 98 joules.", "label": "Lifting a 5 kg object 2 meters against gravity requires a force of 5 * 9.8 * 2 = 98 joules.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Understanding the work-energy theorem", "label": "Understanding the work-energy theorem", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Derivation", "label": "Derivation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Application", "label": "Application", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mathematical steps to derive the work-energy theorem", "label": "Mathematical steps to derive the work-energy theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Kinetic energy is related to velocity and mass.", "label": "Kinetic energy is related to velocity and mass.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Applying the theorem to calculate work done or change in kinetic energy", "label": "Applying the theorem to calculate work done or change in kinetic energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work-energy is conserved in a system.", "label": "Work-energy is conserved in a system.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Central force motion", "label": "Central force motion", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conditions", "label": "Conditions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Examples", "label": "Examples", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Force depends only on distance from the center", "label": "Force depends only on distance from the center", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Motion in a plane", "label": "Motion in a plane", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Planetary motion", "label": "Planetary motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electron in a hydrogen atom", "label": "Electron in a hydrogen atom", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "The net work done on a mass moving against the force of gravity", "to": "Basic Concept"}, {"arrows": "to", "from": "The net work done on a mass moving against the force of gravity", "to": "Formula"}, {"arrows": "to", "from": "The net work done on a mass moving against the force of gravity", "to": "Example"}, {"arrows": "to", "from": "Basic Concept", "to": "Motion under central force"}, {"arrows": "to", "from": "Basic Concept", "to": "Force acting along the line joining the center and the object"}, {"arrows": "to", "from": "Formula", "to": "\u0394K = W"}, {"arrows": "to", "from": "Formula", "to": "Where \u0394K is the change in kinetic energy and W is the work done."}, {"arrows": "to", "from": "Example", "to": "Example of calculating the net work done lifting an object against gravity."}, {"arrows": "to", "from": "Example", "to": "Lifting a 5 kg object 2 meters against gravity requires a force of 5 * 9.8 * 2 = 98 joules."}, {"arrows": "to", "from": "Understanding the work-energy theorem", "to": "Basic Concept"}, {"arrows": "to", "from": "Understanding the work-energy theorem", "to": "Formula"}, {"arrows": "to", "from": "Understanding the work-energy theorem", "to": "Derivation"}, {"arrows": "to", "from": "Understanding the work-energy theorem", "to": "Application"}, {"arrows": "to", "from": "Derivation", "to": "Mathematical steps to derive the work-energy theorem"}, {"arrows": "to", "from": "Derivation", "to": "Kinetic energy is related to velocity and mass."}, {"arrows": "to", "from": "Application", "to": "Applying the theorem to calculate work done or change in kinetic energy"}, {"arrows": "to", "from": "Application", "to": "Work-energy is conserved in a system."}, {"arrows": "to", "from": "Central force motion", "to": "Basic Concept"}, {"arrows": "to", "from": "Central force motion", "to": "Conditions"}, {"arrows": "to", "from": "Central force motion", "to": "Examples"}, {"arrows": "to", "from": "Conditions", "to": "Force depends only on distance from the center"}, {"arrows": "to", "from": "Conditions", "to": "Motion in a plane"}, {"arrows": "to", "from": "Examples", "to": "Planetary motion"}, {"arrows": "to", "from": "Examples", "to": "Electron in a hydrogen atom"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

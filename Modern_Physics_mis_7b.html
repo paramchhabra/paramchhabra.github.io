@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Quantum Mechanics", "label": "Quantum Mechanics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wave-Particle Duality", "label": "Wave-Particle Duality", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Uncertainty Principle", "label": "Uncertainty Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Superposition Principle", "label": "Superposition Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quantum Entanglement", "label": "Quantum Entanglement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Particle-like behavior", "label": "Particle-like behavior", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave-like behavior", "label": "Wave-like behavior", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Experiments: Double-slit experiment, photon polarization", "label": "Experiments: Double-slit experiment, photon polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heisenberg\u0027s Uncertainty Principle", "label": "Heisenberg\u0027s Uncertainty Principle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Position and Momentum", "label": "Position and Momentum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Resolved Position vs. Resolved Momentum", "label": "Example: Resolved Position vs. Resolved Momentum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear superposition of quantum states", "label": "Linear superposition of quantum states", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference effects", "label": "Interference effects", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Quantum interference in double-slit experiment", "label": "Example: Quantum interference in double-slit experiment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Correlation of quantum states without direct interaction", "label": "Correlation of quantum states without direct interaction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Einstein-Podolsky-Rosen paradox", "label": "Einstein-Podolsky-Rosen paradox", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bell\u0027s theorem", "label": "Bell\u0027s theorem", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum teleportation", "label": "Quantum teleportation", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Quantum Tunneling", "label": "Quantum Tunneling", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tunneling through potential barriers", "label": "Tunneling through potential barriers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tunnel diode", "label": "Tunnel diode", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum cascade laser", "label": "Quantum cascade laser", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Quantum Statistics", "label": "Quantum Statistics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bose-Einstein Statistics", "label": "Bose-Einstein Statistics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fermi-Dirac Statistics", "label": "Fermi-Dirac Statistics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Blackbody radiation", "label": "Blackbody radiation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Degenerate quantum gases", "label": "Degenerate quantum gases", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Quantum Computing", "label": "Quantum Computing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum bits (qubits)", "label": "Quantum bits (qubits)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum gates", "label": "Quantum gates", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum error correction", "label": "Quantum error correction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum algorithms: Shor\u0027s algorithm, Grover\u0027s algorithm", "label": "Quantum algorithms: Shor\u0027s algorithm, Grover\u0027s algorithm", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Quantum Field Theory", "label": "Quantum Field Theory", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Lagrangian formalism", "label": "Lagrangian formalism", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Feynman diagrams", "label": "Feynman diagrams", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum electrodynamics (QED)", "label": "Quantum electrodynamics (QED)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum chromodynamics (QCD)", "label": "Quantum chromodynamics (QCD)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "String Theory", "label": "String Theory", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Einstein\u0027s Equivalence Principle", "label": "Einstein\u0027s Equivalence Principle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Unified theory of all fundamental interactions", "label": "Unified theory of all fundamental interactions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Branes, Calabi-Yau spaces", "label": "Branes, Calabi-Yau spaces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Landscape of string vacua", "label": "Landscape of string vacua", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Loop Quantum Gravity", "label": "Loop Quantum Gravity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantization of geometry", "label": "Quantization of geometry", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spinfoam models", "label": "Spinfoam models", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cosmic microwave background radiation", "label": "Cosmic microwave background radiation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Black hole entropy", "label": "Black hole entropy", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Quantum Mechanics", "to": "Wave-Particle Duality"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Uncertainty Principle"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Superposition Principle"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Quantum Entanglement"}, {"arrows": "to", "from": "Wave-Particle Duality", "to": "Particle-like behavior"}, {"arrows": "to", "from": "Wave-Particle Duality", "to": "Wave-like behavior"}, {"arrows": "to", "from": "Wave-Particle Duality", "to": "Experiments: Double-slit experiment, photon polarization"}, {"arrows": "to", "from": "Uncertainty Principle", "to": "Heisenberg\u0027s Uncertainty Principle"}, {"arrows": "to", "from": "Uncertainty Principle", "to": "Position and Momentum"}, {"arrows": "to", "from": "Uncertainty Principle", "to": "Example: Resolved Position vs. Resolved Momentum"}, {"arrows": "to", "from": "Superposition Principle", "to": "Linear superposition of quantum states"}, {"arrows": "to", "from": "Superposition Principle", "to": "Interference effects"}, {"arrows": "to", "from": "Superposition Principle", "to": "Example: Quantum interference in double-slit experiment"}, {"arrows": "to", "from": "Quantum Entanglement", "to": "Correlation of quantum states without direct interaction"}, {"arrows": "to", "from": "Quantum Entanglement", "to": "Einstein-Podolsky-Rosen paradox"}, {"arrows": "to", "from": "Quantum Entanglement", "to": "Bell\u0027s theorem"}, {"arrows": "to", "from": "Quantum Entanglement", "to": "Quantum teleportation"}, {"arrows": "to", "from": "Quantum Tunneling", "to": "Tunneling through potential barriers"}, {"arrows": "to", "from": "Quantum Tunneling", "to": "Tunnel diode"}, {"arrows": "to", "from": "Quantum Tunneling", "to": "Quantum cascade laser"}, {"arrows": "to", "from": "Quantum Statistics", "to": "Bose-Einstein Statistics"}, {"arrows": "to", "from": "Quantum Statistics", "to": "Fermi-Dirac Statistics"}, {"arrows": "to", "from": "Quantum Statistics", "to": "Blackbody radiation"}, {"arrows": "to", "from": "Quantum Statistics", "to": "Degenerate quantum gases"}, {"arrows": "to", "from": "Quantum Computing", "to": "Quantum bits (qubits)"}, {"arrows": "to", "from": "Quantum Computing", "to": "Quantum gates"}, {"arrows": "to", "from": "Quantum Computing", "to": "Quantum error correction"}, {"arrows": "to", "from": "Quantum Computing", "to": "Quantum algorithms: Shor\u0027s algorithm, Grover\u0027s algorithm"}, {"arrows": "to", "from": "Quantum Field Theory", "to": "Lagrangian formalism"}, {"arrows": "to", "from": "Quantum Field Theory", "to": "Feynman diagrams"}, {"arrows": "to", "from": "Quantum Field Theory", "to": "Quantum electrodynamics (QED)"}, {"arrows": "to", "from": "Quantum Field Theory", "to": "Quantum chromodynamics (QCD)"}, {"arrows": "to", "from": "String Theory", "to": "Einstein\u0027s Equivalence Principle"}, {"arrows": "to", "from": "String Theory", "to": "Unified theory of all fundamental interactions"}, {"arrows": "to", "from": "String Theory", "to": "Branes, Calabi-Yau spaces"}, {"arrows": "to", "from": "String Theory", "to": "Landscape of string vacua"}, {"arrows": "to", "from": "Loop Quantum Gravity", "to": "Quantization of geometry"}, {"arrows": "to", "from": "Loop Quantum Gravity", "to": "Spinfoam models"}, {"arrows": "to", "from": "Loop Quantum Gravity", "to": "Cosmic microwave background radiation"}, {"arrows": "to", "from": "Loop Quantum Gravity", "to": "Black hole entropy"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

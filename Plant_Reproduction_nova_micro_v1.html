@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Sexual Reproduction in Flowering Plants", "label": "Sexual Reproduction in Flowering Plants", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pre-fertilization", "label": "Pre-fertilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Double Fertilization", "label": "Double Fertilization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Post-fertilization: Structure and Events", "label": "Post-fertilization: Structure and Events", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollen Grain Formation", "label": "Pollen Grain Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Embryo Sac Formation", "label": "Embryo Sac Formation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollination", "label": "Pollination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Exine differentiated into inner endexine and outer ektexine", "label": "Exine differentiated into inner endexine and outer ektexine", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tectum aids in the identification of pollen grains", "label": "Tectum aids in the identification of pollen grains", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen grain contains regions of germ pores or furrows", "label": "Pollen grain contains regions of germ pores or furrows", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intine is thin and elastic", "label": "Intine is thin and elastic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cytoplasm of pollen grains is rich in starch and unsaturated oils", "label": "Cytoplasm of pollen grains is rich in starch and unsaturated oils", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen grains are initially uninucleate and later become 2-3 celled", "label": "Pollen grains are initially uninucleate and later become 2-3 celled", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "In Calotropis and orchids, pollen of each anther lobe forms a characteristic mass called pollinium", "label": "In Calotropis and orchids, pollen of each anther lobe forms a characteristic mass called pollinium", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of embryo sac involves mitosis and cell wall formation", "label": "Formation of embryo sac involves mitosis and cell wall formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Typical angiosperm embryo sac has seven cells and eight nuclei", "label": "Typical angiosperm embryo sac has seven cells and eight nuclei", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollination is the transfer of pollen grains from anther to stigma", "label": "Pollination is the transfer of pollen grains from anther to stigma", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types of pollination: self-pollination and cross-pollination", "label": "Types of pollination: self-pollination and cross-pollination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Self-pollination includes autogamy and geitonogamy", "label": "Self-pollination includes autogamy and geitonogamy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Double fertilization involves syngamy and triple fusion", "label": "Double fertilization involves syngamy and triple fusion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fertilization involves fusion of male and female gametes", "label": "Fertilization involves fusion of male and female gametes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Syngamy results in diploid zygote", "label": "Syngamy results in diploid zygote", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triple fusion results in triploid primary endosperm nucleus", "label": "Triple fusion results in triploid primary endosperm nucleus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two sexual fusions occur in the embryo sac", "label": "Two sexual fusions occur in the embryo sac", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endosperm formation and its role", "label": "Endosperm formation and its role", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endosperm types: nuclear, cellular, helobial", "label": "Endosperm types: nuclear, cellular, helobial", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed formation and viability", "label": "Seed formation and viability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed dispersal mechanisms", "label": "Seed dispersal mechanisms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Apomixis and amphimixis", "label": "Apomixis and amphimixis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryogeny and its types", "label": "Embryogeny and its types", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Endosperm Formation and Its Role", "label": "Endosperm Formation and Its Role", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endosperm is a nutritive tissue formed from vegetative fertilization", "label": "Endosperm is a nutritive tissue formed from vegetative fertilization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endosperm is generally triploid and may show effects of genes from male gamete (xenia)", "label": "Endosperm is generally triploid and may show effects of genes from male gamete (xenia)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endosperm provides nutrition to developing embryo", "label": "Endosperm provides nutrition to developing embryo", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Liquid endosperm of coconut contains auxins, cytokinins, and GA", "label": "Liquid endosperm of coconut contains auxins, cytokinins, and GA", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zeatin is a potent cytokinin extracted from young endosperm of maize", "label": "Zeatin is a potent cytokinin extracted from young endosperm of maize", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Endosperm Types", "label": "Endosperm Types", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nuclear endosperm: free nuclei by repeated mitosis", "label": "Nuclear endosperm: free nuclei by repeated mitosis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cellular endosperm: walls formed after every division", "label": "Cellular endosperm: walls formed after every division", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Helobial endosperm: first division produces two cells, may become cellular", "label": "Helobial endosperm: first division produces two cells, may become cellular", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Seed Formation and Viability", "label": "Seed Formation and Viability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed viability is the period for which seeds retain the ability to germinate", "label": "Seed viability is the period for which seeds retain the ability to germinate", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed viability is determined genetically and environmentally", "label": "Seed viability is determined genetically and environmentally", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed viability ranges from a few days to 100 years", "label": "Seed viability ranges from a few days to 100 years", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seeds provide protection, food reserve, and means for colonization and propagation", "label": "Seeds provide protection, food reserve, and means for colonization and propagation", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Seed Dispersal Mechanisms", "label": "Seed Dispersal Mechanisms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed dispersal by ants through caruncle in castor bean", "label": "Seed dispersal by ants through caruncle in castor bean", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seed viability tested by respiration and germination", "label": "Seed viability tested by respiration and germination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Respiring seed turns colorless triphenyl tetrazolium chloride into pink tripheyl formazan", "label": "Respiring seed turns colorless triphenyl tetrazolium chloride into pink tripheyl formazan", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Apomixis and Amphimixis", "label": "Apomixis and Amphimixis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Apomixis is formation of new individuals by asexual methods mimicking sexual reproduction", "label": "Apomixis is formation of new individuals by asexual methods mimicking sexual reproduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Amphimixis is normal sexual reproduction with meiosis and fertilization", "label": "Amphimixis is normal sexual reproduction with meiosis and fertilization", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Embryogeny and Its Types", "label": "Embryogeny and Its Types", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryogeny is development of mature embryo from zygote", "label": "Embryogeny is development of mature embryo from zygote", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dicot embryogeny: zygote divides into suspensor and embryo cell, forms heart-shaped embryo", "label": "Dicot embryogeny: zygote divides into suspensor and embryo cell, forms heart-shaped embryo", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Monocot embryogeny: zygote undergoes transverse division to form suspensor and embryo cell, forms globular embryo", "label": "Monocot embryogeny: zygote undergoes transverse division to form suspensor and embryo cell, forms globular embryo", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Pre-fertilization"}, {"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Double Fertilization"}, {"arrows": "to", "from": "Sexual Reproduction in Flowering Plants", "to": "Post-fertilization: Structure and Events"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Pollen Grain Formation"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Embryo Sac Formation"}, {"arrows": "to", "from": "Pre-fertilization", "to": "Pollination"}, {"arrows": "to", "from": "Double Fertilization", "to": "Fertilization involves fusion of male and female gametes"}, {"arrows": "to", "from": "Double Fertilization", "to": "Syngamy results in diploid zygote"}, {"arrows": "to", "from": "Double Fertilization", "to": "Triple fusion results in triploid primary endosperm nucleus"}, {"arrows": "to", "from": "Double Fertilization", "to": "Two sexual fusions occur in the embryo sac"}, {"arrows": "to", "from": "Post-fertilization: Structure and Events", "to": "Endosperm formation and its role"}, {"arrows": "to", "from": "Post-fertilization: Structure and Events", "to": "Endosperm types: nuclear, cellular, helobial"}, {"arrows": "to", "from": "Post-fertilization: Structure and Events", "to": "Seed formation and viability"}, {"arrows": "to", "from": "Post-fertilization: Structure and Events", "to": "Seed dispersal mechanisms"}, {"arrows": "to", "from": "Post-fertilization: Structure and Events", "to": "Apomixis and amphimixis"}, {"arrows": "to", "from": "Post-fertilization: Structure and Events", "to": "Embryogeny and its types"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Exine differentiated into inner endexine and outer ektexine"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Tectum aids in the identification of pollen grains"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Pollen grain contains regions of germ pores or furrows"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Intine is thin and elastic"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Cytoplasm of pollen grains is rich in starch and unsaturated oils"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "Pollen grains are initially uninucleate and later become 2-3 celled"}, {"arrows": "to", "from": "Pollen Grain Formation", "to": "In Calotropis and orchids, pollen of each anther lobe forms a characteristic mass called pollinium"}, {"arrows": "to", "from": "Embryo Sac Formation", "to": "Formation of embryo sac involves mitosis and cell wall formation"}, {"arrows": "to", "from": "Embryo Sac Formation", "to": "Typical angiosperm embryo sac has seven cells and eight nuclei"}, {"arrows": "to", "from": "Pollination", "to": "Pollination is the transfer of pollen grains from anther to stigma"}, {"arrows": "to", "from": "Pollination", "to": "Types of pollination: self-pollination and cross-pollination"}, {"arrows": "to", "from": "Pollination", "to": "Self-pollination includes autogamy and geitonogamy"}, {"arrows": "to", "from": "Pollination", "to": "Double fertilization involves syngamy and triple fusion"}, {"arrows": "to", "from": "Endosperm Formation and Its Role", "to": "Endosperm is a nutritive tissue formed from vegetative fertilization"}, {"arrows": "to", "from": "Endosperm Formation and Its Role", "to": "Endosperm is generally triploid and may show effects of genes from male gamete (xenia)"}, {"arrows": "to", "from": "Endosperm Formation and Its Role", "to": "Endosperm provides nutrition to developing embryo"}, {"arrows": "to", "from": "Endosperm Formation and Its Role", "to": "Liquid endosperm of coconut contains auxins, cytokinins, and GA"}, {"arrows": "to", "from": "Endosperm Formation and Its Role", "to": "Zeatin is a potent cytokinin extracted from young endosperm of maize"}, {"arrows": "to", "from": "Endosperm Types", "to": "Nuclear endosperm: free nuclei by repeated mitosis"}, {"arrows": "to", "from": "Endosperm Types", "to": "Cellular endosperm: walls formed after every division"}, {"arrows": "to", "from": "Endosperm Types", "to": "Helobial endosperm: first division produces two cells, may become cellular"}, {"arrows": "to", "from": "Seed Formation and Viability", "to": "Seed viability is the period for which seeds retain the ability to germinate"}, {"arrows": "to", "from": "Seed Formation and Viability", "to": "Seed viability is determined genetically and environmentally"}, {"arrows": "to", "from": "Seed Formation and Viability", "to": "Seed viability ranges from a few days to 100 years"}, {"arrows": "to", "from": "Seed Formation and Viability", "to": "Seeds provide protection, food reserve, and means for colonization and propagation"}, {"arrows": "to", "from": "Seed Dispersal Mechanisms", "to": "Seed dispersal by ants through caruncle in castor bean"}, {"arrows": "to", "from": "Seed Dispersal Mechanisms", "to": "Seed viability tested by respiration and germination"}, {"arrows": "to", "from": "Seed Dispersal Mechanisms", "to": "Respiring seed turns colorless triphenyl tetrazolium chloride into pink tripheyl formazan"}, {"arrows": "to", "from": "Apomixis and Amphimixis", "to": "Apomixis is formation of new individuals by asexual methods mimicking sexual reproduction"}, {"arrows": "to", "from": "Apomixis and Amphimixis", "to": "Amphimixis is normal sexual reproduction with meiosis and fertilization"}, {"arrows": "to", "from": "Embryogeny and Its Types", "to": "Embryogeny is development of mature embryo from zygote"}, {"arrows": "to", "from": "Embryogeny and Its Types", "to": "Dicot embryogeny: zygote divides into suspensor and embryo cell, forms heart-shaped embryo"}, {"arrows": "to", "from": "Embryogeny and Its Types", "to": "Monocot embryogeny: zygote undergoes transverse division to form suspensor and embryo cell, forms globular embryo"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

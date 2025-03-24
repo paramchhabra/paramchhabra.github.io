@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Interference of Energy Places", "label": "Interference of Energy Places", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wavelengths and Spectrum of Wavelengths", "label": "Wavelengths and Spectrum of Wavelengths", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "ILLUMINATIONS OF INTERFERENCE", "label": "ILLUMINATIONS OF INTERFERENCE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A1 = A2", "label": "A1 = A2", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Phase difference between two waves at an instant", "label": "Phase difference between two waves at an instant", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ratio of resulting wave from two in phase waves", "label": "Ratio of resulting wave from two in phase waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PL = PQ from detected limiting case", "label": "PL = PQ from detected limiting case", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PL = PA from limiting ray case", "label": "PL = PA from limiting ray case", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PL = PA from detected limiting case", "label": "PL = PA from detected limiting case", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Resulting wave from two in-phase waves", "label": "Resulting wave from two in-phase waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Catalyst called as interfering wave", "label": "Catalyst called as interfering wave", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Waves from two or more sources arrive at a point at the same phase", "label": "Waves from two or more sources arrive at a point at the same phase", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Interferometer", "label": "Interferometer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "M1 (Max) = m * \u03bb", "label": "M1 (Max) = m * \u03bb", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "M2 (Min) = (m - 0.5) * \u03bb", "label": "M2 (Min) = (m - 0.5) * \u03bb", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Path difference", "label": "Path difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference in terms of wavelength (in multiple of \u03bb)", "label": "Path difference in terms of wavelength (in multiple of \u03bb)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A = B for rays to interfere", "label": "A = B for rays to interfere", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Wave Interference", "label": "Wave Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Constructive Interference", "label": "Constructive Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Destructive Interference", "label": "Destructive Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula = I1 + I2 + 2 * \u221a(I1*I2)", "label": "Formula = I1 + I2 + 2 * \u221a(I1*I2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used in optical communications devices like laser beam interferometers", "label": "Used in optical communications devices like laser beam interferometers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula = |I1 - I2|", "label": "Formula = |I1 - I2|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Found in noise canceling headphones", "label": "Found in noise canceling headphones", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Polarization", "label": "Polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Perpendicular to polarization", "label": "Perpendicular to polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Parallel to polarization", "label": "Parallel to polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plane of polarization perpendicular to direction of propagation", "label": "Plane of polarization perpendicular to direction of propagation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rays are refracted with no change in vibration", "label": "Rays are refracted with no change in vibration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Light wave vibrates at right angles to the direction of travel", "label": "Light wave vibrates at right angles to the direction of travel", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plane of polarization parallel to direction of propagation", "label": "Plane of polarization parallel to direction of propagation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rays are refracted, plane of vibration of light does not change", "label": "Rays are refracted, plane of vibration of light does not change", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Light waves vibrate along the direction of travel", "label": "Light waves vibrate along the direction of travel", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Diffraction", "label": "Diffraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Single slit diffraction", "label": "Single slit diffraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Double slit diffraction", "label": "Double slit diffraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity formula = I = I0 * sin\u00b2(\u03b2) / \u03b2\u00b2", "label": "Intensity formula = I = I0 * sin\u00b2(\u03b2) / \u03b2\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Angle of diffraction \u03b8 = \u03bb / d", "label": "Angle of diffraction \u03b8 = \u03bb / d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference formula = \u03b4 = d sin\u03b8", "label": "Path difference formula = \u03b4 = d sin\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity formula = (a + b cos\u03b4)\u00b2", "label": "Intensity formula = (a + b cos\u03b4)\u00b2", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Lens", "label": "Lens", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Focal length = 1 / P", "label": "Focal length = 1 / P", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Power of lens = diopters", "label": "Power of lens = diopters", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Microscopy", "label": "Microscopy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Total magnification = Power of eyepiece x Power of objective lens", "label": "Total magnification = Power of eyepiece x Power of objective lens", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnification = Length of object / Length of image", "label": "Magnification = Length of object / Length of image", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Refractive Index", "label": "Refractive Index", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula = n = sin i / sin r", "label": "Formula = n = sin i / sin r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Refraction is governed by Snell\u2019s law", "label": "Refraction is governed by Snell\u2019s law", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Total Internal Reflection", "label": "Total Internal Reflection", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Critical angle = arcsin(n2/n1), where n2 \u003c n1", "label": "Critical angle = arcsin(n2/n1), where n2 \u003c n1", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Optical Fiber", "label": "Optical Fiber", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Light is totally reflected internally", "label": "Light is totally reflected internally", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Used in telecommunications", "label": "Used in telecommunications", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Magnetic Field", "label": "Magnetic Field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic Induction B = \u03bcH", "label": "Magnetic Induction B = \u03bcH", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic field lines", "label": "Magnetic field lines", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Electromagnetic Induction", "label": "Electromagnetic Induction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Faraday\u0027s Law: E = -d\u03a6B/dt", "label": "Faraday\u0027s Law: E = -d\u03a6B/dt", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Lenz\u0027s Law: opposes the change in magnetic flux", "label": "Lenz\u0027s Law: opposes the change in magnetic flux", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Magnetic Effects of Electric Current", "label": "Magnetic Effects of Electric Current", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ampere\u0027s Circuital Law: \u222eB\u22c5dl = \u03bc0I", "label": "Ampere\u0027s Circuital Law: \u222eB\u22c5dl = \u03bc0I", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Biot-Savart Law: dB = (\u03bc0 / 4\u03c0) * (I * dl x r) / r\u00b3", "label": "Biot-Savart Law: dB = (\u03bc0 / 4\u03c0) * (I * dl x r) / r\u00b3", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Magnetostatics", "label": "Magnetostatics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ampere\u0027s Law: \u222eB * dl = \u03bc0 * I_enclosed", "label": "Ampere\u0027s Law: \u222eB * dl = \u03bc0 * I_enclosed", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic field lines around a current-carrying wire", "label": "Magnetic field lines around a current-carrying wire", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Electromagnetic Wave Theory", "label": "Electromagnetic Wave Theory", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "E = E0 * cos(kx - \u03c9t + \u03c6)", "label": "E = E0 * cos(kx - \u03c9t + \u03c6)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "B = B0 * cos(kx - \u03c9t + \u03c6)", "label": "B = B0 * cos(kx - \u03c9t + \u03c6)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Electromagnetic Waves", "label": "Electromagnetic Waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Transverse nature", "label": "Transverse nature", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Propagation of electric and magnetic fields", "label": "Propagation of electric and magnetic fields", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Geometrical Optics", "label": "Geometrical Optics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Lenses: focal length, magnification", "label": "Lenses: focal length, magnification", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mirrors: plane, convex, concave", "label": "Mirrors: plane, convex, concave", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Maxwell\u0027s Equations", "label": "Maxwell\u0027s Equations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Faraday\u0027s Law of Electromagnetic Induction", "label": "Faraday\u0027s Law of Electromagnetic Induction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ampere-Maxwell Law", "label": "Ampere-Maxwell Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gauss\u0027s Law for Electric Fields", "label": "Gauss\u0027s Law for Electric Fields", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gauss\u0027s Law for Magnetic Fields", "label": "Gauss\u0027s Law for Magnetic Fields", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Wave motion", "label": "Wave motion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types of Waves: Longitudinal and Transverse", "label": "Types of Waves: Longitudinal and Transverse", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave Equation: v = \u03bbf", "label": "Wave Equation: v = \u03bbf", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Interference of Energy Places", "to": "Wavelengths and Spectrum of Wavelengths"}, {"arrows": "to", "from": "Interference of Energy Places", "to": "ILLUMINATIONS OF INTERFERENCE"}, {"arrows": "to", "from": "Wavelengths and Spectrum of Wavelengths", "to": "A1 = A2"}, {"arrows": "to", "from": "Wavelengths and Spectrum of Wavelengths", "to": "ILLUMINATIONS OF INTERFERENCE"}, {"arrows": "to", "from": "ILLUMINATIONS OF INTERFERENCE", "to": "Phase difference between two waves at an instant"}, {"arrows": "to", "from": "ILLUMINATIONS OF INTERFERENCE", "to": "Ratio of resulting wave from two in phase waves"}, {"arrows": "to", "from": "Phase difference between two waves at an instant", "to": "PL = PQ from detected limiting case"}, {"arrows": "to", "from": "Phase difference between two waves at an instant", "to": "PL = PA from limiting ray case"}, {"arrows": "to", "from": "Ratio of resulting wave from two in phase waves", "to": "PL = PA from detected limiting case"}, {"arrows": "to", "from": "Resulting wave from two in-phase waves", "to": "Catalyst called as interfering wave"}, {"arrows": "to", "from": "Resulting wave from two in-phase waves", "to": "Waves from two or more sources arrive at a point at the same phase"}, {"arrows": "to", "from": "Interferometer", "to": "M1 (Max) = m * \u03bb"}, {"arrows": "to", "from": "Interferometer", "to": "M2 (Min) = (m - 0.5) * \u03bb"}, {"arrows": "to", "from": "Path difference", "to": "Path difference in terms of wavelength (in multiple of \u03bb)"}, {"arrows": "to", "from": "Path difference", "to": "A = B for rays to interfere"}, {"arrows": "to", "from": "Wave Interference", "to": "Constructive Interference"}, {"arrows": "to", "from": "Wave Interference", "to": "Destructive Interference"}, {"arrows": "to", "from": "Constructive Interference", "to": "Formula = I1 + I2 + 2 * \u221a(I1*I2)"}, {"arrows": "to", "from": "Constructive Interference", "to": "Used in optical communications devices like laser beam interferometers"}, {"arrows": "to", "from": "Destructive Interference", "to": "Formula = |I1 - I2|"}, {"arrows": "to", "from": "Destructive Interference", "to": "Found in noise canceling headphones"}, {"arrows": "to", "from": "Polarization", "to": "Perpendicular to polarization"}, {"arrows": "to", "from": "Polarization", "to": "Parallel to polarization"}, {"arrows": "to", "from": "Perpendicular to polarization", "to": "Plane of polarization perpendicular to direction of propagation"}, {"arrows": "to", "from": "Perpendicular to polarization", "to": "Rays are refracted with no change in vibration"}, {"arrows": "to", "from": "Perpendicular to polarization", "to": "Light wave vibrates at right angles to the direction of travel"}, {"arrows": "to", "from": "Parallel to polarization", "to": "Plane of polarization parallel to direction of propagation"}, {"arrows": "to", "from": "Parallel to polarization", "to": "Rays are refracted, plane of vibration of light does not change"}, {"arrows": "to", "from": "Parallel to polarization", "to": "Light waves vibrate along the direction of travel"}, {"arrows": "to", "from": "Diffraction", "to": "Single slit diffraction"}, {"arrows": "to", "from": "Diffraction", "to": "Double slit diffraction"}, {"arrows": "to", "from": "Single slit diffraction", "to": "Intensity formula = I = I0 * sin\u00b2(\u03b2) / \u03b2\u00b2"}, {"arrows": "to", "from": "Single slit diffraction", "to": "Angle of diffraction \u03b8 = \u03bb / d"}, {"arrows": "to", "from": "Double slit diffraction", "to": "Path difference formula = \u03b4 = d sin\u03b8"}, {"arrows": "to", "from": "Double slit diffraction", "to": "Intensity formula = (a + b cos\u03b4)\u00b2"}, {"arrows": "to", "from": "Lens", "to": "Focal length = 1 / P"}, {"arrows": "to", "from": "Lens", "to": "Power of lens = diopters"}, {"arrows": "to", "from": "Microscopy", "to": "Total magnification = Power of eyepiece x Power of objective lens"}, {"arrows": "to", "from": "Microscopy", "to": "Magnification = Length of object / Length of image"}, {"arrows": "to", "from": "Refractive Index", "to": "Formula = n = sin i / sin r"}, {"arrows": "to", "from": "Refractive Index", "to": "Refraction is governed by Snell\u2019s law"}, {"arrows": "to", "from": "Total Internal Reflection", "to": "Critical angle = arcsin(n2/n1), where n2 \u003c n1"}, {"arrows": "to", "from": "Optical Fiber", "to": "Light is totally reflected internally"}, {"arrows": "to", "from": "Optical Fiber", "to": "Used in telecommunications"}, {"arrows": "to", "from": "Magnetic Field", "to": "Magnetic Induction B = \u03bcH"}, {"arrows": "to", "from": "Magnetic Field", "to": "Magnetic field lines"}, {"arrows": "to", "from": "Electromagnetic Induction", "to": "Faraday\u0027s Law: E = -d\u03a6B/dt"}, {"arrows": "to", "from": "Electromagnetic Induction", "to": "Lenz\u0027s Law: opposes the change in magnetic flux"}, {"arrows": "to", "from": "Magnetic Effects of Electric Current", "to": "Ampere\u0027s Circuital Law: \u222eB\u22c5dl = \u03bc0I"}, {"arrows": "to", "from": "Magnetic Effects of Electric Current", "to": "Biot-Savart Law: dB = (\u03bc0 / 4\u03c0) * (I * dl x r) / r\u00b3"}, {"arrows": "to", "from": "Magnetostatics", "to": "Ampere\u0027s Law: \u222eB * dl = \u03bc0 * I_enclosed"}, {"arrows": "to", "from": "Magnetostatics", "to": "Magnetic field lines around a current-carrying wire"}, {"arrows": "to", "from": "Electromagnetic Wave Theory", "to": "E = E0 * cos(kx - \u03c9t + \u03c6)"}, {"arrows": "to", "from": "Electromagnetic Wave Theory", "to": "B = B0 * cos(kx - \u03c9t + \u03c6)"}, {"arrows": "to", "from": "Electromagnetic Waves", "to": "Transverse nature"}, {"arrows": "to", "from": "Electromagnetic Waves", "to": "Propagation of electric and magnetic fields"}, {"arrows": "to", "from": "Geometrical Optics", "to": "Lenses: focal length, magnification"}, {"arrows": "to", "from": "Geometrical Optics", "to": "Mirrors: plane, convex, concave"}, {"arrows": "to", "from": "Maxwell\u0027s Equations", "to": "Faraday\u0027s Law of Electromagnetic Induction"}, {"arrows": "to", "from": "Maxwell\u0027s Equations", "to": "Ampere-Maxwell Law"}, {"arrows": "to", "from": "Maxwell\u0027s Equations", "to": "Gauss\u0027s Law for Electric Fields"}, {"arrows": "to", "from": "Maxwell\u0027s Equations", "to": "Gauss\u0027s Law for Magnetic Fields"}, {"arrows": "to", "from": "Wave motion", "to": "Types of Waves: Longitudinal and Transverse"}, {"arrows": "to", "from": "Wave motion", "to": "Wave Equation: v = \u03bbf"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

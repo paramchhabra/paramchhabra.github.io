@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Inference of Energy Redistribution", "label": "Inference of Energy Redistribution", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Maxima and Minima", "label": "Maxima and Minima", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Average Intensity", "label": "Average Intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula for AAmax", "label": "Formula for AAmax", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula for AAmin", "label": "Formula for AAmin", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Relation with Wavelength", "label": "Relation with Wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spectrum of Wavelength", "label": "Spectrum of Wavelength", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Illustrations of Interference", "label": "Illustrations of Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Maxima and Minima Formulas", "label": "Maxima and Minima Formulas", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Waves Resultant Amplitude", "label": "Waves Resultant Amplitude", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula", "label": "Formula", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Ratios of Resultant Intensity", "label": "Ratios of Resultant Intensity", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Graphical View", "label": "Graphical View", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave Optics", "label": "Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Path Differences", "label": "Path Differences", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "In Lenses", "label": "In Lenses", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction of Light", "label": "Diffraction of Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Limits", "label": "Limits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stress Analysis", "label": "Stress Analysis", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Thin Films", "label": "Thin Films", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polarization", "label": "Polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plane Polarized", "label": "Plane Polarized", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Transmitted through Analyzer", "label": "Transmitted through Analyzer", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Wavefront", "label": "Wavefront", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shape of Source of Light", "label": "Shape of Source of Light", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Interference in Reflected Light", "label": "Interference in Reflected Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Key Points", "label": "Key Points", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Interference in Refracted Light", "label": "Interference in Refracted Light", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Diffraction and Optical Instruments", "label": "Diffraction and Optical Instruments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Objective Lens", "label": "Objective Lens", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Impact on Image Formation", "label": "Impact on Image Formation", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Inference of Energy Redistribution", "to": "Maxima and Minima"}, {"arrows": "to", "from": "Inference of Energy Redistribution", "to": "Average Intensity"}, {"arrows": "to", "from": "Maxima and Minima", "to": "Formula for AAmax"}, {"arrows": "to", "from": "Maxima and Minima", "to": "Formula for AAmin"}, {"arrows": "to", "from": "Average Intensity", "to": "Relation with Wavelength"}, {"arrows": "to", "from": "Average Intensity", "to": "Spectrum of Wavelength"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "Maxima and Minima Formulas"}, {"arrows": "to", "from": "Waves Resultant Amplitude", "to": "Formula"}, {"arrows": "to", "from": "Ratios of Resultant Intensity", "to": "Formula"}, {"arrows": "to", "from": "Graphical View", "to": "Wave Optics"}, {"arrows": "to", "from": "Graphical View", "to": "Path Differences"}, {"arrows": "to", "from": "Path Differences", "to": "In Lenses"}, {"arrows": "to", "from": "Path Differences", "to": "Diffraction of Light"}, {"arrows": "to", "from": "Diffraction of Light", "to": "Limits"}, {"arrows": "to", "from": "Diffraction of Light", "to": "Stress Analysis"}, {"arrows": "to", "from": "Thin Films", "to": "Polarization"}, {"arrows": "to", "from": "Polarization", "to": "Plane Polarized"}, {"arrows": "to", "from": "Polarization", "to": "Transmitted through Analyzer"}, {"arrows": "to", "from": "Wavefront", "to": "Shape of Source of Light"}, {"arrows": "to", "from": "Interference in Reflected Light", "to": "Key Points"}, {"arrows": "to", "from": "Interference in Refracted Light", "to": "Key Points"}, {"arrows": "to", "from": "Diffraction and Optical Instruments", "to": "Objective Lens"}, {"arrows": "to", "from": "Diffraction and Optical Instruments", "to": "Impact on Image Formation"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

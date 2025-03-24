@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Radioactive Sample Activity", "label": "Radioactive Sample Activity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Unit", "label": "Unit", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Decay Process", "label": "Decay Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "One curie (Ci)", "label": "One curie (Ci)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Activity of a radioactive sample", "label": "Activity of a radioactive sample", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Curie (Ci)", "label": "Curie (Ci)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Becquerel (Bq)", "label": "Becquerel (Bq)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Disintegration", "label": "Disintegration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Alpha decay", "label": "Alpha decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Beta decay", "label": "Beta decay", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gamma decay", "label": "Gamma decay", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rate of nuclear disintegration", "label": "Rate of nuclear disintegration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Exponential decay", "label": "Exponential decay", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emission of alpha particles", "label": "Emission of alpha particles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mass number decreases by 4", "label": "Mass number decreases by 4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Atomic number decreases by 2", "label": "Atomic number decreases by 2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emission of beta particles", "label": "Emission of beta particles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Neutron to proton conversion", "label": "Neutron to proton conversion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Atomic number increases by 1", "label": "Atomic number increases by 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emission of gamma rays", "label": "Emission of gamma rays", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "No change in mass or atomic number", "label": "No change in mass or atomic number", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Applications", "label": "Applications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Medical imaging", "label": "Medical imaging", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cancer treatment", "label": "Cancer treatment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Industrial radiography", "label": "Industrial radiography", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PET scans", "label": "PET scans", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "X-rays", "label": "X-rays", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Radiotherapy", "label": "Radiotherapy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Brachytherapy", "label": "Brachytherapy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Non-destructive testing", "label": "Non-destructive testing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inspection of materials", "label": "Inspection of materials", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Radiation Safety", "label": "Radiation Safety", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Protection measures", "label": "Protection measures", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Dosimetry", "label": "Dosimetry", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Regulations", "label": "Regulations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shielding", "label": "Shielding", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Distance", "label": "Distance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Time", "label": "Time", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measurement of radiation dose", "label": "Measurement of radiation dose", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Units: Sievert (Sv), Gray (Gy)", "label": "Units: Sievert (Sv), Gray (Gy)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "International Atomic Energy Agency (IAEA)", "label": "International Atomic Energy Agency (IAEA)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "National regulatory bodies", "label": "National regulatory bodies", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Nuclear Reactions", "label": "Nuclear Reactions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fission", "label": "Fission", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fusion", "label": "Fusion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Splitting of heavy nuclei", "label": "Splitting of heavy nuclei", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Release of energy", "label": "Release of energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chain reaction", "label": "Chain reaction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Combining of light nuclei", "label": "Combining of light nuclei", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Requires high temperature", "label": "Requires high temperature", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Radioactive Sample Activity", "to": "Definition"}, {"arrows": "to", "from": "Radioactive Sample Activity", "to": "Unit"}, {"arrows": "to", "from": "Radioactive Sample Activity", "to": "Decay Process"}, {"arrows": "to", "from": "Definition", "to": "One curie (Ci)"}, {"arrows": "to", "from": "Definition", "to": "Activity of a radioactive sample"}, {"arrows": "to", "from": "Unit", "to": "Curie (Ci)"}, {"arrows": "to", "from": "Unit", "to": "Becquerel (Bq)"}, {"arrows": "to", "from": "Decay Process", "to": "Disintegration"}, {"arrows": "to", "from": "Decay Process", "to": "Alpha decay"}, {"arrows": "to", "from": "Decay Process", "to": "Beta decay"}, {"arrows": "to", "from": "Decay Process", "to": "Gamma decay"}, {"arrows": "to", "from": "Disintegration", "to": "Rate of nuclear disintegration"}, {"arrows": "to", "from": "Disintegration", "to": "Exponential decay"}, {"arrows": "to", "from": "Alpha decay", "to": "Emission of alpha particles"}, {"arrows": "to", "from": "Alpha decay", "to": "Mass number decreases by 4"}, {"arrows": "to", "from": "Alpha decay", "to": "Atomic number decreases by 2"}, {"arrows": "to", "from": "Beta decay", "to": "Emission of beta particles"}, {"arrows": "to", "from": "Beta decay", "to": "Neutron to proton conversion"}, {"arrows": "to", "from": "Beta decay", "to": "Atomic number increases by 1"}, {"arrows": "to", "from": "Gamma decay", "to": "Emission of gamma rays"}, {"arrows": "to", "from": "Gamma decay", "to": "No change in mass or atomic number"}, {"arrows": "to", "from": "Applications", "to": "Medical imaging"}, {"arrows": "to", "from": "Applications", "to": "Cancer treatment"}, {"arrows": "to", "from": "Applications", "to": "Industrial radiography"}, {"arrows": "to", "from": "Medical imaging", "to": "PET scans"}, {"arrows": "to", "from": "Medical imaging", "to": "X-rays"}, {"arrows": "to", "from": "Cancer treatment", "to": "Radiotherapy"}, {"arrows": "to", "from": "Cancer treatment", "to": "Brachytherapy"}, {"arrows": "to", "from": "Industrial radiography", "to": "Non-destructive testing"}, {"arrows": "to", "from": "Industrial radiography", "to": "Inspection of materials"}, {"arrows": "to", "from": "Radiation Safety", "to": "Protection measures"}, {"arrows": "to", "from": "Radiation Safety", "to": "Dosimetry"}, {"arrows": "to", "from": "Radiation Safety", "to": "Regulations"}, {"arrows": "to", "from": "Protection measures", "to": "Shielding"}, {"arrows": "to", "from": "Protection measures", "to": "Distance"}, {"arrows": "to", "from": "Protection measures", "to": "Time"}, {"arrows": "to", "from": "Dosimetry", "to": "Measurement of radiation dose"}, {"arrows": "to", "from": "Dosimetry", "to": "Units: Sievert (Sv), Gray (Gy)"}, {"arrows": "to", "from": "Regulations", "to": "International Atomic Energy Agency (IAEA)"}, {"arrows": "to", "from": "Regulations", "to": "National regulatory bodies"}, {"arrows": "to", "from": "Nuclear Reactions", "to": "Fission"}, {"arrows": "to", "from": "Nuclear Reactions", "to": "Fusion"}, {"arrows": "to", "from": "Fission", "to": "Splitting of heavy nuclei"}, {"arrows": "to", "from": "Fission", "to": "Release of energy"}, {"arrows": "to", "from": "Fission", "to": "Chain reaction"}, {"arrows": "to", "from": "Fusion", "to": "Combining of light nuclei"}, {"arrows": "to", "from": "Fusion", "to": "Release of energy"}, {"arrows": "to", "from": "Fusion", "to": "Requires high temperature"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

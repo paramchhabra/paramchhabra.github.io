@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "GENERAL KEY CONCEPT", "label": "GENERAL KEY CONCEPT", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Force on a moving charge", "label": "Force on a moving charge", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Magnetic field strength", "label": "Magnetic field strength", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Special Cases", "label": "Special Cases", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Cyclotron", "label": "Cyclotron", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Force on a current carrying conductor", "label": "Force on a current carrying conductor", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "S.I. unit of magnetic field intensity", "label": "S.I. unit of magnetic field intensity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Biot-Savart\u2019s law", "label": "Biot-Savart\u2019s law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications of Biot-Savart\u2019s law", "label": "Applications of Biot-Savart\u2019s law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Force between two parallel conductors carrying current", "label": "Force between two parallel conductors carrying current", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Moving coil galvanometer", "label": "Moving coil galvanometer", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conversion of galvanometer into voltmeter and ammeter", "label": "Conversion of galvanometer into voltmeter and ammeter", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Condition for the maximum sensitivity of the galvanometer", "label": "Condition for the maximum sensitivity of the galvanometer", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Torque on a current carrying coil", "label": "Torque on a current carrying coil", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ampere\u2019s circuital law", "label": "Ampere\u2019s circuital law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Application of Ampere\u2019s circuital law", "label": "Application of Ampere\u2019s circuital law", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Motion of a charged particle in uniform electric field", "label": "Motion of a charged particle in uniform electric field", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Motion of the charged particle in a magnetic field", "label": "Motion of the charged particle in a magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A moving charge is a source of magnetic field", "label": "A moving charge is a source of magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = qBv sin \uf071", "label": "F = qBv sin \uf071", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = kq Bv sin \uf071 [k = constant]", "label": "F = kq Bv sin \uf071 [k = constant]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "k = 1 in S.I. system", "label": "k = 1 in S.I. system", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = qBv sin\uf071", "label": "F = qBv sin\uf071", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = q( v \uf0b4 B )", "label": "F = q( v \uf0b4 B )", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic field strength is defined as the force experienced by a unit charge moving with unit velocity perpendicular to the direction of magnetic field", "label": "Magnetic field strength is defined as the force experienced by a unit charge moving with unit velocity perpendicular to the direction of magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0", "label": "If \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If v = 0, F = 0", "label": "If v = 0, F = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If \uf071 = 90\u00b0, sin \uf071 = 1 then the force is maximum", "label": "If \uf071 = 90\u00b0, sin \uf071 = 1 then the force is maximum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fmax. = qvB", "label": "Fmax. = qvB", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "It \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0", "label": "It \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A charged particle moving parallel to the magnetic field, will not experience any force", "label": "A charged particle moving parallel to the magnetic field, will not experience any force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A charged particle at rest in a magnetic field will not experience any force", "label": "A charged particle at rest in a magnetic field will not experience any force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "It is a device used to accelerate and hence energies the positively charged particle", "label": "It is a device used to accelerate and hence energies the positively charged particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Centripetal force = magnetic Lorentz force", "label": "Centripetal force = magnetic Lorentz force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "mv^2/r = Bqv \uf0de mv/Bq = r \uf0ac  radius of the circular path", "label": "mv^2/r = Bqv \uf0de mv/Bq = r \uf0ac  radius of the circular path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Time to travel a semicircular path = \uf070m/Bq", "label": "Time to travel a semicircular path = \uf070m/Bq", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If v0 be the maximum velocity of the particle and r0 be the maximum radius of its path then", "label": "If v0 be the maximum velocity of the particle and r0 be the maximum radius of its path then", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2mv0^2/Bq = r0", "label": "2mv0^2/Bq = r0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Max. K.E. of the particle = mv0^2/2", "label": "Max. K.E. of the particle = mv0^2/2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Time period of the oscillating electric field \uf0de T = 2\uf070m/Bq", "label": "Time period of the oscillating electric field \uf0de T = 2\uf070m/Bq", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cyclotron frequency = 1/T = \uf070Bq/2m", "label": "Cyclotron frequency = 1/T = \uf070Bq/2m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cyclotron angular frequency = \uf0770 = 2\uf070\uf06e = Bq/m", "label": "Cyclotron angular frequency = \uf0770 = 2\uf070\uf06e = Bq/m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = I \uf06cB sin \uf071", "label": "F = I \uf06cB sin \uf071", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "where I is the current through the conductor", "label": "where I is the current through the conductor", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "B is the magnetic field intensity", "label": "B is the magnetic field intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "l is the length of the conductor", "label": "l is the length of the conductor", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\uf071 is the angle between the direction of current and magnetic field", "label": "\uf071 is the angle between the direction of current and magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0", "label": "When \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When a conductor is placed along the magnetic field, no force will act on the conductor", "label": "When a conductor is placed along the magnetic field, no force will act on the conductor", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When \uf071 = 90\u00b0, sin \uf071 = 1, F is maximum", "label": "When \uf071 = 90\u00b0, sin \uf071 = 1, F is maximum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fmax = I \uf06cB", "label": "Fmax = I \uf06cB", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "when the conductor is placed perpendicular to the magnetic field, it will experience maximum force", "label": "when the conductor is placed perpendicular to the magnetic field, it will experience maximum force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "It is called tesla (T)", "label": "It is called tesla (T)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "FB qvsin\uf071 = 1N", "label": "FB qvsin\uf071 = 1N", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If q = 1C, v = 1m/s, \uf071 = 90\u00b0 i.e. sin \uf071 = 1 and F = 1N", "label": "If q = 1C, v = 1m/s, \uf071 = 90\u00b0 i.e. sin \uf071 = 1 and F = 1N", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Then B = 1T", "label": "Then B = 1T", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The strength of magnetic field or magnetic flux density at a point P (dB) due to current element dl depends on", "label": "The strength of magnetic field or magnetic flux density at a point P (dB) due to current element dl depends on", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dB \uf0b5 I", "label": "dB \uf0b5 I", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dB \uf0b5 dl", "label": "dB \uf0b5 dl", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dB \uf0b5 sin \uf071", "label": "dB \uf0b5 sin \uf071", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dB \uf0b5 1/r^2", "label": "dB \uf0b5 1/r^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Combining, dB = kIdlsin\uf071/r^2 [k = Proportionality constant]", "label": "Combining, dB = kIdlsin\uf071/r^2 [k = Proportionality constant]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "In S.I. units, k = 4\uf06d0/\uf070 where \uf06d0 is called permeability of free space", "label": "In S.I. units, k = 4\uf06d0/\uf070 where \uf06d0 is called permeability of free space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dB = 4\uf06d0Idlsin\uf071/r^2", "label": "dB = 4\uf06d0Idlsin\uf071/r^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dB = 4\uf06d0I(dl r )/r^3", "label": "dB = 4\uf06d0I(dl r )/r^3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "d B is perpendicular to the plane containing d\uf06c and r and is directed inwards", "label": "d B is perpendicular to the plane containing d\uf06c and r and is directed inwards", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic field (B) at the Centre of a Circular Coil Carrying Current", "label": "Magnetic field (B) at the Centre of a Circular Coil Carrying Current", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "B = 0nIB/2r", "label": "B = 0nIB/2r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic field due to a straight conductor carrying current", "label": "Magnetic field due to a straight conductor carrying current", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "B = 0I(sin \uf0661 + sin \uf0662)/4a", "label": "B = 0I(sin \uf0661 + sin \uf0662)/4a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For an infinitely long conductor", "label": "For an infinitely long conductor", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "B = 0I/2a", "label": "B = 0I/2a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic field at a point on the axis of a Circular Coil Carrying Current", "label": "Magnetic field at a point on the axis of a Circular Coil Carrying Current", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "B = 0M/4x^3", "label": "B = 0M/4x^3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When the current is in same direction the two conductors will attract each other with a force", "label": "When the current is in same direction the two conductors will attract each other with a force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = 0I1I2/4r", "label": "F = 0I1I2/4r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When the current is in opposite direction the two conductors will repel each other with the same force", "label": "When the current is in opposite direction the two conductors will repel each other with the same force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "S.I. unit of current is 1 ampere (A)", "label": "S.I. unit of current is 1 ampere (A)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "This is based on the principle that when a current carrying coil is placed in a magnetic field it experiences a torque", "label": "This is based on the principle that when a current carrying coil is placed in a magnetic field it experiences a torque", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "In equilibrium, Deflecting torque = Restoring torque", "label": "In equilibrium, Deflecting torque = Restoring torque", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "nIBA = k \uf071", "label": "nIBA = k \uf071", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "I = kGnBA\uf071", "label": "I = kGnBA\uf071", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Current sensitivity of the galvanometer is the deflection produced when unit current is passed through the galvanometer", "label": "Current sensitivity of the galvanometer is the deflection produced when unit current is passed through the galvanometer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Voltage sensitivity is defined as the deflection produced when unit potential difference is applied across the galvanometer", "label": "Voltage sensitivity is defined as the deflection produced when unit potential difference is applied across the galvanometer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A galvanometer is converted to voltmeter by putting a high resistance in series with it", "label": "A galvanometer is converted to voltmeter by putting a high resistance in series with it", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Total resistance of voltmeter = Rg + R", "label": "Total resistance of voltmeter = Rg + R", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Current through the galvanometer = Ig = V/(Rg + R)", "label": "Current through the galvanometer = Ig = V/(Rg + R)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "R = (V/Ig) - Rg", "label": "R = (V/Ig) - Rg", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Range of the voltmeter: 0 \u2013 V volt", "label": "Range of the voltmeter: 0 \u2013 V volt", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A galvanometer is converted into an ammeter by connecting a low resistance in parallel with it (shunt)", "label": "A galvanometer is converted into an ammeter by connecting a low resistance in parallel with it (shunt)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shunt = (Ig/I) * Rg", "label": "Shunt = (Ig/I) * Rg", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Effective resistance of the ammeter R = Rg/(S + 1)", "label": "Effective resistance of the ammeter R = Rg/(S + 1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The range of the ammeter is 0 \u2013 I A", "label": "The range of the ammeter is 0 \u2013 I A", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The galvanometer is said to be sensitive if a small current produces a large deflection", "label": "The galvanometer is said to be sensitive if a small current produces a large deflection", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\uf071 will be large if (i) n is large, (ii) B is large (iii) A is large and (iv) k is small", "label": "\uf071 will be large if (i) n is large, (ii) B is large (iii) A is large and (iv) k is small", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "M B\uf074 = \uf0b4", "label": "M B\uf074 = \uf0b4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\uf074 = MB sin \uf061 = nIBA sin \uf061", "label": "\uf074 = MB sin \uf061 = nIBA sin \uf061", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "M = nIA", "label": "M = nIA", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the coil is placed parallel to magnetic field \uf071 = 0\u00b0, cos \uf071 = 1 then torque is maximum", "label": "If the coil is placed parallel to magnetic field \uf071 = 0\u00b0, cos \uf071 = 1 then torque is maximum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the coil is placed perpendicular to magnetic field, \uf071 = 90\u00b0, cos \uf071 = 0 \uf05c \uf074 = 0", "label": "If the coil is placed perpendicular to magnetic field, \uf071 = 90\u00b0, cos \uf071 = 0 \uf05c \uf074 = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The line integral of magnetic field B around any closed path in vacuum is 0\uf06d times the total current through the closed path", "label": "The line integral of magnetic field B around any closed path in vacuum is 0\uf06d times the total current through the closed path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\uf0d1B.dl = 0\uf06dI", "label": "\uf0d1B.dl = 0\uf06dI", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic field due to a current carrying solenoid, B = \uf06d0nI", "label": "Magnetic field due to a current carrying solenoid, B = \uf06d0nI", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "At the edge of a short solenoid, B = 0\uf06d nI/2", "label": "At the edge of a short solenoid, B = 0\uf06d nI/2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetic field due to a toroid or endless solenoid B = \uf06d0nI", "label": "Magnetic field due to a toroid or endless solenoid B = \uf06d0nI", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The path of a charged particle in an electric field is a parabola", "label": "The path of a charged particle in an electric field is a parabola", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Equation of the parabola is y = (qE/2mv^2)x^2", "label": "Equation of the parabola is y = (qE/2mv^2)x^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "where x is the width of the electric field", "label": "where x is the width of the electric field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "y is the displacement of the particle from its straight path", "label": "y is the displacement of the particle from its straight path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "v is the speed of the charged particle", "label": "v is the speed of the charged particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "q is the charge of the particle", "label": "q is the charge of the particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "E is the electric field intensity", "label": "E is the electric field intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "m is the mass of the particle", "label": "m is the mass of the particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The path of a charged particle in a magnetic field is a helix", "label": "The path of a charged particle in a magnetic field is a helix", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The component of velocity v cos \uf071 will not provide a force to the charged particle, so under this velocity the particle with move forward with a constant velocity along the direction of B", "label": "The component of velocity v cos \uf071 will not provide a force to the charged particle, so under this velocity the particle with move forward with a constant velocity along the direction of B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The other component v sin \uf071 will produce the force F = qBv sin \uf071, which will supply the necessary centripetal force to the charged particle in moving along a circular path of radius r", "label": "The other component v sin \uf071 will produce the force F = qBv sin \uf071, which will supply the necessary centripetal force to the charged particle in moving along a circular path of radius r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Centripetal force = mv^2/r = Bqv sin \uf071", "label": "Centripetal force = mv^2/r = Bqv sin \uf071", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Angular velocity of rotation = w = v sin \uf071/Bq", "label": "Angular velocity of rotation = w = v sin \uf071/Bq", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Frequency of rotation = \uf077 = Bq/2m", "label": "Frequency of rotation = \uf077 = Bq/2m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Time period of revolution = T = 2m/Bq", "label": "Time period of revolution = T = 2m/Bq", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Force on a moving charge"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Magnetic field strength"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Special Cases"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Cyclotron"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Force on a current carrying conductor"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "S.I. unit of magnetic field intensity"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Biot-Savart\u2019s law"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Applications of Biot-Savart\u2019s law"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Force between two parallel conductors carrying current"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Moving coil galvanometer"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Conversion of galvanometer into voltmeter and ammeter"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Condition for the maximum sensitivity of the galvanometer"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Torque on a current carrying coil"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Ampere\u2019s circuital law"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Application of Ampere\u2019s circuital law"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Motion of a charged particle in uniform electric field"}, {"arrows": "to", "from": "GENERAL KEY CONCEPT", "to": "Motion of the charged particle in a magnetic field"}, {"arrows": "to", "from": "Force on a moving charge", "to": "A moving charge is a source of magnetic field"}, {"arrows": "to", "from": "Force on a moving charge", "to": "F = qBv sin \uf071"}, {"arrows": "to", "from": "Force on a moving charge", "to": "F = kq Bv sin \uf071 [k = constant]"}, {"arrows": "to", "from": "Force on a moving charge", "to": "k = 1 in S.I. system"}, {"arrows": "to", "from": "Force on a moving charge", "to": "F = qBv sin\uf071"}, {"arrows": "to", "from": "Force on a moving charge", "to": "F = q( v \uf0b4 B )"}, {"arrows": "to", "from": "Magnetic field strength", "to": "Magnetic field strength is defined as the force experienced by a unit charge moving with unit velocity perpendicular to the direction of magnetic field"}, {"arrows": "to", "from": "Magnetic field strength", "to": "Special Cases"}, {"arrows": "to", "from": "Magnetic field strength", "to": "If \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0"}, {"arrows": "to", "from": "Magnetic field strength", "to": "If v = 0, F = 0"}, {"arrows": "to", "from": "Magnetic field strength", "to": "If \uf071 = 90\u00b0, sin \uf071 = 1 then the force is maximum"}, {"arrows": "to", "from": "Magnetic field strength", "to": "Fmax. = qvB"}, {"arrows": "to", "from": "Special Cases", "to": "It \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0"}, {"arrows": "to", "from": "Special Cases", "to": "A charged particle moving parallel to the magnetic field, will not experience any force"}, {"arrows": "to", "from": "Special Cases", "to": "If v = 0, F = 0"}, {"arrows": "to", "from": "Special Cases", "to": "A charged particle at rest in a magnetic field will not experience any force"}, {"arrows": "to", "from": "Special Cases", "to": "If \uf071 = 90\u00b0, sin \uf071 = 1 then the force is maximum"}, {"arrows": "to", "from": "Special Cases", "to": "Fmax. = qvB"}, {"arrows": "to", "from": "Cyclotron", "to": "It is a device used to accelerate and hence energies the positively charged particle"}, {"arrows": "to", "from": "Cyclotron", "to": "Centripetal force = magnetic Lorentz force"}, {"arrows": "to", "from": "Cyclotron", "to": "mv^2/r = Bqv \uf0de mv/Bq = r \uf0ac  radius of the circular path"}, {"arrows": "to", "from": "Cyclotron", "to": "Time to travel a semicircular path = \uf070m/Bq"}, {"arrows": "to", "from": "Cyclotron", "to": "If v0 be the maximum velocity of the particle and r0 be the maximum radius of its path then"}, {"arrows": "to", "from": "Cyclotron", "to": "2mv0^2/Bq = r0"}, {"arrows": "to", "from": "Cyclotron", "to": "Max. K.E. of the particle = mv0^2/2"}, {"arrows": "to", "from": "Cyclotron", "to": "Time period of the oscillating electric field \uf0de T = 2\uf070m/Bq"}, {"arrows": "to", "from": "Cyclotron", "to": "Cyclotron frequency = 1/T = \uf070Bq/2m"}, {"arrows": "to", "from": "Cyclotron", "to": "Cyclotron angular frequency = \uf0770 = 2\uf070\uf06e = Bq/m"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "F = I \uf06cB sin \uf071"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "where I is the current through the conductor"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "B is the magnetic field intensity"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "l is the length of the conductor"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "\uf071 is the angle between the direction of current and magnetic field"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "Special Cases"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "When \uf071 = 0\u00b0 or 180\u00b0, sin \uf071 = 0 \uf0de F = 0"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "When a conductor is placed along the magnetic field, no force will act on the conductor"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "When \uf071 = 90\u00b0, sin \uf071 = 1, F is maximum"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "Fmax = I \uf06cB"}, {"arrows": "to", "from": "Force on a current carrying conductor", "to": "when the conductor is placed perpendicular to the magnetic field, it will experience maximum force"}, {"arrows": "to", "from": "S.I. unit of magnetic field intensity", "to": "It is called tesla (T)"}, {"arrows": "to", "from": "S.I. unit of magnetic field intensity", "to": "FB qvsin\uf071 = 1N"}, {"arrows": "to", "from": "S.I. unit of magnetic field intensity", "to": "If q = 1C, v = 1m/s, \uf071 = 90\u00b0 i.e. sin \uf071 = 1 and F = 1N"}, {"arrows": "to", "from": "S.I. unit of magnetic field intensity", "to": "Then B = 1T"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "The strength of magnetic field or magnetic flux density at a point P (dB) due to current element dl depends on"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "dB \uf0b5 I"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "dB \uf0b5 dl"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "dB \uf0b5 sin \uf071"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "dB \uf0b5 1/r^2"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "Combining, dB = kIdlsin\uf071/r^2 [k = Proportionality constant]"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "In S.I. units, k = 4\uf06d0/\uf070 where \uf06d0 is called permeability of free space"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "dB = 4\uf06d0Idlsin\uf071/r^2"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "dB = 4\uf06d0I(dl r )/r^3"}, {"arrows": "to", "from": "Biot-Savart\u2019s law", "to": "d B is perpendicular to the plane containing d\uf06c and r and is directed inwards"}, {"arrows": "to", "from": "Applications of Biot-Savart\u2019s law", "to": "Magnetic field (B) at the Centre of a Circular Coil Carrying Current"}, {"arrows": "to", "from": "Applications of Biot-Savart\u2019s law", "to": "B = 0nIB/2r"}, {"arrows": "to", "from": "Applications of Biot-Savart\u2019s law", "to": "Magnetic field due to a straight conductor carrying current"}, {"arrows": "to", "from": "Applications of Biot-Savart\u2019s law", "to": "B = 0I(sin \uf0661 + sin \uf0662)/4a"}, {"arrows": "to", "from": "Applications of Biot-Savart\u2019s law", "to": "For an infinitely long conductor"}, {"arrows": "to", "from": "Applications of Biot-Savart\u2019s law", "to": "B = 0I/2a"}, {"arrows": "to", "from": "Applications of Biot-Savart\u2019s law", "to": "Magnetic field at a point on the axis of a Circular Coil Carrying Current"}, {"arrows": "to", "from": "Applications of Biot-Savart\u2019s law", "to": "B = 0M/4x^3"}, {"arrows": "to", "from": "Force between two parallel conductors carrying current", "to": "When the current is in same direction the two conductors will attract each other with a force"}, {"arrows": "to", "from": "Force between two parallel conductors carrying current", "to": "F = 0I1I2/4r"}, {"arrows": "to", "from": "Force between two parallel conductors carrying current", "to": "When the current is in opposite direction the two conductors will repel each other with the same force"}, {"arrows": "to", "from": "Force between two parallel conductors carrying current", "to": "S.I. unit of current is 1 ampere (A)"}, {"arrows": "to", "from": "Moving coil galvanometer", "to": "This is based on the principle that when a current carrying coil is placed in a magnetic field it experiences a torque"}, {"arrows": "to", "from": "Moving coil galvanometer", "to": "In equilibrium, Deflecting torque = Restoring torque"}, {"arrows": "to", "from": "Moving coil galvanometer", "to": "nIBA = k \uf071"}, {"arrows": "to", "from": "Moving coil galvanometer", "to": "I = kGnBA\uf071"}, {"arrows": "to", "from": "Moving coil galvanometer", "to": "Current sensitivity of the galvanometer is the deflection produced when unit current is passed through the galvanometer"}, {"arrows": "to", "from": "Moving coil galvanometer", "to": "Voltage sensitivity is defined as the deflection produced when unit potential difference is applied across the galvanometer"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "A galvanometer is converted to voltmeter by putting a high resistance in series with it"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "Total resistance of voltmeter = Rg + R"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "Current through the galvanometer = Ig = V/(Rg + R)"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "R = (V/Ig) - Rg"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "Range of the voltmeter: 0 \u2013 V volt"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "A galvanometer is converted into an ammeter by connecting a low resistance in parallel with it (shunt)"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "Shunt = (Ig/I) * Rg"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "Effective resistance of the ammeter R = Rg/(S + 1)"}, {"arrows": "to", "from": "Conversion of galvanometer into voltmeter and ammeter", "to": "The range of the ammeter is 0 \u2013 I A"}, {"arrows": "to", "from": "Condition for the maximum sensitivity of the galvanometer", "to": "The galvanometer is said to be sensitive if a small current produces a large deflection"}, {"arrows": "to", "from": "Condition for the maximum sensitivity of the galvanometer", "to": "\uf071 will be large if (i) n is large, (ii) B is large (iii) A is large and (iv) k is small"}, {"arrows": "to", "from": "Torque on a current carrying coil", "to": "M B\uf074 = \uf0b4"}, {"arrows": "to", "from": "Torque on a current carrying coil", "to": "\uf074 = MB sin \uf061 = nIBA sin \uf061"}, {"arrows": "to", "from": "Torque on a current carrying coil", "to": "M = nIA"}, {"arrows": "to", "from": "Torque on a current carrying coil", "to": "Special Cases"}, {"arrows": "to", "from": "Torque on a current carrying coil", "to": "If the coil is placed parallel to magnetic field \uf071 = 0\u00b0, cos \uf071 = 1 then torque is maximum"}, {"arrows": "to", "from": "Torque on a current carrying coil", "to": "If the coil is placed perpendicular to magnetic field, \uf071 = 90\u00b0, cos \uf071 = 0 \uf05c \uf074 = 0"}, {"arrows": "to", "from": "Ampere\u2019s circuital law", "to": "The line integral of magnetic field B around any closed path in vacuum is 0\uf06d times the total current through the closed path"}, {"arrows": "to", "from": "Ampere\u2019s circuital law", "to": "\uf0d1B.dl = 0\uf06dI"}, {"arrows": "to", "from": "Application of Ampere\u2019s circuital law", "to": "Magnetic field due to a current carrying solenoid, B = \uf06d0nI"}, {"arrows": "to", "from": "Application of Ampere\u2019s circuital law", "to": "At the edge of a short solenoid, B = 0\uf06d nI/2"}, {"arrows": "to", "from": "Application of Ampere\u2019s circuital law", "to": "Magnetic field due to a toroid or endless solenoid B = \uf06d0nI"}, {"arrows": "to", "from": "Motion of a charged particle in uniform electric field", "to": "The path of a charged particle in an electric field is a parabola"}, {"arrows": "to", "from": "Motion of a charged particle in uniform electric field", "to": "Equation of the parabola is y = (qE/2mv^2)x^2"}, {"arrows": "to", "from": "Motion of a charged particle in uniform electric field", "to": "where x is the width of the electric field"}, {"arrows": "to", "from": "Motion of a charged particle in uniform electric field", "to": "y is the displacement of the particle from its straight path"}, {"arrows": "to", "from": "Motion of a charged particle in uniform electric field", "to": "v is the speed of the charged particle"}, {"arrows": "to", "from": "Motion of a charged particle in uniform electric field", "to": "q is the charge of the particle"}, {"arrows": "to", "from": "Motion of a charged particle in uniform electric field", "to": "E is the electric field intensity"}, {"arrows": "to", "from": "Motion of a charged particle in uniform electric field", "to": "m is the mass of the particle"}, {"arrows": "to", "from": "Motion of the charged particle in a magnetic field", "to": "The path of a charged particle in a magnetic field is a helix"}, {"arrows": "to", "from": "Motion of the charged particle in a magnetic field", "to": "The component of velocity v cos \uf071 will not provide a force to the charged particle, so under this velocity the particle with move forward with a constant velocity along the direction of B"}, {"arrows": "to", "from": "Motion of the charged particle in a magnetic field", "to": "The other component v sin \uf071 will produce the force F = qBv sin \uf071, which will supply the necessary centripetal force to the charged particle in moving along a circular path of radius r"}, {"arrows": "to", "from": "Motion of the charged particle in a magnetic field", "to": "Centripetal force = mv^2/r = Bqv sin \uf071"}, {"arrows": "to", "from": "Motion of the charged particle in a magnetic field", "to": "Angular velocity of rotation = w = v sin \uf071/Bq"}, {"arrows": "to", "from": "Motion of the charged particle in a magnetic field", "to": "Frequency of rotation = \uf077 = Bq/2m"}, {"arrows": "to", "from": "Motion of the charged particle in a magnetic field", "to": "Time period of revolution = T = 2m/Bq"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

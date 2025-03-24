@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Work, Power \u0026 Energy", "label": "Work, Power \u0026 Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done by a Force", "label": "Work Done by a Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservative and Non-Conservative Forces", "label": "Conservative and Non-Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Energy Forms and Conservation", "label": "Energy Forms and Conservation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition and Formula", "label": "Definition and Formula", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done by Gravity", "label": "Work Done by Gravity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done by a Variable Force", "label": "Work Done by a Variable Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done by a Spring", "label": "Work Done by a Spring", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done = Force \u00d7 Displacement", "label": "Work Done = Force \u00d7 Displacement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done by a Variable Force = \u222bF ds", "label": "Work Done by a Variable Force = \u222bF ds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done by a Conservative Force = \u2013\u222bdU", "label": "Work Done by a Conservative Force = \u2013\u222bdU", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done = mgh", "label": "Work Done = mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Lifting a Mass", "label": "Example: Lifting a Mass", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Falling Body", "label": "Example: Falling Body", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done = \u222bF ds", "label": "Work Done = \u222bF ds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Work Done by Friction", "label": "Example: Work Done by Friction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Work Done by a Spring", "label": "Example: Work Done by a Spring", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done = \u00bdkx\u00b2", "label": "Work Done = \u00bdkx\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Compressing/Stretching a Spring", "label": "Example: Compressing/Stretching a Spring", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservative Forces", "label": "Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Conservative Forces", "label": "Non-Conservative Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Gravity, Elastic Force", "label": "Examples: Gravity, Elastic Force", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work-Energy Theorem: \u0394KE = \u2013\u222bdU", "label": "Work-Energy Theorem: \u0394KE = \u2013\u222bdU", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Friction, Viscous Forces", "label": "Examples: Friction, Viscous Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done is Path-Dependent", "label": "Work Done is Path-Dependent", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Potential Energy", "label": "Potential Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Kinetic Energy", "label": "Kinetic Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Total Mechanical Energy", "label": "Total Mechanical Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Internal Energy", "label": "Internal Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservation of Energy", "label": "Conservation of Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gravitational Potential Energy: PE = mgh", "label": "Gravitational Potential Energy: PE = mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Elastic Potential Energy: PE = \u00bdkx\u00b2", "label": "Elastic Potential Energy: PE = \u00bdkx\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chemical Potential Energy", "label": "Chemical Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "KE = \u00bdmv\u00b2", "label": "KE = \u00bdmv\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "KE of a Rotating Body: KE = \u00bdI\u03c9\u00b2", "label": "KE of a Rotating Body: KE = \u00bdI\u03c9\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "KE of a Vibrating Body: KE = \u00bdmv\u00b2", "label": "KE of a Vibrating Body: KE = \u00bdmv\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Total Mechanical Energy = PE + KE", "label": "Total Mechanical Energy = PE + KE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conservation of Mechanical Energy: \u0394(PE + KE) = 0", "label": "Conservation of Mechanical Energy: \u0394(PE + KE) = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heat Energy", "label": "Heat Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thermal Energy", "label": "Thermal Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chemical Energy", "label": "Chemical Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nuclear Energy", "label": "Nuclear Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Law of Conservation of Energy", "label": "Law of Conservation of Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Collision, Vibration, Heat Engine", "label": "Examples: Collision, Vibration, Heat Engine", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Work, Power \u0026 Energy", "to": "Work Done by a Force"}, {"arrows": "to", "from": "Work, Power \u0026 Energy", "to": "Conservative and Non-Conservative Forces"}, {"arrows": "to", "from": "Work, Power \u0026 Energy", "to": "Energy Forms and Conservation"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Definition and Formula"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Work Done by Gravity"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Work Done by a Variable Force"}, {"arrows": "to", "from": "Work Done by a Force", "to": "Work Done by a Spring"}, {"arrows": "to", "from": "Conservative and Non-Conservative Forces", "to": "Conservative Forces"}, {"arrows": "to", "from": "Conservative and Non-Conservative Forces", "to": "Non-Conservative Forces"}, {"arrows": "to", "from": "Energy Forms and Conservation", "to": "Potential Energy"}, {"arrows": "to", "from": "Energy Forms and Conservation", "to": "Kinetic Energy"}, {"arrows": "to", "from": "Energy Forms and Conservation", "to": "Total Mechanical Energy"}, {"arrows": "to", "from": "Energy Forms and Conservation", "to": "Internal Energy"}, {"arrows": "to", "from": "Energy Forms and Conservation", "to": "Conservation of Energy"}, {"arrows": "to", "from": "Definition and Formula", "to": "Work Done = Force \u00d7 Displacement"}, {"arrows": "to", "from": "Definition and Formula", "to": "Work Done by a Variable Force = \u222bF ds"}, {"arrows": "to", "from": "Definition and Formula", "to": "Work Done by a Conservative Force = \u2013\u222bdU"}, {"arrows": "to", "from": "Work Done by Gravity", "to": "Work Done = mgh"}, {"arrows": "to", "from": "Work Done by Gravity", "to": "Example: Lifting a Mass"}, {"arrows": "to", "from": "Work Done by Gravity", "to": "Example: Falling Body"}, {"arrows": "to", "from": "Work Done by a Variable Force", "to": "Work Done = \u222bF ds"}, {"arrows": "to", "from": "Work Done by a Variable Force", "to": "Example: Work Done by Friction"}, {"arrows": "to", "from": "Work Done by a Variable Force", "to": "Example: Work Done by a Spring"}, {"arrows": "to", "from": "Work Done by a Spring", "to": "Work Done = \u00bdkx\u00b2"}, {"arrows": "to", "from": "Work Done by a Spring", "to": "Example: Compressing/Stretching a Spring"}, {"arrows": "to", "from": "Conservative Forces", "to": "Definition"}, {"arrows": "to", "from": "Conservative Forces", "to": "Examples: Gravity, Elastic Force"}, {"arrows": "to", "from": "Conservative Forces", "to": "Work-Energy Theorem: \u0394KE = \u2013\u222bdU"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Definition"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Examples: Friction, Viscous Forces"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Work Done is Path-Dependent"}, {"arrows": "to", "from": "Potential Energy", "to": "Gravitational Potential Energy: PE = mgh"}, {"arrows": "to", "from": "Potential Energy", "to": "Elastic Potential Energy: PE = \u00bdkx\u00b2"}, {"arrows": "to", "from": "Potential Energy", "to": "Chemical Potential Energy"}, {"arrows": "to", "from": "Kinetic Energy", "to": "KE = \u00bdmv\u00b2"}, {"arrows": "to", "from": "Kinetic Energy", "to": "KE of a Rotating Body: KE = \u00bdI\u03c9\u00b2"}, {"arrows": "to", "from": "Kinetic Energy", "to": "KE of a Vibrating Body: KE = \u00bdmv\u00b2"}, {"arrows": "to", "from": "Total Mechanical Energy", "to": "Total Mechanical Energy = PE + KE"}, {"arrows": "to", "from": "Total Mechanical Energy", "to": "Conservation of Mechanical Energy: \u0394(PE + KE) = 0"}, {"arrows": "to", "from": "Internal Energy", "to": "Heat Energy"}, {"arrows": "to", "from": "Internal Energy", "to": "Thermal Energy"}, {"arrows": "to", "from": "Internal Energy", "to": "Chemical Energy"}, {"arrows": "to", "from": "Internal Energy", "to": "Nuclear Energy"}, {"arrows": "to", "from": "Conservation of Energy", "to": "Law of Conservation of Energy"}, {"arrows": "to", "from": "Conservation of Energy", "to": "Examples: Collision, Vibration, Heat Engine"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

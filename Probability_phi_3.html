@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Main Topic", "label": "Main Topic", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Experiments", "label": "Experiments", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Basic Definitions", "label": "Basic Definitions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Probability", "label": "Probability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Random Variables and its Probability Distributions", "label": "Random Variables and its Probability Distributions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Independent Events", "label": "Independent Events", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mutually Exclusive Event", "label": "Mutually Exclusive Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bayes\u0027 Theorem", "label": "Bayes\u0027 Theorem", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bernoulli Trials and Binomial Distribution", "label": "Bernoulli Trials and Binomial Distribution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tossing two dice and finding the sum of the numbers", "label": "Tossing two dice and finding the sum of the numbers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tossing a coin 50 times and counting the number of heads", "label": "Tossing a coin 50 times and counting the number of heads", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Randomly selecting 4 articles from a lot of 20 (6 are defective)", "label": "Randomly selecting 4 articles from a lot of 20 (6 are defective)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random Experiment: Experiments whose all possible outcomes are known but not predictable", "label": "Random Experiment: Experiments whose all possible outcomes are known but not predictable", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sample-space: Set of all possible outcomes", "label": "Sample-space: Set of all possible outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Experiment or Trial: Series of action with uncertain outcomes", "label": "Experiment or Trial: Series of action with uncertain outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Event: Subset of sample space", "label": "Event: Subset of sample space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Simple Event: Event containing only one element of the sample space", "label": "Simple Event: Event containing only one element of the sample space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Compound Event: Union of sample points", "label": "Compound Event: Union of sample points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a random experiment can result in any one of N different equally likely outcomes, and exactly n favor a particular event A", "label": "If a random experiment can result in any one of N different equally likely outcomes, and exactly n favor a particular event A", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "then the probability of event A, P(A) = n/N", "label": "then the probability of event A, P(A) = n/N", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability of a mutually exclusive event with zero is not always zero", "label": "Probability of a mutually exclusive event with zero is not always zero", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability of independent events, P(E \u2229 F) = P(E). P(F)", "label": "Probability of independent events, P(E \u2229 F) = P(E). P(F)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example of drawing a card from a deck, heart vs red card", "label": "Example of drawing a card from a deck, heart vs red card", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random variable: Real number assigned to outcomes", "label": "Random variable: Real number assigned to outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mean of a random variable: Weighted average of possible values", "label": "Mean of a random variable: Weighted average of possible values", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability Distributions: List of values and their probabilities", "label": "Probability Distributions: List of values and their probabilities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Binomial Distribution: Distribution of number of successes in Bernoulli trials", "label": "Binomial Distribution: Distribution of number of successes in Bernoulli trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independence: Probability unaffected by another event", "label": "Independence: Probability unaffected by another event", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bayes\u0027 Theorem: Inverting probabilities with given information", "label": "Bayes\u0027 Theorem: Inverting probabilities with given information", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "E and F are independent if occurrence of one does not affect the other", "label": "E and F are independent if occurrence of one does not affect the other", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mutually independent three events, P(A \u2229 B) = P(A) P(B)", "label": "Mutually independent three events, P(A \u2229 B) = P(A) P(B)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Events not affecting each other are independent, for their conditional probabilities to be equal", "label": "Events not affecting each other are independent, for their conditional probabilities to be equal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Events that cannot occur simultaneously", "label": "Events that cannot occur simultaneously", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Confusion between independent and mutually exclusive events, mutually exclusive cannot have common outcome, independent may", "label": "Confusion between independent and mutually exclusive events, mutually exclusive cannot have common outcome, independent may", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bayes\u0027 Theorem: Posthumously published in 1763 by John Bayes", "label": "Bayes\u0027 Theorem: Posthumously published in 1763 by John Bayes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conditional Probability: Probability of B given A", "label": "Conditional Probability: Probability of B given A", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Theorem of total probability: Formula combining probabilities of partitions of sample space", "label": "Theorem of total probability: Formula combining probabilities of partitions of sample space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bernoulli trials: Independent trials with two outcomes", "label": "Bernoulli trials: Independent trials with two outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Drawing balls from a urn", "label": "Examples: Drawing balls from a urn", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Main Topic", "to": "Experiments"}, {"arrows": "to", "from": "Main Topic", "to": "Basic Definitions"}, {"arrows": "to", "from": "Main Topic", "to": "Probability"}, {"arrows": "to", "from": "Main Topic", "to": "Random Variables and its Probability Distributions"}, {"arrows": "to", "from": "Main Topic", "to": "Independent Events"}, {"arrows": "to", "from": "Main Topic", "to": "Mutually Exclusive Event"}, {"arrows": "to", "from": "Main Topic", "to": "Bayes\u0027 Theorem"}, {"arrows": "to", "from": "Main Topic", "to": "Bernoulli Trials and Binomial Distribution"}, {"arrows": "to", "from": "Experiments", "to": "Tossing two dice and finding the sum of the numbers"}, {"arrows": "to", "from": "Experiments", "to": "Tossing a coin 50 times and counting the number of heads"}, {"arrows": "to", "from": "Experiments", "to": "Randomly selecting 4 articles from a lot of 20 (6 are defective)"}, {"arrows": "to", "from": "Basic Definitions", "to": "Random Experiment: Experiments whose all possible outcomes are known but not predictable"}, {"arrows": "to", "from": "Basic Definitions", "to": "Sample-space: Set of all possible outcomes"}, {"arrows": "to", "from": "Basic Definitions", "to": "Experiment or Trial: Series of action with uncertain outcomes"}, {"arrows": "to", "from": "Basic Definitions", "to": "Event: Subset of sample space"}, {"arrows": "to", "from": "Basic Definitions", "to": "Simple Event: Event containing only one element of the sample space"}, {"arrows": "to", "from": "Basic Definitions", "to": "Compound Event: Union of sample points"}, {"arrows": "to", "from": "Probability", "to": "If a random experiment can result in any one of N different equally likely outcomes, and exactly n favor a particular event A"}, {"arrows": "to", "from": "Probability", "to": "then the probability of event A, P(A) = n/N"}, {"arrows": "to", "from": "Probability", "to": "Probability of a mutually exclusive event with zero is not always zero"}, {"arrows": "to", "from": "Probability", "to": "Probability of independent events, P(E \u2229 F) = P(E). P(F)"}, {"arrows": "to", "from": "Probability", "to": "Example of drawing a card from a deck, heart vs red card"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Random variable: Real number assigned to outcomes"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Mean of a random variable: Weighted average of possible values"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Probability Distributions: List of values and their probabilities"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Binomial Distribution: Distribution of number of successes in Bernoulli trials"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Independence: Probability unaffected by another event"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Bayes\u0027 Theorem: Inverting probabilities with given information"}, {"arrows": "to", "from": "Independent Events", "to": "E and F are independent if occurrence of one does not affect the other"}, {"arrows": "to", "from": "Independent Events", "to": "Mutually independent three events, P(A \u2229 B) = P(A) P(B)"}, {"arrows": "to", "from": "Independent Events", "to": "Events not affecting each other are independent, for their conditional probabilities to be equal"}, {"arrows": "to", "from": "Mutually Exclusive Event", "to": "Events that cannot occur simultaneously"}, {"arrows": "to", "from": "Mutually Exclusive Event", "to": "Confusion between independent and mutually exclusive events, mutually exclusive cannot have common outcome, independent may"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Bayes\u0027 Theorem: Posthumously published in 1763 by John Bayes"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Conditional Probability: Probability of B given A"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Theorem of total probability: Formula combining probabilities of partitions of sample space"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Bernoulli trials: Independent trials with two outcomes"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Examples: Drawing balls from a urn"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

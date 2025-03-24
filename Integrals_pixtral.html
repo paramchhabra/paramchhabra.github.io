@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Quantum Mechanics", "label": "Quantum Mechanics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Introduction", "label": "Introduction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wave Function", "label": "Wave Function", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Schr\u00f6dinger Equation", "label": "Schr\u00f6dinger Equation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Solutions of Schr\u00f6dinger Equation", "label": "Solutions of Schr\u00f6dinger Equation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Probability and Expectation Values", "label": "Probability and Expectation Values", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quantum States and Operators", "label": "Quantum States and Operators", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Uncertainty Principle", "label": "Uncertainty Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quantization", "label": "Quantization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition of Quantum Mechanics", "label": "Definition of Quantum Mechanics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Historical Background", "label": "Historical Background", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Importance and Applications", "label": "Importance and Applications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties", "label": "Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mathematical Representation", "label": "Mathematical Representation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Time-Independent Schr\u00f6dinger Equation", "label": "Time-Independent Schr\u00f6dinger Equation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Time-Dependent Schr\u00f6dinger Equation", "label": "Time-Dependent Schr\u00f6dinger Equation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Solving the Schr\u00f6dinger Equation", "label": "Solving the Schr\u00f6dinger Equation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Exact Solutions", "label": "Exact Solutions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Approximate Solutions", "label": "Approximate Solutions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bound States and Scattering States", "label": "Bound States and Scattering States", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Probability Density", "label": "Probability Density", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Expectation Value Formula", "label": "Expectation Value Formula", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Examples of Expectation Values", "label": "Examples of Expectation Values", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition of Quantum States", "label": "Definition of Quantum States", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Operators in Quantum Mechanics", "label": "Operators in Quantum Mechanics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Commutators and Anticommutators", "label": "Commutators and Anticommutators", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Heisenberg Uncertainty Principle", "label": "Heisenberg Uncertainty Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mathematical Formulation", "label": "Mathematical Formulation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Implications and Examples", "label": "Implications and Examples", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quantization of Energy", "label": "Quantization of Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quantum Numbers", "label": "Quantum Numbers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Quantum States and Energy Levels", "label": "Quantum States and Energy Levels", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Formulation", "label": "Formulation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Energy Eigenvalues", "label": "Energy Eigenvalues", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Solve for Energy Levels", "label": "Solve for Energy Levels", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Solving the Equation", "label": "Solving the Equation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications", "label": "Applications", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Numerical Methods", "label": "Numerical Methods", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Special Cases", "label": "Special Cases", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Calculation", "label": "Calculation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Examples", "label": "Examples", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Interpretation", "label": "Interpretation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wave Functions", "label": "Wave Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Stationary States", "label": "Stationary States", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Superposition Principle", "label": "Superposition Principle", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hermitian Operators", "label": "Hermitian Operators", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Commutators", "label": "Commutators", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Examples of Operators", "label": "Examples of Operators", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Implications", "label": "Implications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Energy Levels", "label": "Energy Levels", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Principal Quantum Number", "label": "Principal Quantum Number", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Angular Momentum Quantum Number", "label": "Angular Momentum Quantum Number", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Magnetic Quantum Number", "label": "Magnetic Quantum Number", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Spin Quantum Number", "label": "Spin Quantum Number", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electron Orbits", "label": "Electron Orbits", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Energy Level Diagram", "label": "Energy Level Diagram", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Solvable Potentials", "label": "Solvable Potentials", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Analytical Methods", "label": "Analytical Methods", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Variational Methods", "label": "Variational Methods", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Numerical Techniques", "label": "Numerical Techniques", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bound States", "label": "Bound States", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Scattering States", "label": "Scattering States", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Transition Between States", "label": "Transition Between States", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability Amplitude", "label": "Probability Amplitude", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Normalization", "label": "Normalization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Complex Nature", "label": "Complex Nature", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Orthogonality", "label": "Orthogonality", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Normalization Condition", "label": "Normalization Condition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave Function in Position Space", "label": "Wave Function in Position Space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave Function in Momentum Space", "label": "Wave Function in Momentum Space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fourier Transform", "label": "Fourier Transform", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uncertainty Relations", "label": "Uncertainty Relations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mathematical Derivation", "label": "Mathematical Derivation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Eigenvalues", "label": "Eigenvalues", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Eigenfunctions", "label": "Eigenfunctions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Solving for Eigenvalues", "label": "Solving for Eigenvalues", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Potential Energy", "label": "Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrating the Wave Function", "label": "Integrating the Wave Function", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hydrogen Atom", "label": "Hydrogen Atom", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Particles in a Box", "label": "Particles in a Box", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Free Particle", "label": "Free Particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Derivation", "label": "Derivation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Position Expectation Value", "label": "Position Expectation Value", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Momentum Expectation Value", "label": "Momentum Expectation Value", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy Expectation Value", "label": "Energy Expectation Value", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Physical Meaning", "label": "Physical Meaning", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Position Operator", "label": "Position Operator", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Momentum Operator", "label": "Momentum Operator", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hamiltonian Operator", "label": "Hamiltonian Operator", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Limitations of Measurement", "label": "Limitations of Measurement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Complementarity Principle", "label": "Complementarity Principle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy Formula", "label": "Energy Formula", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bohr Model", "label": "Bohr Model", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum Orbits", "label": "Quantum Orbits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diagram", "label": "Diagram", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Potentials", "label": "Potentials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Methods of Solution", "label": "Methods of Solution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Series Solutions", "label": "Series Solutions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Special Functions", "label": "Special Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Application", "label": "Application", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finite Difference Methods", "label": "Finite Difference Methods", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finite Element Methods", "label": "Finite Element Methods", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum Chemistry", "label": "Quantum Chemistry", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Solid State Physics", "label": "Solid State Physics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nuclear Physics", "label": "Nuclear Physics", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Quantum Mechanics", "to": "Introduction"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Wave Function"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Schr\u00f6dinger Equation"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Solutions of Schr\u00f6dinger Equation"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Probability and Expectation Values"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Quantum States and Operators"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Uncertainty Principle"}, {"arrows": "to", "from": "Quantum Mechanics", "to": "Quantization"}, {"arrows": "to", "from": "Introduction", "to": "Definition of Quantum Mechanics"}, {"arrows": "to", "from": "Introduction", "to": "Historical Background"}, {"arrows": "to", "from": "Introduction", "to": "Importance and Applications"}, {"arrows": "to", "from": "Wave Function", "to": "Definition"}, {"arrows": "to", "from": "Wave Function", "to": "Properties"}, {"arrows": "to", "from": "Wave Function", "to": "Mathematical Representation"}, {"arrows": "to", "from": "Schr\u00f6dinger Equation", "to": "Time-Independent Schr\u00f6dinger Equation"}, {"arrows": "to", "from": "Schr\u00f6dinger Equation", "to": "Time-Dependent Schr\u00f6dinger Equation"}, {"arrows": "to", "from": "Schr\u00f6dinger Equation", "to": "Solving the Schr\u00f6dinger Equation"}, {"arrows": "to", "from": "Solutions of Schr\u00f6dinger Equation", "to": "Exact Solutions"}, {"arrows": "to", "from": "Solutions of Schr\u00f6dinger Equation", "to": "Approximate Solutions"}, {"arrows": "to", "from": "Solutions of Schr\u00f6dinger Equation", "to": "Bound States and Scattering States"}, {"arrows": "to", "from": "Probability and Expectation Values", "to": "Probability Density"}, {"arrows": "to", "from": "Probability and Expectation Values", "to": "Expectation Value Formula"}, {"arrows": "to", "from": "Probability and Expectation Values", "to": "Examples of Expectation Values"}, {"arrows": "to", "from": "Quantum States and Operators", "to": "Definition of Quantum States"}, {"arrows": "to", "from": "Quantum States and Operators", "to": "Operators in Quantum Mechanics"}, {"arrows": "to", "from": "Quantum States and Operators", "to": "Commutators and Anticommutators"}, {"arrows": "to", "from": "Uncertainty Principle", "to": "Heisenberg Uncertainty Principle"}, {"arrows": "to", "from": "Uncertainty Principle", "to": "Mathematical Formulation"}, {"arrows": "to", "from": "Uncertainty Principle", "to": "Implications and Examples"}, {"arrows": "to", "from": "Quantization", "to": "Quantization of Energy"}, {"arrows": "to", "from": "Quantization", "to": "Quantum Numbers"}, {"arrows": "to", "from": "Quantization", "to": "Quantum States and Energy Levels"}, {"arrows": "to", "from": "Definition", "to": "Wave Function"}, {"arrows": "to", "from": "Definition", "to": "Probability Amplitude"}, {"arrows": "to", "from": "Definition", "to": "Normalization"}, {"arrows": "to", "from": "Properties", "to": "Complex Nature"}, {"arrows": "to", "from": "Properties", "to": "Orthogonality"}, {"arrows": "to", "from": "Properties", "to": "Normalization Condition"}, {"arrows": "to", "from": "Mathematical Representation", "to": "Wave Function in Position Space"}, {"arrows": "to", "from": "Mathematical Representation", "to": "Wave Function in Momentum Space"}, {"arrows": "to", "from": "Mathematical Representation", "to": "Fourier Transform"}, {"arrows": "to", "from": "Time-Independent Schr\u00f6dinger Equation", "to": "Formulation"}, {"arrows": "to", "from": "Time-Independent Schr\u00f6dinger Equation", "to": "Energy Eigenvalues"}, {"arrows": "to", "from": "Time-Independent Schr\u00f6dinger Equation", "to": "Solve for Energy Levels"}, {"arrows": "to", "from": "Time-Dependent Schr\u00f6dinger Equation", "to": "Formulation"}, {"arrows": "to", "from": "Time-Dependent Schr\u00f6dinger Equation", "to": "Solving the Equation"}, {"arrows": "to", "from": "Time-Dependent Schr\u00f6dinger Equation", "to": "Applications"}, {"arrows": "to", "from": "Solving the Schr\u00f6dinger Equation", "to": "Exact Solutions"}, {"arrows": "to", "from": "Solving the Schr\u00f6dinger Equation", "to": "Numerical Methods"}, {"arrows": "to", "from": "Solving the Schr\u00f6dinger Equation", "to": "Special Cases"}, {"arrows": "to", "from": "Exact Solutions", "to": "Solvable Potentials"}, {"arrows": "to", "from": "Exact Solutions", "to": "Analytical Methods"}, {"arrows": "to", "from": "Exact Solutions", "to": "Examples"}, {"arrows": "to", "from": "Approximate Solutions", "to": "Variational Methods"}, {"arrows": "to", "from": "Approximate Solutions", "to": "Numerical Techniques"}, {"arrows": "to", "from": "Approximate Solutions", "to": "Applications"}, {"arrows": "to", "from": "Bound States and Scattering States", "to": "Bound States"}, {"arrows": "to", "from": "Bound States and Scattering States", "to": "Scattering States"}, {"arrows": "to", "from": "Bound States and Scattering States", "to": "Transition Between States"}, {"arrows": "to", "from": "Probability Density", "to": "Definition"}, {"arrows": "to", "from": "Probability Density", "to": "Calculation"}, {"arrows": "to", "from": "Probability Density", "to": "Examples"}, {"arrows": "to", "from": "Expectation Value Formula", "to": "Mathematical Formulation"}, {"arrows": "to", "from": "Expectation Value Formula", "to": "Examples"}, {"arrows": "to", "from": "Expectation Value Formula", "to": "Interpretation"}, {"arrows": "to", "from": "Examples of Expectation Values", "to": "Position Expectation Value"}, {"arrows": "to", "from": "Examples of Expectation Values", "to": "Momentum Expectation Value"}, {"arrows": "to", "from": "Examples of Expectation Values", "to": "Energy Expectation Value"}, {"arrows": "to", "from": "Definition of Quantum States", "to": "Wave Functions"}, {"arrows": "to", "from": "Definition of Quantum States", "to": "Stationary States"}, {"arrows": "to", "from": "Definition of Quantum States", "to": "Superposition Principle"}, {"arrows": "to", "from": "Operators in Quantum Mechanics", "to": "Hermitian Operators"}, {"arrows": "to", "from": "Operators in Quantum Mechanics", "to": "Commutators"}, {"arrows": "to", "from": "Operators in Quantum Mechanics", "to": "Examples of Operators"}, {"arrows": "to", "from": "Heisenberg Uncertainty Principle", "to": "Formulation"}, {"arrows": "to", "from": "Heisenberg Uncertainty Principle", "to": "Examples"}, {"arrows": "to", "from": "Heisenberg Uncertainty Principle", "to": "Implications"}, {"arrows": "to", "from": "Mathematical Formulation", "to": "Expectation Value Formula"}, {"arrows": "to", "from": "Mathematical Formulation", "to": "Derivation"}, {"arrows": "to", "from": "Mathematical Formulation", "to": "Examples"}, {"arrows": "to", "from": "Quantization of Energy", "to": "Energy Levels"}, {"arrows": "to", "from": "Quantization of Energy", "to": "Quantum Numbers"}, {"arrows": "to", "from": "Quantization of Energy", "to": "Examples"}, {"arrows": "to", "from": "Quantum Numbers", "to": "Principal Quantum Number"}, {"arrows": "to", "from": "Quantum Numbers", "to": "Angular Momentum Quantum Number"}, {"arrows": "to", "from": "Quantum Numbers", "to": "Magnetic Quantum Number"}, {"arrows": "to", "from": "Quantum Numbers", "to": "Spin Quantum Number"}, {"arrows": "to", "from": "Quantum States and Energy Levels", "to": "Electron Orbits"}, {"arrows": "to", "from": "Quantum States and Energy Levels", "to": "Energy Level Diagram"}, {"arrows": "to", "from": "Quantum States and Energy Levels", "to": "Examples"}, {"arrows": "to", "from": "Formulation", "to": "Uncertainty Relations"}, {"arrows": "to", "from": "Formulation", "to": "Mathematical Derivation"}, {"arrows": "to", "from": "Formulation", "to": "Examples"}, {"arrows": "to", "from": "Energy Eigenvalues", "to": "Eigenvalues"}, {"arrows": "to", "from": "Energy Eigenvalues", "to": "Eigenfunctions"}, {"arrows": "to", "from": "Energy Eigenvalues", "to": "Solving for Eigenvalues"}, {"arrows": "to", "from": "Solve for Energy Levels", "to": "Potential Energy"}, {"arrows": "to", "from": "Solve for Energy Levels", "to": "Solving the Equation"}, {"arrows": "to", "from": "Solve for Energy Levels", "to": "Energy Levels"}, {"arrows": "to", "from": "Solving the Equation", "to": "Exact Solutions"}, {"arrows": "to", "from": "Solving the Equation", "to": "Numerical Methods"}, {"arrows": "to", "from": "Solving the Equation", "to": "Special Cases"}, {"arrows": "to", "from": "Applications", "to": "Quantum Chemistry"}, {"arrows": "to", "from": "Applications", "to": "Solid State Physics"}, {"arrows": "to", "from": "Applications", "to": "Nuclear Physics"}, {"arrows": "to", "from": "Calculation", "to": "Integrating the Wave Function"}, {"arrows": "to", "from": "Calculation", "to": "Probability Density"}, {"arrows": "to", "from": "Calculation", "to": "Examples"}, {"arrows": "to", "from": "Examples", "to": "Hydrogen Atom"}, {"arrows": "to", "from": "Examples", "to": "Particles in a Box"}, {"arrows": "to", "from": "Examples", "to": "Free Particle"}, {"arrows": "to", "from": "Interpretation", "to": "Physical Meaning"}, {"arrows": "to", "from": "Interpretation", "to": "Applications"}, {"arrows": "to", "from": "Interpretation", "to": "Examples"}, {"arrows": "to", "from": "Wave Functions", "to": "Definition"}, {"arrows": "to", "from": "Wave Functions", "to": "Properties"}, {"arrows": "to", "from": "Wave Functions", "to": "Mathematical Representation"}, {"arrows": "to", "from": "Stationary States", "to": "Definition"}, {"arrows": "to", "from": "Stationary States", "to": "Energy Levels"}, {"arrows": "to", "from": "Stationary States", "to": "Examples"}, {"arrows": "to", "from": "Superposition Principle", "to": "Definition"}, {"arrows": "to", "from": "Superposition Principle", "to": "Mathematical Formulation"}, {"arrows": "to", "from": "Superposition Principle", "to": "Examples"}, {"arrows": "to", "from": "Hermitian Operators", "to": "Definition"}, {"arrows": "to", "from": "Hermitian Operators", "to": "Properties"}, {"arrows": "to", "from": "Hermitian Operators", "to": "Examples"}, {"arrows": "to", "from": "Commutators", "to": "Definition"}, {"arrows": "to", "from": "Commutators", "to": "Properties"}, {"arrows": "to", "from": "Commutators", "to": "Examples"}, {"arrows": "to", "from": "Examples of Operators", "to": "Position Operator"}, {"arrows": "to", "from": "Examples of Operators", "to": "Momentum Operator"}, {"arrows": "to", "from": "Examples of Operators", "to": "Hamiltonian Operator"}, {"arrows": "to", "from": "Implications", "to": "Limitations of Measurement"}, {"arrows": "to", "from": "Implications", "to": "Complementarity Principle"}, {"arrows": "to", "from": "Implications", "to": "Applications"}, {"arrows": "to", "from": "Energy Levels", "to": "Quantization"}, {"arrows": "to", "from": "Energy Levels", "to": "Energy Formula"}, {"arrows": "to", "from": "Energy Levels", "to": "Examples"}, {"arrows": "to", "from": "Principal Quantum Number", "to": "Definition"}, {"arrows": "to", "from": "Principal Quantum Number", "to": "Energy Levels"}, {"arrows": "to", "from": "Principal Quantum Number", "to": "Examples"}, {"arrows": "to", "from": "Angular Momentum Quantum Number", "to": "Definition"}, {"arrows": "to", "from": "Angular Momentum Quantum Number", "to": "Energy Levels"}, {"arrows": "to", "from": "Angular Momentum Quantum Number", "to": "Examples"}, {"arrows": "to", "from": "Magnetic Quantum Number", "to": "Definition"}, {"arrows": "to", "from": "Magnetic Quantum Number", "to": "Energy Levels"}, {"arrows": "to", "from": "Magnetic Quantum Number", "to": "Examples"}, {"arrows": "to", "from": "Spin Quantum Number", "to": "Definition"}, {"arrows": "to", "from": "Spin Quantum Number", "to": "Energy Levels"}, {"arrows": "to", "from": "Spin Quantum Number", "to": "Examples"}, {"arrows": "to", "from": "Electron Orbits", "to": "Bohr Model"}, {"arrows": "to", "from": "Electron Orbits", "to": "Quantum Orbits"}, {"arrows": "to", "from": "Electron Orbits", "to": "Energy Levels"}, {"arrows": "to", "from": "Energy Level Diagram", "to": "Diagram"}, {"arrows": "to", "from": "Energy Level Diagram", "to": "Interpretation"}, {"arrows": "to", "from": "Energy Level Diagram", "to": "Examples"}, {"arrows": "to", "from": "Solvable Potentials", "to": "Potentials"}, {"arrows": "to", "from": "Solvable Potentials", "to": "Methods of Solution"}, {"arrows": "to", "from": "Solvable Potentials", "to": "Examples"}, {"arrows": "to", "from": "Analytical Methods", "to": "Series Solutions"}, {"arrows": "to", "from": "Analytical Methods", "to": "Special Functions"}, {"arrows": "to", "from": "Analytical Methods", "to": "Examples"}, {"arrows": "to", "from": "Variational Methods", "to": "Definition"}, {"arrows": "to", "from": "Variational Methods", "to": "Application"}, {"arrows": "to", "from": "Variational Methods", "to": "Examples"}, {"arrows": "to", "from": "Numerical Techniques", "to": "Finite Difference Methods"}, {"arrows": "to", "from": "Numerical Techniques", "to": "Finite Element Methods"}, {"arrows": "to", "from": "Numerical Techniques", "to": "Examples"}, {"arrows": "to", "from": "Bound States", "to": "Definition"}, {"arrows": "to", "from": "Bound States", "to": "Energy Levels"}, {"arrows": "to", "from": "Bound States", "to": "Examples"}, {"arrows": "to", "from": "Scattering States", "to": "Definition"}, {"arrows": "to", "from": "Scattering States", "to": "Energy Levels"}, {"arrows": "to", "from": "Scattering States", "to": "Examples"}, {"arrows": "to", "from": "Transition Between States", "to": "Definition"}, {"arrows": "to", "from": "Transition Between States", "to": "Energy Levels"}, {"arrows": "to", "from": "Transition Between States", "to": "Examples"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

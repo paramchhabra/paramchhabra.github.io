@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Optics", "label": "Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wave Optics", "label": "Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Geometrical Optics", "label": "Geometrical Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Interference and Diffraction in Optics", "label": "Interference and Diffraction in Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polarization in Wave Optics", "label": "Polarization in Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Principles and Laws of Wave Optics", "label": "Principles and Laws of Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wave Optics with Coherent Sources", "label": "Wave Optics with Coherent Sources", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Analysis of Various Phenomena in Wave Optics", "label": "Analysis of Various Phenomena in Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Limits of Wave Optics", "label": "Limits of Wave Optics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Huygens\u0027 Principle", "label": "Huygens\u0027 Principle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Average Intensity and its Dependence", "label": "Average Intensity and its Dependence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Illustration of Interference", "label": "Illustration of Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Secondary Maxima in Interference", "label": "Secondary Maxima in Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polarization by Reflection and Refraction", "label": "Polarization by Reflection and Refraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Malus\u0027 Law for Intensity of Polarised Light", "label": "Malus\u0027 Law for Intensity of Polarised Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dependency of Intensity on the Angle of Incidence", "label": "Dependency of Intensity on the Angle of Incidence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pinhole Camera", "label": "Pinhole Camera", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Laplace\u0027s Method for Estimating Intensity", "label": "Laplace\u0027s Method for Estimating Intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction at Sharp Edges and Sources", "label": "Diffraction at Sharp Edges and Sources", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Superposition of Waves", "label": "Superposition of Waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reflected and Refracted Waves Polarization", "label": "Reflected and Refracted Waves Polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phases and Path Differences in Interference", "label": "Phases and Path Differences in Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fringes and Isoheliums", "label": "Fringes and Isoheliums", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Connections of Isoheliums on the Sphere", "label": "Connections of Isoheliums on the Sphere", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Extension of Isoheliums to the Plane", "label": "Extension of Isoheliums to the Plane", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference and Secondary Maxima", "label": "Interference and Secondary Maxima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path Differences in Interference", "label": "Path Differences in Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wavelets and Interference Patterns", "label": "Wavelets and Interference Patterns", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Unpolarised Light", "label": "Unpolarised Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polarizer and Analyser Relationship", "label": "Polarizer and Analyser Relationship", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reflected, Refracted, and Scattered Light Polarization", "label": "Reflected, Refracted, and Scattered Light Polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diagram of Polarizer and Analyser", "label": "Diagram of Polarizer and Analyser", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polarization and Path Difference", "label": "Polarization and Path Difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Malus\u0027 Law", "label": "Malus\u0027 Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spherical Aberration and Spherical Lens Limitation", "label": "Spherical Aberration and Spherical Lens Limitation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sources of Coherent Light", "label": "Sources of Coherent Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction of Light", "label": "Diffraction of Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wavefronts and Their Shapes", "label": "Wavefronts and Their Shapes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Optical Instruments Limitations", "label": "Optical Instruments Limitations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Common Examples of Huygens\u0027 Principle", "label": "Common Examples of Huygens\u0027 Principle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction at Single Slit and Straight Edge", "label": "Diffraction at Single Slit and Straight Edge", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Scattering of Light and Its Polarization", "label": "Scattering of Light and Its Polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reflection and Refraction of Light", "label": "Reflection and Refraction of Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Destruction and Constructive Interference", "label": "Destruction and Constructive Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Normal to Refracted Ray and Principle of Reciprocity", "label": "Normal to Refracted Ray and Principle of Reciprocity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference in Reflected Light", "label": "Interference in Reflected Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Intensity and Resultant Wave Amplitude", "label": "Intensity and Resultant Wave Amplitude", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polarization by Scattering and Dalton Scattering", "label": "Polarization by Scattering and Dalton Scattering", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polarization by Reflection and Reflection from Glass and Water", "label": "Polarization by Reflection and Reflection from Glass and Water", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thin Films and Interference", "label": "Thin Films and Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction and Optical Instruments", "label": "Diffraction and Optical Instruments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction Limit and Spherical Aberration", "label": "Diffraction Limit and Spherical Aberration", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Optics", "to": "Wave Optics"}, {"arrows": "to", "from": "Optics", "to": "Geometrical Optics"}, {"arrows": "to", "from": "Optics", "to": "Interference and Diffraction in Optics"}, {"arrows": "to", "from": "Optics", "to": "Polarization in Wave Optics"}, {"arrows": "to", "from": "Optics", "to": "Principles and Laws of Wave Optics"}, {"arrows": "to", "from": "Optics", "to": "Wave Optics with Coherent Sources"}, {"arrows": "to", "from": "Optics", "to": "Analysis of Various Phenomena in Wave Optics"}, {"arrows": "to", "from": "Optics", "to": "Limits of Wave Optics"}, {"arrows": "to", "from": "Wave Optics", "to": "Huygens\u0027 Principle"}, {"arrows": "to", "from": "Wave Optics", "to": "Average Intensity and its Dependence"}, {"arrows": "to", "from": "Wave Optics", "to": "Illustration of Interference"}, {"arrows": "to", "from": "Wave Optics", "to": "Secondary Maxima in Interference"}, {"arrows": "to", "from": "Wave Optics", "to": "Polarization by Reflection and Refraction"}, {"arrows": "to", "from": "Wave Optics", "to": "Malus\u0027 Law for Intensity of Polarised Light"}, {"arrows": "to", "from": "Wave Optics", "to": "Dependency of Intensity on the Angle of Incidence"}, {"arrows": "to", "from": "Geometrical Optics", "to": "Pinhole Camera"}, {"arrows": "to", "from": "Geometrical Optics", "to": "Laplace\u0027s Method for Estimating Intensity"}, {"arrows": "to", "from": "Geometrical Optics", "to": "Diffraction at Sharp Edges and Sources"}, {"arrows": "to", "from": "Geometrical Optics", "to": "Superposition of Waves"}, {"arrows": "to", "from": "Geometrical Optics", "to": "Reflected and Refracted Waves Polarization"}, {"arrows": "to", "from": "Geometrical Optics", "to": "Phases and Path Differences in Interference"}, {"arrows": "to", "from": "Interference and Diffraction in Optics", "to": "Fringes and Isoheliums"}, {"arrows": "to", "from": "Interference and Diffraction in Optics", "to": "Connections of Isoheliums on the Sphere"}, {"arrows": "to", "from": "Interference and Diffraction in Optics", "to": "Extension of Isoheliums to the Plane"}, {"arrows": "to", "from": "Interference and Diffraction in Optics", "to": "Interference and Secondary Maxima"}, {"arrows": "to", "from": "Interference and Diffraction in Optics", "to": "Path Differences in Interference"}, {"arrows": "to", "from": "Interference and Diffraction in Optics", "to": "Wavelets and Interference Patterns"}, {"arrows": "to", "from": "Interference and Diffraction in Optics", "to": "Unpolarised Light"}, {"arrows": "to", "from": "Polarization in Wave Optics", "to": "Polarizer and Analyser Relationship"}, {"arrows": "to", "from": "Polarization in Wave Optics", "to": "Reflected, Refracted, and Scattered Light Polarization"}, {"arrows": "to", "from": "Polarization in Wave Optics", "to": "Diagram of Polarizer and Analyser"}, {"arrows": "to", "from": "Polarization in Wave Optics", "to": "Polarization and Path Difference"}, {"arrows": "to", "from": "Principles and Laws of Wave Optics", "to": "Malus\u0027 Law"}, {"arrows": "to", "from": "Principles and Laws of Wave Optics", "to": "Spherical Aberration and Spherical Lens Limitation"}, {"arrows": "to", "from": "Principles and Laws of Wave Optics", "to": "Sources of Coherent Light"}, {"arrows": "to", "from": "Principles and Laws of Wave Optics", "to": "Diffraction of Light"}, {"arrows": "to", "from": "Principles and Laws of Wave Optics", "to": "Wavefronts and Their Shapes"}, {"arrows": "to", "from": "Principles and Laws of Wave Optics", "to": "Optical Instruments Limitations"}, {"arrows": "to", "from": "Wave Optics with Coherent Sources", "to": "Huygens\u0027 Principle"}, {"arrows": "to", "from": "Wave Optics with Coherent Sources", "to": "Common Examples of Huygens\u0027 Principle"}, {"arrows": "to", "from": "Wave Optics with Coherent Sources", "to": "Diffraction at Single Slit and Straight Edge"}, {"arrows": "to", "from": "Wave Optics with Coherent Sources", "to": "Scattering of Light and Its Polarization"}, {"arrows": "to", "from": "Wave Optics with Coherent Sources", "to": "Reflection and Refraction of Light"}, {"arrows": "to", "from": "Analysis of Various Phenomena in Wave Optics", "to": "Destruction and Constructive Interference"}, {"arrows": "to", "from": "Analysis of Various Phenomena in Wave Optics", "to": "Normal to Refracted Ray and Principle of Reciprocity"}, {"arrows": "to", "from": "Analysis of Various Phenomena in Wave Optics", "to": "Interference in Reflected Light"}, {"arrows": "to", "from": "Analysis of Various Phenomena in Wave Optics", "to": "Intensity and Resultant Wave Amplitude"}, {"arrows": "to", "from": "Analysis of Various Phenomena in Wave Optics", "to": "Polarization by Scattering and Dalton Scattering"}, {"arrows": "to", "from": "Analysis of Various Phenomena in Wave Optics", "to": "Polarization by Reflection and Reflection from Glass and Water"}, {"arrows": "to", "from": "Limits of Wave Optics", "to": "Thin Films and Interference"}, {"arrows": "to", "from": "Limits of Wave Optics", "to": "Diffraction and Optical Instruments"}, {"arrows": "to", "from": "Limits of Wave Optics", "to": "Diffraction Limit and Spherical Aberration"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

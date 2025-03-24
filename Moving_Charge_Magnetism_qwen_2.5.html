@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "1. Force on a moving charge", "label": "1. Force on a moving charge", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A moving charge is a source of magnetic field.", "label": "A moving charge is a source of magnetic field.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Let a positive charge q is moving in a uniform magnetic field B", "label": "Let a positive charge q is moving in a uniform magnetic field B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F = qBv sin \u03b8", "label": "F = qBv sin \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "special cases", "label": "special cases", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "grand total = qvB", "label": "grand total = qvB", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "2. Magnetic field strength(B)", "label": "2. Magnetic field strength(B)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "F/qv", "label": "F/qv", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 = 0\u00b0 or 180\u00b0", "label": "\u03b8 = 0\u00b0 or 180\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "v = 0", "label": "v = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 = 90\u00b0", "label": "\u03b8 = 90\u00b0", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "3. Cyclotron", "label": "3. Cyclotron", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "accelerate positively charged particle", "label": "accelerate positively charged particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "oscillating electric field", "label": "oscillating electric field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "perpendicular magnetic field", "label": "perpendicular magnetic field", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "4. Ampere\u2019s circuital law", "label": "4. Ampere\u2019s circuital law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The line integral of magnetic field B along a closed path is zero", "label": "The line integral of magnetic field B along a closed path is zero", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "equality is equal to \u03bc times the total current through the closed path", "label": "equality is equal to \u03bc times the total current through the closed path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "magnetic field due to a current-carrying solenoid", "label": "magnetic field due to a current-carrying solenoid", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "magnetic field due to a toroid or endless solenoid", "label": "magnetic field due to a toroid or endless solenoid", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "5. Application of Ampere\u2019s circuital law", "label": "5. Application of Ampere\u2019s circuital law", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "6. Motion of a charged particle in uniform electric field", "label": "6. Motion of a charged particle in uniform electric field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the path of a charged particle in an electric field is a parabola", "label": "the path of a charged particle in an electric field is a parabola", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "2 mvx 2 qE y \uf03d where x is the width of the electric field", "label": "2 mvx 2 qE y \uf03d where x is the width of the electric field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "y is the displacement of the particle from its straight path", "label": "y is the displacement of the particle from its straight path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "v is the speed of the charged particle", "label": "v is the speed of the charged particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "q is the charge of the particle", "label": "q is the charge of the particle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "E is the electric field intensity", "label": "E is the electric field intensity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "m is the mass of the particle", "label": "m is the mass of the particle", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "7. Motion of the charged particle in a magnetic field", "label": "7. Motion of the charged particle in a magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The path of a charged particle in a magnetic field.", "label": "The path of a charged particle in a magnetic field.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "8. Motion of the charged particle in a magnetic field", "label": "8. Motion of the charged particle in a magnetic field", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The path of a charged particle in a magnetic field", "label": "The path of a charged particle in a magnetic field", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "1. Force on a moving charge", "to": "A moving charge is a source of magnetic field."}, {"arrows": "to", "from": "1. Force on a moving charge", "to": "Let a positive charge q is moving in a uniform magnetic field B"}, {"arrows": "to", "from": "1. Force on a moving charge", "to": "F = qBv sin \u03b8"}, {"arrows": "to", "from": "1. Force on a moving charge", "to": "special cases"}, {"arrows": "to", "from": "1. Force on a moving charge", "to": "grand total = qvB"}, {"arrows": "to", "from": "2. Magnetic field strength(B)", "to": "F/qv"}, {"arrows": "to", "from": "2. Magnetic field strength(B)", "to": "\u03b8 = 0\u00b0 or 180\u00b0"}, {"arrows": "to", "from": "2. Magnetic field strength(B)", "to": "v = 0"}, {"arrows": "to", "from": "2. Magnetic field strength(B)", "to": "\u03b8 = 90\u00b0"}, {"arrows": "to", "from": "3. Cyclotron", "to": "accelerate positively charged particle"}, {"arrows": "to", "from": "3. Cyclotron", "to": "oscillating electric field"}, {"arrows": "to", "from": "3. Cyclotron", "to": "perpendicular magnetic field"}, {"arrows": "to", "from": "4. Ampere\u2019s circuital law", "to": "The line integral of magnetic field B along a closed path is zero"}, {"arrows": "to", "from": "4. Ampere\u2019s circuital law", "to": "equality is equal to \u03bc times the total current through the closed path"}, {"arrows": "to", "from": "4. Ampere\u2019s circuital law", "to": "magnetic field due to a current-carrying solenoid"}, {"arrows": "to", "from": "4. Ampere\u2019s circuital law", "to": "magnetic field due to a toroid or endless solenoid"}, {"arrows": "to", "from": "5. Application of Ampere\u2019s circuital law", "to": "magnetic field due to a current-carrying solenoid"}, {"arrows": "to", "from": "5. Application of Ampere\u2019s circuital law", "to": "magnetic field due to a toroid or endless solenoid"}, {"arrows": "to", "from": "6. Motion of a charged particle in uniform electric field", "to": "the path of a charged particle in an electric field is a parabola"}, {"arrows": "to", "from": "6. Motion of a charged particle in uniform electric field", "to": "2 mvx 2 qE y \uf03d where x is the width of the electric field"}, {"arrows": "to", "from": "6. Motion of a charged particle in uniform electric field", "to": "y is the displacement of the particle from its straight path"}, {"arrows": "to", "from": "6. Motion of a charged particle in uniform electric field", "to": "v is the speed of the charged particle"}, {"arrows": "to", "from": "6. Motion of a charged particle in uniform electric field", "to": "q is the charge of the particle"}, {"arrows": "to", "from": "6. Motion of a charged particle in uniform electric field", "to": "E is the electric field intensity"}, {"arrows": "to", "from": "6. Motion of a charged particle in uniform electric field", "to": "m is the mass of the particle"}, {"arrows": "to", "from": "7. Motion of the charged particle in a magnetic field", "to": "The path of a charged particle in a magnetic field."}, {"arrows": "to", "from": "8. Motion of the charged particle in a magnetic field", "to": "The path of a charged particle in a magnetic field"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

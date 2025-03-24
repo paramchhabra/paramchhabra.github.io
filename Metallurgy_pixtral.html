@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "METALLURGY", "label": "METALLURGY", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "History", "label": "History", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Branches", "label": "Branches", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Important Concepts", "label": "Important Concepts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Processes", "label": "Processes", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications", "label": "Applications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Materials", "label": "Materials", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties", "label": "Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Phase Diagrams", "label": "Phase Diagrams", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Alloys", "label": "Alloys", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Heat Treatment", "label": "Heat Treatment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Corrosion", "label": "Corrosion", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Extractive Metallurgy", "label": "Extractive Metallurgy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Physical Metallurgy", "label": "Physical Metallurgy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Chemical Metallurgy", "label": "Chemical Metallurgy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrochemistry", "label": "Electrochemistry", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mechanical Properties", "label": "Mechanical Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Microstructure", "label": "Microstructure", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Defects", "label": "Defects", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Crystal Structures", "label": "Crystal Structures", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Phase Transformations", "label": "Phase Transformations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thermodynamics", "label": "Thermodynamics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Kinetics", "label": "Kinetics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Surface Science", "label": "Surface Science", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nanomaterials", "label": "Nanomaterials", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Biomaterials", "label": "Biomaterials", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Computational Metallurgy", "label": "Computational Metallurgy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Science of metals and their properties", "label": "Science of metals and their properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Study of extraction, processing, and application of metals", "label": "Study of extraction, processing, and application of metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ancient metallurgy", "label": "Ancient metallurgy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Middle Ages", "label": "Middle Ages", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Industrial Revolution", "label": "Industrial Revolution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Modern metallurgy", "label": "Modern metallurgy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Materials Science", "label": "Materials Science", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phase diagram", "label": "Phase diagram", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Alloy", "label": "Alloy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heat treatment", "label": "Heat treatment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Crystal structures", "label": "Crystal structures", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Melting", "label": "Melting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Casting", "label": "Casting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rolling", "label": "Rolling", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Forging", "label": "Forging", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Annealing", "label": "Annealing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hardening", "label": "Hardening", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tempering", "label": "Tempering", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Automotive industry", "label": "Automotive industry", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Aerospace industry", "label": "Aerospace industry", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electronics", "label": "Electronics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Construction", "label": "Construction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy sector", "label": "Energy sector", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ferrous materials", "label": "Ferrous materials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Non-ferrous materials", "label": "Non-ferrous materials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Composite materials", "label": "Composite materials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mechanical properties", "label": "Mechanical properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Physical properties", "label": "Physical properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chemical properties", "label": "Chemical properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Thermal properties", "label": "Thermal properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Binary phase diagrams", "label": "Binary phase diagrams", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ternary phase diagrams", "label": "Ternary phase diagrams", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Eutectic points", "label": "Eutectic points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Peritectic points", "label": "Peritectic points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Aluminum alloys", "label": "Aluminum alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Steel alloys", "label": "Steel alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Copper alloys", "label": "Copper alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Titanium alloys", "label": "Titanium alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nickel alloys", "label": "Nickel alloys", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Normalizing", "label": "Normalizing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quenching", "label": "Quenching", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rusting", "label": "Rusting", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Galvanic corrosion", "label": "Galvanic corrosion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pitting corrosion", "label": "Pitting corrosion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Crevice corrosion", "label": "Crevice corrosion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stress corrosion cracking", "label": "Stress corrosion cracking", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pyrometallurgy", "label": "Pyrometallurgy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hydrometallurgy", "label": "Hydrometallurgy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrometallurgy", "label": "Electrometallurgy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Biometallurgy", "label": "Biometallurgy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phase transformations", "label": "Phase transformations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reactions", "label": "Reactions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Alloying elements", "label": "Alloying elements", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Surface treatments", "label": "Surface treatments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electroplating", "label": "Electroplating", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Batteries", "label": "Batteries", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electrolytic refining", "label": "Electrolytic refining", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electroforming", "label": "Electroforming", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tensile strength", "label": "Tensile strength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Compressive strength", "label": "Compressive strength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bending strength", "label": "Bending strength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hardness", "label": "Hardness", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ductility", "label": "Ductility", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Grain structure", "label": "Grain structure", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Precipitation hardening", "label": "Precipitation hardening", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Grain boundaries", "label": "Grain boundaries", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Point defects", "label": "Point defects", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Line defects", "label": "Line defects", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Surface defects", "label": "Surface defects", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Volume defects", "label": "Volume defects", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Body-centered cubic (BCC)", "label": "Body-centered cubic (BCC)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Face-centered cubic (FCC)", "label": "Face-centered cubic (FCC)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hexagonal close-packed (HCP)", "label": "Hexagonal close-packed (HCP)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Eutectic transformation", "label": "Eutectic transformation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Peritectic transformation", "label": "Peritectic transformation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Allotropic transformations", "label": "Allotropic transformations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gibbs free energy", "label": "Gibbs free energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Entropy", "label": "Entropy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Enthalpy", "label": "Enthalpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heat capacity", "label": "Heat capacity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Rate laws", "label": "Rate laws", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Activation energy", "label": "Activation energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reaction mechanisms", "label": "Reaction mechanisms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffusion", "label": "Diffusion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Adsorption", "label": "Adsorption", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Catalysis", "label": "Catalysis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Surface energy", "label": "Surface energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Corrosion mechanisms", "label": "Corrosion mechanisms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nanocrystals", "label": "Nanocrystals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nanocomposites", "label": "Nanocomposites", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nanowires", "label": "Nanowires", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nanotubes", "label": "Nanotubes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Biocompatibility", "label": "Biocompatibility", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Degradability", "label": "Degradability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Biomechanics", "label": "Biomechanics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Biomimicry", "label": "Biomimicry", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Molecular dynamics", "label": "Molecular dynamics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finite element analysis", "label": "Finite element analysis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Monte Carlo simulations", "label": "Monte Carlo simulations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Density functional theory", "label": "Density functional theory", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "METALLURGY", "to": "Definition"}, {"arrows": "to", "from": "METALLURGY", "to": "History"}, {"arrows": "to", "from": "METALLURGY", "to": "Branches"}, {"arrows": "to", "from": "METALLURGY", "to": "Important Concepts"}, {"arrows": "to", "from": "METALLURGY", "to": "Processes"}, {"arrows": "to", "from": "METALLURGY", "to": "Applications"}, {"arrows": "to", "from": "METALLURGY", "to": "Materials"}, {"arrows": "to", "from": "METALLURGY", "to": "Properties"}, {"arrows": "to", "from": "METALLURGY", "to": "Phase Diagrams"}, {"arrows": "to", "from": "METALLURGY", "to": "Alloys"}, {"arrows": "to", "from": "METALLURGY", "to": "Heat Treatment"}, {"arrows": "to", "from": "METALLURGY", "to": "Corrosion"}, {"arrows": "to", "from": "METALLURGY", "to": "Extractive Metallurgy"}, {"arrows": "to", "from": "METALLURGY", "to": "Physical Metallurgy"}, {"arrows": "to", "from": "METALLURGY", "to": "Chemical Metallurgy"}, {"arrows": "to", "from": "METALLURGY", "to": "Electrochemistry"}, {"arrows": "to", "from": "METALLURGY", "to": "Mechanical Properties"}, {"arrows": "to", "from": "METALLURGY", "to": "Microstructure"}, {"arrows": "to", "from": "METALLURGY", "to": "Defects"}, {"arrows": "to", "from": "METALLURGY", "to": "Crystal Structures"}, {"arrows": "to", "from": "METALLURGY", "to": "Phase Transformations"}, {"arrows": "to", "from": "METALLURGY", "to": "Thermodynamics"}, {"arrows": "to", "from": "METALLURGY", "to": "Kinetics"}, {"arrows": "to", "from": "METALLURGY", "to": "Surface Science"}, {"arrows": "to", "from": "METALLURGY", "to": "Nanomaterials"}, {"arrows": "to", "from": "METALLURGY", "to": "Biomaterials"}, {"arrows": "to", "from": "METALLURGY", "to": "Computational Metallurgy"}, {"arrows": "to", "from": "Definition", "to": "Science of metals and their properties"}, {"arrows": "to", "from": "Definition", "to": "Study of extraction, processing, and application of metals"}, {"arrows": "to", "from": "History", "to": "Ancient metallurgy"}, {"arrows": "to", "from": "History", "to": "Middle Ages"}, {"arrows": "to", "from": "History", "to": "Industrial Revolution"}, {"arrows": "to", "from": "History", "to": "Modern metallurgy"}, {"arrows": "to", "from": "Branches", "to": "Physical Metallurgy"}, {"arrows": "to", "from": "Branches", "to": "Chemical Metallurgy"}, {"arrows": "to", "from": "Branches", "to": "Extractive Metallurgy"}, {"arrows": "to", "from": "Branches", "to": "Electrochemistry"}, {"arrows": "to", "from": "Branches", "to": "Materials Science"}, {"arrows": "to", "from": "Important Concepts", "to": "Phase diagram"}, {"arrows": "to", "from": "Important Concepts", "to": "Alloy"}, {"arrows": "to", "from": "Important Concepts", "to": "Heat treatment"}, {"arrows": "to", "from": "Important Concepts", "to": "Corrosion"}, {"arrows": "to", "from": "Important Concepts", "to": "Microstructure"}, {"arrows": "to", "from": "Important Concepts", "to": "Defects"}, {"arrows": "to", "from": "Important Concepts", "to": "Crystal structures"}, {"arrows": "to", "from": "Processes", "to": "Melting"}, {"arrows": "to", "from": "Processes", "to": "Casting"}, {"arrows": "to", "from": "Processes", "to": "Rolling"}, {"arrows": "to", "from": "Processes", "to": "Forging"}, {"arrows": "to", "from": "Processes", "to": "Annealing"}, {"arrows": "to", "from": "Processes", "to": "Hardening"}, {"arrows": "to", "from": "Processes", "to": "Tempering"}, {"arrows": "to", "from": "Applications", "to": "Automotive industry"}, {"arrows": "to", "from": "Applications", "to": "Aerospace industry"}, {"arrows": "to", "from": "Applications", "to": "Electronics"}, {"arrows": "to", "from": "Applications", "to": "Construction"}, {"arrows": "to", "from": "Applications", "to": "Energy sector"}, {"arrows": "to", "from": "Materials", "to": "Ferrous materials"}, {"arrows": "to", "from": "Materials", "to": "Non-ferrous materials"}, {"arrows": "to", "from": "Materials", "to": "Alloys"}, {"arrows": "to", "from": "Materials", "to": "Composite materials"}, {"arrows": "to", "from": "Properties", "to": "Mechanical properties"}, {"arrows": "to", "from": "Properties", "to": "Physical properties"}, {"arrows": "to", "from": "Properties", "to": "Chemical properties"}, {"arrows": "to", "from": "Properties", "to": "Thermal properties"}, {"arrows": "to", "from": "Phase Diagrams", "to": "Binary phase diagrams"}, {"arrows": "to", "from": "Phase Diagrams", "to": "Ternary phase diagrams"}, {"arrows": "to", "from": "Phase Diagrams", "to": "Eutectic points"}, {"arrows": "to", "from": "Phase Diagrams", "to": "Peritectic points"}, {"arrows": "to", "from": "Alloys", "to": "Aluminum alloys"}, {"arrows": "to", "from": "Alloys", "to": "Steel alloys"}, {"arrows": "to", "from": "Alloys", "to": "Copper alloys"}, {"arrows": "to", "from": "Alloys", "to": "Titanium alloys"}, {"arrows": "to", "from": "Alloys", "to": "Nickel alloys"}, {"arrows": "to", "from": "Heat Treatment", "to": "Annealing"}, {"arrows": "to", "from": "Heat Treatment", "to": "Hardening"}, {"arrows": "to", "from": "Heat Treatment", "to": "Tempering"}, {"arrows": "to", "from": "Heat Treatment", "to": "Normalizing"}, {"arrows": "to", "from": "Heat Treatment", "to": "Quenching"}, {"arrows": "to", "from": "Corrosion", "to": "Rusting"}, {"arrows": "to", "from": "Corrosion", "to": "Galvanic corrosion"}, {"arrows": "to", "from": "Corrosion", "to": "Pitting corrosion"}, {"arrows": "to", "from": "Corrosion", "to": "Crevice corrosion"}, {"arrows": "to", "from": "Corrosion", "to": "Stress corrosion cracking"}, {"arrows": "to", "from": "Extractive Metallurgy", "to": "Pyrometallurgy"}, {"arrows": "to", "from": "Extractive Metallurgy", "to": "Hydrometallurgy"}, {"arrows": "to", "from": "Extractive Metallurgy", "to": "Electrometallurgy"}, {"arrows": "to", "from": "Extractive Metallurgy", "to": "Biometallurgy"}, {"arrows": "to", "from": "Physical Metallurgy", "to": "Microstructure"}, {"arrows": "to", "from": "Physical Metallurgy", "to": "Defects"}, {"arrows": "to", "from": "Physical Metallurgy", "to": "Crystal structures"}, {"arrows": "to", "from": "Physical Metallurgy", "to": "Phase transformations"}, {"arrows": "to", "from": "Chemical Metallurgy", "to": "Reactions"}, {"arrows": "to", "from": "Chemical Metallurgy", "to": "Corrosion"}, {"arrows": "to", "from": "Chemical Metallurgy", "to": "Alloying elements"}, {"arrows": "to", "from": "Chemical Metallurgy", "to": "Surface treatments"}, {"arrows": "to", "from": "Electrochemistry", "to": "Electroplating"}, {"arrows": "to", "from": "Electrochemistry", "to": "Batteries"}, {"arrows": "to", "from": "Electrochemistry", "to": "Electrolytic refining"}, {"arrows": "to", "from": "Electrochemistry", "to": "Electroforming"}, {"arrows": "to", "from": "Mechanical Properties", "to": "Tensile strength"}, {"arrows": "to", "from": "Mechanical Properties", "to": "Compressive strength"}, {"arrows": "to", "from": "Mechanical Properties", "to": "Bending strength"}, {"arrows": "to", "from": "Mechanical Properties", "to": "Hardness"}, {"arrows": "to", "from": "Mechanical Properties", "to": "Ductility"}, {"arrows": "to", "from": "Microstructure", "to": "Grain structure"}, {"arrows": "to", "from": "Microstructure", "to": "Precipitation hardening"}, {"arrows": "to", "from": "Microstructure", "to": "Phase transformations"}, {"arrows": "to", "from": "Microstructure", "to": "Grain boundaries"}, {"arrows": "to", "from": "Defects", "to": "Point defects"}, {"arrows": "to", "from": "Defects", "to": "Line defects"}, {"arrows": "to", "from": "Defects", "to": "Surface defects"}, {"arrows": "to", "from": "Defects", "to": "Volume defects"}, {"arrows": "to", "from": "Crystal Structures", "to": "Body-centered cubic (BCC)"}, {"arrows": "to", "from": "Crystal Structures", "to": "Face-centered cubic (FCC)"}, {"arrows": "to", "from": "Crystal Structures", "to": "Hexagonal close-packed (HCP)"}, {"arrows": "to", "from": "Phase Transformations", "to": "Eutectic transformation"}, {"arrows": "to", "from": "Phase Transformations", "to": "Peritectic transformation"}, {"arrows": "to", "from": "Phase Transformations", "to": "Allotropic transformations"}, {"arrows": "to", "from": "Thermodynamics", "to": "Gibbs free energy"}, {"arrows": "to", "from": "Thermodynamics", "to": "Entropy"}, {"arrows": "to", "from": "Thermodynamics", "to": "Enthalpy"}, {"arrows": "to", "from": "Thermodynamics", "to": "Heat capacity"}, {"arrows": "to", "from": "Kinetics", "to": "Rate laws"}, {"arrows": "to", "from": "Kinetics", "to": "Activation energy"}, {"arrows": "to", "from": "Kinetics", "to": "Reaction mechanisms"}, {"arrows": "to", "from": "Kinetics", "to": "Diffusion"}, {"arrows": "to", "from": "Surface Science", "to": "Adsorption"}, {"arrows": "to", "from": "Surface Science", "to": "Catalysis"}, {"arrows": "to", "from": "Surface Science", "to": "Surface energy"}, {"arrows": "to", "from": "Surface Science", "to": "Corrosion mechanisms"}, {"arrows": "to", "from": "Nanomaterials", "to": "Nanocrystals"}, {"arrows": "to", "from": "Nanomaterials", "to": "Nanocomposites"}, {"arrows": "to", "from": "Nanomaterials", "to": "Nanowires"}, {"arrows": "to", "from": "Nanomaterials", "to": "Nanotubes"}, {"arrows": "to", "from": "Biomaterials", "to": "Biocompatibility"}, {"arrows": "to", "from": "Biomaterials", "to": "Degradability"}, {"arrows": "to", "from": "Biomaterials", "to": "Biomechanics"}, {"arrows": "to", "from": "Biomaterials", "to": "Biomimicry"}, {"arrows": "to", "from": "Computational Metallurgy", "to": "Molecular dynamics"}, {"arrows": "to", "from": "Computational Metallurgy", "to": "Finite element analysis"}, {"arrows": "to", "from": "Computational Metallurgy", "to": "Monte Carlo simulations"}, {"arrows": "to", "from": "Computational Metallurgy", "to": "Density functional theory"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

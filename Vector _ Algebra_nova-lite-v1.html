@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Are linearly dependent, then", "label": "Are linearly dependent, then", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The vectors a, b, and c are collinear.", "label": "The vectors a, b, and c are collinear.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "They are parallel to the same line.", "label": "They are parallel to the same line.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Linearly independent vectors in three-dimensional space", "label": "Linearly independent vectors in three-dimensional space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a, b, and c are not coplanar and are not collinear with each other.", "label": "If a, b, and c are not coplanar and are not collinear with each other.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "They span the entire three-dimensional space.", "label": "They span the entire three-dimensional space.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "For two vectors a and b", "label": "For two vectors a and b", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the scalar product of a and b is zero, a and b are orthogonal.", "label": "If the scalar product of a and b is zero, a and b are orthogonal.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the scalar product of a and b is positive, the angle between a and b is acute.", "label": "If the scalar product of a and b is positive, the angle between a and b is acute.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "For three vectors a, b, and c", "label": "For three vectors a, b, and c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the scalar product of (a \u00d7 b) and c is zero, then a, b, and c are coplanar.", "label": "If the scalar product of (a \u00d7 b) and c is zero, then a, b, and c are coplanar.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the scalar product of (a \u00d7 b) and c is non-zero, then a, b, and c are not coplanar.", "label": "If the scalar product of (a \u00d7 b) and c is non-zero, then a, b, and c are not coplanar.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Orthogonal unit vectors i, j, k", "label": "Orthogonal unit vectors i, j, k", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The cross product of i and j is k, j and k is i, and k and i is j.", "label": "The cross product of i and j is k, j and k is i, and k and i is j.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "These unit vectors are perpendicular to each other.", "label": "These unit vectors are perpendicular to each other.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Are equivalent to", "label": "Are equivalent to", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The vectors a and b are equivalent if and only if their corresponding components are equal.", "label": "The vectors a and b are equivalent if and only if their corresponding components are equal.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "They define the same direction and magnitude in space.", "label": "They define the same direction and magnitude in space.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "In geometric terms, if a and b are two opposite edges of a tetrahedron (P, O, A, B)", "label": "In geometric terms, if a and b are two opposite edges of a tetrahedron (P, O, A, B)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The vectors a and b are equivalent if and only if the tetrahedron P, O, A, B has zero volume.", "label": "The vectors a and b are equivalent if and only if the tetrahedron P, O, A, B has zero volume.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "This implies that the tetrahedron collapses into a plane.", "label": "This implies that the tetrahedron collapses into a plane.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "For any three points O, A, B", "label": "For any three points O, A, B", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The vectors a and b are equivalent if and only if the displacement vectors OA and OB have the same magnitude and direction.", "label": "The vectors a and b are equivalent if and only if the displacement vectors OA and OB have the same magnitude and direction.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "This means point B is a reflection of point A with respect to point O.", "label": "This means point B is a reflection of point A with respect to point O.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The cosine of the angle between two non-zero vectors a and b", "label": "The cosine of the angle between two non-zero vectors a and b", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Is equal to the dot product of their unit vectors divided by the product of their magnitudes.", "label": "Is equal to the dot product of their unit vectors divided by the product of their magnitudes.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Given by the formula cos(\u03b8) = (a \u00b7 b) / (|a| |b|).", "label": "Given by the formula cos(\u03b8) = (a \u00b7 b) / (|a| |b|).", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The distance between two points A and B in space", "label": "The distance between two points A and B in space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Can be expressed as the magnitude of the position vector of B relative to A.", "label": "Can be expressed as the magnitude of the position vector of B relative to A.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Is given by the formula |AB| = \u221a((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2).", "label": "Is given by the formula |AB| = \u221a((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2).", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If three vectors a, b, and c are perpendicular, then", "label": "If three vectors a, b, and c are perpendicular, then", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Their scalar product is zero.", "label": "Their scalar product is zero.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "They form the vertices of a rectangular box (or a right-angled tetrahedron).", "label": "They form the vertices of a rectangular box (or a right-angled tetrahedron).", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "For any three vectors a, b, and c", "label": "For any three vectors a, b, and c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a and b are collinear with c, then a, b, and c are also collinear.", "label": "If a and b are collinear with c, then a, b, and c are also collinear.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If a, b, and c are orthogonal to each other, then they can form the edges of an orthocentric tetrahedron.", "label": "If a, b, and c are orthogonal to each other, then they can form the edges of an orthocentric tetrahedron.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Volume of a parallelepiped formed by vectors a, b, and c", "label": "Volume of a parallelepiped formed by vectors a, b, and c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Is given by the scalar triple product |(a \u00d7 b) \u00b7 c|", "label": "Is given by the scalar triple product |(a \u00d7 b) \u00b7 c|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "V = |a \u00b7 (b \u00d7 c)|", "label": "V = |a \u00b7 (b \u00d7 c)|", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Area of a parallelogram formed by vectors a and b", "label": "Area of a parallelogram formed by vectors a and b", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Is given by the magnitude of the cross product |a \u00d7 b|", "label": "Is given by the magnitude of the cross product |a \u00d7 b|", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Position vector of a body", "label": "Position vector of a body", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The position vector r represents the displacement of a body from an origin O.", "label": "The position vector r represents the displacement of a body from an origin O.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "It is given by r = x i + y j + z k, where i, j, and k are unit vectors along the x, y, and z axes.", "label": "It is given by r = x i + y j + z k, where i, j, and k are unit vectors along the x, y, and z axes.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The vectors a:b", "label": "The vectors a:b", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Represent different directions in space and their scalar product gives a measure of their alignment.", "label": "Represent different directions in space and their scalar product gives a measure of their alignment.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Their scalar product is zero if they are orthogonal.", "label": "Their scalar product is zero if they are orthogonal.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Equivalent vectors", "label": "Equivalent vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Are vectors that have the same magnitude and direction.", "label": "Are vectors that have the same magnitude and direction.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "They are interchangeable in vector operations and equations.", "label": "They are interchangeable in vector operations and equations.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Vectors i, j, k", "label": "Vectors i, j, k", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Are the unit vectors along the x, y, and z axes respectively.", "label": "Are the unit vectors along the x, y, and z axes respectively.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "They form a right-handed coordinate system.", "label": "They form a right-handed coordinate system.", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Are linearly dependent, then", "to": "The vectors a, b, and c are collinear."}, {"arrows": "to", "from": "Are linearly dependent, then", "to": "They are parallel to the same line."}, {"arrows": "to", "from": "Linearly independent vectors in three-dimensional space", "to": "If a, b, and c are not coplanar and are not collinear with each other."}, {"arrows": "to", "from": "Linearly independent vectors in three-dimensional space", "to": "They span the entire three-dimensional space."}, {"arrows": "to", "from": "For two vectors a and b", "to": "If the scalar product of a and b is zero, a and b are orthogonal."}, {"arrows": "to", "from": "For two vectors a and b", "to": "If the scalar product of a and b is positive, the angle between a and b is acute."}, {"arrows": "to", "from": "For three vectors a, b, and c", "to": "If the scalar product of (a \u00d7 b) and c is zero, then a, b, and c are coplanar."}, {"arrows": "to", "from": "For three vectors a, b, and c", "to": "If the scalar product of (a \u00d7 b) and c is non-zero, then a, b, and c are not coplanar."}, {"arrows": "to", "from": "Orthogonal unit vectors i, j, k", "to": "The cross product of i and j is k, j and k is i, and k and i is j."}, {"arrows": "to", "from": "Orthogonal unit vectors i, j, k", "to": "These unit vectors are perpendicular to each other."}, {"arrows": "to", "from": "Are equivalent to", "to": "The vectors a and b are equivalent if and only if their corresponding components are equal."}, {"arrows": "to", "from": "Are equivalent to", "to": "They define the same direction and magnitude in space."}, {"arrows": "to", "from": "In geometric terms, if a and b are two opposite edges of a tetrahedron (P, O, A, B)", "to": "The vectors a and b are equivalent if and only if the tetrahedron P, O, A, B has zero volume."}, {"arrows": "to", "from": "In geometric terms, if a and b are two opposite edges of a tetrahedron (P, O, A, B)", "to": "This implies that the tetrahedron collapses into a plane."}, {"arrows": "to", "from": "For any three points O, A, B", "to": "The vectors a and b are equivalent if and only if the displacement vectors OA and OB have the same magnitude and direction."}, {"arrows": "to", "from": "For any three points O, A, B", "to": "This means point B is a reflection of point A with respect to point O."}, {"arrows": "to", "from": "The cosine of the angle between two non-zero vectors a and b", "to": "Is equal to the dot product of their unit vectors divided by the product of their magnitudes."}, {"arrows": "to", "from": "The cosine of the angle between two non-zero vectors a and b", "to": "Given by the formula cos(\u03b8) = (a \u00b7 b) / (|a| |b|)."}, {"arrows": "to", "from": "The distance between two points A and B in space", "to": "Can be expressed as the magnitude of the position vector of B relative to A."}, {"arrows": "to", "from": "The distance between two points A and B in space", "to": "Is given by the formula |AB| = \u221a((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)."}, {"arrows": "to", "from": "If three vectors a, b, and c are perpendicular, then", "to": "Their scalar product is zero."}, {"arrows": "to", "from": "If three vectors a, b, and c are perpendicular, then", "to": "They form the vertices of a rectangular box (or a right-angled tetrahedron)."}, {"arrows": "to", "from": "For any three vectors a, b, and c", "to": "If a and b are collinear with c, then a, b, and c are also collinear."}, {"arrows": "to", "from": "For any three vectors a, b, and c", "to": "If a, b, and c are orthogonal to each other, then they can form the edges of an orthocentric tetrahedron."}, {"arrows": "to", "from": "Volume of a parallelepiped formed by vectors a, b, and c", "to": "Is given by the scalar triple product |(a \u00d7 b) \u00b7 c|"}, {"arrows": "to", "from": "Volume of a parallelepiped formed by vectors a, b, and c", "to": "V = |a \u00b7 (b \u00d7 c)|"}, {"arrows": "to", "from": "Area of a parallelogram formed by vectors a and b", "to": "Is given by the magnitude of the cross product |a \u00d7 b|"}, {"arrows": "to", "from": "Position vector of a body", "to": "The position vector r represents the displacement of a body from an origin O."}, {"arrows": "to", "from": "Position vector of a body", "to": "It is given by r = x i + y j + z k, where i, j, and k are unit vectors along the x, y, and z axes."}, {"arrows": "to", "from": "The vectors a:b", "to": "Represent different directions in space and their scalar product gives a measure of their alignment."}, {"arrows": "to", "from": "The vectors a:b", "to": "Their scalar product is zero if they are orthogonal."}, {"arrows": "to", "from": "Equivalent vectors", "to": "Are vectors that have the same magnitude and direction."}, {"arrows": "to", "from": "Equivalent vectors", "to": "They are interchangeable in vector operations and equations."}, {"arrows": "to", "from": "Vectors i, j, k", "to": "Are the unit vectors along the x, y, and z axes respectively."}, {"arrows": "to", "from": "Vectors i, j, k", "to": "They form a right-handed coordinate system."}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

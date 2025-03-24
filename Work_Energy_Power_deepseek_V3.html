@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Force and Work", "label": "Force and Work", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done by Force", "label": "Work Done by Force", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work Done by Gravity", "label": "Work Done by Gravity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Circular Motion", "label": "Circular Motion", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservation of Energy", "label": "Conservation of Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: W = F * d * cos(\u03b8)", "label": "Formula: W = F * d * cos(\u03b8)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Positive Work: \u03b8 \u003c 90\u00b0", "label": "Positive Work: \u03b8 \u003c 90\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Negative Work: \u03b8 \u003e 90\u00b0", "label": "Negative Work: \u03b8 \u003e 90\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zero Work: \u03b8 = 90\u00b0", "label": "Zero Work: \u03b8 = 90\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: W = -mgh", "label": "Formula: W = -mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gravitational Potential Energy: PE = mgh", "label": "Gravitational Potential Energy: PE = mgh", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Centripetal Force: F = mv\u00b2/r", "label": "Centripetal Force: F = mv\u00b2/r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done in Circular Motion: Zero", "label": "Work Done in Circular Motion: Zero", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mechanical Energy: KE + PE", "label": "Mechanical Energy: KE + PE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done by Conservative Force: \u0394PE", "label": "Work Done by Conservative Force: \u0394PE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done by Non-Conservative Force: \u0394KE + \u0394PE", "label": "Work Done by Non-Conservative Force: \u0394KE + \u0394PE", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Elastic Potential Energy", "label": "Elastic Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spring Force: F = -kx", "label": "Spring Force: F = -kx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done by Spring: W = \u00bdkx\u00b2", "label": "Work Done by Spring: W = \u00bdkx\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Elastic Potential Energy: PE = \u00bdkx\u00b2", "label": "Elastic Potential Energy: PE = \u00bdkx\u00b2", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Heat Energy", "label": "Heat Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random Motion of Molecules", "label": "Random Motion of Molecules", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Internal Energy: Sum of KE and PE of Molecules", "label": "Internal Energy: Sum of KE and PE of Molecules", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Friction and Viscous Forces", "label": "Friction and Viscous Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done by Friction: W = -f * d", "label": "Work Done by Friction: W = -f * d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy Dissipation: W = -f * x", "label": "Energy Dissipation: W = -f * x", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Conservative Forces", "label": "Conservative Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done: Independent of Path", "label": "Work Done: Independent of Path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Potential Energy: F = -dU/dx", "label": "Potential Energy: F = -dU/dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Non-Conservative Forces", "label": "Non-Conservative Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done: Dependent on Path", "label": "Work Done: Dependent on Path", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy Dissipation: W = F * x", "label": "Energy Dissipation: W = F * x", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Force and Work", "to": "Work Done by Force"}, {"arrows": "to", "from": "Force and Work", "to": "Work Done by Gravity"}, {"arrows": "to", "from": "Force and Work", "to": "Circular Motion"}, {"arrows": "to", "from": "Force and Work", "to": "Conservation of Energy"}, {"arrows": "to", "from": "Work Done by Force", "to": "Formula: W = F * d * cos(\u03b8)"}, {"arrows": "to", "from": "Work Done by Force", "to": "Positive Work: \u03b8 \u003c 90\u00b0"}, {"arrows": "to", "from": "Work Done by Force", "to": "Negative Work: \u03b8 \u003e 90\u00b0"}, {"arrows": "to", "from": "Work Done by Force", "to": "Zero Work: \u03b8 = 90\u00b0"}, {"arrows": "to", "from": "Work Done by Gravity", "to": "Formula: W = -mgh"}, {"arrows": "to", "from": "Work Done by Gravity", "to": "Gravitational Potential Energy: PE = mgh"}, {"arrows": "to", "from": "Circular Motion", "to": "Centripetal Force: F = mv\u00b2/r"}, {"arrows": "to", "from": "Circular Motion", "to": "Work Done in Circular Motion: Zero"}, {"arrows": "to", "from": "Conservation of Energy", "to": "Mechanical Energy: KE + PE"}, {"arrows": "to", "from": "Conservation of Energy", "to": "Work Done by Conservative Force: \u0394PE"}, {"arrows": "to", "from": "Conservation of Energy", "to": "Work Done by Non-Conservative Force: \u0394KE + \u0394PE"}, {"arrows": "to", "from": "Elastic Potential Energy", "to": "Spring Force: F = -kx"}, {"arrows": "to", "from": "Elastic Potential Energy", "to": "Work Done by Spring: W = \u00bdkx\u00b2"}, {"arrows": "to", "from": "Elastic Potential Energy", "to": "Elastic Potential Energy: PE = \u00bdkx\u00b2"}, {"arrows": "to", "from": "Heat Energy", "to": "Random Motion of Molecules"}, {"arrows": "to", "from": "Heat Energy", "to": "Internal Energy: Sum of KE and PE of Molecules"}, {"arrows": "to", "from": "Friction and Viscous Forces", "to": "Work Done by Friction: W = -f * d"}, {"arrows": "to", "from": "Friction and Viscous Forces", "to": "Energy Dissipation: W = -f * x"}, {"arrows": "to", "from": "Conservative Forces", "to": "Work Done: Independent of Path"}, {"arrows": "to", "from": "Conservative Forces", "to": "Potential Energy: F = -dU/dx"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Work Done: Dependent on Path"}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Energy Dissipation: W = F * x"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

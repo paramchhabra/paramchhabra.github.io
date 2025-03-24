@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Quadratic Factors", "label": "Quadratic Factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-factorizable Quadratic Factors", "label": "Non-factorizable Quadratic Factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals of Quadratic Factors", "label": "Integrals of Quadratic Factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (ax^2 + bx + c)(x - g683)(x - g684)...(x - g68n)", "label": "g(x) = (ax^2 + bx + c)(x - g683)(x - g684)...(x - g68n)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (ax^2 + bx + c)^2(x - g685)(x - g686)...(x - g68n)", "label": "g(x) = (ax^2 + bx + c)^2(x - g685)(x - g686)...(x - g68n)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integration by Parts", "label": "Integration by Parts", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals of the Form x^n dx", "label": "Integrals of the Form x^n dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integrals of the Form 2P(x)dx", "label": "Integrals of the Form 2P(x)dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resolving the integrand into partial fractions", "label": "Resolving the integrand into partial fractions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integrating the resulting partial fractions", "label": "Integrating the resulting partial fractions", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integrals of the Form sin^n(x)cos^m(x)dx", "label": "Integrals of the Form sin^n(x)cos^m(x)dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 1: Non-repeated linear factors", "label": "Case 1: Non-repeated linear factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 2: Repeated and non-repeated linear factors", "label": "Case 2: Repeated and non-repeated linear factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 3: Odd powers of sin(x) and cos(x)", "label": "Case 3: Odd powers of sin(x) and cos(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 4: Even powers of sin(x) and cos(x)", "label": "Case 4: Even powers of sin(x) and cos(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 5: Even powers of x", "label": "Case 5: Even powers of x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Working Rule", "label": "Working Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples", "label": "Examples", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Quadratic Factors", "to": "Non-factorizable Quadratic Factors"}, {"arrows": "to", "from": "Quadratic Factors", "to": "Integrals of Quadratic Factors"}, {"arrows": "to", "from": "Non-factorizable Quadratic Factors", "to": "g(x) = (ax^2 + bx + c)(x - g683)(x - g684)...(x - g68n)"}, {"arrows": "to", "from": "Non-factorizable Quadratic Factors", "to": "g(x) = (ax^2 + bx + c)^2(x - g685)(x - g686)...(x - g68n)"}, {"arrows": "to", "from": "Integrals of Quadratic Factors", "to": "Integration by Parts"}, {"arrows": "to", "from": "Integrals of Quadratic Factors", "to": "Integrals of the Form x^n dx"}, {"arrows": "to", "from": "Integration by Parts", "to": "Working Rule"}, {"arrows": "to", "from": "Integration by Parts", "to": "Examples"}, {"arrows": "to", "from": "Integrals of the Form x^n dx", "to": "Working Rule"}, {"arrows": "to", "from": "Integrals of the Form x^n dx", "to": "Examples"}, {"arrows": "to", "from": "Integrals of the Form 2P(x)dx", "to": "Resolving the integrand into partial fractions"}, {"arrows": "to", "from": "Integrals of the Form 2P(x)dx", "to": "Integrating the resulting partial fractions"}, {"arrows": "to", "from": "Integrals of the Form sin^n(x)cos^m(x)dx", "to": "Case 1: Non-repeated linear factors"}, {"arrows": "to", "from": "Integrals of the Form sin^n(x)cos^m(x)dx", "to": "Case 2: Repeated and non-repeated linear factors"}, {"arrows": "to", "from": "Integrals of the Form sin^n(x)cos^m(x)dx", "to": "Case 3: Odd powers of sin(x) and cos(x)"}, {"arrows": "to", "from": "Integrals of the Form sin^n(x)cos^m(x)dx", "to": "Case 4: Even powers of sin(x) and cos(x)"}, {"arrows": "to", "from": "Integrals of the Form sin^n(x)cos^m(x)dx", "to": "Case 5: Even powers of x"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

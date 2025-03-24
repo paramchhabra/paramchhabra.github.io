@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Radioactivity", "label": "Radioactivity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Activity and Curie", "label": "Activity and Curie", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Disintegration", "label": "Disintegration", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Alpha and Beta Particles", "label": "Alpha and Beta Particles", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "De-Broglie Wavelength", "label": "De-Broglie Wavelength", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nature of Radiation", "label": "Nature of Radiation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "X-Rays", "label": "X-Rays", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nuclear Density", "label": "Nuclear Density", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nuclear Radius", "label": "Nuclear Radius", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nuclear Stability", "label": "Nuclear Stability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Nuclear Fission", "label": "Nuclear Fission", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Photoelectric Effect", "label": "Photoelectric Effect", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Applications of Photoelectric Cells", "label": "Applications of Photoelectric Cells", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Discussion", "label": "Discussion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "1 Curie = 3.7 \u00d7 10^10 disintegrations per second", "label": "1 Curie = 3.7 \u00d7 10^10 disintegrations per second", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Activity = Number of disintegrations per second", "label": "Activity = Number of disintegrations per second", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random and independent", "label": "Random and independent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Half-life and decay constant", "label": "Half-life and decay constant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Alpha: Helium nucleus (2 protons, 2 neutrons)", "label": "Alpha: Helium nucleus (2 protons, 2 neutrons)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Beta: Electrons or positrons", "label": "Beta: Electrons or positrons", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gamma: High-energy photons", "label": "Gamma: High-energy photons", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03bb = h/p", "label": "\u03bb = h/p", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "h = Planck\u0027s constant, p = momentum", "label": "h = Planck\u0027s constant, p = momentum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave-particle duality", "label": "Wave-particle duality", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Photoelectric effect supports particle nature", "label": "Photoelectric effect supports particle nature", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Compton effect supports wave nature", "label": "Compton effect supports wave nature", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Characteristic X-rays: K\u03b1, K\u03b2, L\u03b1, L\u03b2, ...", "label": "Characteristic X-rays: K\u03b1, K\u03b2, L\u03b1, L\u03b2, ...", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Continuous X-rays: Bremsstrahlung", "label": "Continuous X-rays: Bremsstrahlung", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03c1 = 2.97 \u00d7 10^17 kg/m\u00b3 (constant)", "label": "\u03c1 = 2.97 \u00d7 10^17 kg/m\u00b3 (constant)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independent of A (mass number)", "label": "Independent of A (mass number)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "R = R0 * A^(1/3)", "label": "R = R0 * A^(1/3)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "R0 = 1.2 \u00d7 10^-15 m", "label": "R0 = 1.2 \u00d7 10^-15 m", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "A = mass number", "label": "A = mass number", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stable nuclei: N/Z \u2248 1", "label": "Stable nuclei: N/Z \u2248 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magic numbers: 2, 8, 20, 28, 50, 82, 126", "label": "Magic numbers: 2, 8, 20, 28, 50, 82, 126", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spontaneous or induced", "label": "Spontaneous or induced", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy release: E = \u03b3 * m * c^2", "label": "Energy release: E = \u03b3 * m * c^2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b3 \u2248 0.1", "label": "\u03b3 \u2248 0.1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Photoelectrons emitted when light of frequency \u2265 threshold frequency falls on cathode", "label": "Photoelectrons emitted when light of frequency \u2265 threshold frequency falls on cathode", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "E = h\u03bd - \u03c6 (work function)", "label": "E = h\u03bd - \u03c6 (work function)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Light meters", "label": "Light meters", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "TV camera tubes", "label": "TV camera tubes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "X-ray tubes", "label": "X-ray tubes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Photoelectric effect and wave-particle duality", "label": "Photoelectric effect and wave-particle duality", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Photoelectric effect and threshold frequency", "label": "Photoelectric effect and threshold frequency", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Radioactivity", "to": "Activity and Curie"}, {"arrows": "to", "from": "Radioactivity", "to": "Disintegration"}, {"arrows": "to", "from": "Radioactivity", "to": "Alpha and Beta Particles"}, {"arrows": "to", "from": "Radioactivity", "to": "De-Broglie Wavelength"}, {"arrows": "to", "from": "Radioactivity", "to": "Nature of Radiation"}, {"arrows": "to", "from": "Radioactivity", "to": "X-Rays"}, {"arrows": "to", "from": "Radioactivity", "to": "Nuclear Density"}, {"arrows": "to", "from": "Radioactivity", "to": "Nuclear Radius"}, {"arrows": "to", "from": "Radioactivity", "to": "Nuclear Stability"}, {"arrows": "to", "from": "Radioactivity", "to": "Nuclear Fission"}, {"arrows": "to", "from": "Radioactivity", "to": "Photoelectric Effect"}, {"arrows": "to", "from": "Radioactivity", "to": "Applications of Photoelectric Cells"}, {"arrows": "to", "from": "Radioactivity", "to": "Discussion"}, {"arrows": "to", "from": "Activity and Curie", "to": "1 Curie = 3.7 \u00d7 10^10 disintegrations per second"}, {"arrows": "to", "from": "Activity and Curie", "to": "Activity = Number of disintegrations per second"}, {"arrows": "to", "from": "Disintegration", "to": "Random and independent"}, {"arrows": "to", "from": "Disintegration", "to": "Half-life and decay constant"}, {"arrows": "to", "from": "Alpha and Beta Particles", "to": "Alpha: Helium nucleus (2 protons, 2 neutrons)"}, {"arrows": "to", "from": "Alpha and Beta Particles", "to": "Beta: Electrons or positrons"}, {"arrows": "to", "from": "Alpha and Beta Particles", "to": "Gamma: High-energy photons"}, {"arrows": "to", "from": "De-Broglie Wavelength", "to": "\u03bb = h/p"}, {"arrows": "to", "from": "De-Broglie Wavelength", "to": "h = Planck\u0027s constant, p = momentum"}, {"arrows": "to", "from": "Nature of Radiation", "to": "Wave-particle duality"}, {"arrows": "to", "from": "Nature of Radiation", "to": "Photoelectric effect supports particle nature"}, {"arrows": "to", "from": "Nature of Radiation", "to": "Compton effect supports wave nature"}, {"arrows": "to", "from": "X-Rays", "to": "Characteristic X-rays: K\u03b1, K\u03b2, L\u03b1, L\u03b2, ..."}, {"arrows": "to", "from": "X-Rays", "to": "Continuous X-rays: Bremsstrahlung"}, {"arrows": "to", "from": "Nuclear Density", "to": "\u03c1 = 2.97 \u00d7 10^17 kg/m\u00b3 (constant)"}, {"arrows": "to", "from": "Nuclear Density", "to": "Independent of A (mass number)"}, {"arrows": "to", "from": "Nuclear Radius", "to": "R = R0 * A^(1/3)"}, {"arrows": "to", "from": "Nuclear Radius", "to": "R0 = 1.2 \u00d7 10^-15 m"}, {"arrows": "to", "from": "Nuclear Radius", "to": "A = mass number"}, {"arrows": "to", "from": "Nuclear Stability", "to": "Stable nuclei: N/Z \u2248 1"}, {"arrows": "to", "from": "Nuclear Stability", "to": "Magic numbers: 2, 8, 20, 28, 50, 82, 126"}, {"arrows": "to", "from": "Nuclear Fission", "to": "Spontaneous or induced"}, {"arrows": "to", "from": "Nuclear Fission", "to": "Energy release: E = \u03b3 * m * c^2"}, {"arrows": "to", "from": "Nuclear Fission", "to": "\u03b3 \u2248 0.1"}, {"arrows": "to", "from": "Photoelectric Effect", "to": "Photoelectrons emitted when light of frequency \u2265 threshold frequency falls on cathode"}, {"arrows": "to", "from": "Photoelectric Effect", "to": "E = h\u03bd - \u03c6 (work function)"}, {"arrows": "to", "from": "Applications of Photoelectric Cells", "to": "Light meters"}, {"arrows": "to", "from": "Applications of Photoelectric Cells", "to": "TV camera tubes"}, {"arrows": "to", "from": "Applications of Photoelectric Cells", "to": "X-ray tubes"}, {"arrows": "to", "from": "Discussion", "to": "Photoelectric effect and wave-particle duality"}, {"arrows": "to", "from": "Discussion", "to": "Photoelectric effect and threshold frequency"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

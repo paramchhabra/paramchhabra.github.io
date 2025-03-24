@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "p-BLOCK ELEMENTS", "label": "p-BLOCK ELEMENTS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Clatherate Compounds", "label": "Clatherate Compounds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "COMPOUNDS OF XENON", "label": "COMPOUNDS OF XENON", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "PHOSPHORUS", "label": "PHOSPHORUS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reactivity and occurrence", "label": "Reactivity and occurrence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Important phosphates", "label": "Important phosphates", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "ESTIMATION OF AVAILABLE CHLORINE", "label": "ESTIMATION OF AVAILABLE CHLORINE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Method", "label": "Method", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Starch solution and hypo reaction", "label": "Starch solution and hypo reaction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Percentage calculation", "label": "Percentage calculation", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "USES OF CHLORINE", "label": "USES OF CHLORINE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Preparation of CCl4, CHCl3", "label": "Preparation of CCl4, CHCl3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Preparation of ethyl anthraquinone", "label": "Preparation of ethyl anthraquinone", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bleaching agent for paper pulp and textiles", "label": "Bleaching agent for paper pulp and textiles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hazardous compounds", "label": "Hazardous compounds", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Chlorosulphonic Acid", "label": "Chlorosulphonic Acid", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Preparation", "label": "Preparation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties", "label": "Properties", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Solubility", "label": "Solubility", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "SULFUR", "label": "SULFUR", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Preparation from inorganic sources", "label": "Preparation from inorganic sources", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "D density and thermally", "label": "D density and thermally", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "IODINE (I2)", "label": "IODINE (I2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Preparation methods", "label": "Preparation methods", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reaction with hypo", "label": "Reaction with hypo", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Industrial method", "label": "Industrial method", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "HYDROPHERIC ACID [H2F2, HF]", "label": "HYDROPHERIC ACID [H2F2, HF]", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "XENON HEXAFLUORIDE (XeF6)", "label": "XENON HEXAFLUORIDE (XeF6)", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "Clatherate Compounds"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "COMPOUNDS OF XENON"}, {"arrows": "to", "from": "PHOSPHORUS", "to": "Reactivity and occurrence"}, {"arrows": "to", "from": "PHOSPHORUS", "to": "Important phosphates"}, {"arrows": "to", "from": "ESTIMATION OF AVAILABLE CHLORINE", "to": "Method"}, {"arrows": "to", "from": "ESTIMATION OF AVAILABLE CHLORINE", "to": "Starch solution and hypo reaction"}, {"arrows": "to", "from": "ESTIMATION OF AVAILABLE CHLORINE", "to": "Percentage calculation"}, {"arrows": "to", "from": "USES OF CHLORINE", "to": "Preparation of CCl4, CHCl3"}, {"arrows": "to", "from": "USES OF CHLORINE", "to": "Preparation of ethyl anthraquinone"}, {"arrows": "to", "from": "USES OF CHLORINE", "to": "Bleaching agent for paper pulp and textiles"}, {"arrows": "to", "from": "USES OF CHLORINE", "to": "Hazardous compounds"}, {"arrows": "to", "from": "Chlorosulphonic Acid", "to": "Preparation"}, {"arrows": "to", "from": "Chlorosulphonic Acid", "to": "Properties"}, {"arrows": "to", "from": "Chlorosulphonic Acid", "to": "Solubility"}, {"arrows": "to", "from": "SULFUR", "to": "Preparation from inorganic sources"}, {"arrows": "to", "from": "SULFUR", "to": "Properties"}, {"arrows": "to", "from": "SULFUR", "to": "D density and thermally"}, {"arrows": "to", "from": "IODINE (I2)", "to": "Preparation methods"}, {"arrows": "to", "from": "IODINE (I2)", "to": "Properties"}, {"arrows": "to", "from": "IODINE (I2)", "to": "Reaction with hypo"}, {"arrows": "to", "from": "IODINE (I2)", "to": "Industrial method"}, {"arrows": "to", "from": "HYDROPHERIC ACID [H2F2, HF]", "to": "Preparation methods"}, {"arrows": "to", "from": "HYDROPHERIC ACID [H2F2, HF]", "to": "Properties"}, {"arrows": "to", "from": "XENON HEXAFLUORIDE (XeF6)", "to": "Preparation methods"}, {"arrows": "to", "from": "XENON HEXAFLUORIDE (XeF6)", "to": "Properties"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Experiments", "label": "Experiments", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Tossing two dice - sum of numbers", "label": "Tossing two dice - sum of numbers", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Tossing a coin 50 times - number of heads", "label": "Tossing a coin 50 times - number of heads", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Drawing 4 articles from 20 - number of defectives", "label": "Drawing 4 articles from 20 - number of defectives", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sum of numbers on two dice", "label": "Sum of numbers on two dice", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random variable X represents sum", "label": "Random variable X represents sum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Number of heads in 50 tosses", "label": "Number of heads in 50 tosses", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random variable X represents heads count", "label": "Random variable X represents heads count", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Number of defectives in sample of 4", "label": "Number of defectives in sample of 4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random variable X represents defective count", "label": "Random variable X represents defective count", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Random Variable", "label": "Random Variable", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Denoted by X", "label": "Denoted by X", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Co-domain is set of real numbers", "label": "Co-domain is set of real numbers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(E\u2229F) = P(E)P(F)", "label": "P(E\u2229F) = P(E)P(F)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Die toss E = multiple of 3, F = even number", "label": "Example: Die toss E = multiple of 3, F = even number", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Basic Definitions", "label": "Basic Definitions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Random Experiment", "label": "Random Experiment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sample-space", "label": "Sample-space", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Event", "label": "Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Simple Event", "label": "Simple Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Compound Event", "label": "Compound Event", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Known outcomes, unpredictable specific outcome", "label": "Known outcomes, unpredictable specific outcome", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Tossing a coin", "label": "Example: Tossing a coin", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Set of all possible outcomes", "label": "Set of all possible outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Denoted by S", "label": "Denoted by S", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Die toss S = {1, 2, 3, 4, 5, 6}", "label": "Example: Die toss S = {1, 2, 3, 4, 5, 6}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Subset of sample-space", "label": "Subset of sample-space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Concerned with occurrence of specific events", "label": "Concerned with occurrence of specific events", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Contains only one sample-space element", "label": "Contains only one sample-space element", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Union of sample points", "label": "Union of sample points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing a red card from deck", "label": "Example: Drawing a red card from deck", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Probability", "label": "Probability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Remarks", "label": "Remarks", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability 1 doesn\u2019t ensure certainty", "label": "Probability 1 doesn\u2019t ensure certainty", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability 0 doesn\u2019t mean event can\u2019t occur", "label": "Probability 0 doesn\u2019t mean event can\u2019t occur", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Conditional Probability", "label": "Conditional Probability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties", "label": "Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Example", "label": "Example", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(S|F) = 1", "label": "P(S|F) = 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(A|B) = P(A\u2229B)/P(B)", "label": "P(A|B) = P(A\u2229B)/P(B)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Drawing black balls without replacement", "label": "Drawing black balls without replacement", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "P(E\u2229F) = P(E)P(F|E)", "label": "P(E\u2229F) = P(E)P(F|E)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Independent Events", "label": "Independent Events", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mutually Exclusive vs Independent", "label": "Mutually Exclusive vs Independent", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independent events can have common outcomes", "label": "Independent events can have common outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mutually exclusive events cannot be independent", "label": "Mutually exclusive events cannot be independent", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Bayes\u0027 Theorem", "label": "Bayes\u0027 Theorem", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Description", "label": "Description", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Proof", "label": "Proof", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Terminology", "label": "Terminology", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inverse probability", "label": "Inverse probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Two bags with balls", "label": "Example: Two bags with balls", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Partition of sample space", "label": "Partition of sample space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: P(Ei|A) = P(Ei)P(A|Ei)/\u2211P(Ej)P(A|Ej)", "label": "Formula: P(Ei|A) = P(Ei)P(A|Ei)/\u2211P(Ej)P(A|Ej)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hypotheses", "label": "Hypotheses", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Priori probability", "label": "Priori probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Posteriori probability", "label": "Posteriori probability", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Random Variables and Probability Distributions", "label": "Random Variables and Probability Distributions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mean", "label": "Mean", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Variance", "label": "Variance", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Binomial Distribution", "label": "Binomial Distribution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measure of central tendency", "label": "Measure of central tendency", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "E(X) = \u2211xiP(xi)", "label": "E(X) = \u2211xiP(xi)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measure of variability", "label": "Measure of variability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Var(X) = E(X^2) \u2013 (E(X))^2", "label": "Var(X) = E(X^2) \u2013 (E(X))^2", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bernoulli Trials", "label": "Bernoulli Trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability function P(x) = C(n,x)p^xq^(n-x)", "label": "Probability function P(x) = C(n,x)p^xq^(n-x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Finite, independent trials", "label": "Finite, independent trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two outcomes: success/failure", "label": "Two outcomes: success/failure", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing balls with replacement", "label": "Example: Drawing balls with replacement", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Experiments", "to": "Tossing two dice - sum of numbers"}, {"arrows": "to", "from": "Experiments", "to": "Tossing a coin 50 times - number of heads"}, {"arrows": "to", "from": "Experiments", "to": "Drawing 4 articles from 20 - number of defectives"}, {"arrows": "to", "from": "Tossing two dice - sum of numbers", "to": "Sum of numbers on two dice"}, {"arrows": "to", "from": "Tossing two dice - sum of numbers", "to": "Random variable X represents sum"}, {"arrows": "to", "from": "Tossing a coin 50 times - number of heads", "to": "Number of heads in 50 tosses"}, {"arrows": "to", "from": "Tossing a coin 50 times - number of heads", "to": "Random variable X represents heads count"}, {"arrows": "to", "from": "Drawing 4 articles from 20 - number of defectives", "to": "Number of defectives in sample of 4"}, {"arrows": "to", "from": "Drawing 4 articles from 20 - number of defectives", "to": "Random variable X represents defective count"}, {"arrows": "to", "from": "Random Variable", "to": "Definition"}, {"arrows": "to", "from": "Random Variable", "to": "Denoted by X"}, {"arrows": "to", "from": "Random Variable", "to": "Co-domain is set of real numbers"}, {"arrows": "to", "from": "Definition", "to": "P(E\u2229F) = P(E)P(F)"}, {"arrows": "to", "from": "Definition", "to": "Example: Die toss E = multiple of 3, F = even number"}, {"arrows": "to", "from": "Basic Definitions", "to": "Random Experiment"}, {"arrows": "to", "from": "Basic Definitions", "to": "Sample-space"}, {"arrows": "to", "from": "Basic Definitions", "to": "Event"}, {"arrows": "to", "from": "Basic Definitions", "to": "Simple Event"}, {"arrows": "to", "from": "Basic Definitions", "to": "Compound Event"}, {"arrows": "to", "from": "Random Experiment", "to": "Known outcomes, unpredictable specific outcome"}, {"arrows": "to", "from": "Random Experiment", "to": "Example: Tossing a coin"}, {"arrows": "to", "from": "Sample-space", "to": "Set of all possible outcomes"}, {"arrows": "to", "from": "Sample-space", "to": "Denoted by S"}, {"arrows": "to", "from": "Sample-space", "to": "Example: Die toss S = {1, 2, 3, 4, 5, 6}"}, {"arrows": "to", "from": "Event", "to": "Subset of sample-space"}, {"arrows": "to", "from": "Event", "to": "Concerned with occurrence of specific events"}, {"arrows": "to", "from": "Simple Event", "to": "Contains only one sample-space element"}, {"arrows": "to", "from": "Compound Event", "to": "Union of sample points"}, {"arrows": "to", "from": "Compound Event", "to": "Example: Drawing a red card from deck"}, {"arrows": "to", "from": "Probability", "to": "Definition"}, {"arrows": "to", "from": "Probability", "to": "Remarks"}, {"arrows": "to", "from": "Remarks", "to": "Probability 1 doesn\u2019t ensure certainty"}, {"arrows": "to", "from": "Remarks", "to": "Probability 0 doesn\u2019t mean event can\u2019t occur"}, {"arrows": "to", "from": "Conditional Probability", "to": "Definition"}, {"arrows": "to", "from": "Conditional Probability", "to": "Properties"}, {"arrows": "to", "from": "Conditional Probability", "to": "Example"}, {"arrows": "to", "from": "Properties", "to": "P(S|F) = 1"}, {"arrows": "to", "from": "Properties", "to": "P(A|B) = P(A\u2229B)/P(B)"}, {"arrows": "to", "from": "Example", "to": "Drawing black balls without replacement"}, {"arrows": "to", "from": "Example", "to": "P(E\u2229F) = P(E)P(F|E)"}, {"arrows": "to", "from": "Independent Events", "to": "Definition"}, {"arrows": "to", "from": "Independent Events", "to": "Mutually Exclusive vs Independent"}, {"arrows": "to", "from": "Mutually Exclusive vs Independent", "to": "Independent events can have common outcomes"}, {"arrows": "to", "from": "Mutually Exclusive vs Independent", "to": "Mutually exclusive events cannot be independent"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Description"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Proof"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Terminology"}, {"arrows": "to", "from": "Description", "to": "Inverse probability"}, {"arrows": "to", "from": "Description", "to": "Example: Two bags with balls"}, {"arrows": "to", "from": "Proof", "to": "Partition of sample space"}, {"arrows": "to", "from": "Proof", "to": "Formula: P(Ei|A) = P(Ei)P(A|Ei)/\u2211P(Ej)P(A|Ej)"}, {"arrows": "to", "from": "Terminology", "to": "Hypotheses"}, {"arrows": "to", "from": "Terminology", "to": "Priori probability"}, {"arrows": "to", "from": "Terminology", "to": "Posteriori probability"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Mean"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Variance"}, {"arrows": "to", "from": "Random Variables and Probability Distributions", "to": "Binomial Distribution"}, {"arrows": "to", "from": "Mean", "to": "Measure of central tendency"}, {"arrows": "to", "from": "Mean", "to": "E(X) = \u2211xiP(xi)"}, {"arrows": "to", "from": "Variance", "to": "Measure of variability"}, {"arrows": "to", "from": "Variance", "to": "Var(X) = E(X^2) \u2013 (E(X))^2"}, {"arrows": "to", "from": "Binomial Distribution", "to": "Bernoulli Trials"}, {"arrows": "to", "from": "Binomial Distribution", "to": "Probability function P(x) = C(n,x)p^xq^(n-x)"}, {"arrows": "to", "from": "Bernoulli Trials", "to": "Finite, independent trials"}, {"arrows": "to", "from": "Bernoulli Trials", "to": "Two outcomes: success/failure"}, {"arrows": "to", "from": "Bernoulli Trials", "to": "Example: Drawing balls with replacement"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

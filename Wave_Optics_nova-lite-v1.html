@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Interference of energy takes place in the form of maxima and minima", "label": "Interference of energy takes place in the form of maxima and minima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Average intensity: (I-max + I-min) / 2", "label": "Average intensity: (I-max + I-min) / 2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Maximum intensity: 4I-max", "label": "Maximum intensity: 4I-max", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Minimum intensity: 0", "label": "Minimum intensity: 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Amplitude of individual amplitudes should be same: a1 = a2 = Amax", "label": "Amplitude of individual amplitudes should be same: a1 = a2 = Amax", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phase difference: \u0394\u03c6 = 0\u00b0 or multiples of 360\u00b0", "label": "Phase difference: \u0394\u03c6 = 0\u00b0 or multiples of 360\u00b0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When waves of equal amplitude, velocity and frequency coming from two coherent sources superimpose, the resultant amplitude will be maximum when the waves are in phase.", "label": "When waves of equal amplitude, velocity and frequency coming from two coherent sources superimpose, the resultant amplitude will be maximum when the waves are in phase.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The intensity is proportional to the square of the amplitude of waves.", "label": "The intensity is proportional to the square of the amplitude of waves.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Wave spectrum of glass", "label": "Example: Wave spectrum of glass", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Young\u0027s Double Slit Experiment", "label": "Young\u0027s Double Slit Experiment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Condition for Constructive Interference (Maxima at a point): x = (m\u03bbD)/d", "label": "Condition for Constructive Interference (Maxima at a point): x = (m\u03bbD)/d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Condition for Destructive Interference (Minima at a point): x = [(2m + 1)\u03bbD]/(2d)", "label": "Condition for Destructive Interference (Minima at a point): x = [(2m + 1)\u03bbD]/(2d)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resultant amplitude at P: A = sqrt(A1^2 + A2^2 + 2A1A2 cos(\u0394\u03c6))", "label": "Resultant amplitude at P: A = sqrt(A1^2 + A2^2 + 2A1A2 cos(\u0394\u03c6))", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Diffraction at a straight edge, Huygens\u0027 Construction of wavefronts", "label": "Examples: Diffraction at a straight edge, Huygens\u0027 Construction of wavefronts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Wave optics principles", "label": "Wave optics principles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference: Phase reversal can lead to completely polarized reflected light or partial polarization", "label": "Interference: Phase reversal can lead to completely polarized reflected light or partial polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reflection: Partially polarized light can be reflected by analyzing the angle of incidence and polarization of the incident light", "label": "Reflection: Partially polarized light can be reflected by analyzing the angle of incidence and polarization of the incident light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Refraction: Light can become completely polarized upon refraction at certain angles of incidence known as Brewster\u0027s angle", "label": "Refraction: Light can become completely polarized upon refraction at certain angles of incidence known as Brewster\u0027s angle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polarization by scattering can occur due to Rayleigh scattering, leading to sky being partially polarized", "label": "Polarization by scattering can occur due to Rayleigh scattering, leading to sky being partially polarized", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Average intensity: (I-max + I-min) / 2"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Maximum intensity: 4I-max"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Minimum intensity: 0"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Amplitude of individual amplitudes should be same: a1 = a2 = Amax"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Phase difference: \u0394\u03c6 = 0\u00b0 or multiples of 360\u00b0"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "When waves of equal amplitude, velocity and frequency coming from two coherent sources superimpose, the resultant amplitude will be maximum when the waves are in phase."}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "The intensity is proportional to the square of the amplitude of waves."}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Example: Wave spectrum of glass"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Young\u0027s Double Slit Experiment"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Condition for Constructive Interference (Maxima at a point): x = (m\u03bbD)/d"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Condition for Destructive Interference (Minima at a point): x = [(2m + 1)\u03bbD]/(2d)"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Resultant amplitude at P: A = sqrt(A1^2 + A2^2 + 2A1A2 cos(\u0394\u03c6))"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Examples: Diffraction at a straight edge, Huygens\u0027 Construction of wavefronts"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Wave optics principles"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Interference: Phase reversal can lead to completely polarized reflected light or partial polarization"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Reflection: Partially polarized light can be reflected by analyzing the angle of incidence and polarization of the incident light"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Refraction: Light can become completely polarized upon refraction at certain angles of incidence known as Brewster\u0027s angle"}, {"arrows": "to", "from": "Interference of energy takes place in the form of maxima and minima", "to": "Polarization by scattering can occur due to Rayleigh scattering, leading to sky being partially polarized"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

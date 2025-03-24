@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Mathematical factors which cannot be factorised further", "label": "Mathematical factors which cannot be factorised further", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Required when two function types are different we can choose", "label": "Required when two function types are different we can choose", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The integral becomes transpose on collective terms involving I. e. g. sin x", "label": "The integral becomes transpose on collective terms involving I. e. g. sin x", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Quadratic factors which cannot be factorised further", "label": "Quadratic factors which cannot be factorised further", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Given g(x) = (ax^2 + bx + c)^2 (x - g3)(x - g4)  \u2026.. (x - gN)", "label": "Given g(x) = (ax^2 + bx + c)^2 (x - g3)(x - g4)  \u2026.. (x - gN)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The given integral again putting it equal to I (iii)", "label": "The given integral again putting it equal to I (iii)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The given integrand is", "label": "The given integrand is", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Transposed again and evaluated", "label": "Transposed again and evaluated", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Trigonometric and co-trigonometric terms involving I. e. g.", "label": "Trigonometric and co-trigonometric terms involving I. e. g.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The sine or cosine of multiple angles", "label": "The sine or cosine of multiple angles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Evaluate the integral", "label": "Evaluate the integral", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integration by parts", "label": "Integration by parts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Method of integration", "label": "Method of integration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the two functions are of different types, we can choose", "label": "If the two functions are of different types, we can choose", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Working Rule", "label": "Working Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Write ax^2 + bx + c", "label": "Write ax^2 + bx + c", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integral becomes", "label": "Integral becomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Put x \u2013 g3 = (x \u2013 g4)", "label": "Put x \u2013 g3 = (x \u2013 g4)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Put x \u2013 gN =t", "label": "Put x \u2013 gN =t", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Then the integrand", "label": "Then the integrand", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(t)dt", "label": "g(t)dt", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The integral", "label": "The integral", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the power of sin x and cos x are both even put sin x and cos x I", "label": "If the power of sin x and cos x are both even put sin x and cos x I", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the power of sin x and cos x are both odd put sin x =cos", "label": "If the power of sin x and cos x are both odd put sin x =cos", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Transposed and evaluated integral", "label": "Transposed and evaluated integral", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The integrand is converted to one side and", "label": "The integrand is converted to one side and", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Interchange of terms", "label": "Interchange of terms", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "We proceed as follows", "label": "We proceed as follows", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If the denominator", "label": "If the denominator", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Contains repeated linear factors", "label": "Contains repeated linear factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Put numerator = A(denominator)\u2019 + B(denominator)\u2019\u2019  + \u2026\u2026 + M(denominator)\u2019\u2019\u2019 etc", "label": "Put numerator = A(denominator)\u2019 + B(denominator)\u2019\u2019  + \u2026\u2026 + M(denominator)\u2019\u2019\u2019 etc", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "SOLVE EXAMPLES", "label": "SOLVE EXAMPLES", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Example 1", "label": "Example 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Evaluate: \u222b (3272x + 32x^5) / (4x\u00b3 - 4x^2  )^4 dx", "label": "Evaluate: \u222b (3272x + 32x^5) / (4x\u00b3 - 4x^2  )^4 dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "CASE II", "label": "CASE II", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The denominator contains only non repeated linear factors", "label": "The denominator contains only non repeated linear factors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Example 2", "label": "Example 2", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If the denominator contains", "label": "If the denominator contains", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Irrepeated linear factors", "label": "Irrepeated linear factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Then put numerator = A denominator + B / denominator + C / denominator^2 etc.", "label": "Then put numerator = A denominator + B / denominator + C / denominator^2 etc.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If the integral is of the form", "label": "If the integral is of the form", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g1\u2032(x) / g1(x) + g2\u2032(x)/g2(x) + ...+ gn\u2032(x)/g(x) dx", "label": "g1\u2032(x) / g1(x) + g2\u2032(x)/g2(x) + ...+ gn\u2032(x)/g(x) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Then it becomes log|g1(x) g2(x)\u2026. gn(x)|", "label": "Then it becomes log|g1(x) g2(x)\u2026. gn(x)|", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Rule of integration by parts may be remembered", "label": "Rule of integration by parts may be remembered", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "as Ilate dm minus Integral Vdm", "label": "as Ilate dm minus Integral Vdm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The first function is to be taken as the one which comes later in the", "label": "The first function is to be taken as the one which comes later in the", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The integral of a function", "label": "The integral of a function", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Can be easily found if we can express it as the sum of simpler functions whose integrals are known.", "label": "Can be easily found if we can express it as the sum of simpler functions whose integrals are known.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For example, any integral of the form f(x) dx can be integrated by resolving it into a sum of terms each of which contains sine or cosine of a multiple angle.", "label": "For example, any integral of the form f(x) dx can be integrated by resolving it into a sum of terms each of which contains sine or cosine of a multiple angle.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The process of resolving any", "label": "The process of resolving any", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integral into a sum of simpler functions is known as integration by parts.", "label": "Integral into a sum of simpler functions is known as integration by parts.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "We proceed as follows: (i) express the given integral as the sum of integrals involving simpler functions.", "label": "We proceed as follows: (i) express the given integral as the sum of integrals involving simpler functions.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222b sin^4 x cos x dx Here put sin x = t", "label": "\u222b sin^4 x cos x dx Here put sin x = t", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222b sin^3 x cos^2 x dx Here put cos x = t and evaluate the", "label": "\u222b sin^3 x cos^2 x dx Here put cos x = t and evaluate the", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "integral", "label": "integral", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Integrals of the form", "label": "Integrals of the form", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin^m x cos^n x dx", "label": "sin^m x cos^n x dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "can be evaluated as follows", "label": "can be evaluated as follows", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If m is odd", "label": "If m is odd", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Put sin x = t", "label": "Put sin x = t", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "If n is odd", "label": "If n is odd", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Put cos x = t or sin x = cos x sin x + cos x dx", "label": "Put cos x = t or sin x = cos x sin x + cos x dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integrals of the functions", "label": "Integrals of the functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Which contain the sum or difference of two or more angles", "label": "Which contain the sum or difference of two or more angles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Can be evaluated by using the appropriate trigonometric identities. Following are some examples", "label": "Can be evaluated by using the appropriate trigonometric identities. Following are some examples", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "SIDES AFTER TAKING LCM", "label": "SIDES AFTER TAKING LCM", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "AND THEN TAKING LCM", "label": "AND THEN TAKING LCM", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example 1 : \u222b dx / sin x + sin 2x", "label": "Example 1 : \u222b dx / sin x + sin 2x", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "To simplify", "label": "To simplify", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin x + sin 2x, multiply Nr and Dr by Cos \u00bd x", "label": "sin x + sin 2x, multiply Nr and Dr by Cos \u00bd x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 1", "label": "Case 1", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "CASE 1", "label": "CASE 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the Denominator Contains repeated linear Factors", "label": "If the Denominator Contains repeated linear Factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CASE 2 : Evaluate \u222b (3272x + 32x^5) / (4x\u00b3 - 4x^2  )^4 dx", "label": "CASE 2 : Evaluate \u222b (3272x + 32x^5) / (4x\u00b3 - 4x^2  )^4 dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "CASE 2", "label": "CASE 2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "the denominator contains only Irreperated linear factors", "label": "the denominator contains only Irreperated linear factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CASE 3 : If the denominator contains", "label": "CASE 3 : If the denominator contains", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "CASE 3", "label": "CASE 3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "repeated as well Irreperated linear factors", "label": "repeated as well Irreperated linear factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the denominator contains repeated linear factors then numerator", "label": "If the denominator contains repeated linear factors then numerator", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If the integral is of the form g\u2032(x) / g(x) dx", "label": "If the integral is of the form g\u2032(x) / g(x) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "then it becomes ln|g(x)|", "label": "then it becomes ln|g(x)|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integration By Substitution : If integral is of the form f(g(x)) g\u2032(x) dx", "label": "Integration By Substitution : If integral is of the form f(g(x)) g\u2032(x) dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integration By Substitution: If integral is of the form f(g(x)) g\u2032(x) dx", "label": "Integration By Substitution: If integral is of the form f(g(x)) g\u2032(x) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "then it can be computed by making the substitution g(x) = t", "label": "then it can be computed by making the substitution g(x) = t", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For example,", "label": "For example,", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integral is given by", "label": "Integral is given by", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : \u222b sin(x/2) dx", "label": "Example : \u222b sin(x/2) dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Solved Examples", "label": "Solved Examples", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222b (6x\u00b2 + 13x + 14) / (3x\u00b2 + 7x + 4) dx", "label": "Example : Solve \u222b (6x\u00b2 + 13x + 14) / (3x\u00b2 + 7x + 4) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222b (x\u00b3 - 3x\u00b2 + 3x  +7) / (x\u00b2 - 2x + 2) dx", "label": "Example : Solve \u222b (x\u00b3 - 3x\u00b2 + 3x  +7) / (x\u00b2 - 2x + 2) dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "When the integral of the form cos x sin x dx", "label": "When the integral of the form cos x sin x dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Where sin x = kcos x + C where is c is the constant of integration, can be solved by the process of substitution", "label": "Where sin x = kcos x + C where is c is the constant of integration, can be solved by the process of substitution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example :  solve \u222bcos x sin x dx", "label": "Example :  solve \u222bcos x sin x dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "When the integral of the form \u222bsin xdx / sin 2x", "label": "When the integral of the form \u222bsin xdx / sin 2x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Put sin x = kcos x + C where is c is the constant of integration", "label": "Put sin x = kcos x + C where is c is the constant of integration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222b (sin x)  / (1-sin\u00b2x)dx", "label": "Example : Solve \u222b (sin x)  / (1-sin\u00b2x)dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Examples", "label": "Examples", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222bsin x / (1-sin x) dx", "label": "Example : Solve \u222bsin x / (1-sin x) dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222bsin^3x / (sin x - cos x)dx", "label": "Example : Solve \u222bsin^3x / (sin x - cos x)dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The process Of integration by which we divide the given integral", "label": "The process Of integration by which we divide the given integral", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "In the sum of two or more simple integrals is known as integration by partial fractions", "label": "In the sum of two or more simple integrals is known as integration by partial fractions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the degree of P(x) \u003c the degree Q(x) we can integrate in the usual way", "label": "If the degree of P(x) \u003c the degree Q(x) we can integrate in the usual way", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The process Of integration", "label": "The process Of integration", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "By which we divide the given integral in the sum of two or more", "label": "By which we divide the given integral in the sum of two or more", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "If the degree of P(x) = degree of Q(x), we divide P(x) by the Q(x) and obtain", "label": "If the degree of P(x) = degree of Q(x), we divide P(x) by the Q(x) and obtain", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "If the degree of P(x) \u003e degree of Q(x)", "label": "If the degree of P(x) \u003e degree of Q(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "We would first divide P(x) by Q(x) and then resolve into partial fractions", "label": "We would first divide P(x) by Q(x) and then resolve into partial fractions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The division will result in certain integral terms along with fraction terms, which are then integrated", "label": "The division will result in certain integral terms along with fraction terms, which are then integrated", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "In the process of algebraic substitution", "label": "In the process of algebraic substitution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "We change the variable of integration by a suitable substitution in terms of the original variable and thus reducing the integral to a standard form integrable in the usual manner. For example", "label": "We change the variable of integration by a suitable substitution in terms of the original variable and thus reducing the integral to a standard form integrable in the usual manner. For example", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u222b (4x + 3) / (2x\u00b2 + 3x + 1) dx = \u222b (4x + 3) / ( (2x + 1) (x + 1)   dx.", "label": "\u222b (4x + 3) / (2x\u00b2 + 3x + 1) dx = \u222b (4x + 3) / ( (2x + 1) (x + 1)   dx.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "The process of integration by substitution is particularly useful when", "label": "The process of integration by substitution is particularly useful when", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The integrand contains a factor which is the derivative or a constant multiple of the derivative of another factor. Thus the given integral can be transformed and reduced to a more simple integral. It is also very helpful to find the integrals of functions involving radicals or rational powers of algebraic expressions.", "label": "The integrand contains a factor which is the derivative or a constant multiple of the derivative of another factor. Thus the given integral can be transformed and reduced to a more simple integral. It is also very helpful to find the integrals of functions involving radicals or rational powers of algebraic expressions.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222b (18x + 15) / (6x\u00b2 + 10x + 24)  dx", "label": "Example : Solve \u222b (18x + 15) / (6x\u00b2 + 10x + 24)  dx", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "CASE SIMPLIFICATION", "label": "CASE SIMPLIFICATION", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222b (x\u00b3 +  5x\u00b2 + 6x + 8 ) / (x\u00b2 + 3x + 3) dx Here divide by making the degree of numerator and denominator equal.", "label": "Example : Solve \u222b (x\u00b3 +  5x\u00b2 + 6x + 8 ) / (x\u00b2 + 3x + 3) dx Here divide by making the degree of numerator and denominator equal.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "EXAMPLES", "label": "EXAMPLES", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222b (3x + 2) / (x\u00b2 = 9)  dx", "label": "Example : Solve \u222b (3x + 2) / (x\u00b2 = 9)  dx", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example : Solve \u222b(cos \u221ax) / (\u221ax) dx", "label": "Example : Solve \u222b(cos \u221ax) / (\u221ax) dx", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Mathematical factors which cannot be factorised further", "to": "Required when two function types are different we can choose"}, {"arrows": "to", "from": "Mathematical factors which cannot be factorised further", "to": "The integral becomes transpose on collective terms involving I. e. g. sin x"}, {"arrows": "to", "from": "Quadratic factors which cannot be factorised further", "to": "Given g(x) = (ax^2 + bx + c)^2 (x - g3)(x - g4)  \u2026.. (x - gN)"}, {"arrows": "to", "from": "Quadratic factors which cannot be factorised further", "to": "The given integral again putting it equal to I (iii)"}, {"arrows": "to", "from": "The given integrand is", "to": "Transposed again and evaluated"}, {"arrows": "to", "from": "The given integrand is", "to": "Trigonometric and co-trigonometric terms involving I. e. g."}, {"arrows": "to", "from": "The sine or cosine of multiple angles", "to": "Evaluate the integral"}, {"arrows": "to", "from": "Integration by parts", "to": "Method of integration"}, {"arrows": "to", "from": "Integration by parts", "to": "If the two functions are of different types, we can choose"}, {"arrows": "to", "from": "Working Rule", "to": "Write ax^2 + bx + c"}, {"arrows": "to", "from": "Working Rule", "to": "Integral becomes"}, {"arrows": "to", "from": "Integral becomes", "to": "Put x \u2013 g3 = (x \u2013 g4)"}, {"arrows": "to", "from": "Integral becomes", "to": "Put x \u2013 gN =t"}, {"arrows": "to", "from": "Then the integrand", "to": "g(t)dt"}, {"arrows": "to", "from": "The integral", "to": "If the power of sin x and cos x are both even put sin x and cos x I"}, {"arrows": "to", "from": "The integral", "to": "If the power of sin x and cos x are both odd put sin x =cos"}, {"arrows": "to", "from": "Transposed and evaluated integral", "to": "The integrand is converted to one side and"}, {"arrows": "to", "from": "Interchange of terms", "to": "We proceed as follows"}, {"arrows": "to", "from": "If the denominator", "to": "Contains repeated linear factors"}, {"arrows": "to", "from": "If the denominator", "to": "Put numerator = A(denominator)\u2019 + B(denominator)\u2019\u2019  + \u2026\u2026 + M(denominator)\u2019\u2019\u2019 etc"}, {"arrows": "to", "from": "SOLVE EXAMPLES", "to": "Example 1"}, {"arrows": "to", "from": "SOLVE EXAMPLES", "to": "Evaluate: \u222b (3272x + 32x^5) / (4x\u00b3 - 4x^2  )^4 dx"}, {"arrows": "to", "from": "Example 1", "to": "\u222b sin^4 x cos x dx Here put sin x = t"}, {"arrows": "to", "from": "Example 1", "to": "Example 2"}, {"arrows": "to", "from": "CASE II", "to": "The denominator contains only non repeated linear factors"}, {"arrows": "to", "from": "CASE II", "to": "Example 2"}, {"arrows": "to", "from": "Example 2", "to": "\u222b sin^3 x cos^2 x dx Here put cos x = t and evaluate the"}, {"arrows": "to", "from": "Example 2", "to": "integral"}, {"arrows": "to", "from": "If the denominator contains", "to": "Irrepeated linear factors"}, {"arrows": "to", "from": "If the denominator contains", "to": "Then put numerator = A denominator + B / denominator + C / denominator^2 etc."}, {"arrows": "to", "from": "If the integral is of the form", "to": "g1\u2032(x) / g1(x) + g2\u2032(x)/g2(x) + ...+ gn\u2032(x)/g(x) dx"}, {"arrows": "to", "from": "If the integral is of the form", "to": "Then it becomes log|g1(x) g2(x)\u2026. gn(x)|"}, {"arrows": "to", "from": "Rule of integration by parts may be remembered", "to": "as Ilate dm minus Integral Vdm"}, {"arrows": "to", "from": "Rule of integration by parts may be remembered", "to": "The first function is to be taken as the one which comes later in the"}, {"arrows": "to", "from": "The integral of a function", "to": "Can be easily found if we can express it as the sum of simpler functions whose integrals are known."}, {"arrows": "to", "from": "The integral of a function", "to": "For example, any integral of the form f(x) dx can be integrated by resolving it into a sum of terms each of which contains sine or cosine of a multiple angle."}, {"arrows": "to", "from": "The process of resolving any", "to": "Integral into a sum of simpler functions is known as integration by parts."}, {"arrows": "to", "from": "The process of resolving any", "to": "We proceed as follows: (i) express the given integral as the sum of integrals involving simpler functions."}, {"arrows": "to", "from": "Integrals of the form", "to": "sin^m x cos^n x dx"}, {"arrows": "to", "from": "Integrals of the form", "to": "can be evaluated as follows"}, {"arrows": "to", "from": "If m is odd", "to": "Put sin x = t"}, {"arrows": "to", "from": "If m is odd", "to": "If n is odd"}, {"arrows": "to", "from": "If n is odd", "to": "Put cos x = t or sin x = cos x sin x + cos x dx"}, {"arrows": "to", "from": "If n is odd", "to": "Integrals of the form"}, {"arrows": "to", "from": "Integrals of the functions", "to": "Which contain the sum or difference of two or more angles"}, {"arrows": "to", "from": "Integrals of the functions", "to": "Can be evaluated by using the appropriate trigonometric identities. Following are some examples"}, {"arrows": "to", "from": "SIDES AFTER TAKING LCM", "to": "AND THEN TAKING LCM"}, {"arrows": "to", "from": "SIDES AFTER TAKING LCM", "to": "Example 1 : \u222b dx / sin x + sin 2x"}, {"arrows": "to", "from": "To simplify", "to": "sin x + sin 2x, multiply Nr and Dr by Cos \u00bd x"}, {"arrows": "to", "from": "To simplify", "to": "Case 1"}, {"arrows": "to", "from": "CASE 1", "to": "If the Denominator Contains repeated linear Factors"}, {"arrows": "to", "from": "CASE 1", "to": "CASE 2 : Evaluate \u222b (3272x + 32x^5) / (4x\u00b3 - 4x^2  )^4 dx"}, {"arrows": "to", "from": "CASE 2", "to": "the denominator contains only Irreperated linear factors"}, {"arrows": "to", "from": "CASE 2", "to": "CASE 3 : If the denominator contains"}, {"arrows": "to", "from": "CASE 3", "to": "repeated as well Irreperated linear factors"}, {"arrows": "to", "from": "CASE 3", "to": "If the denominator contains repeated linear factors then numerator"}, {"arrows": "to", "from": "If the integral is of the form g\u2032(x) / g(x) dx", "to": "then it becomes ln|g(x)|"}, {"arrows": "to", "from": "If the integral is of the form g\u2032(x) / g(x) dx", "to": "Integration By Substitution : If integral is of the form f(g(x)) g\u2032(x) dx"}, {"arrows": "to", "from": "Integration By Substitution: If integral is of the form f(g(x)) g\u2032(x) dx", "to": "then it can be computed by making the substitution g(x) = t"}, {"arrows": "to", "from": "Integration By Substitution: If integral is of the form f(g(x)) g\u2032(x) dx", "to": "For example,"}, {"arrows": "to", "from": "Integral is given by", "to": "Example : \u222b sin(x/2) dx"}, {"arrows": "to", "from": "Solved Examples", "to": "Example : Solve \u222b (6x\u00b2 + 13x + 14) / (3x\u00b2 + 7x + 4) dx"}, {"arrows": "to", "from": "Solved Examples", "to": "Example : Solve \u222b (x\u00b3 - 3x\u00b2 + 3x  +7) / (x\u00b2 - 2x + 2) dx"}, {"arrows": "to", "from": "When the integral of the form cos x sin x dx", "to": "Where sin x = kcos x + C where is c is the constant of integration, can be solved by the process of substitution"}, {"arrows": "to", "from": "When the integral of the form cos x sin x dx", "to": "Example :  solve \u222bcos x sin x dx"}, {"arrows": "to", "from": "When the integral of the form \u222bsin xdx / sin 2x", "to": "Put sin x = kcos x + C where is c is the constant of integration"}, {"arrows": "to", "from": "When the integral of the form \u222bsin xdx / sin 2x", "to": "Example : Solve \u222b (sin x)  / (1-sin\u00b2x)dx"}, {"arrows": "to", "from": "Examples", "to": "Example : Solve \u222bsin x / (1-sin x) dx"}, {"arrows": "to", "from": "Examples", "to": "Example : Solve \u222bsin^3x / (sin x - cos x)dx"}, {"arrows": "to", "from": "The process Of integration by which we divide the given integral", "to": "In the sum of two or more simple integrals is known as integration by partial fractions"}, {"arrows": "to", "from": "The process Of integration by which we divide the given integral", "to": "If the degree of P(x) \u003c the degree Q(x) we can integrate in the usual way"}, {"arrows": "to", "from": "The process Of integration", "to": "By which we divide the given integral in the sum of two or more"}, {"arrows": "to", "from": "The process Of integration", "to": "If the degree of P(x) = degree of Q(x), we divide P(x) by the Q(x) and obtain"}, {"arrows": "to", "from": "If the degree of P(x) \u003e degree of Q(x)", "to": "We would first divide P(x) by Q(x) and then resolve into partial fractions"}, {"arrows": "to", "from": "If the degree of P(x) \u003e degree of Q(x)", "to": "The division will result in certain integral terms along with fraction terms, which are then integrated"}, {"arrows": "to", "from": "In the process of algebraic substitution", "to": "We change the variable of integration by a suitable substitution in terms of the original variable and thus reducing the integral to a standard form integrable in the usual manner. For example"}, {"arrows": "to", "from": "In the process of algebraic substitution", "to": "\u222b (4x + 3) / (2x\u00b2 + 3x + 1) dx = \u222b (4x + 3) / ( (2x + 1) (x + 1)   dx."}, {"arrows": "to", "from": "The process of integration by substitution is particularly useful when", "to": "The integrand contains a factor which is the derivative or a constant multiple of the derivative of another factor. Thus the given integral can be transformed and reduced to a more simple integral. It is also very helpful to find the integrals of functions involving radicals or rational powers of algebraic expressions."}, {"arrows": "to", "from": "The process of integration by substitution is particularly useful when", "to": "Example : Solve \u222b (18x + 15) / (6x\u00b2 + 10x + 24)  dx"}, {"arrows": "to", "from": "CASE SIMPLIFICATION", "to": "Example : Solve \u222b (x\u00b3 +  5x\u00b2 + 6x + 8 ) / (x\u00b2 + 3x + 3) dx Here divide by making the degree of numerator and denominator equal."}, {"arrows": "to", "from": "CASE SIMPLIFICATION", "to": "CASE SIMPLIFICATION"}, {"arrows": "to", "from": "EXAMPLES", "to": "Example : Solve \u222b (3x + 2) / (x\u00b2 = 9)  dx"}, {"arrows": "to", "from": "EXAMPLES", "to": "Example : Solve \u222b(cos \u221ax) / (\u221ax) dx"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

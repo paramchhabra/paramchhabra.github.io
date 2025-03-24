@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Inverse Trigonometric Functions", "label": "Inverse Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Definitions", "label": "Definitions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties", "label": "Properties", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graphs", "label": "Graphs", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "sin\u207b\u00b9x = \u03b8", "label": "sin\u207b\u00b9x = \u03b8", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "cos\u207b\u00b9x = \u03b8", "label": "cos\u207b\u00b9x = \u03b8", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "tan\u207b\u00b9x = \u03b8", "label": "tan\u207b\u00b9x = \u03b8", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "cot\u207b\u00b9x = \u03b8", "label": "cot\u207b\u00b9x = \u03b8", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "sec\u207b\u00b9x = \u03b8", "label": "sec\u207b\u00b9x = \u03b8", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "cosec\u207b\u00b9x = \u03b8", "label": "cosec\u207b\u00b9x = \u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin\u207b\u00b9(-x) = -sin\u207b\u00b9x", "label": "sin\u207b\u00b9(-x) = -sin\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cos\u207b\u00b9(-x) = \u03c0 - cos\u207b\u00b9x", "label": "cos\u207b\u00b9(-x) = \u03c0 - cos\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan\u207b\u00b9(-x) = -tan\u207b\u00b9x", "label": "tan\u207b\u00b9(-x) = -tan\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cot\u207b\u00b9(-x) = \u03c0 - cot\u207b\u00b9x", "label": "cot\u207b\u00b9(-x) = \u03c0 - cot\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sec\u207b\u00b9(-x) = \u03c0 - sec\u207b\u00b9x", "label": "sec\u207b\u00b9(-x) = \u03c0 - sec\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cosec\u207b\u00b9(-x) = -cosec\u207b\u00b9x", "label": "cosec\u207b\u00b9(-x) = -cosec\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graph of y = sin\u207b\u00b9x", "label": "Graph of y = sin\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graph of y = cos\u207b\u00b9x", "label": "Graph of y = cos\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graph of y = tan\u207b\u00b9x", "label": "Graph of y = tan\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graph of y = cot\u207b\u00b9x", "label": "Graph of y = cot\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graph of y = sec\u207b\u00b9x", "label": "Graph of y = sec\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graph of y = cosec\u207b\u00b9x", "label": "Graph of y = cosec\u207b\u00b9x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x = sin\u03b8", "label": "x = sin\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 \u2208 [-\u03c0/2, \u03c0/2]", "label": "\u03b8 \u2208 [-\u03c0/2, \u03c0/2]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x = cos\u03b8", "label": "x = cos\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 \u2208 [0, \u03c0]", "label": "\u03b8 \u2208 [0, \u03c0]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x = tan\u03b8", "label": "x = tan\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 \u2208 (-\u03c0/2, \u03c0/2)", "label": "\u03b8 \u2208 (-\u03c0/2, \u03c0/2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x = cot\u03b8", "label": "x = cot\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 \u2208 (0, \u03c0)", "label": "\u03b8 \u2208 (0, \u03c0)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x = sec\u03b8", "label": "x = sec\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 \u2208 [0, \u03c0] - {\u03c0/2}", "label": "\u03b8 \u2208 [0, \u03c0] - {\u03c0/2}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "x = cosec\u03b8", "label": "x = cosec\u03b8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "\u03b8 \u2208 [-\u03c0/2, \u03c0/2] - {0}", "label": "\u03b8 \u2208 [-\u03c0/2, \u03c0/2] - {0}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Domain: [-1, 1]", "label": "Domain: [-1, 1]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Range: [-\u03c0/2, \u03c0/2]", "label": "Range: [-\u03c0/2, \u03c0/2]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Range: [0, \u03c0]", "label": "Range: [0, \u03c0]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Domain: \u211d", "label": "Domain: \u211d", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Range: (-\u03c0/2, \u03c0/2)", "label": "Range: (-\u03c0/2, \u03c0/2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Range: (0, \u03c0)", "label": "Range: (0, \u03c0)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Domain: (-\u221e, -1] \u222a [1, \u221e)", "label": "Domain: (-\u221e, -1] \u222a [1, \u221e)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Range: [0, \u03c0] - {\u03c0/2}", "label": "Range: [0, \u03c0] - {\u03c0/2}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Range: [-\u03c0/2, \u03c0/2] - {0}", "label": "Range: [-\u03c0/2, \u03c0/2] - {0}", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "Definitions"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "Properties"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "Graphs"}, {"arrows": "to", "from": "Definitions", "to": "sin\u207b\u00b9x = \u03b8"}, {"arrows": "to", "from": "Definitions", "to": "cos\u207b\u00b9x = \u03b8"}, {"arrows": "to", "from": "Definitions", "to": "tan\u207b\u00b9x = \u03b8"}, {"arrows": "to", "from": "Definitions", "to": "cot\u207b\u00b9x = \u03b8"}, {"arrows": "to", "from": "Definitions", "to": "sec\u207b\u00b9x = \u03b8"}, {"arrows": "to", "from": "Definitions", "to": "cosec\u207b\u00b9x = \u03b8"}, {"arrows": "to", "from": "Properties", "to": "sin\u207b\u00b9(-x) = -sin\u207b\u00b9x"}, {"arrows": "to", "from": "Properties", "to": "cos\u207b\u00b9(-x) = \u03c0 - cos\u207b\u00b9x"}, {"arrows": "to", "from": "Properties", "to": "tan\u207b\u00b9(-x) = -tan\u207b\u00b9x"}, {"arrows": "to", "from": "Properties", "to": "cot\u207b\u00b9(-x) = \u03c0 - cot\u207b\u00b9x"}, {"arrows": "to", "from": "Properties", "to": "sec\u207b\u00b9(-x) = \u03c0 - sec\u207b\u00b9x"}, {"arrows": "to", "from": "Properties", "to": "cosec\u207b\u00b9(-x) = -cosec\u207b\u00b9x"}, {"arrows": "to", "from": "Graphs", "to": "Graph of y = sin\u207b\u00b9x"}, {"arrows": "to", "from": "Graphs", "to": "Graph of y = cos\u207b\u00b9x"}, {"arrows": "to", "from": "Graphs", "to": "Graph of y = tan\u207b\u00b9x"}, {"arrows": "to", "from": "Graphs", "to": "Graph of y = cot\u207b\u00b9x"}, {"arrows": "to", "from": "Graphs", "to": "Graph of y = sec\u207b\u00b9x"}, {"arrows": "to", "from": "Graphs", "to": "Graph of y = cosec\u207b\u00b9x"}, {"arrows": "to", "from": "sin\u207b\u00b9x = \u03b8", "to": "x = sin\u03b8"}, {"arrows": "to", "from": "sin\u207b\u00b9x = \u03b8", "to": "\u03b8 \u2208 [-\u03c0/2, \u03c0/2]"}, {"arrows": "to", "from": "cos\u207b\u00b9x = \u03b8", "to": "x = cos\u03b8"}, {"arrows": "to", "from": "cos\u207b\u00b9x = \u03b8", "to": "\u03b8 \u2208 [0, \u03c0]"}, {"arrows": "to", "from": "tan\u207b\u00b9x = \u03b8", "to": "x = tan\u03b8"}, {"arrows": "to", "from": "tan\u207b\u00b9x = \u03b8", "to": "\u03b8 \u2208 (-\u03c0/2, \u03c0/2)"}, {"arrows": "to", "from": "cot\u207b\u00b9x = \u03b8", "to": "x = cot\u03b8"}, {"arrows": "to", "from": "cot\u207b\u00b9x = \u03b8", "to": "\u03b8 \u2208 (0, \u03c0)"}, {"arrows": "to", "from": "sec\u207b\u00b9x = \u03b8", "to": "x = sec\u03b8"}, {"arrows": "to", "from": "sec\u207b\u00b9x = \u03b8", "to": "\u03b8 \u2208 [0, \u03c0] - {\u03c0/2}"}, {"arrows": "to", "from": "cosec\u207b\u00b9x = \u03b8", "to": "x = cosec\u03b8"}, {"arrows": "to", "from": "cosec\u207b\u00b9x = \u03b8", "to": "\u03b8 \u2208 [-\u03c0/2, \u03c0/2] - {0}"}, {"arrows": "to", "from": "Graph of y = sin\u207b\u00b9x", "to": "Domain: [-1, 1]"}, {"arrows": "to", "from": "Graph of y = sin\u207b\u00b9x", "to": "Range: [-\u03c0/2, \u03c0/2]"}, {"arrows": "to", "from": "Graph of y = cos\u207b\u00b9x", "to": "Domain: [-1, 1]"}, {"arrows": "to", "from": "Graph of y = cos\u207b\u00b9x", "to": "Range: [0, \u03c0]"}, {"arrows": "to", "from": "Graph of y = tan\u207b\u00b9x", "to": "Domain: \u211d"}, {"arrows": "to", "from": "Graph of y = tan\u207b\u00b9x", "to": "Range: (-\u03c0/2, \u03c0/2)"}, {"arrows": "to", "from": "Graph of y = cot\u207b\u00b9x", "to": "Domain: \u211d"}, {"arrows": "to", "from": "Graph of y = cot\u207b\u00b9x", "to": "Range: (0, \u03c0)"}, {"arrows": "to", "from": "Graph of y = sec\u207b\u00b9x", "to": "Domain: (-\u221e, -1] \u222a [1, \u221e)"}, {"arrows": "to", "from": "Graph of y = sec\u207b\u00b9x", "to": "Range: [0, \u03c0] - {\u03c0/2}"}, {"arrows": "to", "from": "Graph of y = cosec\u207b\u00b9x", "to": "Domain: (-\u221e, -1] \u222a [1, \u221e)"}, {"arrows": "to", "from": "Graph of y = cosec\u207b\u00b9x", "to": "Range: [-\u03c0/2, \u03c0/2] - {0}"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

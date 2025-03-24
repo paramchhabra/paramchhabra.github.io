@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Quadratic Factor", "label": "Quadratic Factor", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cannot be factored further", "label": "Cannot be factored further", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g(x) = (ax^2 + bx + c)(x - g68_3)(x - g68_4)...(x - g68_n)", "label": "g(x) = (ax^2 + bx + c)(x - g68_3)(x - g68_4)...(x - g68_n)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integration by Parts", "label": "Integration by Parts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Function selection based on ILATE rule", "label": "Function selection based on ILATE rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "ILATE stands for Inverse, Logarithmic, Algebraic, Trigonometric, Exponential", "label": "ILATE stands for Inverse, Logarithmic, Algebraic, Trigonometric, Exponential", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Trigonometric Functions", "label": "Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integration of sine and cosine of multiple angles", "label": "Integration of sine and cosine of multiple angles", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Further integration term by term", "label": "Further integration term by term", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Partial Fractions", "label": "Partial Fractions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Resolving integrand into partial fractions", "label": "Resolving integrand into partial fractions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Determining constants by comparing coefficients", "label": "Determining constants by comparing coefficients", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Repeated Linear Factors", "label": "Repeated Linear Factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 1: Non-repeated linear factors", "label": "Case 1: Non-repeated linear factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Case 2: Denominator contains repeated as well as non-repeated linear factors", "label": "Case 2: Denominator contains repeated as well as non-repeated linear factors", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Odd and Even Powers", "label": "Odd and Even Powers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Handling odd powers of sin(x) and cos(x)", "label": "Handling odd powers of sin(x) and cos(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Using substitution t = sin(x) or t = cos(x)", "label": "Using substitution t = sin(x) or t = cos(x)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Standard Integrals", "label": "Standard Integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integration of functions like sin^n(x), cos^n(x)", "label": "Integration of functions like sin^n(x), cos^n(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Using De Moivre\u0027s theorem for even positive integers", "label": "Using De Moivre\u0027s theorem for even positive integers", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Substitution Rule", "label": "Substitution Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Change of variable t = x^n", "label": "Change of variable t = x^n", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Derivative dt = n x^(n-1) dx", "label": "Derivative dt = n x^(n-1) dx", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Working Rules", "label": "Working Rules", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Split integral into multiple integrals", "label": "Split integral into multiple integrals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Evaluate each integral separately", "label": "Evaluate each integral separately", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Integration of Product of Two Functions", "label": "Integration of Product of Two Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Known as integration by parts", "label": "Known as integration by parts", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "u = first function, dv = second function", "label": "u = first function, dv = second function", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Quadratic Factor", "to": "Cannot be factored further"}, {"arrows": "to", "from": "Quadratic Factor", "to": "g(x) = (ax^2 + bx + c)(x - g68_3)(x - g68_4)...(x - g68_n)"}, {"arrows": "to", "from": "Integration by Parts", "to": "Function selection based on ILATE rule"}, {"arrows": "to", "from": "Integration by Parts", "to": "ILATE stands for Inverse, Logarithmic, Algebraic, Trigonometric, Exponential"}, {"arrows": "to", "from": "Trigonometric Functions", "to": "Integration of sine and cosine of multiple angles"}, {"arrows": "to", "from": "Trigonometric Functions", "to": "Further integration term by term"}, {"arrows": "to", "from": "Partial Fractions", "to": "Resolving integrand into partial fractions"}, {"arrows": "to", "from": "Partial Fractions", "to": "Determining constants by comparing coefficients"}, {"arrows": "to", "from": "Repeated Linear Factors", "to": "Case 1: Non-repeated linear factors"}, {"arrows": "to", "from": "Repeated Linear Factors", "to": "Case 2: Denominator contains repeated as well as non-repeated linear factors"}, {"arrows": "to", "from": "Odd and Even Powers", "to": "Handling odd powers of sin(x) and cos(x)"}, {"arrows": "to", "from": "Odd and Even Powers", "to": "Using substitution t = sin(x) or t = cos(x)"}, {"arrows": "to", "from": "Standard Integrals", "to": "Integration of functions like sin^n(x), cos^n(x)"}, {"arrows": "to", "from": "Standard Integrals", "to": "Using De Moivre\u0027s theorem for even positive integers"}, {"arrows": "to", "from": "Substitution Rule", "to": "Change of variable t = x^n"}, {"arrows": "to", "from": "Substitution Rule", "to": "Derivative dt = n x^(n-1) dx"}, {"arrows": "to", "from": "Working Rules", "to": "Split integral into multiple integrals"}, {"arrows": "to", "from": "Working Rules", "to": "Evaluate each integral separately"}, {"arrows": "to", "from": "Integration of Product of Two Functions", "to": "Known as integration by parts"}, {"arrows": "to", "from": "Integration of Product of Two Functions", "to": "u = first function, dv = second function"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Exine Structure", "label": "Exine Structure", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inner Endexine", "label": "Inner Endexine", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Outer Ektexine", "label": "Outer Ektexine", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Foot Layer", "label": "Foot Layer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Baculate Layer", "label": "Baculate Layer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tectum", "label": "Tectum", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Endosperm Development", "label": "Endosperm Development", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nuclear Endosperm", "label": "Nuclear Endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cellular Endosperm", "label": "Cellular Endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Helobial Endosperm", "label": "Helobial Endosperm", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Functions of Endosperm", "label": "Functions of Endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutrients in albuminous seeds", "label": "Nutrients in albuminous seeds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Nutrition to developing embryo", "label": "Nutrition to developing embryo", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Seed Viability", "label": "Seed Viability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Genetic factors", "label": "Genetic factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Environmental factors", "label": "Environmental factors", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Pollination Types", "label": "Pollination Types", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Entomophily (Insect pollination)", "label": "Entomophily (Insect pollination)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ornithophily (Bird pollination)", "label": "Ornithophily (Bird pollination)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chiropterophily (Pollination by bats)", "label": "Chiropterophily (Pollination by bats)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hydrophily (Water pollination)", "label": "Hydrophily (Water pollination)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Post-Fertilization Events", "label": "Post-Fertilization Events", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of seed and fruit", "label": "Formation of seed and fruit", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Endosperm", "label": "Endosperm", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metaxenia", "label": "Metaxenia", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Apomixis", "label": "Apomixis", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Embryogeny", "label": "Embryogeny", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Dicot embryogeny", "label": "Dicot embryogeny", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Monocot embryogeny", "label": "Monocot embryogeny", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Embryo development stages", "label": "Embryo development stages", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Importance of Parthenocarpic Fruits", "label": "Importance of Parthenocarpic Fruits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Seedless fruits", "label": "Seedless fruits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Development in greenhouses", "label": "Development in greenhouses", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quicker food processing", "label": "Quicker food processing", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Advantages of Apomixis", "label": "Advantages of Apomixis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of new individuals without gametic fusion", "label": "Formation of new individuals without gametic fusion", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Genetically similar to the parent", "label": "Genetically similar to the parent", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Seed Viability Factors", "label": "Seed Viability Factors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Genetic", "label": "Genetic", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Environmental", "label": "Environmental", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Pollination Advantages", "label": "Pollination Advantages", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Genetic recombination", "label": "Genetic recombination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Variation in offspring", "label": "Variation in offspring", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Pollination Disadvantages", "label": "Pollination Disadvantages", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Large number of pollen grains", "label": "Large number of pollen grains", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chance factor", "label": "Chance factor", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Agents of Pollination", "label": "Agents of Pollination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Anemophily (Wind pollination)", "label": "Anemophily (Wind pollination)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Formation of Embryo Sac", "label": "Formation of Embryo Sac", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mitosis of nucleus in megaspore", "label": "Mitosis of nucleus in megaspore", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of two nucleate embryo sac", "label": "Formation of two nucleate embryo sac", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Organization of female gametophyte", "label": "Organization of female gametophyte", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Double Fertilization", "label": "Double Fertilization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Syngamy (Fusion of male and female gametes)", "label": "Syngamy (Fusion of male and female gametes)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triple Fusion (Fusion of male gamete with polar nuclei)", "label": "Triple Fusion (Fusion of male gamete with polar nuclei)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Pollen Products", "label": "Pollen Products", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen food supplements", "label": "Pollen food supplements", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen creams", "label": "Pollen creams", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Pollen Viability", "label": "Pollen Viability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Temperature and humidity dependence", "label": "Temperature and humidity dependence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cryopreservation in liquid nitrogen", "label": "Cryopreservation in liquid nitrogen", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Male Reproductive Unit (Stamen)", "label": "Male Reproductive Unit (Stamen)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Anther and filament", "label": "Anther and filament", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pollen sacs or microsporangia", "label": "Pollen sacs or microsporangia", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Anther wall layers", "label": "Anther wall layers", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Anther Development", "label": "Anther Development", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Mass of meristematic cells", "label": "Mass of meristematic cells", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Differentiation of archesporial cells", "label": "Differentiation of archesporial cells", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of four layers of cells", "label": "Formation of four layers of cells", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Formation of Pollen Grain", "label": "Formation of Pollen Grain", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Division of nucleus in pollen grain", "label": "Division of nucleus in pollen grain", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emergence of germ tube", "label": "Emergence of germ tube", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Division of generative nucleus into male gametes", "label": "Division of generative nucleus into male gametes", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Post Pollination Events", "label": "Post Pollination Events", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Division of pollen grain nucleus", "label": "Division of pollen grain nucleus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Growth of pollen tube", "label": "Growth of pollen tube", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Entry of pollen tube into ovule", "label": "Entry of pollen tube into ovule", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Parthenocarpy", "label": "Parthenocarpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Genetic parthenocarpy", "label": "Genetic parthenocarpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Environmental parthenocarpy", "label": "Environmental parthenocarpy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chemically induced parthenocarpy", "label": "Chemically induced parthenocarpy", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Advantages of Cross Pollination", "label": "Advantages of Cross Pollination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Elimination of defective characters", "label": "Elimination of defective characters", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Disadvantages of Cross Pollination", "label": "Disadvantages of Cross Pollination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spoil of good characters", "label": "Spoil of good characters", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Development of Male Gametophyte", "label": "Development of Male Gametophyte", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formation of vegetative cell and generative cell", "label": "Formation of vegetative cell and generative cell", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Division of generative cell after pollen has landed on stigma", "label": "Division of generative cell after pollen has landed on stigma", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Exine Structure", "to": "Inner Endexine"}, {"arrows": "to", "from": "Exine Structure", "to": "Outer Ektexine"}, {"arrows": "to", "from": "Exine Structure", "to": "Foot Layer"}, {"arrows": "to", "from": "Exine Structure", "to": "Baculate Layer"}, {"arrows": "to", "from": "Exine Structure", "to": "Tectum"}, {"arrows": "to", "from": "Endosperm Development", "to": "Nuclear Endosperm"}, {"arrows": "to", "from": "Endosperm Development", "to": "Cellular Endosperm"}, {"arrows": "to", "from": "Endosperm Development", "to": "Helobial Endosperm"}, {"arrows": "to", "from": "Functions of Endosperm", "to": "Nutrients in albuminous seeds"}, {"arrows": "to", "from": "Functions of Endosperm", "to": "Nutrition to developing embryo"}, {"arrows": "to", "from": "Seed Viability", "to": "Genetic factors"}, {"arrows": "to", "from": "Seed Viability", "to": "Environmental factors"}, {"arrows": "to", "from": "Pollination Types", "to": "Entomophily (Insect pollination)"}, {"arrows": "to", "from": "Pollination Types", "to": "Ornithophily (Bird pollination)"}, {"arrows": "to", "from": "Pollination Types", "to": "Chiropterophily (Pollination by bats)"}, {"arrows": "to", "from": "Pollination Types", "to": "Hydrophily (Water pollination)"}, {"arrows": "to", "from": "Post-Fertilization Events", "to": "Formation of seed and fruit"}, {"arrows": "to", "from": "Post-Fertilization Events", "to": "Endosperm"}, {"arrows": "to", "from": "Post-Fertilization Events", "to": "Metaxenia"}, {"arrows": "to", "from": "Post-Fertilization Events", "to": "Apomixis"}, {"arrows": "to", "from": "Embryogeny", "to": "Dicot embryogeny"}, {"arrows": "to", "from": "Embryogeny", "to": "Monocot embryogeny"}, {"arrows": "to", "from": "Embryogeny", "to": "Embryo development stages"}, {"arrows": "to", "from": "Importance of Parthenocarpic Fruits", "to": "Seedless fruits"}, {"arrows": "to", "from": "Importance of Parthenocarpic Fruits", "to": "Development in greenhouses"}, {"arrows": "to", "from": "Importance of Parthenocarpic Fruits", "to": "Quicker food processing"}, {"arrows": "to", "from": "Advantages of Apomixis", "to": "Formation of new individuals without gametic fusion"}, {"arrows": "to", "from": "Advantages of Apomixis", "to": "Genetically similar to the parent"}, {"arrows": "to", "from": "Seed Viability Factors", "to": "Genetic"}, {"arrows": "to", "from": "Seed Viability Factors", "to": "Environmental"}, {"arrows": "to", "from": "Pollination Advantages", "to": "Genetic recombination"}, {"arrows": "to", "from": "Pollination Advantages", "to": "Variation in offspring"}, {"arrows": "to", "from": "Pollination Disadvantages", "to": "Large number of pollen grains"}, {"arrows": "to", "from": "Pollination Disadvantages", "to": "Chance factor"}, {"arrows": "to", "from": "Agents of Pollination", "to": "Anemophily (Wind pollination)"}, {"arrows": "to", "from": "Agents of Pollination", "to": "Entomophily (Insect pollination)"}, {"arrows": "to", "from": "Agents of Pollination", "to": "Ornithophily (Bird pollination)"}, {"arrows": "to", "from": "Agents of Pollination", "to": "Chiropterophily (Pollination by bats)"}, {"arrows": "to", "from": "Agents of Pollination", "to": "Hydrophily (Water pollination)"}, {"arrows": "to", "from": "Formation of Embryo Sac", "to": "Mitosis of nucleus in megaspore"}, {"arrows": "to", "from": "Formation of Embryo Sac", "to": "Formation of two nucleate embryo sac"}, {"arrows": "to", "from": "Formation of Embryo Sac", "to": "Organization of female gametophyte"}, {"arrows": "to", "from": "Double Fertilization", "to": "Syngamy (Fusion of male and female gametes)"}, {"arrows": "to", "from": "Double Fertilization", "to": "Triple Fusion (Fusion of male gamete with polar nuclei)"}, {"arrows": "to", "from": "Pollen Products", "to": "Pollen food supplements"}, {"arrows": "to", "from": "Pollen Products", "to": "Pollen creams"}, {"arrows": "to", "from": "Pollen Viability", "to": "Temperature and humidity dependence"}, {"arrows": "to", "from": "Pollen Viability", "to": "Cryopreservation in liquid nitrogen"}, {"arrows": "to", "from": "Male Reproductive Unit (Stamen)", "to": "Anther and filament"}, {"arrows": "to", "from": "Male Reproductive Unit (Stamen)", "to": "Pollen sacs or microsporangia"}, {"arrows": "to", "from": "Male Reproductive Unit (Stamen)", "to": "Anther wall layers"}, {"arrows": "to", "from": "Anther Development", "to": "Mass of meristematic cells"}, {"arrows": "to", "from": "Anther Development", "to": "Differentiation of archesporial cells"}, {"arrows": "to", "from": "Anther Development", "to": "Formation of four layers of cells"}, {"arrows": "to", "from": "Formation of Pollen Grain", "to": "Division of nucleus in pollen grain"}, {"arrows": "to", "from": "Formation of Pollen Grain", "to": "Emergence of germ tube"}, {"arrows": "to", "from": "Formation of Pollen Grain", "to": "Division of generative nucleus into male gametes"}, {"arrows": "to", "from": "Post Pollination Events", "to": "Division of pollen grain nucleus"}, {"arrows": "to", "from": "Post Pollination Events", "to": "Growth of pollen tube"}, {"arrows": "to", "from": "Post Pollination Events", "to": "Entry of pollen tube into ovule"}, {"arrows": "to", "from": "Parthenocarpy", "to": "Genetic parthenocarpy"}, {"arrows": "to", "from": "Parthenocarpy", "to": "Environmental parthenocarpy"}, {"arrows": "to", "from": "Parthenocarpy", "to": "Chemically induced parthenocarpy"}, {"arrows": "to", "from": "Advantages of Cross Pollination", "to": "Genetic recombination"}, {"arrows": "to", "from": "Advantages of Cross Pollination", "to": "Variation in offspring"}, {"arrows": "to", "from": "Advantages of Cross Pollination", "to": "Elimination of defective characters"}, {"arrows": "to", "from": "Disadvantages of Cross Pollination", "to": "Large number of pollen grains"}, {"arrows": "to", "from": "Disadvantages of Cross Pollination", "to": "Spoil of good characters"}, {"arrows": "to", "from": "Disadvantages of Cross Pollination", "to": "Chance factor"}, {"arrows": "to", "from": "Development of Male Gametophyte", "to": "Division of nucleus in pollen grain"}, {"arrows": "to", "from": "Development of Male Gametophyte", "to": "Formation of vegetative cell and generative cell"}, {"arrows": "to", "from": "Development of Male Gametophyte", "to": "Division of generative cell after pollen has landed on stigma"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

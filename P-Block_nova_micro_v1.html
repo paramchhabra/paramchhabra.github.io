@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "p-BLOCK ELEMENTS", "label": "p-BLOCK ELEMENTS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Clatherate compounds", "label": "Clatherate compounds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "COMPOUNDS OF XENON", "label": "COMPOUNDS OF XENON", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PROPERTIES", "label": "PROPERTIES", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PHOSPHORUS", "label": "PHOSPHORUS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "ESTIMATION OF AVAILABLE CHLORINE", "label": "ESTIMATION OF AVAILABLE CHLORINE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "IODINE", "label": "IODINE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "HYDROGEN PEROXIDE", "label": "HYDROGEN PEROXIDE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "HYDROFLUORIC ACID", "label": "HYDROFLUORIC ACID", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "OXY-ACIDS OF CHLORINE", "label": "OXY-ACIDS OF CHLORINE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "BLEACHING POWDER", "label": "BLEACHING POWDER", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "GROUP 17 ELEMENTS", "label": "GROUP 17 ELEMENTS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "SULPHUR TRIOXIDE", "label": "SULPHUR TRIOXIDE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "SULPHURIC ACID", "label": "SULPHURIC ACID", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "USES", "label": "USES", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH OXYGEN", "label": "REACTIVITY WITH OXYGEN", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY TOWARD THE HALOGEN", "label": "REACTIVITY TOWARD THE HALOGEN", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CHLORIC ACID", "label": "CHLORIC ACID", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PER-CHLORIC ACID", "label": "PER-CHLORIC ACID", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY TOWARDS METALS", "label": "REACTIVITY TOWARDS METALS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY OF HALOGEN TOWARDS OTHER HALOGEN", "label": "REACTIVITY OF HALOGEN TOWARDS OTHER HALOGEN", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "AMMONIA", "label": "AMMONIA", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "NITROUS OXIDE", "label": "NITROUS OXIDE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "NITROGEN OXIDE", "label": "NITROGEN OXIDE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "OXYGEN", "label": "OXYGEN", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH HYDROGEN", "label": "REACTIVITY WITH HYDROGEN", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "XENON\u2013OXYGEN COMPOUNDS", "label": "XENON\u2013OXYGEN COMPOUNDS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "INTERHALOGEN COMPOUNDS", "label": "INTERHALOGEN COMPOUNDS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH SODIUM HYDROXIDE", "label": "REACTIVITY WITH SODIUM HYDROXIDE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH AMMONIA", "label": "REACTIVITY WITH AMMONIA", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH H2S", "label": "REACTIVITY WITH H2S", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH SILICA", "label": "REACTIVITY WITH SILICA", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH WATER", "label": "REACTIVITY WITH WATER", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH SO3", "label": "REACTIVITY WITH SO3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH O2", "label": "REACTIVITY WITH O2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "DECOMPOSITION", "label": "DECOMPOSITION", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH METALS", "label": "REACTIVITY WITH METALS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH XeO3", "label": "REACTIVITY WITH XeO3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "XENON HEXAFLUORIDE", "label": "XENON HEXAFLUORIDE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "THERMAL DECOMPOSITION", "label": "THERMAL DECOMPOSITION", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "FORMATION OF ADDITION COMPOUNDS", "label": "FORMATION OF ADDITION COMPOUNDS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "REACTIVITY WITH H2", "label": "REACTIVITY WITH H2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "PHOSPHORUS PENTOXIDE", "label": "PHOSPHORUS PENTOXIDE", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "DEHYDRATING POWER", "label": "DEHYDRATING POWER", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "Clatherate compounds"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "COMPOUNDS OF XENON"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "PROPERTIES"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "PHOSPHORUS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "ESTIMATION OF AVAILABLE CHLORINE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "IODINE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "HYDROGEN PEROXIDE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "HYDROFLUORIC ACID"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "OXY-ACIDS OF CHLORINE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "BLEACHING POWDER"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "GROUP 17 ELEMENTS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "SULPHUR TRIOXIDE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "SULPHURIC ACID"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "USES"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH OXYGEN"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY TOWARD THE HALOGEN"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "CHLORIC ACID"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "PER-CHLORIC ACID"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY TOWARDS METALS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY OF HALOGEN TOWARDS OTHER HALOGEN"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "AMMONIA"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "NITROUS OXIDE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "NITROGEN OXIDE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "OXYGEN"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH HYDROGEN"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "XENON\u2013OXYGEN COMPOUNDS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "INTERHALOGEN COMPOUNDS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH SODIUM HYDROXIDE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH AMMONIA"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH H2S"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH SILICA"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH WATER"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH SO3"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH O2"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "DECOMPOSITION"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH METALS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH XeO3"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "XENON HEXAFLUORIDE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "THERMAL DECOMPOSITION"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "FORMATION OF ADDITION COMPOUNDS"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "REACTIVITY WITH H2"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "PHOSPHORUS PENTOXIDE"}, {"arrows": "to", "from": "p-BLOCK ELEMENTS", "to": "DEHYDRATING POWER"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

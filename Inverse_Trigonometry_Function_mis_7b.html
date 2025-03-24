@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "g159", "label": "g159", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 19", "label": "Subtopic 19", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 1", "label": "Subtopic 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail A", "label": "Detail A", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail B", "label": "Detail B", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 2", "label": "Subtopic 2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail C", "label": "Detail C", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail D", "label": "Detail D", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 3", "label": "Subtopic 3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail E", "label": "Detail E", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g83", "label": "g83", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 80", "label": "Subtopic 80", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 4", "label": "Subtopic 4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail F", "label": "Detail F", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail G", "label": "Detail G", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 5", "label": "Subtopic 5", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail H", "label": "Detail H", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0032", "label": "uni0032", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 6", "label": "Subtopic 6", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail I", "label": "Detail I", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g173", "label": "g173", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 116", "label": "Subtopic 116", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 7", "label": "Subtopic 7", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail J", "label": "Detail J", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g189", "label": "g189", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 117", "label": "Subtopic 117", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 8", "label": "Subtopic 8", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail K", "label": "Detail K", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g167", "label": "g167", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 118", "label": "Subtopic 118", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 9", "label": "Subtopic 9", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail L", "label": "Detail L", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g183", "label": "g183", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 119", "label": "Subtopic 119", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 10", "label": "Subtopic 10", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail M", "label": "Detail M", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g170", "label": "g170", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 11", "label": "Subtopic 11", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail N", "label": "Detail N", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g186", "label": "g186", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 12", "label": "Subtopic 12", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail O", "label": "Detail O", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g16", "label": "g16", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 115", "label": "Subtopic 115", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 13", "label": "Subtopic 13", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail P", "label": "Detail P", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g84", "label": "g84", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 20", "label": "Subtopic 20", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 14", "label": "Subtopic 14", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail Q", "label": "Detail Q", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni004E", "label": "uni004E", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 15", "label": "Subtopic 15", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail R", "label": "Detail R", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni006F", "label": "uni006F", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 83", "label": "Subtopic 83", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 16", "label": "Subtopic 16", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail S", "label": "Detail S", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0077", "label": "uni0077", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 17", "label": "Subtopic 17", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail T", "label": "Detail T", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni002C", "label": "uni002C", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 18", "label": "Subtopic 18", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail U", "label": "Detail U", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail V", "label": "Detail V", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail W", "label": "Detail W", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g143", "label": "g143", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 21", "label": "Subtopic 21", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail X", "label": "Detail X", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 22", "label": "Subtopic 22", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail Y", "label": "Detail Y", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g102", "label": "g102", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 23", "label": "Subtopic 23", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail Z", "label": "Detail Z", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g31", "label": "g31", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 24", "label": "Subtopic 24", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail AA", "label": "Detail AA", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g100", "label": "g100", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 25", "label": "Subtopic 25", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail BB", "label": "Detail BB", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g137", "label": "g137", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 26", "label": "Subtopic 26", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail CC", "label": "Detail CC", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0054", "label": "uni0054", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 27", "label": "Subtopic 27", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail DD", "label": "Detail DD", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0068", "label": "uni0068", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 95", "label": "Subtopic 95", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 28", "label": "Subtopic 28", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail EE", "label": "Detail EE", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0075", "label": "uni0075", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 42", "label": "Subtopic 42", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 29", "label": "Subtopic 29", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail FF", "label": "Detail FF", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0073", "label": "uni0073", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 92", "label": "Subtopic 92", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 30", "label": "Subtopic 30", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail GG", "label": "Detail GG", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0065", "label": "uni0065", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 101", "label": "Subtopic 101", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 31", "label": "Subtopic 31", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail HH", "label": "Detail HH", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0061", "label": "uni0061", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 99", "label": "Subtopic 99", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 32", "label": "Subtopic 32", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail II", "label": "Detail II", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0072", "label": "uni0072", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 100", "label": "Subtopic 100", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 33", "label": "Subtopic 33", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail JJ", "label": "Detail JJ", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0069", "label": "uni0069", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 93", "label": "Subtopic 93", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 34", "label": "Subtopic 34", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail KK", "label": "Detail KK", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0074", "label": "uni0074", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 94", "label": "Subtopic 94", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 35", "label": "Subtopic 35", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail LL", "label": "Detail LL", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0070", "label": "uni0070", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 36", "label": "Subtopic 36", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail MM", "label": "Detail MM", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 37", "label": "Subtopic 37", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail NN", "label": "Detail NN", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 38", "label": "Subtopic 38", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail OO", "label": "Detail OO", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 39", "label": "Subtopic 39", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail PP", "label": "Detail PP", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 40", "label": "Subtopic 40", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail QQ", "label": "Detail QQ", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 41", "label": "Subtopic 41", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail RR", "label": "Detail RR", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail SS", "label": "Detail SS", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 43", "label": "Subtopic 43", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail TT", "label": "Detail TT", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 44", "label": "Subtopic 44", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail UU", "label": "Detail UU", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 45", "label": "Subtopic 45", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail VV", "label": "Detail VV", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 46", "label": "Subtopic 46", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail WW", "label": "Detail WW", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 47", "label": "Subtopic 47", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail XX", "label": "Detail XX", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 48", "label": "Subtopic 48", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail YY", "label": "Detail YY", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 49", "label": "Subtopic 49", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Detail ZZ", "label": "Detail ZZ", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 50", "label": "Subtopic 50", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 51", "label": "Subtopic 51", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g168", "label": "g168", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 120", "label": "Subtopic 120", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 52", "label": "Subtopic 52", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g184", "label": "g184", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 121", "label": "Subtopic 121", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 53", "label": "Subtopic 53", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g169", "label": "g169", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 122", "label": "Subtopic 122", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 54", "label": "Subtopic 54", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g185", "label": "g185", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 123", "label": "Subtopic 123", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 55", "label": "Subtopic 55", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g171", "label": "g171", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 124", "label": "Subtopic 124", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 56", "label": "Subtopic 56", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g187", "label": "g187", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 125", "label": "Subtopic 125", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 57", "label": "Subtopic 57", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g172", "label": "g172", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 126", "label": "Subtopic 126", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 58", "label": "Subtopic 58", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g188", "label": "g188", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 127", "label": "Subtopic 127", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 59", "label": "Subtopic 59", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g175", "label": "g175", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 128", "label": "Subtopic 128", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 60", "label": "Subtopic 60", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g191", "label": "g191", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 129", "label": "Subtopic 129", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 61", "label": "Subtopic 61", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g39", "label": "g39", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 114", "label": "Subtopic 114", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 62", "label": "Subtopic 62", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 63", "label": "Subtopic 63", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 64", "label": "Subtopic 64", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 65", "label": "Subtopic 65", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 66", "label": "Subtopic 66", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 67", "label": "Subtopic 67", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 68", "label": "Subtopic 68", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 69", "label": "Subtopic 69", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 70", "label": "Subtopic 70", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 71", "label": "Subtopic 71", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 72", "label": "Subtopic 72", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 73", "label": "Subtopic 73", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 74", "label": "Subtopic 74", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 75", "label": "Subtopic 75", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 76", "label": "Subtopic 76", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 77", "label": "Subtopic 77", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "g63", "label": "g63", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 78", "label": "Subtopic 78", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 79", "label": "Subtopic 79", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 81", "label": "Subtopic 81", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "uni0063", "label": "uni0063", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Subtopic 82", "label": "Subtopic 82", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 84", "label": "Subtopic 84", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 85", "label": "Subtopic 85", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 86", "label": "Subtopic 86", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 87", "label": "Subtopic 87", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 88", "label": "Subtopic 88", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 89", "label": "Subtopic 89", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 90", "label": "Subtopic 90", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 91", "label": "Subtopic 91", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 96", "label": "Subtopic 96", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 97", "label": "Subtopic 97", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 98", "label": "Subtopic 98", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 102", "label": "Subtopic 102", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 103", "label": "Subtopic 103", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 104", "label": "Subtopic 104", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 105", "label": "Subtopic 105", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 106", "label": "Subtopic 106", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 107", "label": "Subtopic 107", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 108", "label": "Subtopic 108", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 109", "label": "Subtopic 109", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 110", "label": "Subtopic 110", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 111", "label": "Subtopic 111", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 112", "label": "Subtopic 112", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Subtopic 113", "label": "Subtopic 113", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "g159", "to": "Subtopic 19"}, {"arrows": "to", "from": "Subtopic 19", "to": "Detail V"}, {"arrows": "to", "from": "Subtopic 1", "to": "Detail A"}, {"arrows": "to", "from": "Subtopic 1", "to": "Detail B"}, {"arrows": "to", "from": "Subtopic 2", "to": "Detail C"}, {"arrows": "to", "from": "Subtopic 2", "to": "Detail D"}, {"arrows": "to", "from": "Subtopic 3", "to": "Detail E"}, {"arrows": "to", "from": "g83", "to": "Subtopic 80"}, {"arrows": "to", "from": "Subtopic 80", "to": "Detail EE"}, {"arrows": "to", "from": "Subtopic 4", "to": "Detail F"}, {"arrows": "to", "from": "Subtopic 4", "to": "Detail G"}, {"arrows": "to", "from": "Subtopic 5", "to": "Detail H"}, {"arrows": "to", "from": "uni0032", "to": "Subtopic 6"}, {"arrows": "to", "from": "Subtopic 6", "to": "Detail I"}, {"arrows": "to", "from": "g173", "to": "Subtopic 116"}, {"arrows": "to", "from": "Subtopic 116", "to": "Detail OO"}, {"arrows": "to", "from": "Subtopic 7", "to": "Detail J"}, {"arrows": "to", "from": "g189", "to": "Subtopic 117"}, {"arrows": "to", "from": "Subtopic 117", "to": "Detail PP"}, {"arrows": "to", "from": "Subtopic 8", "to": "Detail K"}, {"arrows": "to", "from": "g167", "to": "Subtopic 118"}, {"arrows": "to", "from": "Subtopic 118", "to": "Detail QQ"}, {"arrows": "to", "from": "Subtopic 9", "to": "Detail L"}, {"arrows": "to", "from": "g183", "to": "Subtopic 119"}, {"arrows": "to", "from": "Subtopic 119", "to": "Detail RR"}, {"arrows": "to", "from": "Subtopic 10", "to": "Detail M"}, {"arrows": "to", "from": "g170", "to": "Subtopic 11"}, {"arrows": "to", "from": "Subtopic 11", "to": "Detail N"}, {"arrows": "to", "from": "g186", "to": "Subtopic 12"}, {"arrows": "to", "from": "Subtopic 12", "to": "Detail O"}, {"arrows": "to", "from": "g16", "to": "Subtopic 115"}, {"arrows": "to", "from": "Subtopic 115", "to": "Detail NN"}, {"arrows": "to", "from": "Subtopic 13", "to": "Detail P"}, {"arrows": "to", "from": "g84", "to": "Subtopic 20"}, {"arrows": "to", "from": "Subtopic 20", "to": "Detail W"}, {"arrows": "to", "from": "Subtopic 14", "to": "Detail Q"}, {"arrows": "to", "from": "uni004E", "to": "Subtopic 15"}, {"arrows": "to", "from": "Subtopic 15", "to": "Detail R"}, {"arrows": "to", "from": "uni006F", "to": "Subtopic 83"}, {"arrows": "to", "from": "Subtopic 83", "to": "Detail HH"}, {"arrows": "to", "from": "Subtopic 16", "to": "Detail S"}, {"arrows": "to", "from": "uni0077", "to": "Subtopic 17"}, {"arrows": "to", "from": "Subtopic 17", "to": "Detail T"}, {"arrows": "to", "from": "uni002C", "to": "Subtopic 18"}, {"arrows": "to", "from": "Subtopic 18", "to": "Detail U"}, {"arrows": "to", "from": "g143", "to": "Subtopic 21"}, {"arrows": "to", "from": "Subtopic 21", "to": "Detail X"}, {"arrows": "to", "from": "Subtopic 22", "to": "Detail Y"}, {"arrows": "to", "from": "g102", "to": "Subtopic 23"}, {"arrows": "to", "from": "Subtopic 23", "to": "Detail Z"}, {"arrows": "to", "from": "g31", "to": "Subtopic 24"}, {"arrows": "to", "from": "Subtopic 24", "to": "Detail AA"}, {"arrows": "to", "from": "g100", "to": "Subtopic 25"}, {"arrows": "to", "from": "Subtopic 25", "to": "Detail BB"}, {"arrows": "to", "from": "g137", "to": "Subtopic 26"}, {"arrows": "to", "from": "Subtopic 26", "to": "Detail CC"}, {"arrows": "to", "from": "uni0054", "to": "Subtopic 27"}, {"arrows": "to", "from": "Subtopic 27", "to": "Detail DD"}, {"arrows": "to", "from": "uni0068", "to": "Subtopic 95"}, {"arrows": "to", "from": "Subtopic 95", "to": "Detail TT"}, {"arrows": "to", "from": "Subtopic 28", "to": "Detail EE"}, {"arrows": "to", "from": "uni0075", "to": "Subtopic 42"}, {"arrows": "to", "from": "Subtopic 42", "to": "Detail SS"}, {"arrows": "to", "from": "Subtopic 29", "to": "Detail FF"}, {"arrows": "to", "from": "uni0073", "to": "Subtopic 92"}, {"arrows": "to", "from": "Subtopic 92", "to": "Detail QQ"}, {"arrows": "to", "from": "Subtopic 30", "to": "Detail GG"}, {"arrows": "to", "from": "uni0065", "to": "Subtopic 101"}, {"arrows": "to", "from": "Subtopic 101", "to": "Detail ZZ"}, {"arrows": "to", "from": "Subtopic 31", "to": "Detail HH"}, {"arrows": "to", "from": "uni0061", "to": "Subtopic 99"}, {"arrows": "to", "from": "Subtopic 99", "to": "Detail XX"}, {"arrows": "to", "from": "Subtopic 32", "to": "Detail II"}, {"arrows": "to", "from": "uni0072", "to": "Subtopic 100"}, {"arrows": "to", "from": "Subtopic 100", "to": "Detail YY"}, {"arrows": "to", "from": "Subtopic 33", "to": "Detail JJ"}, {"arrows": "to", "from": "uni0069", "to": "Subtopic 93"}, {"arrows": "to", "from": "Subtopic 93", "to": "Detail RR"}, {"arrows": "to", "from": "Subtopic 34", "to": "Detail KK"}, {"arrows": "to", "from": "uni0074", "to": "Subtopic 94"}, {"arrows": "to", "from": "Subtopic 94", "to": "Detail SS"}, {"arrows": "to", "from": "Subtopic 35", "to": "Detail LL"}, {"arrows": "to", "from": "uni0070", "to": "Subtopic 36"}, {"arrows": "to", "from": "Subtopic 36", "to": "Detail MM"}, {"arrows": "to", "from": "Subtopic 37", "to": "Detail NN"}, {"arrows": "to", "from": "Subtopic 38", "to": "Detail OO"}, {"arrows": "to", "from": "Subtopic 39", "to": "Detail PP"}, {"arrows": "to", "from": "Subtopic 40", "to": "Detail QQ"}, {"arrows": "to", "from": "Subtopic 41", "to": "Detail RR"}, {"arrows": "to", "from": "Subtopic 43", "to": "Detail TT"}, {"arrows": "to", "from": "Subtopic 44", "to": "Detail UU"}, {"arrows": "to", "from": "Subtopic 45", "to": "Detail VV"}, {"arrows": "to", "from": "Subtopic 46", "to": "Detail WW"}, {"arrows": "to", "from": "Subtopic 47", "to": "Detail XX"}, {"arrows": "to", "from": "Subtopic 48", "to": "Detail YY"}, {"arrows": "to", "from": "Subtopic 49", "to": "Detail ZZ"}, {"arrows": "to", "from": "Subtopic 50", "to": "Detail AA"}, {"arrows": "to", "from": "Subtopic 51", "to": "Detail BB"}, {"arrows": "to", "from": "g168", "to": "Subtopic 120"}, {"arrows": "to", "from": "Subtopic 120", "to": "Detail SS"}, {"arrows": "to", "from": "Subtopic 52", "to": "Detail CC"}, {"arrows": "to", "from": "g184", "to": "Subtopic 121"}, {"arrows": "to", "from": "Subtopic 121", "to": "Detail TT"}, {"arrows": "to", "from": "Subtopic 53", "to": "Detail DD"}, {"arrows": "to", "from": "g169", "to": "Subtopic 122"}, {"arrows": "to", "from": "Subtopic 122", "to": "Detail UU"}, {"arrows": "to", "from": "Subtopic 54", "to": "Detail EE"}, {"arrows": "to", "from": "g185", "to": "Subtopic 123"}, {"arrows": "to", "from": "Subtopic 123", "to": "Detail VV"}, {"arrows": "to", "from": "Subtopic 55", "to": "Detail FF"}, {"arrows": "to", "from": "g171", "to": "Subtopic 124"}, {"arrows": "to", "from": "Subtopic 124", "to": "Detail WW"}, {"arrows": "to", "from": "Subtopic 56", "to": "Detail GG"}, {"arrows": "to", "from": "g187", "to": "Subtopic 125"}, {"arrows": "to", "from": "Subtopic 125", "to": "Detail XX"}, {"arrows": "to", "from": "Subtopic 57", "to": "Detail HH"}, {"arrows": "to", "from": "g172", "to": "Subtopic 126"}, {"arrows": "to", "from": "Subtopic 126", "to": "Detail YY"}, {"arrows": "to", "from": "Subtopic 58", "to": "Detail II"}, {"arrows": "to", "from": "g188", "to": "Subtopic 127"}, {"arrows": "to", "from": "Subtopic 127", "to": "Detail ZZ"}, {"arrows": "to", "from": "Subtopic 59", "to": "Detail JJ"}, {"arrows": "to", "from": "g175", "to": "Subtopic 128"}, {"arrows": "to", "from": "Subtopic 128", "to": "Detail AA"}, {"arrows": "to", "from": "Subtopic 60", "to": "Detail KK"}, {"arrows": "to", "from": "g191", "to": "Subtopic 129"}, {"arrows": "to", "from": "Subtopic 129", "to": "Detail BB"}, {"arrows": "to", "from": "Subtopic 61", "to": "Detail LL"}, {"arrows": "to", "from": "g39", "to": "Subtopic 114"}, {"arrows": "to", "from": "Subtopic 114", "to": "Detail MM"}, {"arrows": "to", "from": "Subtopic 62", "to": "Detail MM"}, {"arrows": "to", "from": "Subtopic 63", "to": "Detail NN"}, {"arrows": "to", "from": "Subtopic 64", "to": "Detail OO"}, {"arrows": "to", "from": "Subtopic 65", "to": "Detail PP"}, {"arrows": "to", "from": "Subtopic 66", "to": "Detail QQ"}, {"arrows": "to", "from": "Subtopic 67", "to": "Detail RR"}, {"arrows": "to", "from": "Subtopic 68", "to": "Detail SS"}, {"arrows": "to", "from": "Subtopic 69", "to": "Detail TT"}, {"arrows": "to", "from": "Subtopic 70", "to": "Detail UU"}, {"arrows": "to", "from": "Subtopic 71", "to": "Detail VV"}, {"arrows": "to", "from": "Subtopic 72", "to": "Detail WW"}, {"arrows": "to", "from": "Subtopic 73", "to": "Detail XX"}, {"arrows": "to", "from": "Subtopic 74", "to": "Detail YY"}, {"arrows": "to", "from": "Subtopic 75", "to": "Detail ZZ"}, {"arrows": "to", "from": "Subtopic 76", "to": "Detail AA"}, {"arrows": "to", "from": "Subtopic 77", "to": "Detail BB"}, {"arrows": "to", "from": "g63", "to": "Subtopic 78"}, {"arrows": "to", "from": "Subtopic 78", "to": "Detail CC"}, {"arrows": "to", "from": "Subtopic 79", "to": "Detail DD"}, {"arrows": "to", "from": "Subtopic 81", "to": "Detail FF"}, {"arrows": "to", "from": "uni0063", "to": "Subtopic 82"}, {"arrows": "to", "from": "Subtopic 82", "to": "Detail GG"}, {"arrows": "to", "from": "Subtopic 84", "to": "Detail II"}, {"arrows": "to", "from": "Subtopic 85", "to": "Detail JJ"}, {"arrows": "to", "from": "Subtopic 86", "to": "Detail KK"}, {"arrows": "to", "from": "Subtopic 87", "to": "Detail LL"}, {"arrows": "to", "from": "Subtopic 88", "to": "Detail MM"}, {"arrows": "to", "from": "Subtopic 89", "to": "Detail NN"}, {"arrows": "to", "from": "Subtopic 90", "to": "Detail OO"}, {"arrows": "to", "from": "Subtopic 91", "to": "Detail PP"}, {"arrows": "to", "from": "Subtopic 96", "to": "Detail UU"}, {"arrows": "to", "from": "Subtopic 97", "to": "Detail VV"}, {"arrows": "to", "from": "Subtopic 98", "to": "Detail WW"}, {"arrows": "to", "from": "Subtopic 102", "to": "Detail AA"}, {"arrows": "to", "from": "Subtopic 103", "to": "Detail BB"}, {"arrows": "to", "from": "Subtopic 104", "to": "Detail CC"}, {"arrows": "to", "from": "Subtopic 105", "to": "Detail DD"}, {"arrows": "to", "from": "Subtopic 106", "to": "Detail EE"}, {"arrows": "to", "from": "Subtopic 107", "to": "Detail FF"}, {"arrows": "to", "from": "Subtopic 108", "to": "Detail GG"}, {"arrows": "to", "from": "Subtopic 109", "to": "Detail HH"}, {"arrows": "to", "from": "Subtopic 110", "to": "Detail II"}, {"arrows": "to", "from": "Subtopic 111", "to": "Detail JJ"}, {"arrows": "to", "from": "Subtopic 112", "to": "Detail KK"}, {"arrows": "to", "from": "Subtopic 113", "to": "Detail LL"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

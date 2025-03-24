@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Interference", "label": "Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Average Intensity", "label": "Average Intensity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Shift Independence", "label": "Shift Independence", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Illustrations of Interference", "label": "Illustrations of Interference", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Wave Optics", "label": "Wave Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Polarization", "label": "Polarization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction", "label": "Diffraction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Superposition", "label": "Superposition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Results due to Superposition", "label": "Results due to Superposition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Graphical View", "label": "Graphical View", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thin Films", "label": "Thin Films", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Diffraction and Optical Instruments", "label": "Diffraction and Optical Instruments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "222121minmaxwavelength", "label": "222121minmaxwavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "So spectrum of wavelength", "label": "So spectrum of wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "So spectrum", "label": "So spectrum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "independent of wavelength", "label": "independent of wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "maximum minimum", "label": "maximum minimum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a1 = a2", "label": "a1 = a2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "AAmin = 0Amin = a1 \u2013 a2If", "label": "AAmin = 0Amin = a1 \u2013 a2If", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "AAmax = 2a0If", "label": "AAmax = 2a0If", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "where a1, a2 = Individual amplitudes", "label": "where a1, a2 = Individual amplitudes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g73 = Phase difference between the waves at an instant when they are meeting aray optics can be taken as a limiting case of wave optics", "label": "g73 = Phase difference between the waves at an instant when they are meeting aray optics can be taken as a limiting case of wave optics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hence Ray optics can be taken as a limiting case of wave optics", "label": "Hence Ray optics can be taken as a limiting case of wave optics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "reflected and refracted rays becomes partially polarised", "label": "reflected and refracted rays becomes partially polarised", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For glass g113 g124 g8457P, for water g113 g124 g8453P polariser", "label": "For glass g113 g124 g8457P, for water g113 g124 g8453P polariser", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "reflected light may be completely polarised, partially polarized or unpolarized. This would depend on the angle of incidence", "label": "reflected light may be completely polarised, partially polarized or unpolarized. This would depend on the angle of incidence", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Results due to the superposition", "label": "Results due to the superposition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Results due to the super-of waves from two coherent sources", "label": "Results due to the super-of waves from two coherent sources", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Common examples : Diffraction at a straight edge, Diffraction at single slit", "label": "Common examples : Diffraction at a straight edge, Diffraction at single slit", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The above two assumptions are known as Huygen\u2019s principle or Huygens\u2019 construction", "label": "The above two assumptions are known as Huygen\u2019s principle or Huygens\u2019 construction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or respectively then the ratio of resultant intensity at point P and Q will be", "label": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or respectively then the ratio of resultant intensity at point P and Q will be", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "When the scattred light is seen in a direction perpendicular to the direction of incidence, it is found the plane perpendicular to the direction of propagation is called Unpolarised light", "label": "When the scattred light is seen in a direction perpendicular to the direction of incidence, it is found the plane perpendicular to the direction of propagation is called Unpolarised light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The oscillation may be resolved into the displacements (y1 and y2) produced by individual waves. i.e. 21yyyg71g71g71g14", "label": "The oscillation may be resolved into the displacements (y1 and y2) produced by individual waves. i.e. 21yyyg71g71g71g14", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "3.1  Graphical view", "label": "3.1  Graphical view", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "4.2 Resultant intensity due to two identical waves", "label": "4.2 Resultant intensity due to two identical waves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For two coherent sources the resultant intensity is given by", "label": "For two coherent sources the resultant intensity is given by", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "plane perpendicular to the plane of oscillation is called plane of polarisation", "label": "plane perpendicular to the plane of oscillation is called plane of polarisation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The plane of polarisation is perpendicular to the plane of transmission of the polarised light", "label": "The plane of polarisation is perpendicular to the plane of transmission of the polarised light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction at a straight edge", "label": "Diffraction at a straight edge", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction at single slit", "label": "Diffraction at single slit", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction of light limits the ability of optical instruments to form clear images of objects when they stress analysis", "label": "Diffraction of light limits the ability of optical instruments to form clear images of objects when they stress analysis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "9.6 Malus law", "label": "9.6 Malus law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "path difference between the interfering waves meeting at a point P on the screen is given by g84 g32 g32sindDydx where x isreflected image, the central fringe is dark instead of bright one", "label": "path difference between the interfering waves meeting at a point P on the screen is given by g84 g32 g32sindDydx where x isreflected image, the central fringe is dark instead of bright one", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "5.1 Path differences", "label": "5.1 Path differences", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "lits S1 and S2 which are very close together acts as two coherent sources, when waves coming from two coherent sources travel in the same direction type. Common examples :", "label": "lits S1 and S2 which are very close together acts as two coherent sources, when waves coming from two coherent sources travel in the same direction type. Common examples :", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "In thin films interference takes place between the waves reflected to be plane polarized (as detected by the analyser). The phenomenon is called polarization by scattering", "label": "In thin films interference takes place between the waves reflected to be plane polarized (as detected by the analyser). The phenomenon is called polarization by scattering", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The objective lens of optical instrument like telescope or max2121g159  If two waves having equal intensity (I1 = I2 = I0) meets at two locations P and Q with path difference g391 and g392", "label": "The objective lens of optical instrument like telescope or max2121g159  If two waves having equal intensity (I1 = I2 = I0) meets at two locations P and Q with path difference g391 and g392", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Interference", "to": "Average Intensity"}, {"arrows": "to", "from": "Interference", "to": "Shift Independence"}, {"arrows": "to", "from": "Interference", "to": "Illustrations of Interference"}, {"arrows": "to", "from": "Interference", "to": "Wave Optics"}, {"arrows": "to", "from": "Interference", "to": "Polarization"}, {"arrows": "to", "from": "Interference", "to": "Diffraction"}, {"arrows": "to", "from": "Interference", "to": "Superposition"}, {"arrows": "to", "from": "Interference", "to": "Results due to Superposition"}, {"arrows": "to", "from": "Interference", "to": "Graphical View"}, {"arrows": "to", "from": "Interference", "to": "Thin Films"}, {"arrows": "to", "from": "Interference", "to": "Diffraction and Optical Instruments"}, {"arrows": "to", "from": "Average Intensity", "to": "222121minmaxwavelength"}, {"arrows": "to", "from": "Average Intensity", "to": "So spectrum of wavelength"}, {"arrows": "to", "from": "Average Intensity", "to": "So spectrum"}, {"arrows": "to", "from": "Shift Independence", "to": "independent of wavelength"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "maximum minimum"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "a1 = a2"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "AAmin = 0Amin = a1 \u2013 a2If"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "AAmax = 2a0If"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "where a1, a2 = Individual amplitudes"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "g73 = Phase difference between the waves at an instant when they are meeting aray optics can be taken as a limiting case of wave optics"}, {"arrows": "to", "from": "Illustrations of Interference", "to": "Hence Ray optics can be taken as a limiting case of wave optics"}, {"arrows": "to", "from": "Wave Optics", "to": "reflected and refracted rays becomes partially polarised"}, {"arrows": "to", "from": "Wave Optics", "to": "For glass g113 g124 g8457P, for water g113 g124 g8453P polariser"}, {"arrows": "to", "from": "Wave Optics", "to": "reflected light may be completely polarised, partially polarized or unpolarized. This would depend on the angle of incidence"}, {"arrows": "to", "from": "Wave Optics", "to": "Results due to the superposition"}, {"arrows": "to", "from": "Wave Optics", "to": "Results due to the super-of waves from two coherent sources"}, {"arrows": "to", "from": "Wave Optics", "to": "Common examples : Diffraction at a straight edge, Diffraction at single slit"}, {"arrows": "to", "from": "Wave Optics", "to": "The above two assumptions are known as Huygen\u2019s principle or Huygens\u2019 construction"}, {"arrows": "to", "from": "Wave Optics", "to": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or respectively then the ratio of resultant intensity at point P and Q will be"}, {"arrows": "to", "from": "Wave Optics", "to": "When the scattred light is seen in a direction perpendicular to the direction of incidence, it is found the plane perpendicular to the direction of propagation is called Unpolarised light"}, {"arrows": "to", "from": "Wave Optics", "to": "The oscillation may be resolved into the displacements (y1 and y2) produced by individual waves. i.e. 21yyyg71g71g71g14"}, {"arrows": "to", "from": "Wave Optics", "to": "3.1  Graphical view"}, {"arrows": "to", "from": "Wave Optics", "to": "4.2 Resultant intensity due to two identical waves"}, {"arrows": "to", "from": "Wave Optics", "to": "For two coherent sources the resultant intensity is given by"}, {"arrows": "to", "from": "Polarization", "to": "plane perpendicular to the plane of oscillation is called plane of polarisation"}, {"arrows": "to", "from": "Polarization", "to": "The plane of polarisation is perpendicular to the plane of transmission of the polarised light"}, {"arrows": "to", "from": "Diffraction", "to": "Diffraction at a straight edge"}, {"arrows": "to", "from": "Diffraction", "to": "Diffraction at single slit"}, {"arrows": "to", "from": "Diffraction", "to": "Diffraction of light limits the ability of optical instruments to form clear images of objects when they stress analysis"}, {"arrows": "to", "from": "Diffraction", "to": "9.6 Malus law"}, {"arrows": "to", "from": "Superposition", "to": "path difference between the interfering waves meeting at a point P on the screen is given by g84 g32 g32sindDydx where x isreflected image, the central fringe is dark instead of bright one"}, {"arrows": "to", "from": "Superposition", "to": "5.1 Path differences"}, {"arrows": "to", "from": "Superposition", "to": "lits S1 and S2 which are very close together acts as two coherent sources, when waves coming from two coherent sources travel in the same direction type. Common examples :"}, {"arrows": "to", "from": "Thin Films", "to": "In thin films interference takes place between the waves reflected to be plane polarized (as detected by the analyser). The phenomenon is called polarization by scattering"}, {"arrows": "to", "from": "Diffraction and Optical Instruments", "to": "The objective lens of optical instrument like telescope or max2121g159  If two waves having equal intensity (I1 = I2 = I0) meets at two locations P and Q with path difference g391 and g392"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

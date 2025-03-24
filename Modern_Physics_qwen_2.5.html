@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Mathematics", "label": "Mathematics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Calculus", "label": "Calculus", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Algebra", "label": "Algebra", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mechanics", "label": "Mechanics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Integral Calculus", "label": "Integral Calculus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Differential Calculus", "label": "Differential Calculus", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Calculus Applications", "label": "Calculus Applications", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear Algebra", "label": "Linear Algebra", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Abstract Algebra", "label": "Abstract Algebra", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Complex Numbers", "label": "Complex Numbers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Classical Mechanics", "label": "Classical Mechanics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Continuum Mechanics", "label": "Continuum Mechanics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Quantum Mechanics", "label": "Quantum Mechanics", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Physics", "label": "Physics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electricity and Magnetism", "label": "Electricity and Magnetism", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Optics", "label": "Optics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thermodynamics", "label": "Thermodynamics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coulomb\u0027s Law", "label": "Coulomb\u0027s Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Maxwell\u0027s Equations", "label": "Maxwell\u0027s Equations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Electric Circuits", "label": "Electric Circuits", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reflection and Refraction", "label": "Reflection and Refraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference", "label": "Interference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Polarization", "label": "Polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "First Law", "label": "First Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Second Law", "label": "Second Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Phase Transitions", "label": "Phase Transitions", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Mathematics", "to": "Calculus"}, {"arrows": "to", "from": "Mathematics", "to": "Algebra"}, {"arrows": "to", "from": "Mathematics", "to": "Mechanics"}, {"arrows": "to", "from": "Calculus", "to": "Integral Calculus"}, {"arrows": "to", "from": "Calculus", "to": "Differential Calculus"}, {"arrows": "to", "from": "Calculus", "to": "Calculus Applications"}, {"arrows": "to", "from": "Algebra", "to": "Linear Algebra"}, {"arrows": "to", "from": "Algebra", "to": "Abstract Algebra"}, {"arrows": "to", "from": "Algebra", "to": "Complex Numbers"}, {"arrows": "to", "from": "Mechanics", "to": "Classical Mechanics"}, {"arrows": "to", "from": "Mechanics", "to": "Continuum Mechanics"}, {"arrows": "to", "from": "Mechanics", "to": "Quantum Mechanics"}, {"arrows": "to", "from": "Physics", "to": "Electricity and Magnetism"}, {"arrows": "to", "from": "Physics", "to": "Optics"}, {"arrows": "to", "from": "Physics", "to": "Thermodynamics"}, {"arrows": "to", "from": "Electricity and Magnetism", "to": "Coulomb\u0027s Law"}, {"arrows": "to", "from": "Electricity and Magnetism", "to": "Maxwell\u0027s Equations"}, {"arrows": "to", "from": "Electricity and Magnetism", "to": "Electric Circuits"}, {"arrows": "to", "from": "Optics", "to": "Reflection and Refraction"}, {"arrows": "to", "from": "Optics", "to": "Interference"}, {"arrows": "to", "from": "Optics", "to": "Polarization"}, {"arrows": "to", "from": "Thermodynamics", "to": "First Law"}, {"arrows": "to", "from": "Thermodynamics", "to": "Second Law"}, {"arrows": "to", "from": "Thermodynamics", "to": "Phase Transitions"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

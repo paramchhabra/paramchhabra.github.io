@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Experiments", "label": "Experiments", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tossing two dice, sum of numbers", "label": "Tossing two dice, sum of numbers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tossing a coin 50 times, number of heads", "label": "Tossing a coin 50 times, number of heads", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Random sampling from defective articles", "label": "Random sampling from defective articles", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Random Variable", "label": "Random Variable", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition", "label": "Definition", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Basic Definitions", "label": "Basic Definitions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Random Experiment", "label": "Random Experiment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Sample-space", "label": "Sample-space", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Experiment or Trial", "label": "Experiment or Trial", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Event", "label": "Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Simple Event", "label": "Simple Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Compound Event", "label": "Compound Event", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "An experiment with known possible outcomes but uncertain specific outcome", "label": "An experiment with known possible outcomes but uncertain specific outcome", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Tossing of a coin", "label": "Example: Tossing of a coin", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Set of all possible outcomes of a random experiment", "label": "Set of all possible outcomes of a random experiment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Denoted by \u2018S\u2019", "label": "Denoted by \u2018S\u2019", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Tossing a die, S = {1, 2, 3, 4, 5, 6}", "label": "Example: Tossing a die, S = {1, 2, 3, 4, 5, 6}", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Series of actions with uncertain outcomes", "label": "Series of actions with uncertain outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Tossing a coin, Selecting a card, throwing a dice", "label": "Examples: Tossing a coin, Selecting a card, throwing a dice", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Subset of sample-space", "label": "Subset of sample-space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interest in certain events rather than specific outcomes", "label": "Interest in certain events rather than specific outcomes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Set containing only one element of the sample-space", "label": "Set containing only one element of the sample-space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Union of sample points", "label": "Union of sample points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing a heart or a diamond from a deck of cards", "label": "Example: Drawing a heart or a diamond from a deck of cards", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Probability", "label": "Probability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: P(A) = n/N (favorable cases/total cases)", "label": "Formula: P(A) = n/N (favorable cases/total cases)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Remarks", "label": "Remarks", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Independent Events", "label": "Independent Events", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Multiplication Rule", "label": "Multiplication Rule", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Probability of drawing two black balls from an urn", "label": "Example: Probability of drawing two black balls from an urn", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability of occurrence of one event is not affected by the other", "label": "Probability of occurrence of one event is not affected by the other", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: P(E \u2229 F) = P(E) * P(F)", "label": "Formula: P(E \u2229 F) = P(E) * P(F)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Tossing a die, events of multiple of 3 and even", "label": "Example: Tossing a die, events of multiple of 3 and even", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability of two events occurring together", "label": "Probability of two events occurring together", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: P(E \u2229 F) = P(E) * P(F|E)", "label": "Formula: P(E \u2229 F) = P(E) * P(F|E)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Random Variables and its Probability Distributions", "label": "Random Variables and its Probability Distributions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interest in numbers associated with outcomes", "label": "Interest in numbers associated with outcomes", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mean of a random variable", "label": "Mean of a random variable", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Variance of a random variable", "label": "Variance of a random variable", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bayes\u0027 Theorem", "label": "Bayes\u0027 Theorem", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mutually exclusive Event", "label": "Mutually exclusive Event", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conditional Probability", "label": "Conditional Probability", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Bernoulli Trials and Binomial Distribution", "label": "Bernoulli Trials and Binomial Distribution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measure of central tendency", "label": "Measure of central tendency", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: \u03bc = \u03a3 (x_i * p_i)", "label": "Formula: \u03bc = \u03a3 (x_i * p_i)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Weighted average of possible values", "label": "Example: Weighted average of possible values", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Measure of variability", "label": "Measure of variability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: \u03c3\u00b2 = \u03a3 (p_i * (x_i - \u03bc)\u00b2)", "label": "Formula: \u03c3\u00b2 = \u03a3 (p_i * (x_i - \u03bc)\u00b2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Distribution of X and Y with same mean but different variability", "label": "Example: Distribution of X and Y with same mean but different variability", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Description", "label": "Description", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Proof", "label": "Proof", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Remark", "label": "Remark", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Terminology", "label": "Terminology", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Events that cannot occur simultaneously", "label": "Events that cannot occur simultaneously", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability of an event given another event has occurred", "label": "Probability of an event given another event has occurred", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: P(B|A) = P(A \u2229 B) / P(A)", "label": "Formula: P(B|A) = P(A \u2229 B) / P(A)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Probability of drawing a ball from a specific bag given its color", "label": "Example: Probability of drawing a ball from a specific bag given its color", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Conditions", "label": "Conditions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing balls from an urn with replacement and without replacement", "label": "Example: Drawing balls from an urn with replacement and without replacement", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Bernoulli Trials", "label": "Bernoulli Trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Independent trials with two outcomes: success or failure", "label": "Independent trials with two outcomes: success or failure", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Drawing balls from an urn", "label": "Example: Drawing balls from an urn", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Binomial Distribution", "label": "Binomial Distribution", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Probability distribution of number of successes in n Bernoulli trials", "label": "Probability distribution of number of successes in n Bernoulli trials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: P(X=x) = C(n, x) * p^x * q^(n-x)", "label": "Formula: P(X=x) = C(n, x) * p^x * q^(n-x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: Probability distribution of successes in 30 trials", "label": "Example: Probability distribution of successes in 30 trials", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Experiments", "to": "Tossing two dice, sum of numbers"}, {"arrows": "to", "from": "Experiments", "to": "Tossing a coin 50 times, number of heads"}, {"arrows": "to", "from": "Experiments", "to": "Random sampling from defective articles"}, {"arrows": "to", "from": "Random Variable", "to": "Definition"}, {"arrows": "to", "from": "Random Variable", "to": "Basic Definitions"}, {"arrows": "to", "from": "Random Variable", "to": "Random Experiment"}, {"arrows": "to", "from": "Random Variable", "to": "Sample-space"}, {"arrows": "to", "from": "Random Variable", "to": "Experiment or Trial"}, {"arrows": "to", "from": "Random Variable", "to": "Event"}, {"arrows": "to", "from": "Random Variable", "to": "Simple Event"}, {"arrows": "to", "from": "Random Variable", "to": "Compound Event"}, {"arrows": "to", "from": "Random Experiment", "to": "An experiment with known possible outcomes but uncertain specific outcome"}, {"arrows": "to", "from": "Random Experiment", "to": "Example: Tossing of a coin"}, {"arrows": "to", "from": "Sample-space", "to": "Set of all possible outcomes of a random experiment"}, {"arrows": "to", "from": "Sample-space", "to": "Denoted by \u2018S\u2019"}, {"arrows": "to", "from": "Sample-space", "to": "Example: Tossing a die, S = {1, 2, 3, 4, 5, 6}"}, {"arrows": "to", "from": "Experiment or Trial", "to": "Series of actions with uncertain outcomes"}, {"arrows": "to", "from": "Experiment or Trial", "to": "Examples: Tossing a coin, Selecting a card, throwing a dice"}, {"arrows": "to", "from": "Event", "to": "Subset of sample-space"}, {"arrows": "to", "from": "Event", "to": "Interest in certain events rather than specific outcomes"}, {"arrows": "to", "from": "Simple Event", "to": "Set containing only one element of the sample-space"}, {"arrows": "to", "from": "Compound Event", "to": "Union of sample points"}, {"arrows": "to", "from": "Compound Event", "to": "Example: Drawing a heart or a diamond from a deck of cards"}, {"arrows": "to", "from": "Probability", "to": "Definition"}, {"arrows": "to", "from": "Probability", "to": "Formula: P(A) = n/N (favorable cases/total cases)"}, {"arrows": "to", "from": "Probability", "to": "Remarks"}, {"arrows": "to", "from": "Probability", "to": "Independent Events"}, {"arrows": "to", "from": "Probability", "to": "Multiplication Rule"}, {"arrows": "to", "from": "Probability", "to": "Example: Probability of drawing two black balls from an urn"}, {"arrows": "to", "from": "Independent Events", "to": "Probability of occurrence of one event is not affected by the other"}, {"arrows": "to", "from": "Independent Events", "to": "Formula: P(E \u2229 F) = P(E) * P(F)"}, {"arrows": "to", "from": "Independent Events", "to": "Example: Tossing a die, events of multiple of 3 and even"}, {"arrows": "to", "from": "Multiplication Rule", "to": "Probability of two events occurring together"}, {"arrows": "to", "from": "Multiplication Rule", "to": "Formula: P(E \u2229 F) = P(E) * P(F|E)"}, {"arrows": "to", "from": "Multiplication Rule", "to": "Example: Probability of drawing two black balls from an urn"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Interest in numbers associated with outcomes"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Mean of a random variable"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Variance of a random variable"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Bayes\u0027 Theorem"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Mutually exclusive Event"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Conditional Probability"}, {"arrows": "to", "from": "Random Variables and its Probability Distributions", "to": "Bernoulli Trials and Binomial Distribution"}, {"arrows": "to", "from": "Mean of a random variable", "to": "Measure of central tendency"}, {"arrows": "to", "from": "Mean of a random variable", "to": "Formula: \u03bc = \u03a3 (x_i * p_i)"}, {"arrows": "to", "from": "Mean of a random variable", "to": "Example: Weighted average of possible values"}, {"arrows": "to", "from": "Variance of a random variable", "to": "Measure of variability"}, {"arrows": "to", "from": "Variance of a random variable", "to": "Formula: \u03c3\u00b2 = \u03a3 (p_i * (x_i - \u03bc)\u00b2)"}, {"arrows": "to", "from": "Variance of a random variable", "to": "Example: Distribution of X and Y with same mean but different variability"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Description"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Proof"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Remark"}, {"arrows": "to", "from": "Bayes\u0027 Theorem", "to": "Terminology"}, {"arrows": "to", "from": "Mutually exclusive Event", "to": "Events that cannot occur simultaneously"}, {"arrows": "to", "from": "Conditional Probability", "to": "Probability of an event given another event has occurred"}, {"arrows": "to", "from": "Conditional Probability", "to": "Formula: P(B|A) = P(A \u2229 B) / P(A)"}, {"arrows": "to", "from": "Conditional Probability", "to": "Example: Probability of drawing a ball from a specific bag given its color"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Definition"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Conditions"}, {"arrows": "to", "from": "Bernoulli Trials and Binomial Distribution", "to": "Example: Drawing balls from an urn with replacement and without replacement"}, {"arrows": "to", "from": "Bernoulli Trials", "to": "Independent trials with two outcomes: success or failure"}, {"arrows": "to", "from": "Bernoulli Trials", "to": "Conditions"}, {"arrows": "to", "from": "Bernoulli Trials", "to": "Example: Drawing balls from an urn"}, {"arrows": "to", "from": "Binomial Distribution", "to": "Probability distribution of number of successes in n Bernoulli trials"}, {"arrows": "to", "from": "Binomial Distribution", "to": "Formula: P(X=x) = C(n, x) * p^x * q^(n-x)"}, {"arrows": "to", "from": "Binomial Distribution", "to": "Example: Probability distribution of successes in 30 trials"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

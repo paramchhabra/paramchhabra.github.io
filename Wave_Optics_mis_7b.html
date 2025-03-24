@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Interference Redistribution of Energy", "label": "Interference Redistribution of Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Average Intensity", "label": "Average Intensity", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Spectrum of Wavelength", "label": "Spectrum of Wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Shift is independent of wavelength", "label": "Shift is independent of wavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "222121minmaxwavelength", "label": "222121minmaxwavelength", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Spectrum", "label": "Spectrum", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Radiation from the source", "label": "Radiation from the source", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Interference Minima and Maxima", "label": "Interference Minima and Maxima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula for minima", "label": "Formula for minima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula for maxima", "label": "Formula for maxima", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Formula for Minima", "label": "Formula for Minima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a1 = a2", "label": "a1 = a2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Amin = 0Amin = a1 \u2013 a2", "label": "Amin = 0Amin = a1 \u2013 a2", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Formula for Maxima", "label": "Formula for Maxima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "AAmax = 2a0If", "label": "AAmax = 2a0If", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Waves Resultant Amplitude", "label": "Waves Resultant Amplitude", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g73g14g14 g32 cosaa2aaA212221", "label": "g73g14g14 g32 cosaa2aaA212221", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Sin-Gordon Equation", "label": "Sin-Gordon Equation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "dnsing79g32 g84", "label": "dnsing79g32 g84", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Secondary Maxima", "label": "Secondary Maxima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "occurs", "label": "occurs", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference between the waves", "label": "Path difference between the waves", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Path Difference for Secondary Maxima", "label": "Path Difference for Secondary Maxima", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g39 = ng79;", "label": "g39 = ng79;", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "where n = 1, 2, 3 ...", "label": "where n = 1, 2, 3 ...", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Wave Optics", "label": "Wave Optics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reflected and refracted rays become partially polarised", "label": "Reflected and refracted rays become partially polarised", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Polarisation for Glass and Water", "label": "Polarisation for Glass and Water", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For glass g113 g124 g8457P", "label": "For glass g113 g124 g8457P", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "For water g113 g124 g8453P", "label": "For water g113 g124 g8453P", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Intensity of Transmitted Polarised Light", "label": "Intensity of Transmitted Polarised Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "is half the intensity of unpolarised light", "label": "is half the intensity of unpolarised light", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Huygen\u2019s Principle", "label": "Huygen\u2019s Principle", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Huygens\u2019 principle or Huygens\u2019 construction", "label": "Huygens\u2019 principle or Huygens\u2019 construction", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Angle of Incidence for Complete Plane Polarization", "label": "Angle of Incidence for Complete Plane Polarization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "polarizing angle or", "label": "polarizing angle or", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "respectively then the ratio of resultant intensity at point P and Q will be", "label": "respectively then the ratio of resultant intensity at point P and Q will be", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Resultant Intensity Ratio", "label": "Resultant Intensity Ratio", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g184", "label": "g184", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g185", "label": "g185", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g183g168", "label": "g183g168", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g169", "label": "g169", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g167", "label": "g167", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g79", "label": "g79", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g39g83", "label": "g39g83", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g39", "label": "g39", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g83", "label": "g83", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Unpolarised Light", "label": "Unpolarised Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "is found the plane perpendicular to the direction of propagation", "label": "is found the plane perpendicular to the direction of propagation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "i.e. 21yyyg71g71g71g14 g32", "label": "i.e. 21yyyg71g71g71g14 g32", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Graphical View", "label": "Graphical View", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "WAVE OPTICSWAVE OPTICS", "label": "WAVE OPTICSWAVE OPTICS", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Path difference between the interfering waves meeting at a point P on the screen is given by", "label": "Path difference between the interfering waves meeting at a point P on the screen is given by", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Path Difference", "label": "Path Difference", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "g84 g32 g32sindDydx where x is", "label": "g84 g32 g32sindDydx where x is", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "reflected image, the central fringe is dark instead of bright one", "label": "reflected image, the central fringe is dark instead of bright one", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Diffraction at a Straight Edge and Single Slit", "label": "Diffraction at a Straight Edge and Single Slit", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction at a straight edge", "label": "Diffraction at a straight edge", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction at single slit", "label": "Diffraction at single slit", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Huygen\u2019s Principle Key Points", "label": "Huygen\u2019s Principle Key Points", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or", "label": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The plane perpendicular to the plane of oscillation is called plane of polarisation", "label": "The plane perpendicular to the plane of oscillation is called plane of polarisation", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Polarization by Scattering", "label": "Polarization by Scattering", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "In thin films interference takes place between the waves reflected", "label": "In thin films interference takes place between the waves reflected", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "gives a method to know as to how light spreads out in the medium", "label": "gives a method to know as to how light spreads out in the medium", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Polarizer", "label": "Polarizer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "for water g113 g124 g8453P", "label": "for water g113 g124 g8453P", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Malus Law", "label": "Malus Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "This law states that the intensity of the polarised light reflected from a transparent medium (refractive index = g3g80)", "label": "This law states that the intensity of the polarised light reflected from a transparent medium (refractive index = g3g80)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "reflected light is completely plane polarised at a certain angle (called the angle of polarisation g84p)", "label": "reflected light is completely plane polarised at a certain angle (called the angle of polarisation g84p)", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Plane Wavefront", "label": "Plane Wavefront", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Depending upon the shape of the source of light, wavefront can", "label": "Depending upon the shape of the source of light, wavefront can", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Interference in reflectedInterference in refractedlightlight", "label": "Interference in reflectedInterference in refractedlightlight", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Wave Normal", "label": "Wave Normal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Since the ray of light is normal to the wavefront, it is sometimes called as the wave normal", "label": "Since the ray of light is normal to the wavefront, it is sometimes called as the wave normal", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Thin Films", "label": "Thin Films", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The phenomenon is called polarization by scattering", "label": "The phenomenon is called polarization by scattering", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Diffraction of Light", "label": "Diffraction of Light", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Diffraction of light limits the ability of optical instruments to form clear images of objects when they", "label": "Diffraction of light limits the ability of optical instruments to form clear images of objects when they", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Stress Analysis", "label": "Stress Analysis", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Stress analysis.", "label": "Stress analysis.", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Interference Redistribution of Energy", "to": "Average Intensity"}, {"arrows": "to", "from": "Interference Redistribution of Energy", "to": "Spectrum of Wavelength"}, {"arrows": "to", "from": "Interference Redistribution of Energy", "to": "Shift is independent of wavelength"}, {"arrows": "to", "from": "Average Intensity", "to": "222121minmaxwavelength"}, {"arrows": "to", "from": "Spectrum of Wavelength", "to": "Spectrum"}, {"arrows": "to", "from": "Spectrum of Wavelength", "to": "Radiation from the source"}, {"arrows": "to", "from": "Interference Minima and Maxima", "to": "Formula for minima"}, {"arrows": "to", "from": "Interference Minima and Maxima", "to": "Formula for maxima"}, {"arrows": "to", "from": "Formula for Minima", "to": "a1 = a2"}, {"arrows": "to", "from": "Formula for Minima", "to": "Amin = 0Amin = a1 \u2013 a2"}, {"arrows": "to", "from": "Formula for Maxima", "to": "a1 = a2"}, {"arrows": "to", "from": "Formula for Maxima", "to": "AAmax = 2a0If"}, {"arrows": "to", "from": "Waves Resultant Amplitude", "to": "g73g14g14 g32 cosaa2aaA212221"}, {"arrows": "to", "from": "Sin-Gordon Equation", "to": "dnsing79g32 g84"}, {"arrows": "to", "from": "Secondary Maxima", "to": "occurs"}, {"arrows": "to", "from": "Secondary Maxima", "to": "Path difference between the waves"}, {"arrows": "to", "from": "Path Difference for Secondary Maxima", "to": "g39 = ng79;"}, {"arrows": "to", "from": "Path Difference for Secondary Maxima", "to": "where n = 1, 2, 3 ..."}, {"arrows": "to", "from": "Wave Optics", "to": "Reflected and refracted rays become partially polarised"}, {"arrows": "to", "from": "Polarisation for Glass and Water", "to": "For glass g113 g124 g8457P"}, {"arrows": "to", "from": "Polarisation for Glass and Water", "to": "For water g113 g124 g8453P"}, {"arrows": "to", "from": "Intensity of Transmitted Polarised Light", "to": "is half the intensity of unpolarised light"}, {"arrows": "to", "from": "Huygen\u2019s Principle", "to": "Huygens\u2019 principle or Huygens\u2019 construction"}, {"arrows": "to", "from": "Angle of Incidence for Complete Plane Polarization", "to": "polarizing angle or"}, {"arrows": "to", "from": "Angle of Incidence for Complete Plane Polarization", "to": "respectively then the ratio of resultant intensity at point P and Q will be"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g184"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g185"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g183g168"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g169"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g167"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g79"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g39g83"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g39"}, {"arrows": "to", "from": "Resultant Intensity Ratio", "to": "g83"}, {"arrows": "to", "from": "Unpolarised Light", "to": "is found the plane perpendicular to the direction of propagation"}, {"arrows": "to", "from": "Unpolarised Light", "to": "i.e. 21yyyg71g71g71g14 g32"}, {"arrows": "to", "from": "Graphical View", "to": "WAVE OPTICSWAVE OPTICS"}, {"arrows": "to", "from": "Graphical View", "to": "Path difference between the interfering waves meeting at a point P on the screen is given by"}, {"arrows": "to", "from": "Path Difference", "to": "g84 g32 g32sindDydx where x is"}, {"arrows": "to", "from": "Path Difference", "to": "reflected image, the central fringe is dark instead of bright one"}, {"arrows": "to", "from": "Diffraction at a Straight Edge and Single Slit", "to": "Diffraction at a straight edge"}, {"arrows": "to", "from": "Diffraction at a Straight Edge and Single Slit", "to": "Diffraction at single slit"}, {"arrows": "to", "from": "Huygen\u2019s Principle Key Points", "to": "The angle of incidence at which the reflected light is completely plane polarized is called polarizing angle or"}, {"arrows": "to", "from": "Huygen\u2019s Principle Key Points", "to": "The plane perpendicular to the plane of oscillation is called plane of polarisation"}, {"arrows": "to", "from": "Polarization by Scattering", "to": "In thin films interference takes place between the waves reflected"}, {"arrows": "to", "from": "Polarization by Scattering", "to": "gives a method to know as to how light spreads out in the medium"}, {"arrows": "to", "from": "Polarizer", "to": "For glass g113 g124 g8457P"}, {"arrows": "to", "from": "Polarizer", "to": "for water g113 g124 g8453P"}, {"arrows": "to", "from": "Malus Law", "to": "This law states that the intensity of the polarised light reflected from a transparent medium (refractive index = g3g80)"}, {"arrows": "to", "from": "Malus Law", "to": "reflected light is completely plane polarised at a certain angle (called the angle of polarisation g84p)"}, {"arrows": "to", "from": "Plane Wavefront", "to": "Depending upon the shape of the source of light, wavefront can"}, {"arrows": "to", "from": "Plane Wavefront", "to": "Interference in reflectedInterference in refractedlightlight"}, {"arrows": "to", "from": "Wave Normal", "to": "Since the ray of light is normal to the wavefront, it is sometimes called as the wave normal"}, {"arrows": "to", "from": "Thin Films", "to": "In thin films interference takes place between the waves reflected"}, {"arrows": "to", "from": "Thin Films", "to": "The phenomenon is called polarization by scattering"}, {"arrows": "to", "from": "Diffraction of Light", "to": "Diffraction of light limits the ability of optical instruments to form clear images of objects when they"}, {"arrows": "to", "from": "Stress Analysis", "to": "Stress analysis."}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

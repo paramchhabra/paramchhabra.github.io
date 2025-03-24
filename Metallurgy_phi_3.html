@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Metallurgy", "label": "Metallurgy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Blast Furnace", "label": "Blast Furnace", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Basic Oxygen", "label": "Basic Oxygen", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Induction Furnace", "label": "Induction Furnace", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Ore Preparation", "label": "Ore Preparation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "The Blast Furnace Process", "label": "The Blast Furnace Process", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Furnace Operation", "label": "Furnace Operation", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Raw Materials", "label": "Raw Materials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Charge Materials", "label": "Charge Materials", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Blast Furnace Types", "label": "Blast Furnace Types", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Recycling", "label": "Recycling", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Iron and Coke", "label": "Iron and Coke", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Laboratory Monitoring", "label": "Laboratory Monitoring", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Raw Material Blending", "label": "Raw Material Blending", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Charging and Furnace Operation", "label": "Charging and Furnace Operation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tapping and Disposal", "label": "Tapping and Disposal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Iron Ore", "label": "Iron Ore", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Coke Brewing", "label": "Coke Brewing", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gas Preheaters", "label": "Gas Preheaters", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Copper Iron Ore", "label": "Copper Iron Ore", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Limestone", "label": "Limestone", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Calcination", "label": "Calcination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coke Quenching", "label": "Coke Quenching", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sintering of Ore", "label": "Sintering of Ore", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tree Ore", "label": "Tree Ore", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coke Making", "label": "Coke Making", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Heating", "label": "Heating", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coke Calorific Value", "label": "Coke Calorific Value", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coke Making Alternatives", "label": "Coke Making Alternatives", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Calcination, Preparatory Operations", "label": "Calcination, Preparatory Operations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Emission Control", "label": "Emission Control", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Pollution Control", "label": "Pollution Control", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Alternatives to Coke", "label": "Alternatives to Coke", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coal Substitutes", "label": "Coal Substitutes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Directly Heated Fluidized Bed", "label": "Directly Heated Fluidized Bed", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heat Recovery", "label": "Heat Recovery", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hot Blast Thermodynamics", "label": "Hot Blast Thermodynamics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Indirectly Heated Fluidized Bed", "label": "Indirectly Heated Fluidized Bed", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heating Limitations", "label": "Heating Limitations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Refractories", "label": "Refractories", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Equipment", "label": "Equipment", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vitrifiable", "label": "Vitrifiable", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-vitrifiable", "label": "Non-vitrifiable", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Silicates", "label": "Silicates", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Aluminosilicate", "label": "Aluminosilicate", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Clinker", "label": "Clinker", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fusible", "label": "Fusible", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnesium Oxide", "label": "Magnesium Oxide", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Manganese Oxide", "label": "Manganese Oxide", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Aluminates", "label": "Aluminates", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reduction Aids", "label": "Reduction Aids", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Hot Blast Stoves", "label": "Hot Blast Stoves", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Regenerative Batch HRSG", "label": "Regenerative Batch HRSG", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Preheaters", "label": "Preheaters", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Measuring Heat Transfer", "label": "Measuring Heat Transfer", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Exhaust Treatment", "label": "Exhaust Treatment", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Refractory Failure Diagnostics", "label": "Refractory Failure Diagnostics", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Charging of Refractory", "label": "Charging of Refractory", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Particle Size", "label": "Particle Size", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Batch vs. Continuous Calcination", "label": "Batch vs. Continuous Calcination", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Limestone Processing", "label": "Limestone Processing", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Lime Usage in Steel Plant", "label": "Lime Usage in Steel Plant", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "De-sulphurization", "label": "De-sulphurization", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fluidized Beds", "label": "Fluidized Beds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vegetable-oil Lime", "label": "Vegetable-oil Lime", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "New Technologies", "label": "New Technologies", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types", "label": "Types", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Bed Constituents", "label": "Bed Constituents", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reporting Errors", "label": "Reporting Errors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Pre-calcination Size", "label": "Pre-calcination Size", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Fine Abyssal Go", "label": "Fine Abyssal Go", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Iron Ore Direct Reduction", "label": "Iron Ore Direct Reduction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Gas Reduction", "label": "Gas Reduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metallurgical Coke Markets", "label": "Metallurgical Coke Markets", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "TR Cleveland aims to create and maintain clean Hydrogen", "label": "TR Cleveland aims to create and maintain clean Hydrogen", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Inherent Natural Gas De-sulfurization", "label": "Inherent Natural Gas De-sulfurization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gas Reduction and Fluidized Beds", "label": "Gas Reduction and Fluidized Beds", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "DR Capacity", "label": "DR Capacity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CO2 Emissions", "label": "CO2 Emissions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Operational Aspects", "label": "Operational Aspects", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Advantages and Limitations", "label": "Advantages and Limitations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Calculations", "label": "Calculations", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metallurgical Heat Transfer", "label": "Metallurgical Heat Transfer", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gas Losses and Operating Practices", "label": "Gas Losses and Operating Practices", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Scale Removal", "label": "Scale Removal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gas Condensing", "label": "Gas Condensing", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Coke Oven Gas To Fuels", "label": "Coke Oven Gas To Fuels", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Desulfurization Methods", "label": "Desulfurization Methods", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Cooled Coke", "label": "Cooled Coke", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Products and By-products", "label": "Products and By-products", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Sulfur Content", "label": "Sulfur Content", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Viscosity", "label": "Viscosity", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Furnace Roe Ore", "label": "Furnace Roe Ore", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Main-blowing operation", "label": "Main-blowing operation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Steam Heading", "label": "Steam Heading", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "High Limestone", "label": "High Limestone", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Recharging after preventive maintenance", "label": "Recharging after preventive maintenance", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Control of sulphur pick-up", "label": "Control of sulphur pick-up", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Slag Maximum Organic VOC", "label": "Slag Maximum Organic VOC", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "GEO", "label": "GEO", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Desulfurization", "label": "Desulfurization", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Slag Management System", "label": "Slag Management System", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Iron Slag", "label": "Iron Slag", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Slag", "label": "Slag", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tap Holes", "label": "Tap Holes", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnetite Feed", "label": "Magnetite Feed", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reduction Depth", "label": "Reduction Depth", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy Recovery", "label": "Energy Recovery", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Recycled Slag", "label": "Recycled Slag", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Non-CASS slags", "label": "Non-CASS slags", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Waste Slags", "label": "Waste Slags", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Metallurgy", "to": "Blast Furnace"}, {"arrows": "to", "from": "Metallurgy", "to": "Basic Oxygen"}, {"arrows": "to", "from": "Metallurgy", "to": "Induction Furnace"}, {"arrows": "to", "from": "Blast Furnace", "to": "Ore Preparation"}, {"arrows": "to", "from": "Blast Furnace", "to": "The Blast Furnace Process"}, {"arrows": "to", "from": "Blast Furnace", "to": "Furnace Operation"}, {"arrows": "to", "from": "Blast Furnace", "to": "Raw Materials"}, {"arrows": "to", "from": "Blast Furnace", "to": "Charge Materials"}, {"arrows": "to", "from": "Blast Furnace", "to": "Blast Furnace Types"}, {"arrows": "to", "from": "Blast Furnace", "to": "Recycling"}, {"arrows": "to", "from": "Blast Furnace", "to": "Iron and Coke"}, {"arrows": "to", "from": "Blast Furnace", "to": "Laboratory Monitoring"}, {"arrows": "to", "from": "Blast Furnace", "to": "Raw Material Blending"}, {"arrows": "to", "from": "Blast Furnace", "to": "Charging and Furnace Operation"}, {"arrows": "to", "from": "Blast Furnace", "to": "Tapping and Disposal"}, {"arrows": "to", "from": "Raw Materials", "to": "Iron Ore"}, {"arrows": "to", "from": "Raw Materials", "to": "Coke Brewing"}, {"arrows": "to", "from": "Raw Materials", "to": "Gas Preheaters"}, {"arrows": "to", "from": "Recycling", "to": "Furnace Roe Ore"}, {"arrows": "to", "from": "Recycling", "to": "Main-blowing operation"}, {"arrows": "to", "from": "Recycling", "to": "Steam Heading"}, {"arrows": "to", "from": "Recycling", "to": "High Limestone"}, {"arrows": "to", "from": "Recycling", "to": "Recharging after preventive maintenance"}, {"arrows": "to", "from": "Recycling", "to": "Control of sulphur pick-up"}, {"arrows": "to", "from": "Recycling", "to": "Slag Maximum Organic VOC"}, {"arrows": "to", "from": "Recycling", "to": "GEO"}, {"arrows": "to", "from": "Recycling", "to": "Desulfurization"}, {"arrows": "to", "from": "Recycling", "to": "Slag Management System"}, {"arrows": "to", "from": "Iron and Coke", "to": "Iron Ore"}, {"arrows": "to", "from": "Iron and Coke", "to": "Copper Iron Ore"}, {"arrows": "to", "from": "Iron and Coke", "to": "Limestone"}, {"arrows": "to", "from": "Iron and Coke", "to": "Gas Preheaters"}, {"arrows": "to", "from": "Iron and Coke", "to": "Calcination"}, {"arrows": "to", "from": "Iron and Coke", "to": "Coke Quenching"}, {"arrows": "to", "from": "Iron and Coke", "to": "Sintering of Ore"}, {"arrows": "to", "from": "Iron and Coke", "to": "Tree Ore"}, {"arrows": "to", "from": "Coke Brewing", "to": "Coke Making"}, {"arrows": "to", "from": "Coke Brewing", "to": "Heating"}, {"arrows": "to", "from": "Coke Brewing", "to": "Coke Calorific Value"}, {"arrows": "to", "from": "Coke Brewing", "to": "Coke Making Alternatives"}, {"arrows": "to", "from": "Coke Brewing", "to": "Calcination, Preparatory Operations"}, {"arrows": "to", "from": "Coke Brewing", "to": "Emission Control"}, {"arrows": "to", "from": "Coke Brewing", "to": "Pollution Control"}, {"arrows": "to", "from": "Coke Brewing", "to": "Alternatives to Coke"}, {"arrows": "to", "from": "Coke Brewing", "to": "Coal Substitutes"}, {"arrows": "to", "from": "Gas Preheaters", "to": "Heating"}, {"arrows": "to", "from": "Gas Preheaters", "to": "Hot Blast Stoves"}, {"arrows": "to", "from": "Gas Preheaters", "to": "Charging of Refractory"}, {"arrows": "to", "from": "Limestone", "to": "Calcination"}, {"arrows": "to", "from": "Limestone", "to": "Particle Size"}, {"arrows": "to", "from": "Limestone", "to": "Batch vs. Continuous Calcination"}, {"arrows": "to", "from": "Calcination", "to": "Limestone Processing"}, {"arrows": "to", "from": "Calcination", "to": "Lime Usage in Steel Plant"}, {"arrows": "to", "from": "Calcination", "to": "De-sulphurization"}, {"arrows": "to", "from": "Calcination", "to": "Fluidized Beds"}, {"arrows": "to", "from": "Calcination", "to": "Vegetable-oil Lime"}, {"arrows": "to", "from": "Calcination", "to": "New Technologies"}, {"arrows": "to", "from": "Heating", "to": "Directly Heated Fluidized Bed"}, {"arrows": "to", "from": "Heating", "to": "Heat Recovery"}, {"arrows": "to", "from": "Heating", "to": "Hot Blast Thermodynamics"}, {"arrows": "to", "from": "Heating", "to": "Indirectly Heated Fluidized Bed"}, {"arrows": "to", "from": "Heating", "to": "Heating Limitations"}, {"arrows": "to", "from": "Pollution Control", "to": "Gas Condensing"}, {"arrows": "to", "from": "Alternatives to Coke", "to": "Iron Ore Direct Reduction"}, {"arrows": "to", "from": "Alternatives to Coke", "to": "Gas Reduction"}, {"arrows": "to", "from": "Alternatives to Coke", "to": "Metallurgical Coke Markets"}, {"arrows": "to", "from": "Hot Blast Thermodynamics", "to": "Heating"}, {"arrows": "to", "from": "Hot Blast Thermodynamics", "to": "Refractories"}, {"arrows": "to", "from": "Hot Blast Thermodynamics", "to": "Equipment"}, {"arrows": "to", "from": "Refractories", "to": "Vitrifiable"}, {"arrows": "to", "from": "Refractories", "to": "Non-vitrifiable"}, {"arrows": "to", "from": "Refractories", "to": "Silicates"}, {"arrows": "to", "from": "Refractories", "to": "Aluminosilicate"}, {"arrows": "to", "from": "Equipment", "to": "Hot Blast Stoves"}, {"arrows": "to", "from": "Equipment", "to": "Regenerative Batch HRSG"}, {"arrows": "to", "from": "Equipment", "to": "Preheaters"}, {"arrows": "to", "from": "Equipment", "to": "Measuring Heat Transfer"}, {"arrows": "to", "from": "Equipment", "to": "Exhaust Treatment"}, {"arrows": "to", "from": "Equipment", "to": "Refractory Failure Diagnostics"}, {"arrows": "to", "from": "Vitrifiable", "to": "Clinker"}, {"arrows": "to", "from": "Vitrifiable", "to": "Fusible"}, {"arrows": "to", "from": "Non-vitrifiable", "to": "Magnesium Oxide"}, {"arrows": "to", "from": "Non-vitrifiable", "to": "Manganese Oxide"}, {"arrows": "to", "from": "Non-vitrifiable", "to": "Aluminates"}, {"arrows": "to", "from": "Non-vitrifiable", "to": "Reduction Aids"}, {"arrows": "to", "from": "Non-vitrifiable", "to": "Silicates"}, {"arrows": "to", "from": "Measuring Heat Transfer", "to": "Calculations"}, {"arrows": "to", "from": "Measuring Heat Transfer", "to": "Metallurgical Heat Transfer"}, {"arrows": "to", "from": "Measuring Heat Transfer", "to": "Gas Losses and Operating Practices"}, {"arrows": "to", "from": "Exhaust Treatment", "to": "Inherent Natural Gas De-sulfurization"}, {"arrows": "to", "from": "Exhaust Treatment", "to": "Scale Removal"}, {"arrows": "to", "from": "Particle Size", "to": "Pre-calcination Size"}, {"arrows": "to", "from": "Particle Size", "to": "Fine Abyssal Go"}, {"arrows": "to", "from": "Fluidized Beds", "to": "Types"}, {"arrows": "to", "from": "Fluidized Beds", "to": "Bed Constituents"}, {"arrows": "to", "from": "Fluidized Beds", "to": "Reporting Errors"}, {"arrows": "to", "from": "Iron Ore Direct Reduction", "to": "TR Cleveland aims to create and maintain clean Hydrogen"}, {"arrows": "to", "from": "Gas Reduction", "to": "Inherent Natural Gas De-sulfurization"}, {"arrows": "to", "from": "Gas Reduction", "to": "Gas Reduction and Fluidized Beds"}, {"arrows": "to", "from": "Gas Reduction", "to": "DR Capacity"}, {"arrows": "to", "from": "Gas Reduction", "to": "CO2 Emissions"}, {"arrows": "to", "from": "Gas Reduction", "to": "Operational Aspects"}, {"arrows": "to", "from": "Gas Reduction", "to": "Advantages and Limitations"}, {"arrows": "to", "from": "Coke Oven Gas To Fuels", "to": "Desulfurization Methods"}, {"arrows": "to", "from": "Coke Oven Gas To Fuels", "to": "Cooled Coke"}, {"arrows": "to", "from": "Coke Oven Gas To Fuels", "to": "Products and By-products"}, {"arrows": "to", "from": "Coke Oven Gas To Fuels", "to": "Sulfur Content"}, {"arrows": "to", "from": "Coke Oven Gas To Fuels", "to": "Viscosity"}, {"arrows": "to", "from": "Iron Slag", "to": "Slag"}, {"arrows": "to", "from": "Iron Slag", "to": "Tap Holes"}, {"arrows": "to", "from": "Iron Slag", "to": "Magnetite Feed"}, {"arrows": "to", "from": "Iron Slag", "to": "Reduction Depth"}, {"arrows": "to", "from": "Iron Slag", "to": "Energy Recovery"}, {"arrows": "to", "from": "Recycled Slag", "to": "Non-CASS slags"}, {"arrows": "to", "from": "Recycled Slag", "to": "Waste Slags"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

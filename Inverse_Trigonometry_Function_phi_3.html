@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Main Topic", "label": "Main Topic", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Trigonometry", "label": "Trigonometry", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Inverse Trigonometric Functions", "label": "Inverse Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Properties of Inverse Trigonometric Functions", "label": "Properties of Inverse Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Graphs of Inverse Trigonometric Functions", "label": "Graphs of Inverse Trigonometric Functions", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sine(sin)", "label": "sine(sin)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cosine(cos)", "label": "cosine(cos)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tangent(tan)", "label": "tangent(tan)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cotangent(cot)", "label": "cotangent(cot)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "secant(sec)", "label": "secant(sec)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cosecant(csc)", "label": "cosecant(csc)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "arc-sine(sin-1)", "label": "arc-sine(sin-1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "arc-cosine(cos-1)", "label": "arc-cosine(cos-1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "arc-tangent(tan-1)", "label": "arc-tangent(tan-1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "arc-cotangent(cot-1)", "label": "arc-cotangent(cot-1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "arc-secant(sec-1)", "label": "arc-secant(sec-1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "arc-cosecant(csc-1)", "label": "arc-cosecant(csc-1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin-1(sin x) = x", "label": "sin-1(sin x) = x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cos-1(cos x) = x", "label": "cos-1(cos x) = x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan-1(tan x) = x", "label": "tan-1(tan x) = x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cot-1(cot x) = x", "label": "cot-1(cot x) = x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sec-1(sec x) = x", "label": "sec-1(sec x) = x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "csc-1(csc x) = x", "label": "csc-1(csc x) = x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin-1(sin x) + cos-1(cos x) = pi/2", "label": "sin-1(sin x) + cos-1(cos x) = pi/2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "-sin-1(sin x) = sin x", "label": "-sin-1(sin x) = sin x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "-tan-1(tan x) = tan x", "label": "-tan-1(tan x) = tan x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sec-1(sec x) = sec x", "label": "sec-1(sec x) = sec x", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sin-1(x)", "label": "sin-1(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cos-1(x)", "label": "cos-1(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "tan-1(x)", "label": "tan-1(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "cot-1(x)", "label": "cot-1(x)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "sec-1(x)", "label": "sec-1(x)", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Main Topic", "to": "Trigonometry"}, {"arrows": "to", "from": "Main Topic", "to": "Inverse Trigonometric Functions"}, {"arrows": "to", "from": "Main Topic", "to": "Properties of Inverse Trigonometric Functions"}, {"arrows": "to", "from": "Main Topic", "to": "Graphs of Inverse Trigonometric Functions"}, {"arrows": "to", "from": "Trigonometry", "to": "sine(sin)"}, {"arrows": "to", "from": "Trigonometry", "to": "cosine(cos)"}, {"arrows": "to", "from": "Trigonometry", "to": "tangent(tan)"}, {"arrows": "to", "from": "Trigonometry", "to": "cotangent(cot)"}, {"arrows": "to", "from": "Trigonometry", "to": "secant(sec)"}, {"arrows": "to", "from": "Trigonometry", "to": "cosecant(csc)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "arc-sine(sin-1)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "arc-cosine(cos-1)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "arc-tangent(tan-1)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "arc-cotangent(cot-1)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "arc-secant(sec-1)"}, {"arrows": "to", "from": "Inverse Trigonometric Functions", "to": "arc-cosecant(csc-1)"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "sin-1(sin x) = x"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "cos-1(cos x) = x"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "tan-1(tan x) = x"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "cot-1(cot x) = x"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "sec-1(sec x) = x"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "csc-1(csc x) = x"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "sin-1(sin x) + cos-1(cos x) = pi/2"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "-sin-1(sin x) = sin x"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "-tan-1(tan x) = tan x"}, {"arrows": "to", "from": "Properties of Inverse Trigonometric Functions", "to": "sec-1(sec x) = sec x"}, {"arrows": "to", "from": "Graphs of Inverse Trigonometric Functions", "to": "sin-1(x)"}, {"arrows": "to", "from": "Graphs of Inverse Trigonometric Functions", "to": "cos-1(x)"}, {"arrows": "to", "from": "Graphs of Inverse Trigonometric Functions", "to": "tan-1(x)"}, {"arrows": "to", "from": "Graphs of Inverse Trigonometric Functions", "to": "cot-1(x)"}, {"arrows": "to", "from": "Graphs of Inverse Trigonometric Functions", "to": "sec-1(x)"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "Metallurgy", "label": "Metallurgy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrolytical Processes", "label": "Electrolytical Processes", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Thermal Processes", "label": "Thermal Processes", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mechanical Processes", "label": "Mechanical Processes", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrorefining", "label": "Electrorefining", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Electrowinning", "label": "Electrowinning", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Calcium reduction", "label": "Calcium reduction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Carbon reduction", "label": "Carbon reduction", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Hydrothermal process", "label": "Hydrothermal process", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Crushing", "label": "Crushing", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Grinding", "label": "Grinding", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Primary Crushing", "label": "Primary Crushing", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Secondary Crushing", "label": "Secondary Crushing", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Ball Mill Grinding", "label": "Ball Mill Grinding", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Rod Mill Grinding", "label": "Rod Mill Grinding", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Purification of metals", "label": "Purification of metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Eliminating impurities", "label": "Eliminating impurities", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Extraction of metals", "label": "Extraction of metals", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Metal plating", "label": "Metal plating", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reaction at high temperature", "label": "Reaction at high temperature", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Produces pure metal", "label": "Produces pure metal", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Carbides Formation", "label": "Carbides Formation", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reduction involves carbon", "label": "Reduction involves carbon", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uses hot water or steam", "label": "Uses hot water or steam", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Extract metals from ores", "label": "Extract metals from ores", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Reducing large ore size", "label": "Reducing large ore size", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uses jaw crushers", "label": "Uses jaw crushers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Further size reduction", "label": "Further size reduction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uses cone crushers", "label": "Uses cone crushers", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Grinds materials to fine powder", "label": "Grinds materials to fine powder", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uses steel balls", "label": "Uses steel balls", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Similar to ball mill", "label": "Similar to ball mill", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Uses rods instead of balls", "label": "Uses rods instead of balls", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Metallurgy", "to": "Electrolytical Processes"}, {"arrows": "to", "from": "Metallurgy", "to": "Thermal Processes"}, {"arrows": "to", "from": "Metallurgy", "to": "Mechanical Processes"}, {"arrows": "to", "from": "Electrolytical Processes", "to": "Electrorefining"}, {"arrows": "to", "from": "Electrolytical Processes", "to": "Electrowinning"}, {"arrows": "to", "from": "Thermal Processes", "to": "Calcium reduction"}, {"arrows": "to", "from": "Thermal Processes", "to": "Carbon reduction"}, {"arrows": "to", "from": "Thermal Processes", "to": "Hydrothermal process"}, {"arrows": "to", "from": "Mechanical Processes", "to": "Crushing"}, {"arrows": "to", "from": "Mechanical Processes", "to": "Grinding"}, {"arrows": "to", "from": "Electrorefining", "to": "Purification of metals"}, {"arrows": "to", "from": "Electrorefining", "to": "Eliminating impurities"}, {"arrows": "to", "from": "Electrowinning", "to": "Extraction of metals"}, {"arrows": "to", "from": "Electrowinning", "to": "Metal plating"}, {"arrows": "to", "from": "Calcium reduction", "to": "Reaction at high temperature"}, {"arrows": "to", "from": "Calcium reduction", "to": "Produces pure metal"}, {"arrows": "to", "from": "Carbon reduction", "to": "Carbides Formation"}, {"arrows": "to", "from": "Carbon reduction", "to": "Reduction involves carbon"}, {"arrows": "to", "from": "Hydrothermal process", "to": "Uses hot water or steam"}, {"arrows": "to", "from": "Hydrothermal process", "to": "Extract metals from ores"}, {"arrows": "to", "from": "Crushing", "to": "Primary Crushing"}, {"arrows": "to", "from": "Crushing", "to": "Secondary Crushing"}, {"arrows": "to", "from": "Grinding", "to": "Ball Mill Grinding"}, {"arrows": "to", "from": "Grinding", "to": "Rod Mill Grinding"}, {"arrows": "to", "from": "Primary Crushing", "to": "Reducing large ore size"}, {"arrows": "to", "from": "Primary Crushing", "to": "Uses jaw crushers"}, {"arrows": "to", "from": "Secondary Crushing", "to": "Further size reduction"}, {"arrows": "to", "from": "Secondary Crushing", "to": "Uses cone crushers"}, {"arrows": "to", "from": "Ball Mill Grinding", "to": "Grinds materials to fine powder"}, {"arrows": "to", "from": "Ball Mill Grinding", "to": "Uses steel balls"}, {"arrows": "to", "from": "Rod Mill Grinding", "to": "Similar to ball mill"}, {"arrows": "to", "from": "Rod Mill Grinding", "to": "Uses rods instead of balls"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
