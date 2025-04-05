@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "WORK, POWER \u0026 ENERGY", "label": "WORK, POWER \u0026 ENERGY", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work (W)", "label": "Work (W)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Energy (E)", "label": "Energy (E)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Power (P)", "label": "Power (P)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Forces", "label": "Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work-Energy Theorem", "label": "Work-Energy Theorem", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservation of Mechanical Energy", "label": "Conservation of Mechanical Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Units of Work and Energy", "label": "Units of Work and Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Measure of energy transfer when a force moves an object.", "label": "Definition: Measure of energy transfer when a force moves an object.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula (Constant Force): W = F \u22c5 s = F * s * cos(\u03b8) (\u03b8 = angle between Force F and displacement s)", "label": "Formula (Constant Force): W = F \u22c5 s = F * s * cos(\u03b8) (\u03b8 = angle between Force F and displacement s)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula (Variable Force): W = \u222b F(x) dx (Integral from initial position x_i to final position x_f)", "label": "Formula (Variable Force): W = \u222b F(x) dx (Integral from initial position x_i to final position x_f)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Graphical Representation: Area under the Force-Displacement (F-s) graph.", "label": "Graphical Representation: Area under the Force-Displacement (F-s) graph.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Work", "label": "Types of Work", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Work by Specific Forces", "label": "Work by Specific Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Positive Work: 0\u00b0 \u2264 \u03b8 \u003c 90\u00b0 (Energy added to the object by the force). Example: Gravity on a falling body.", "label": "Positive Work: 0\u00b0 \u2264 \u03b8 \u003c 90\u00b0 (Energy added to the object by the force). Example: Gravity on a falling body.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Negative Work: 90\u00b0 \u003c \u03b8 \u2264 180\u00b0 (Energy removed from the object by the force). Example: Kinetic Friction, Gravity on a body lifted up (W_g = -mgh).", "label": "Negative Work: 90\u00b0 \u003c \u03b8 \u2264 180\u00b0 (Energy removed from the object by the force). Example: Kinetic Friction, Gravity on a body lifted up (W_g = -mgh).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zero Work: \u03b8 = 90\u00b0 OR F=0 OR s=0. Example: Centripetal force in uniform circular motion.", "label": "Zero Work: \u03b8 = 90\u00b0 OR F=0 OR s=0. Example: Centripetal force in uniform circular motion.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work by Gravity (Conservative): W_g = -\u0394U_g = -(mgh_f - mgh_i)", "label": "Work by Gravity (Conservative): W_g = -\u0394U_g = -(mgh_f - mgh_i)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work by Spring Force (Conservative): W_spring = -\u0394U_s = -(1/2 k x_f\u00b2 - 1/2 k x_i\u00b2)", "label": "Work by Spring Force (Conservative): W_spring = -\u0394U_s = -(1/2 k x_f\u00b2 - 1/2 k x_i\u00b2)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work by Friction (Non-Conservative): W_friction = - f_k * d (f_k = kinetic friction force, d = distance)", "label": "Work by Friction (Non-Conservative): W_friction = - f_k * d (f_k = kinetic friction force, d = distance)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: The capacity to do work.", "label": "Definition: The capacity to do work.", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Mechanical Energy", "label": "Mechanical Energy", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Other Forms Mentioned", "label": "Other Forms Mentioned", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Kinetic Energy (K.E.)", "label": "Kinetic Energy (K.E.)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Potential Energy (P.E. or U)", "label": "Potential Energy (P.E. or U)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Energy due to motion.", "label": "Definition: Energy due to motion.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: K.E. = 1/2 * m * v\u00b2", "label": "Formula: K.E. = 1/2 * m * v\u00b2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Relation with Momentum (p): K.E. = p\u00b2 / (2m) (where p = mv)", "label": "Relation with Momentum (p): K.E. = p\u00b2 / (2m) (where p = mv)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Stored energy due to position or configuration.", "label": "Definition: Stored energy due to position or configuration.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Defined only for Conservative Forces.", "label": "Defined only for Conservative Forces.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Change in P.E.: \u0394U = -W_conservative", "label": "Change in P.E.: \u0394U = -W_conservative", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Force from P.E.: F = -dU/dx (in 1D)", "label": "Force from P.E.: F = -dU/dx (in 1D)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Types: Gravitational P.E., Elastic P.E.", "label": "Types: Gravitational P.E., Elastic P.E.", "shape": "box", "size": 30}, {"color": "#00ffff", "id": "Types of Potential Energy", "label": "Types of Potential Energy", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gravitational P.E.: U = mgh (Near Earth, reference h=0)", "label": "Gravitational P.E.: U = mgh (Near Earth, reference h=0)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Elastic P.E. (Spring): U = 1/2 * k * x\u00b2 (k=spring constant, x=displacement from equilibrium, reference x=0)", "label": "Elastic P.E. (Spring): U = 1/2 * k * x\u00b2 (k=spring constant, x=displacement from equilibrium, reference x=0)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Internal Energy: Sum of molecular K.E. and P.E.", "label": "Internal Energy: Sum of molecular K.E. and P.E.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Heat Energy: Transfer of internal energy.", "label": "Heat Energy: Transfer of internal energy.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Chemical Energy: Stored in bonds (Example: Coal combustion \u2248 3 x 10\u2077 J/kg)", "label": "Chemical Energy: Stored in bonds (Example: Coal combustion \u2248 3 x 10\u2077 J/kg)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Rate of doing work or transferring energy.", "label": "Definition: Rate of doing work or transferring energy.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Average Power: P_avg = W_total / \u0394t", "label": "Average Power: P_avg = W_total / \u0394t", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Instantaneous Power: P = dW / dt = F \u22c5 v = F * v * cos(\u03b8) (\u03b8 = angle between F and velocity v)", "label": "Instantaneous Power: P = dW / dt = F \u22c5 v = F * v * cos(\u03b8) (\u03b8 = angle between F and velocity v)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Units: Watt (W) [1 W = 1 J/s], Horsepower (hp) [1 hp \u2248 746 W]", "label": "Units: Watt (W) [1 W = 1 J/s], Horsepower (hp) [1 hp \u2248 746 W]", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Conservative Forces", "label": "Conservative Forces", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Non-Conservative Forces", "label": "Non-Conservative Forces", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Property 1: Work done is path-independent.", "label": "Property 1: Work done is path-independent.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Property 2: Work done over a closed path is zero.", "label": "Property 2: Work done over a closed path is zero.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Associated with Potential Energy (U).", "label": "Associated with Potential Energy (U).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Gravitational, Electrostatic, Spring force.", "label": "Examples: Gravitational, Electrostatic, Spring force.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Property: Work done depends on the path taken.", "label": "Property: Work done depends on the path taken.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Energy is usually dissipated (e.g., as heat).", "label": "Energy is usually dissipated (e.g., as heat).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Examples: Friction (Kinetic), Air Resistance (Viscous Drag).", "label": "Examples: Friction (Kinetic), Air Resistance (Viscous Drag).", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Statement: Net work done on an object equals the change in its kinetic energy.", "label": "Statement: Net work done on an object equals the change in its kinetic energy.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: W_net = W_conservative + W_non_conservative + W_external = \u0394K.E.", "label": "Formula: W_net = W_conservative + W_non_conservative + W_external = \u0394K.E.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Infinitesimal form: dW_net = F_net \u22c5 ds = d(K.E.) = mv dv", "label": "Infinitesimal form: dW_net = F_net \u22c5 ds = d(K.E.) = mv dv", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Application: Relates work done by all forces to change in speed.", "label": "Application: Relates work done by all forces to change in speed.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Statement: Total mechanical energy (E = K.E. + P.E.) of a system remains constant if only conservative forces do work.", "label": "Statement: Total mechanical energy (E = K.E. + P.E.) of a system remains constant if only conservative forces do work.", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Condition: W_non_conservative = 0 and W_external = 0", "label": "Condition: W_non_conservative = 0 and W_external = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formula: K.E._initial + P.E._initial = K.E._final + P.E._final", "label": "Formula: K.E._initial + P.E._initial = K.E._final + P.E._final", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Modified Form (with Non-Conservative work): K.E._i + P.E._i + W_nc = K.E._f + P.E._f", "label": "Modified Form (with Non-Conservative work): K.E._i + P.E._i + W_nc = K.E._f + P.E._f", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "SI Unit: Joule (J) [1 J = 1 N\u22c5m]", "label": "SI Unit: Joule (J) [1 J = 1 N\u22c5m]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "CGS Unit: erg [1 erg = 1 dyne\u22c5cm] (Relation: 1 J = 10\u2077 erg)", "label": "CGS Unit: erg [1 erg = 1 dyne\u22c5cm] (Relation: 1 J = 10\u2077 erg)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Gravitational Unit: kg-m [Work by 1 kgf over 1m]", "label": "Gravitational Unit: kg-m [Work by 1 kgf over 1m]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Other: eV (electron-volt), kWh (kilowatt-hour), calorie", "label": "Other: eV (electron-volt), kWh (kilowatt-hour), calorie", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "WORK, POWER \u0026 ENERGY", "to": "Work (W)"}, {"arrows": "to", "from": "WORK, POWER \u0026 ENERGY", "to": "Energy (E)"}, {"arrows": "to", "from": "WORK, POWER \u0026 ENERGY", "to": "Power (P)"}, {"arrows": "to", "from": "WORK, POWER \u0026 ENERGY", "to": "Forces"}, {"arrows": "to", "from": "WORK, POWER \u0026 ENERGY", "to": "Work-Energy Theorem"}, {"arrows": "to", "from": "WORK, POWER \u0026 ENERGY", "to": "Conservation of Mechanical Energy"}, {"arrows": "to", "from": "WORK, POWER \u0026 ENERGY", "to": "Units of Work and Energy"}, {"arrows": "to", "from": "Work (W)", "to": "Definition: Measure of energy transfer when a force moves an object."}, {"arrows": "to", "from": "Work (W)", "to": "Formula (Constant Force): W = F \u22c5 s = F * s * cos(\u03b8) (\u03b8 = angle between Force F and displacement s)"}, {"arrows": "to", "from": "Work (W)", "to": "Formula (Variable Force): W = \u222b F(x) dx (Integral from initial position x_i to final position x_f)"}, {"arrows": "to", "from": "Work (W)", "to": "Graphical Representation: Area under the Force-Displacement (F-s) graph."}, {"arrows": "to", "from": "Work (W)", "to": "Types of Work"}, {"arrows": "to", "from": "Work (W)", "to": "Work by Specific Forces"}, {"arrows": "to", "from": "Energy (E)", "to": "Definition: The capacity to do work."}, {"arrows": "to", "from": "Energy (E)", "to": "Mechanical Energy"}, {"arrows": "to", "from": "Energy (E)", "to": "Other Forms Mentioned"}, {"arrows": "to", "from": "Power (P)", "to": "Definition: Rate of doing work or transferring energy."}, {"arrows": "to", "from": "Power (P)", "to": "Average Power: P_avg = W_total / \u0394t"}, {"arrows": "to", "from": "Power (P)", "to": "Instantaneous Power: P = dW / dt = F \u22c5 v = F * v * cos(\u03b8) (\u03b8 = angle between F and velocity v)"}, {"arrows": "to", "from": "Power (P)", "to": "Units: Watt (W) [1 W = 1 J/s], Horsepower (hp) [1 hp \u2248 746 W]"}, {"arrows": "to", "from": "Forces", "to": "Conservative Forces"}, {"arrows": "to", "from": "Forces", "to": "Non-Conservative Forces"}, {"arrows": "to", "from": "Work-Energy Theorem", "to": "Statement: Net work done on an object equals the change in its kinetic energy."}, {"arrows": "to", "from": "Work-Energy Theorem", "to": "Formula: W_net = W_conservative + W_non_conservative + W_external = \u0394K.E."}, {"arrows": "to", "from": "Work-Energy Theorem", "to": "Infinitesimal form: dW_net = F_net \u22c5 ds = d(K.E.) = mv dv"}, {"arrows": "to", "from": "Work-Energy Theorem", "to": "Application: Relates work done by all forces to change in speed."}, {"arrows": "to", "from": "Conservation of Mechanical Energy", "to": "Statement: Total mechanical energy (E = K.E. + P.E.) of a system remains constant if only conservative forces do work."}, {"arrows": "to", "from": "Conservation of Mechanical Energy", "to": "Condition: W_non_conservative = 0 and W_external = 0"}, {"arrows": "to", "from": "Conservation of Mechanical Energy", "to": "Formula: K.E._initial + P.E._initial = K.E._final + P.E._final"}, {"arrows": "to", "from": "Conservation of Mechanical Energy", "to": "Modified Form (with Non-Conservative work): K.E._i + P.E._i + W_nc = K.E._f + P.E._f"}, {"arrows": "to", "from": "Units of Work and Energy", "to": "SI Unit: Joule (J) [1 J = 1 N\u22c5m]"}, {"arrows": "to", "from": "Units of Work and Energy", "to": "CGS Unit: erg [1 erg = 1 dyne\u22c5cm] (Relation: 1 J = 10\u2077 erg)"}, {"arrows": "to", "from": "Units of Work and Energy", "to": "Gravitational Unit: kg-m [Work by 1 kgf over 1m]"}, {"arrows": "to", "from": "Units of Work and Energy", "to": "Other: eV (electron-volt), kWh (kilowatt-hour), calorie"}, {"arrows": "to", "from": "Types of Work", "to": "Positive Work: 0\u00b0 \u2264 \u03b8 \u003c 90\u00b0 (Energy added to the object by the force). Example: Gravity on a falling body."}, {"arrows": "to", "from": "Types of Work", "to": "Negative Work: 90\u00b0 \u003c \u03b8 \u2264 180\u00b0 (Energy removed from the object by the force). Example: Kinetic Friction, Gravity on a body lifted up (W_g = -mgh)."}, {"arrows": "to", "from": "Types of Work", "to": "Zero Work: \u03b8 = 90\u00b0 OR F=0 OR s=0. Example: Centripetal force in uniform circular motion."}, {"arrows": "to", "from": "Work by Specific Forces", "to": "Work by Gravity (Conservative): W_g = -\u0394U_g = -(mgh_f - mgh_i)"}, {"arrows": "to", "from": "Work by Specific Forces", "to": "Work by Spring Force (Conservative): W_spring = -\u0394U_s = -(1/2 k x_f\u00b2 - 1/2 k x_i\u00b2)"}, {"arrows": "to", "from": "Work by Specific Forces", "to": "Work by Friction (Non-Conservative): W_friction = - f_k * d (f_k = kinetic friction force, d = distance)"}, {"arrows": "to", "from": "Mechanical Energy", "to": "Kinetic Energy (K.E.)"}, {"arrows": "to", "from": "Mechanical Energy", "to": "Potential Energy (P.E. or U)"}, {"arrows": "to", "from": "Other Forms Mentioned", "to": "Internal Energy: Sum of molecular K.E. and P.E."}, {"arrows": "to", "from": "Other Forms Mentioned", "to": "Heat Energy: Transfer of internal energy."}, {"arrows": "to", "from": "Other Forms Mentioned", "to": "Chemical Energy: Stored in bonds (Example: Coal combustion \u2248 3 x 10\u2077 J/kg)"}, {"arrows": "to", "from": "Kinetic Energy (K.E.)", "to": "Definition: Energy due to motion."}, {"arrows": "to", "from": "Kinetic Energy (K.E.)", "to": "Formula: K.E. = 1/2 * m * v\u00b2"}, {"arrows": "to", "from": "Kinetic Energy (K.E.)", "to": "Relation with Momentum (p): K.E. = p\u00b2 / (2m) (where p = mv)"}, {"arrows": "to", "from": "Potential Energy (P.E. or U)", "to": "Definition: Stored energy due to position or configuration."}, {"arrows": "to", "from": "Potential Energy (P.E. or U)", "to": "Defined only for Conservative Forces."}, {"arrows": "to", "from": "Potential Energy (P.E. or U)", "to": "Change in P.E.: \u0394U = -W_conservative"}, {"arrows": "to", "from": "Potential Energy (P.E. or U)", "to": "Force from P.E.: F = -dU/dx (in 1D)"}, {"arrows": "to", "from": "Potential Energy (P.E. or U)", "to": "Types: Gravitational P.E., Elastic P.E."}, {"arrows": "to", "from": "Types of Potential Energy", "to": "Gravitational P.E.: U = mgh (Near Earth, reference h=0)"}, {"arrows": "to", "from": "Types of Potential Energy", "to": "Elastic P.E. (Spring): U = 1/2 * k * x\u00b2 (k=spring constant, x=displacement from equilibrium, reference x=0)"}, {"arrows": "to", "from": "Conservative Forces", "to": "Property 1: Work done is path-independent."}, {"arrows": "to", "from": "Conservative Forces", "to": "Property 2: Work done over a closed path is zero."}, {"arrows": "to", "from": "Conservative Forces", "to": "Associated with Potential Energy (U)."}, {"arrows": "to", "from": "Conservative Forces", "to": "Examples: Gravitational, Electrostatic, Spring force."}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Property: Work done depends on the path taken."}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Energy is usually dissipated (e.g., as heat)."}, {"arrows": "to", "from": "Non-Conservative Forces", "to": "Examples: Friction (Kinetic), Air Resistance (Viscous Drag)."}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

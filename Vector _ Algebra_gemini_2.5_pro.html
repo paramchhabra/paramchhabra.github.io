@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #1e1e2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1000px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00ffff", "id": "VECTOR \u0026 3D", "label": "VECTOR \u0026 3D", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vector Basics", "label": "Vector Basics", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vector Operations", "label": "Vector Operations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Product of Vectors", "label": "Product of Vectors", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Linear Combinations \u0026 Dependence", "label": "Linear Combinations \u0026 Dependence", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Geometric Applications", "label": "Geometric Applications", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Reciprocal System", "label": "Reciprocal System", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Quantity with Magnitude \u0026 Direction", "label": "Definition: Quantity with Magnitude \u0026 Direction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Representation: Directed Line Segment AB (|AB| = Magnitude)", "label": "Representation: Directed Line Segment AB (|AB| = Magnitude)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Position Vector (PV): AB = b - a (PV of B - PV of A)", "label": "Position Vector (PV): AB = b - a (PV of B - PV of A)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Types of Vectors", "label": "Types of Vectors", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Zero Vector: O (|O|=0, Indeterminate Direction)", "label": "Zero Vector: O (|O|=0, Indeterminate Direction)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Unit Vector: a^ = a / |a| (Vector with magnitude 1)", "label": "Unit Vector: a^ = a / |a| (Vector with magnitude 1)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Collinear Vectors: Parallel to same line (a = K b, K is a scalar)", "label": "Collinear Vectors: Parallel to same line (a = K b, K is a scalar)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Equal Vectors: Same Magnitude \u0026 Direction", "label": "Equal Vectors: Same Magnitude \u0026 Direction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coplanar Vectors: Lie in or parallel to the same plane (Two vectors are always coplanar)", "label": "Coplanar Vectors: Lie in or parallel to the same plane (Two vectors are always coplanar)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Scalar Multiplication", "label": "Scalar Multiplication", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Addition / Subtraction", "label": "Addition / Subtraction", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: m * a (Vector parallel to a, magnitude |m|*|a|)", "label": "Definition: m * a (Vector parallel to a, magnitude |m|*|a|)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: m(n a) = (mn) a", "label": "Properties: m(n a) = (mn) a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "(m + n) a = m a + n a", "label": "(m + n) a = m a + n a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "m (a + b) = m a + m b", "label": "m (a + b) = m a + m b", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Parallelogram Law: a + b = Diagonal OC of parallelogram OACB", "label": "Parallelogram Law: a + b = Diagonal OC of parallelogram OACB", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triangle Law", "label": "Triangle Law", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: Commutative (a+b=b+a), Associative ((a+b)+c=a+(b+c))", "label": "Properties: Commutative (a+b=b+a), Associative ((a+b)+c=a+(b+c))", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Magnitude: |a +/- b|^2 = |a|^2 + |b|^2 +/- 2(a.b)", "label": "Magnitude: |a +/- b|^2 = |a|^2 + |b|^2 +/- 2(a.b)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triangle Inequality: |a + b| \u003c= |a| + |b|", "label": "Triangle Inequality: |a + b| \u003c= |a| + |b|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "|a - b| \u003e= ||a| - |b||", "label": "|a - b| \u003e= ||a| - |b||", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Scalar (Dot) Product", "label": "Scalar (Dot) Product", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vector (Cross) Product", "label": "Vector (Cross) Product", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Scalar Triple Product (STP)", "label": "Scalar Triple Product (STP)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Vector Triple Product (VTP)", "label": "Vector Triple Product (VTP)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: a . b = |a| |b| cos(theta) (theta is angle between a and b, 0 \u003c= theta \u003c= pi)", "label": "Definition: a . b = |a| |b| cos(theta) (theta is angle between a and b, 0 \u003c= theta \u003c= pi)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: a.b = b.a (Commutative)", "label": "Properties: a.b = b.a (Commutative)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a.(b+c) = a.b + a.c (Distributive)", "label": "a.(b+c) = a.b + a.c (Distributive)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Orthogonality: a _|_ b \u003c=\u003e a . b = 0 (for non-zero a, b)", "label": "Orthogonality: a _|_ b \u003c=\u003e a . b = 0 (for non-zero a, b)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Unit Vectors: i.i = j.j = k.k = 1; i.j = j.k = k.i = 0", "label": "Unit Vectors: i.i = j.j = k.k = 1; i.j = j.k = k.i = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Component Form: If a = a1i+a2j+a3k, b = b1i+b2j+b3k =\u003e a . b = a1*b1 + a2*b2 + a3*b3", "label": "Component Form: If a = a1i+a2j+a3k, b = b1i+b2j+b3k =\u003e a . b = a1*b1 + a2*b2 + a3*b3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: a=i+2j, b=3i-j =\u003e a.b = (1)(3)+(2)(-1) = 1", "label": "Example: a=i+2j, b=3i-j =\u003e a.b = (1)(3)+(2)(-1) = 1", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Projection of a on b: (a . b) / |b|", "label": "Projection of a on b: (a . b) / |b|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Vector Projection of a on b: ((a . b) / |b|^2) * b", "label": "Vector Projection of a on b: ((a . b) / |b|^2) * b", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Angle between a and b: cos(theta) = (a . b) / (|a| |b|)", "label": "Angle between a and b: cos(theta) = (a . b) / (|a| |b|)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: a x b = |a| |b| sin(theta) n^ (n^ is unit vector perp. to a, b; right-hand system)", "label": "Definition: a x b = |a| |b| sin(theta) n^ (n^ is unit vector perp. to a, b; right-hand system)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: a x b = - (b x a) (Anti-commutative)", "label": "Properties: a x b = - (b x a) (Anti-commutative)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "a x (b+c) = a x b + a x c (Distributive)", "label": "a x (b+c) = a x b + a x c (Distributive)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Parallelism/Collinearity: a || b \u003c=\u003e a x b = 0 (for non-zero a, b)", "label": "Parallelism/Collinearity: a || b \u003c=\u003e a x b = 0 (for non-zero a, b)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Unit Vectors: i x i = j x j = k x k = 0", "label": "Unit Vectors: i x i = j x j = k x k = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "i x j = k, j x k = i, k x i = j", "label": "i x j = k, j x k = i, k x i = j", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "j x i = -k, k x j = -i, i x k = -j", "label": "j x i = -k, k x j = -i, i x k = -j", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Component Form: a x b = det([[i, j, k], [a1, a2, a3], [b1, b2, b3]])", "label": "Component Form: a x b = det([[i, j, k], [a1, a2, a3], [b1, b2, b3]])", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Example: a=i+j, b=j+k =\u003e a x b = det([[i,j,k],[1,1,0],[0,1,1]]) = i(1)-j(1)+k(1) = i-j+k", "label": "Example: a=i+j, b=j+k =\u003e a x b = det([[i,j,k],[1,1,0],[0,1,1]]) = i(1)-j(1)+k(1) = i-j+k", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Geometric Meaning: |a x b| = Area of Parallelogram with adjacent sides a, b", "label": "Geometric Meaning: |a x b| = Area of Parallelogram with adjacent sides a, b", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: [a b c] = a . (b x c) (Box Product)", "label": "Definition: [a b c] = a . (b x c) (Box Product)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Properties: a.(b x c) = (a x b).c (Dot and Cross are interchangeable)", "label": "Properties: a.(b x c) = (a x b).c (Dot and Cross are interchangeable)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[a b c] = [b c a] = [c a b] (Cyclic Permutation)", "label": "[a b c] = [b c a] = [c a b] (Cyclic Permutation)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[a b c] = -[a c b] (Anti-cyclic changes sign)", "label": "[a b c] = -[a c b] (Anti-cyclic changes sign)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[Ka b c] = K[a b c] (K is scalar)", "label": "[Ka b c] = K[a b c] (K is scalar)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "[(a+b) c d] = [a c d] + [b c d]", "label": "[(a+b) c d] = [a c d] + [b c d]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Component Form: [a b c] = det([[a1, a2, a3], [b1, b2, b3], [c1, c2, c3]])", "label": "Component Form: [a b c] = det([[a1, a2, a3], [b1, b2, b3], [c1, c2, c3]])", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Geometric Meaning: |[a b c]| = Volume of Parallelepiped with coterminous edges a, b, c", "label": "Geometric Meaning: |[a b c]| = Volume of Parallelepiped with coterminous edges a, b, c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coplanarity of 3 Vectors: a, b, c are coplanar \u003c=\u003e [a b c] = 0", "label": "Coplanarity of 3 Vectors: a, b, c are coplanar \u003c=\u003e [a b c] = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "STP Squared Relation: [a b c]^2 = det([[a.a, a.b, a.c], [b.a, b.b, b.c], [c.a, c.b, c.c]])", "label": "STP Squared Relation: [a b c]^2 = det([[a.a, a.b, a.c], [b.a, b.b, b.c], [c.a, c.b, c.c]])", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: a x (b x c) or (a x b) x c", "label": "Definition: a x (b x c) or (a x b) x c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Expansion (BAC-CAB Rule): a x (b x c) = (a . c) b - (a . b) c", "label": "Expansion (BAC-CAB Rule): a x (b x c) = (a . c) b - (a . b) c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Expansion: (a x b) x c = (a . c) b - (b . c) a", "label": "Expansion: (a x b) x c = (a . c) b - (b . c) a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Property: Not Associative: a x (b x c) != (a x b) x c", "label": "Property: Not Associative: a x (b x c) != (a x b) x c", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Geometric Property: a x (b x c) is a vector coplanar with b and c, and perpendicular to a", "label": "Geometric Property: a x (b x c) is a vector coplanar with b and c, and perpendicular to a", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear Combination: r = x a + y b + z c + ... (x, y, z are scalars)", "label": "Linear Combination: r = x a + y b + z c + ... (x, y, z are scalars)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear Independence (LI): x1 a1 + ... + xn an = 0 =\u003e x1 = x2 = ... = xn = 0", "label": "Linear Independence (LI): x1 a1 + ... + xn an = 0 =\u003e x1 = x2 = ... = xn = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Linear Dependence (LD): x1 a1 + ... + xn an = 0 with at least one scalar xi != 0", "label": "Linear Dependence (LD): x1 a1 + ... + xn an = 0 with at least one scalar xi != 0", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Dependence Conditions (Non-Zero Vectors)", "label": "Dependence Conditions (Non-Zero Vectors)", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Fundamental Theorems in Plane and Space", "label": "Fundamental Theorems in Plane and Space", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Two Vectors LD \u003c=\u003e Collinear (a = K b or a x b = 0)", "label": "Two Vectors LD \u003c=\u003e Collinear (a = K b or a x b = 0)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Three Vectors LD \u003c=\u003e Coplanar ([a b c] = 0)", "label": "Three Vectors LD \u003c=\u003e Coplanar ([a b c] = 0)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Four Vectors in 3D are always LD", "label": "Four Vectors in 3D are always LD", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Plane: Any vector r coplanar with non-collinear a, b can be uniquely written as r = x a + y b", "label": "Plane: Any vector r coplanar with non-collinear a, b can be uniquely written as r = x a + y b", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Space: Any vector r can be uniquely written as r = x a + y b + z c, where a, b, c are non-coplanar", "label": "Space: Any vector r can be uniquely written as r = x a + y b + z c, where a, b, c are non-coplanar", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Section Formula", "label": "Section Formula", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Centroid", "label": "Centroid", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Area Calculations", "label": "Area Calculations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Volume Calculations", "label": "Volume Calculations", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Collinearity \u0026 Coplanarity Tests", "label": "Collinearity \u0026 Coplanarity Tests", "shape": "box", "size": 30}, {"color": "#ffcc00", "id": "Physics Applications", "label": "Physics Applications", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Internal Division (ratio m:n): PV = (n b + m a) / (m + n)", "label": "Internal Division (ratio m:n): PV = (n b + m a) / (m + n)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "External Division (ratio m:n): PV = (m b - n a) / (m - n)", "label": "External Division (ratio m:n): PV = (m b - n a) / (m - n)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Midpoint (ratio 1:1): PV = (a + b) / 2", "label": "Midpoint (ratio 1:1): PV = (a + b) / 2", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triangle (vertices a, b, c): G = (a + b + c) / 3", "label": "Triangle (vertices a, b, c): G = (a + b + c) / 3", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tetrahedron (vertices a, b, c, d): G = (a + b + c + d) / 4", "label": "Tetrahedron (vertices a, b, c, d): G = (a + b + c + d) / 4", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Triangle ABC (PVs a,b,c): Area = 1/2 |(b-a) x (c-a)| = 1/2 |a x b + b x c + c x a|", "label": "Triangle ABC (PVs a,b,c): Area = 1/2 |(b-a) x (c-a)| = 1/2 |a x b + b x c + c x a|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Parallelogram (adj. sides a,b): Area = |a x b|", "label": "Parallelogram (adj. sides a,b): Area = |a x b|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Parallelogram (diagonals d1, d2): Area = 1/2 |d1 x d2|", "label": "Parallelogram (diagonals d1, d2): Area = 1/2 |d1 x d2|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Parallelepiped (coterminous edges a,b,c): Volume = |[a b c]|", "label": "Parallelepiped (coterminous edges a,b,c): Volume = |[a b c]|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tetrahedron OABC (O=origin, vertices a,b,c): Volume = 1/6 |[a b c]|", "label": "Tetrahedron OABC (O=origin, vertices a,b,c): Volume = 1/6 |[a b c]|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Tetrahedron ABCD (PVs a,b,c,d): Volume = 1/6 |[b-a c-a d-a]|", "label": "Tetrahedron ABCD (PVs a,b,c,d): Volume = 1/6 |[b-a c-a d-a]|", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Collinearity of 3 Points (A,B,C with PVs a,b,c): AB = k BC =\u003e (b-a) = k(c-b) OR Area(ABC)=0", "label": "Collinearity of 3 Points (A,B,C with PVs a,b,c): AB = k BC =\u003e (b-a) = k(c-b) OR Area(ABC)=0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Coplanarity of 4 Points (A,B,C,D with PVs a,b,c,d): [AB AC AD] = 0 =\u003e [b-a c-a d-a] = 0", "label": "Coplanarity of 4 Points (A,B,C,D with PVs a,b,c,d): [AB AC AD] = 0 =\u003e [b-a c-a d-a] = 0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Work Done by constant force F over displacement s: W = F . s", "label": "Work Done by constant force F over displacement s: W = F . s", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Moment of Force F about point O (r=PV of application point): M = r x F", "label": "Moment of Force F about point O (r=PV of application point): M = r x F", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Velocity in Circular Motion (w=angular vel, r=PV): V = w x r", "label": "Velocity in Circular Motion (w=angular vel, r=PV): V = w x r", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Definition: Two sets a,b,c \u0026 a\u0027,b\u0027,c\u0027 are reciprocal if a.a\u0027=b.b\u0027=c.c\u0027=1 and a.b\u0027=a.c\u0027=b.a\u0027=...=0", "label": "Definition: Two sets a,b,c \u0026 a\u0027,b\u0027,c\u0027 are reciprocal if a.a\u0027=b.b\u0027=c.c\u0027=1 and a.b\u0027=a.c\u0027=b.a\u0027=...=0", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Formulas: a\u0027=(b x c)/[a b c], b\u0027=(c x a)/[a b c], c\u0027=(a x b)/[a b c]", "label": "Formulas: a\u0027=(b x c)/[a b c], b\u0027=(c x a)/[a b c], c\u0027=(a x b)/[a b c]", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Condition: requires [a b c] != 0 (a, b, c non-coplanar)", "label": "Condition: requires [a b c] != 0 (a, b, c non-coplanar)", "shape": "box", "size": 30}, {"color": "#00ff66", "id": "Property: [a\u0027 b\u0027 c\u0027] [a b c] = 1", "label": "Property: [a\u0027 b\u0027 c\u0027] [a b c] = 1", "shape": "box", "size": 30}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "VECTOR \u0026 3D", "to": "Vector Basics"}, {"arrows": "to", "from": "VECTOR \u0026 3D", "to": "Vector Operations"}, {"arrows": "to", "from": "VECTOR \u0026 3D", "to": "Product of Vectors"}, {"arrows": "to", "from": "VECTOR \u0026 3D", "to": "Linear Combinations \u0026 Dependence"}, {"arrows": "to", "from": "VECTOR \u0026 3D", "to": "Geometric Applications"}, {"arrows": "to", "from": "VECTOR \u0026 3D", "to": "Reciprocal System"}, {"arrows": "to", "from": "Vector Basics", "to": "Definition: Quantity with Magnitude \u0026 Direction"}, {"arrows": "to", "from": "Vector Basics", "to": "Representation: Directed Line Segment AB (|AB| = Magnitude)"}, {"arrows": "to", "from": "Vector Basics", "to": "Position Vector (PV): AB = b - a (PV of B - PV of A)"}, {"arrows": "to", "from": "Vector Basics", "to": "Types of Vectors"}, {"arrows": "to", "from": "Vector Operations", "to": "Scalar Multiplication"}, {"arrows": "to", "from": "Vector Operations", "to": "Addition / Subtraction"}, {"arrows": "to", "from": "Product of Vectors", "to": "Scalar (Dot) Product"}, {"arrows": "to", "from": "Product of Vectors", "to": "Vector (Cross) Product"}, {"arrows": "to", "from": "Product of Vectors", "to": "Scalar Triple Product (STP)"}, {"arrows": "to", "from": "Product of Vectors", "to": "Vector Triple Product (VTP)"}, {"arrows": "to", "from": "Linear Combinations \u0026 Dependence", "to": "Linear Combination: r = x a + y b + z c + ... (x, y, z are scalars)"}, {"arrows": "to", "from": "Linear Combinations \u0026 Dependence", "to": "Linear Independence (LI): x1 a1 + ... + xn an = 0 =\u003e x1 = x2 = ... = xn = 0"}, {"arrows": "to", "from": "Linear Combinations \u0026 Dependence", "to": "Linear Dependence (LD): x1 a1 + ... + xn an = 0 with at least one scalar xi != 0"}, {"arrows": "to", "from": "Linear Combinations \u0026 Dependence", "to": "Dependence Conditions (Non-Zero Vectors)"}, {"arrows": "to", "from": "Linear Combinations \u0026 Dependence", "to": "Fundamental Theorems in Plane and Space"}, {"arrows": "to", "from": "Geometric Applications", "to": "Section Formula"}, {"arrows": "to", "from": "Geometric Applications", "to": "Centroid"}, {"arrows": "to", "from": "Geometric Applications", "to": "Area Calculations"}, {"arrows": "to", "from": "Geometric Applications", "to": "Volume Calculations"}, {"arrows": "to", "from": "Geometric Applications", "to": "Collinearity \u0026 Coplanarity Tests"}, {"arrows": "to", "from": "Geometric Applications", "to": "Physics Applications"}, {"arrows": "to", "from": "Reciprocal System", "to": "Definition: Two sets a,b,c \u0026 a\u0027,b\u0027,c\u0027 are reciprocal if a.a\u0027=b.b\u0027=c.c\u0027=1 and a.b\u0027=a.c\u0027=b.a\u0027=...=0"}, {"arrows": "to", "from": "Reciprocal System", "to": "Formulas: a\u0027=(b x c)/[a b c], b\u0027=(c x a)/[a b c], c\u0027=(a x b)/[a b c]"}, {"arrows": "to", "from": "Reciprocal System", "to": "Condition: requires [a b c] != 0 (a, b, c non-coplanar)"}, {"arrows": "to", "from": "Reciprocal System", "to": "Property: [a\u0027 b\u0027 c\u0027] [a b c] = 1"}, {"arrows": "to", "from": "Types of Vectors", "to": "Zero Vector: O (|O|=0, Indeterminate Direction)"}, {"arrows": "to", "from": "Types of Vectors", "to": "Unit Vector: a^ = a / |a| (Vector with magnitude 1)"}, {"arrows": "to", "from": "Types of Vectors", "to": "Collinear Vectors: Parallel to same line (a = K b, K is a scalar)"}, {"arrows": "to", "from": "Types of Vectors", "to": "Equal Vectors: Same Magnitude \u0026 Direction"}, {"arrows": "to", "from": "Types of Vectors", "to": "Coplanar Vectors: Lie in or parallel to the same plane (Two vectors are always coplanar)"}, {"arrows": "to", "from": "Scalar Multiplication", "to": "Definition: m * a (Vector parallel to a, magnitude |m|*|a|)"}, {"arrows": "to", "from": "Scalar Multiplication", "to": "Properties: m(n a) = (mn) a"}, {"arrows": "to", "from": "Scalar Multiplication", "to": "(m + n) a = m a + n a"}, {"arrows": "to", "from": "Scalar Multiplication", "to": "m (a + b) = m a + m b"}, {"arrows": "to", "from": "Addition / Subtraction", "to": "Parallelogram Law: a + b = Diagonal OC of parallelogram OACB"}, {"arrows": "to", "from": "Addition / Subtraction", "to": "Triangle Law"}, {"arrows": "to", "from": "Addition / Subtraction", "to": "Properties: Commutative (a+b=b+a), Associative ((a+b)+c=a+(b+c))"}, {"arrows": "to", "from": "Addition / Subtraction", "to": "Magnitude: |a +/- b|^2 = |a|^2 + |b|^2 +/- 2(a.b)"}, {"arrows": "to", "from": "Addition / Subtraction", "to": "Triangle Inequality: |a + b| \u003c= |a| + |b|"}, {"arrows": "to", "from": "Addition / Subtraction", "to": "|a - b| \u003e= ||a| - |b||"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Definition: a . b = |a| |b| cos(theta) (theta is angle between a and b, 0 \u003c= theta \u003c= pi)"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Properties: a.b = b.a (Commutative)"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "a.(b+c) = a.b + a.c (Distributive)"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Orthogonality: a _|_ b \u003c=\u003e a . b = 0 (for non-zero a, b)"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Unit Vectors: i.i = j.j = k.k = 1; i.j = j.k = k.i = 0"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Component Form: If a = a1i+a2j+a3k, b = b1i+b2j+b3k =\u003e a . b = a1*b1 + a2*b2 + a3*b3"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Example: a=i+2j, b=3i-j =\u003e a.b = (1)(3)+(2)(-1) = 1"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Projection of a on b: (a . b) / |b|"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Vector Projection of a on b: ((a . b) / |b|^2) * b"}, {"arrows": "to", "from": "Scalar (Dot) Product", "to": "Angle between a and b: cos(theta) = (a . b) / (|a| |b|)"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "Definition: a x b = |a| |b| sin(theta) n^ (n^ is unit vector perp. to a, b; right-hand system)"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "Properties: a x b = - (b x a) (Anti-commutative)"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "a x (b+c) = a x b + a x c (Distributive)"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "Parallelism/Collinearity: a || b \u003c=\u003e a x b = 0 (for non-zero a, b)"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "Unit Vectors: i x i = j x j = k x k = 0"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "i x j = k, j x k = i, k x i = j"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "j x i = -k, k x j = -i, i x k = -j"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "Component Form: a x b = det([[i, j, k], [a1, a2, a3], [b1, b2, b3]])"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "Example: a=i+j, b=j+k =\u003e a x b = det([[i,j,k],[1,1,0],[0,1,1]]) = i(1)-j(1)+k(1) = i-j+k"}, {"arrows": "to", "from": "Vector (Cross) Product", "to": "Geometric Meaning: |a x b| = Area of Parallelogram with adjacent sides a, b"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "Definition: [a b c] = a . (b x c) (Box Product)"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "Properties: a.(b x c) = (a x b).c (Dot and Cross are interchangeable)"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "[a b c] = [b c a] = [c a b] (Cyclic Permutation)"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "[a b c] = -[a c b] (Anti-cyclic changes sign)"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "[Ka b c] = K[a b c] (K is scalar)"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "[(a+b) c d] = [a c d] + [b c d]"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "Component Form: [a b c] = det([[a1, a2, a3], [b1, b2, b3], [c1, c2, c3]])"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "Geometric Meaning: |[a b c]| = Volume of Parallelepiped with coterminous edges a, b, c"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "Coplanarity of 3 Vectors: a, b, c are coplanar \u003c=\u003e [a b c] = 0"}, {"arrows": "to", "from": "Scalar Triple Product (STP)", "to": "STP Squared Relation: [a b c]^2 = det([[a.a, a.b, a.c], [b.a, b.b, b.c], [c.a, c.b, c.c]])"}, {"arrows": "to", "from": "Vector Triple Product (VTP)", "to": "Definition: a x (b x c) or (a x b) x c"}, {"arrows": "to", "from": "Vector Triple Product (VTP)", "to": "Expansion (BAC-CAB Rule): a x (b x c) = (a . c) b - (a . b) c"}, {"arrows": "to", "from": "Vector Triple Product (VTP)", "to": "Expansion: (a x b) x c = (a . c) b - (b . c) a"}, {"arrows": "to", "from": "Vector Triple Product (VTP)", "to": "Property: Not Associative: a x (b x c) != (a x b) x c"}, {"arrows": "to", "from": "Vector Triple Product (VTP)", "to": "Geometric Property: a x (b x c) is a vector coplanar with b and c, and perpendicular to a"}, {"arrows": "to", "from": "Dependence Conditions (Non-Zero Vectors)", "to": "Two Vectors LD \u003c=\u003e Collinear (a = K b or a x b = 0)"}, {"arrows": "to", "from": "Dependence Conditions (Non-Zero Vectors)", "to": "Three Vectors LD \u003c=\u003e Coplanar ([a b c] = 0)"}, {"arrows": "to", "from": "Dependence Conditions (Non-Zero Vectors)", "to": "Four Vectors in 3D are always LD"}, {"arrows": "to", "from": "Fundamental Theorems in Plane and Space", "to": "Plane: Any vector r coplanar with non-collinear a, b can be uniquely written as r = x a + y b"}, {"arrows": "to", "from": "Fundamental Theorems in Plane and Space", "to": "Space: Any vector r can be uniquely written as r = x a + y b + z c, where a, b, c are non-coplanar"}, {"arrows": "to", "from": "Section Formula", "to": "Internal Division (ratio m:n): PV = (n b + m a) / (m + n)"}, {"arrows": "to", "from": "Section Formula", "to": "External Division (ratio m:n): PV = (m b - n a) / (m - n)"}, {"arrows": "to", "from": "Section Formula", "to": "Midpoint (ratio 1:1): PV = (a + b) / 2"}, {"arrows": "to", "from": "Centroid", "to": "Triangle (vertices a, b, c): G = (a + b + c) / 3"}, {"arrows": "to", "from": "Centroid", "to": "Tetrahedron (vertices a, b, c, d): G = (a + b + c + d) / 4"}, {"arrows": "to", "from": "Area Calculations", "to": "Triangle ABC (PVs a,b,c): Area = 1/2 |(b-a) x (c-a)| = 1/2 |a x b + b x c + c x a|"}, {"arrows": "to", "from": "Area Calculations", "to": "Parallelogram (adj. sides a,b): Area = |a x b|"}, {"arrows": "to", "from": "Area Calculations", "to": "Parallelogram (diagonals d1, d2): Area = 1/2 |d1 x d2|"}, {"arrows": "to", "from": "Volume Calculations", "to": "Parallelepiped (coterminous edges a,b,c): Volume = |[a b c]|"}, {"arrows": "to", "from": "Volume Calculations", "to": "Tetrahedron OABC (O=origin, vertices a,b,c): Volume = 1/6 |[a b c]|"}, {"arrows": "to", "from": "Volume Calculations", "to": "Tetrahedron ABCD (PVs a,b,c,d): Volume = 1/6 |[b-a c-a d-a]|"}, {"arrows": "to", "from": "Collinearity \u0026 Coplanarity Tests", "to": "Collinearity of 3 Points (A,B,C with PVs a,b,c): AB = k BC =\u003e (b-a) = k(c-b) OR Area(ABC)=0"}, {"arrows": "to", "from": "Collinearity \u0026 Coplanarity Tests", "to": "Coplanarity of 4 Points (A,B,C,D with PVs a,b,c,d): [AB AC AD] = 0 =\u003e [b-a c-a d-a] = 0"}, {"arrows": "to", "from": "Physics Applications", "to": "Work Done by constant force F over displacement s: W = F . s"}, {"arrows": "to", "from": "Physics Applications", "to": "Moment of Force F about point O (r=PV of application point): M = r x F"}, {"arrows": "to", "from": "Physics Applications", "to": "Velocity in Circular Motion (w=angular vel, r=PV): V = w x r"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
